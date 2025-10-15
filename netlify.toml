@@ -1,8 +1,32 @@
+# netlify.toml — Ergo/OHS Haven
+
 [build]
-  command = "npm run build"
-  publish = "dist"
+  command  = "npm run build"
+  publish  = "dist"
   functions = "netlify/functions"
 
+# Use modern Node in the build VM
+[build.environment]
+  NODE_VERSION = "20.18.0"
+
+# Bundle Functions with esbuild and keep supabase as an external dep
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["@supabase/supabase-js"]
+
+# (Optional but recommended) make sure the local dev server maps to Vite
+[dev]
+  framework = "vite"
+
+# Single Page App fallback (safe even if you use hash routes)
+# If you are using hash routes (#/…), this won’t trigger; otherwise it keeps deep links working.
+[[redirects]]
+  from = "/*"
+  to   = "/index.html"
+  status = 200
+
+# Ensures Netlify preinstalls function deps correctly (the “install-core” plugin)
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
+  [plugins.inputs]
+    externalNodeModules = ["@supabase/supabase-js"]
