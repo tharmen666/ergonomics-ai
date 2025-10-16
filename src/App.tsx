@@ -1,109 +1,188 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import "./index.css";
 
-function Home() {
-  return (
-    <div className="container">
-      <h1>ErgoGuard™ — Ergonomic Training</h1>
-      <p>Protect posture. Prevent injury. Stay compliant.</p>
-      <p>
-        <a href="#/assess">Start Assessment</a> ·{" "}
-        <a href="#/kit">Ergonomics Kit</a>
-      </p>
-      <hr />
-      <h3>Pass Mark</h3>
-      <p>Minimum pass score: <strong>90%</strong> (low 90s).</p>
-    </div>
-  );
+type RouteKey = "home" | "kit" | "assess";
+
+function useHashRoute(): RouteKey {
+  const parse = () => {
+    const raw = (location.hash || "#/").toLowerCase();
+    if (raw.startsWith("#/kit")) return "kit";
+    if (raw.startsWith("#/assess")) return "assess";
+    return "home";
+  };
+  const [route, setRoute] = useState<RouteKey>(parse);
+  useEffect(() => {
+    const onHash = () => setRoute(parse());
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+  return route;
 }
 
-function Assess() {
-  // simple 7-question mock (1–5) just to show wiring
-  const [scores, setScores] = useState<number[]>(Array(7).fill(3));
-  const total = useMemo(() => scores.reduce((a, b) => a + b, 0), [scores]);
-  const percent = Math.round((total / (7 * 5)) * 100);
+const Brand = () => (
+  <div className="brand">
+    <span className="dot floaty" />
+    Ohshaven <span style={{ color: "var(--brand)" }}>Ergo</span>
+  </div>
+);
 
-  return (
-    <div className="container">
-      <h2>Self-Assessment</h2>
-      <p>Rate 1–5 (5 is best) for each item:</p>
-      {[
-        "Chair height",
-        "Monitor position",
-        "Keyboard/mouse",
-        "Lighting",
-        "Breaks",
-        "Stretching",
-        "Reporting knowledge"
-      ].map((label, i) => (
-        <div key={i} style={{ marginBottom: 8 }}>
-          <label>{label}: </label>
-          <select
-            value={scores[i]}
-            onChange={(e) => {
-              const next = [...scores];
-              next[i] = Number(e.target.value);
-              setScores(next);
-            }}
-          >
-            {[1,2,3,4,5].map(n => <option key={n} value={n}>{n}</option>)}
-          </select>
-        </div>
-      ))}
+const Link = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <a href={href}>{children}</a>
+);
 
-      <p><strong>Score:</strong> {percent}%</p>
+/* ---------------- Pages ---------------- */
+
+const Home = () => (
+  <div className="container">
+    <section className="main-hero">
+      <h1>Ergonomics that actually ships.</h1>
       <p>
-        {percent >= 90
-          ? "✅ Pass — eligible for certificate."
-          : "⚠️ Below pass mark — HR follow-up recommended."}
+        Assessments, certified training, HR export, and a clean resource kit—built for South African OHS compliance and remote teams.
       </p>
-      <p><a href="#/">Back</a></p>
-    </div>
-  );
-}
+      <div className="cta">
+        <a className="btn" href="#/assess">Start assessment</a>
+        <a className="btn secondary" href="#/kit">Open Ergonomics Kit</a>
+      </div>
+    </section>
 
-function Kit() {
-  return (
-    <div className="container">
-      <h2>Ergonomic Training Package for HR</h2>
-      <h3>1. Employee Ergonomic Assessment Tool</h3>
-      <p><strong>Purpose:</strong> Evaluate workstation setup and ergonomic awareness.</p>
-      <table border={1} cellPadding={6}>
+    <section className="grid" style={{ marginTop: 18 }}>
+      <article className="card">
+        <h2>Compliance-first</h2>
+        <p>Aligned to Ergonomics Regulations (2019). Pass mark defaults to 90% with exportable audit trails.</p>
+        <span className="badge">OHS • POPIA</span>
+      </article>
+      <article className="card">
+        <h2>For hybrid teams</h2>
+        <p>Office and remote workflows with self-assessment, video modules, and instant certificates.</p>
+        <span className="badge">Office • Remote</span>
+      </article>
+      <article className="card">
+        <h2>Zero friction</h2>
+        <p>No login required to test. Add Auth later when you’re ready to track employees.</p>
+        <span className="badge">Prototype ready</span>
+      </article>
+    </section>
+  </div>
+);
+
+const Kit = () => (
+  <div className="container">
+    <h1>Ergonomics Kit</h1>
+    <p>Curated videos and articles—ready to embed in training.</p>
+
+    <div className="card" style={{ overflowX: "auto" }}>
+      <table className="table">
         <thead>
-          <tr><th>Item</th><th>Description</th></tr>
+          <tr>
+            <th>Title</th>
+            <th>Type</th>
+            <th>Language</th>
+            <th>Open</th>
+          </tr>
         </thead>
         <tbody>
-          <tr><td>Chair height</td><td>Feet flat, knees at 90°</td></tr>
-          <tr><td>Monitor position</td><td>Eye level, arm’s length</td></tr>
-          <tr><td>Keyboard/mouse</td><td>Elbows at 90°, wrists straight</td></tr>
-          <tr><td>Lighting</td><td>No glare, adequate brightness</td></tr>
-          <tr><td>Breaks</td><td>Every 2 hours (micro-breaks better)</td></tr>
-          <tr><td>Stretching</td><td>Daily routine followed</td></tr>
-          <tr><td>Reporting</td><td>Knows how to report discomfort</td></tr>
+          {KIT_LINKS.map((r) => (
+            <tr key={r.url}>
+              <td>{r.title}</td>
+              <td>{r.type}</td>
+              <td>{r.lang.toUpperCase()}</td>
+              <td>
+                <a className="btn secondary" href={r.url} target="_blank" rel="noreferrer">View</a>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
-
-      <h3>Videos</h3>
-      <ul>
-        <li><a href="https://www.youtube.com/watch?v=g8okeqaQHsU" target="_blank">360° HEALTH: Ergonomics & Wellness</a></li>
-        <li><a href="https://www.youtube.com/watch?v=MSU1-16ztHo" target="_blank">Optimize Your Ergonomics for Remote Work</a></li>
-        <li><a href="https://www.youtube.com/watch?v=nIQECMXsGdM" target="_blank">Ergonomics for Your Workspace</a></li>
-        <li><a href="https://www.youtube.com/watch?v=7YDeeb5SGkc" target="_blank">Ergonomic Tips for Working at Home – Kate Ayoub, PT</a></li>
-      </ul>
-
-      <h3>Visual Guides</h3>
-      <ul>
-        <li><a href="https://www.upwork.com/resources/home-office-ergonomics-tips" target="_blank">Upwork Ergonomics Tips</a></li>
-        <li><a href="https://www.publichealthdegrees.org/resources/how-to-create-work-from-home-set-up/" target="_blank">Public Health Degrees – WFH Setup</a></li>
-      </ul>
-
-      <p><a href="#/">Back</a></p>
     </div>
+
+    <p style={{ marginTop: 10, color: "var(--muted)" }}>
+      Tip: Seed these into <code>public.resources</code> (Supabase) and your UI will render live data.
+    </p>
+  </div>
+);
+
+const Assess = () => {
+  const [score, setScore] = useState<number | null>(null);
+  const [email, setEmail] = useState("");
+  const pass = useMemo(() => (score ?? 0) >= 90, [score]);
+
+  return (
+    <div className="container">
+      <h1>Self-Assessment</h1>
+      <p>7 quick checks. Pass mark: <strong>90%</strong>.</p>
+
+      <div className="card" style={{ maxWidth: 680 }}>
+        <div style={{ display: "grid", gap: 12 }}>
+          <label>
+            Your email
+            <input className="input" placeholder="you@company.com" value={email} onChange={e => setEmail(e.target.value)} />
+          </label>
+
+          <label>
+            Score (0–100)
+            <input
+              className="input"
+              type="number"
+              min={0}
+              max={100}
+              placeholder="e.g. 92"
+              value={score ?? ""}
+              onChange={e => setScore(e.target.value === "" ? null : Number(e.target.value))}
+            />
+          </label>
+
+          <div>
+            <button className="btn" onClick={() => alert("Hook this up to Supabase insert → certificate/HR export")}>
+              Submit assessment
+            </button>
+            {" "}
+            {score !== null && (
+              <span className="badge" style={{ marginLeft: 8 }}>
+                {pass ? "PASS ✅" : "Needs follow-up ⚠️"}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* --------------- Router shell --------------- */
+
+export default function App(){
+  const route = useHashRoute();
+
+  return (
+    <>
+      <header className="header">
+        <nav className="nav">
+          <Brand/>
+          <div className="spacer" />
+          <Link href="#/">Home</Link>
+          <Link href="#/kit">Ergonomics Kit</Link>
+          <Link href="#/assess">Assessment</Link>
+        </nav>
+      </header>
+
+      {route === "home" && <Home/>}
+      {route === "kit" && <Kit/>}
+      {route === "assess" && <Assess/>}
+
+      <footer className="container" style={{ opacity:.7, paddingBottom: 40 }}>
+        <hr style={{ borderColor:"#243246", borderWidth:0, borderTop:"1px solid #243246", margin:"24px 0" }}/>
+        <small>© {new Date().getFullYear()} Ohshaven • Ergonomics & OHS</small>
+      </footer>
+    </>
   );
 }
 
-export default function App() {
-  const route = typeof window !== "undefined" ? window.location.hash : "#/";
-  if (route.startsWith("#/assess")) return <Assess />;
-  if (route.startsWith("#/kit")) return <Kit />;
-  return <Home />;
-}
+/* Static links used on Kit page (matches what you seeded) */
+const KIT_LINKS = [
+  { title: "360° HEALTH: Ergonomics & Wellness", url: "https://www.youtube.com/watch?v=g8okeqaQHsU", type: "video", lang: "en" },
+  { title: "Optimize Your Ergonomics for Remote Work", url: "https://www.youtube.com/watch?v=MSU1-16ztHo", type: "video", lang: "en" },
+  { title: "Ergonomics for Your Workspace", url: "https://www.youtube.com/watch?v=nIQECMXsGdM", type: "video", lang: "en" },
+  { title: "Ergonomic tips for working at home – Kate Ayoub, PT", url: "https://www.youtube.com/watch?v=7YDeeb5SGkc", type: "video", lang: "en" },
+  { title: "Upwork: Home Office Ergonomics Tips", url: "https://www.upwork.com/resources/home-office-ergonomics-tips", type: "article", lang: "en" },
+  { title: "WFH Setup Guide – Public Health Degrees", url: "https://www.publichealthdegrees.org/resources/how-to-create-work-from-home-set-up/", type: "article", lang: "en" },
+];
