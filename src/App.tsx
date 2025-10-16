@@ -1,119 +1,109 @@
-// src/App.tsx
-import { useEffect, useState } from "react";
-import ErgonomicsKit from "./pages/ErgonomicsKit";
+import React, { useMemo, useState } from "react";
 
 function Home() {
   return (
-    <div className="card">
-      <h2>Welcome to OHS Haven • Ergo</h2>
-      <p>Pick a page from the nav to get started.</p>
-      <ul>
-        <li><a href="#/assess">Self-assessment (pass mark 90%)</a></li>
-        <li><a href="#/kit">Ergonomics Kit (videos & guides)</a></li>
-      </ul>
+    <div className="container">
+      <h1>ErgoGuard™ — Ergonomic Training</h1>
+      <p>Protect posture. Prevent injury. Stay compliant.</p>
+      <p>
+        <a href="#/assess">Start Assessment</a> ·{" "}
+        <a href="#/kit">Ergonomics Kit</a>
+      </p>
+      <hr />
+      <h3>Pass Mark</h3>
+      <p>Minimum pass score: <strong>90%</strong> (low 90s).</p>
     </div>
   );
 }
 
-const QUESTIONS = [
-  { id: 1, text: "Feet flat on floor or footrest?" },
-  { id: 2, text: "Knees ~90° and hips slightly above knees?" },
-  { id: 3, text: "Monitor at/near eye height, arm’s length?" },
-  { id: 4, text: "External keyboard/mouse (no laptop hunch)?" },
-  { id: 5, text: "Wrists neutral, elbows ~90°, shoulders relaxed?" },
-  { id: 6, text: "Lighting without glare; can see screen clearly?" },
-  { id: 7, text: "Take micro-breaks every 30–60 minutes?" },
-  { id: 8, text: "Do 2–5 min stretches 2–3x per day?" },
-  { id: 9, text: "Alternate sitting/standing if possible?" },
-  { id:10, text: "Know how to report discomfort early?" }
-];
-
-function Assessment() {
-  const [answers, setAnswers] = useState<Record<number, number>>({});
-  const [score, setScore] = useState<number | null>(null);
-  const passMark = 90;
-
-  const setAnswer = (id: number, val: number) =>
-    setAnswers((prev) => ({ ...prev, [id]: val }));
-
-  const submit = () => {
-    const total = QUESTIONS.length * 5;
-    const got = QUESTIONS.reduce((sum, q) => sum + (answers[q.id] || 0), 0);
-    const pct = Math.round((got / total) * 100);
-    setScore(pct);
-  };
+function Assess() {
+  // simple 7-question mock (1–5) just to show wiring
+  const [scores, setScores] = useState<number[]>(Array(7).fill(3));
+  const total = useMemo(() => scores.reduce((a, b) => a + b, 0), [scores]);
+  const percent = Math.round((total / (7 * 5)) * 100);
 
   return (
-    <div className="card">
+    <div className="container">
       <h2>Self-Assessment</h2>
-      <p>Rate each item 1–5 (5 = ideal). <b>Pass mark: {passMark}%</b></p>
+      <p>Rate 1–5 (5 is best) for each item:</p>
+      {[
+        "Chair height",
+        "Monitor position",
+        "Keyboard/mouse",
+        "Lighting",
+        "Breaks",
+        "Stretching",
+        "Reporting knowledge"
+      ].map((label, i) => (
+        <div key={i} style={{ marginBottom: 8 }}>
+          <label>{label}: </label>
+          <select
+            value={scores[i]}
+            onChange={(e) => {
+              const next = [...scores];
+              next[i] = Number(e.target.value);
+              setScores(next);
+            }}
+          >
+            {[1,2,3,4,5].map(n => <option key={n} value={n}>{n}</option>)}
+          </select>
+        </div>
+      ))}
 
-      <table className="table">
+      <p><strong>Score:</strong> {percent}%</p>
+      <p>
+        {percent >= 90
+          ? "✅ Pass — eligible for certificate."
+          : "⚠️ Below pass mark — HR follow-up recommended."}
+      </p>
+      <p><a href="#/">Back</a></p>
+    </div>
+  );
+}
+
+function Kit() {
+  return (
+    <div className="container">
+      <h2>Ergonomic Training Package for HR</h2>
+      <h3>1. Employee Ergonomic Assessment Tool</h3>
+      <p><strong>Purpose:</strong> Evaluate workstation setup and ergonomic awareness.</p>
+      <table border={1} cellPadding={6}>
         <thead>
-          <tr><th>Item</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+          <tr><th>Item</th><th>Description</th></tr>
         </thead>
         <tbody>
-          {QUESTIONS.map(q => (
-            <tr key={q.id}>
-              <td>{q.text}</td>
-              {[1,2,3,4,5].map(v => (
-                <td key={v}>
-                  <input
-                    type="radio"
-                    name={`q${q.id}`}
-                    checked={answers[q.id] === v}
-                    onChange={() => setAnswer(q.id, v)}
-                  />
-                </td>
-              ))}
-            </tr>
-          ))}
+          <tr><td>Chair height</td><td>Feet flat, knees at 90°</td></tr>
+          <tr><td>Monitor position</td><td>Eye level, arm’s length</td></tr>
+          <tr><td>Keyboard/mouse</td><td>Elbows at 90°, wrists straight</td></tr>
+          <tr><td>Lighting</td><td>No glare, adequate brightness</td></tr>
+          <tr><td>Breaks</td><td>Every 2 hours (micro-breaks better)</td></tr>
+          <tr><td>Stretching</td><td>Daily routine followed</td></tr>
+          <tr><td>Reporting</td><td>Knows how to report discomfort</td></tr>
         </tbody>
       </table>
 
-      <button className="btn primary" onClick={submit} style={{marginTop:12}}>
-        Calculate score
-      </button>
+      <h3>Videos</h3>
+      <ul>
+        <li><a href="https://www.youtube.com/watch?v=g8okeqaQHsU" target="_blank">360° HEALTH: Ergonomics & Wellness</a></li>
+        <li><a href="https://www.youtube.com/watch?v=MSU1-16ztHo" target="_blank">Optimize Your Ergonomics for Remote Work</a></li>
+        <li><a href="https://www.youtube.com/watch?v=nIQECMXsGdM" target="_blank">Ergonomics for Your Workspace</a></li>
+        <li><a href="https://www.youtube.com/watch?v=7YDeeb5SGkc" target="_blank">Ergonomic Tips for Working at Home – Kate Ayoub, PT</a></li>
+      </ul>
 
-      {score !== null && (
-        <div style={{marginTop:12}}>
-          <p><b>Score:</b> {score}%</p>
-          {score >= passMark ? (
-            <p className="badge">✅ Passed – great job!</p>
-          ) : (
-            <p className="badge" style={{background:'#fff0f0', borderColor:'#ffd1d1', color:'#b10000'}}>
-              ⚠️ Below pass mark – please improve your setup and retake.
-            </p>
-          )}
-        </div>
-      )}
+      <h3>Visual Guides</h3>
+      <ul>
+        <li><a href="https://www.upwork.com/resources/home-office-ergonomics-tips" target="_blank">Upwork Ergonomics Tips</a></li>
+        <li><a href="https://www.publichealthdegrees.org/resources/how-to-create-work-from-home-set-up/" target="_blank">Public Health Degrees – WFH Setup</a></li>
+      </ul>
+
+      <p><a href="#/">Back</a></p>
     </div>
   );
 }
 
 export default function App() {
-  const [route, setRoute] = useState<string>(window.location.hash || "#/");
-
-  useEffect(() => {
-    const onHash = () => setRoute(window.location.hash || "#/");
-    window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
-
-  return (
-    <>
-      <nav className="nav">
-        <span className="brand">OHS Haven • Ergo</span>
-        <a className="btn" href="#/">Home</a>
-        <a className="btn" href="#/assess">Assessment</a>
-        <a className="btn" href="#/kit">Ergonomics Kit</a>
-      </nav>
-
-      <div className="container">
-        {route === "#/" && <Home />}
-        {route === "#/assess" && <Assessment />}
-        {route === "#/kit" && <ErgonomicsKit />}
-      </div>
-    </>
-  );
+  const route = typeof window !== "undefined" ? window.location.hash : "#/";
+  if (route.startsWith("#/assess")) return <Assess />;
+  if (route.startsWith("#/kit")) return <Kit />;
+  return <Home />;
 }
