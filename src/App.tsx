@@ -1,188 +1,180 @@
-import React, { useEffect, useMemo, useState } from "react";
-import "./index.css";
+import React from "react";
+import { HashRouter, Routes, Route, Link } from "react-router-dom";
+import ErgonomicsKit from "./pages/ErgonomicsKit";
 
-type RouteKey = "home" | "kit" | "assess";
+function Home() {
+  return (
+    <>
+      {/* HERO */}
+      <header className="section">
+        <div className="shell">
+          <div className="glass" style={{ padding: "28px", borderRadius: "20px" }}>
+            <div className="kicker">OHSHAVEN • ErgoPulse</div>
+            <h1 className="display">Protect posture. Prevent injury. Stay compliant.</h1>
+            <p className="kicker" style={{ maxWidth: 800 }}>
+              AI-assisted ergonomic training for office & remote teams. Assessments,
+              micro-breaks, videos, and HR-grade audit packs — all in one sleek experience.
+            </p>
 
-function useHashRoute(): RouteKey {
-  const parse = () => {
-    const raw = (location.hash || "#/").toLowerCase();
-    if (raw.startsWith("#/kit")) return "kit";
-    if (raw.startsWith("#/assess")) return "assess";
-    return "home";
-  };
-  const [route, setRoute] = useState<RouteKey>(parse);
-  useEffect(() => {
-    const onHash = () => setRoute(parse());
-    window.addEventListener("hashchange", onHash);
-    return () => window.removeEventListener("hashchange", onHash);
-  }, []);
-  return route;
+            <div className="mt-4" style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
+              <Link to="/assess" className="btn emerald">Start Assessment</Link>
+              <Link to="/kit" className="btn indigo">Open Training Kit</Link>
+              <a
+                href="https://ergonomics-ai.netlify.app/#/kit"
+                className="btn ghost"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Live Demo
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* FEATURES */}
+      <section className="section">
+        <div className="shell">
+          <div className="grid">
+            <article className="glass card col-4">
+              <h3 style={{ margin: "0 0 .25rem" }}>Legal-ready</h3>
+              <p className="kicker">
+                Aligns with SA Ergonomics Regulations (2019): training, RLS policies,
+                incident reporting, and traceable certs.
+              </p>
+            </article>
+
+            <article className="glass card col-4">
+              <h3 style={{ margin: "0 0 .25rem" }}>HR dashboards</h3>
+              <p className="kicker">
+                Track completions, risk flags & certificates. Export to CSV with a click.
+              </p>
+            </article>
+
+            <article className="glass card col-4">
+              <h3 style={{ margin: "0 0 .25rem" }}>Multi-language</h3>
+              <p className="kicker">
+                English, Afrikaans, Sotho, Xhosa, Zulu, Mandarin, Spanish (extensible).
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      {/* VIDEOS / RESOURCES PREVIEW */}
+      <section className="section">
+        <div className="shell">
+          <div className="glass" style={{ padding: 18 }}>
+            <h2 style={{ margin: 0 }}>Quick videos</h2>
+            <p className="kicker">Embed your vetted YouTube resources here.</p>
+            <div className="grid" style={{ marginTop: 12 }}>
+              <div className="glass card col-6">
+                <div className="kicker">Optimize Your Ergonomics for Remote Work</div>
+                <div className="mt-2" style={{ position: "relative", paddingTop: "56.25%" }}>
+                  <iframe
+                    title="remote-ergonomics"
+                    src="https://www.youtube.com/embed/MSU1-16ztHo"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    style={{
+                      position: "absolute", inset: 0, width: "100%", height: "100%",
+                      border: 0, borderRadius: "14px"
+                    }}
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+
+              <div className="glass card col-6">
+                <div className="kicker">Ergonomic Tips for Working at Home (Kate Ayoub, PT)</div>
+                <div className="mt-2" style={{ position: "relative", paddingTop: "56.25%" }}>
+                  <iframe
+                    title="kate-ayoub"
+                    src="https://www.youtube.com/embed/7YDeeb5SGkc"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    style={{
+                      position: "absolute", inset: 0, width: "100%", height: "100%",
+                      border: 0, borderRadius: "14px"
+                    }}
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
 }
 
-const Brand = () => (
-  <div className="brand">
-    <span className="dot floaty" />
-    Ohshaven <span style={{ color: "var(--brand)" }}>Ergo</span>
-  </div>
-);
-
-const Link = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <a href={href}>{children}</a>
-);
-
-/* ---------------- Pages ---------------- */
-
-const Home = () => (
-  <div className="container">
-    <section className="main-hero">
-      <h1>Ergonomics that actually ships.</h1>
-      <p>
-        Assessments, certified training, HR export, and a clean resource kit—built for South African OHS compliance and remote teams.
-      </p>
-      <div className="cta">
-        <a className="btn" href="#/assess">Start assessment</a>
-        <a className="btn secondary" href="#/kit">Open Ergonomics Kit</a>
-      </div>
-    </section>
-
-    <section className="grid" style={{ marginTop: 18 }}>
-      <article className="card">
-        <h2>Compliance-first</h2>
-        <p>Aligned to Ergonomics Regulations (2019). Pass mark defaults to 90% with exportable audit trails.</p>
-        <span className="badge">OHS • POPIA</span>
-      </article>
-      <article className="card">
-        <h2>For hybrid teams</h2>
-        <p>Office and remote workflows with self-assessment, video modules, and instant certificates.</p>
-        <span className="badge">Office • Remote</span>
-      </article>
-      <article className="card">
-        <h2>Zero friction</h2>
-        <p>No login required to test. Add Auth later when you’re ready to track employees.</p>
-        <span className="badge">Prototype ready</span>
-      </article>
-    </section>
-  </div>
-);
-
-const Kit = () => (
-  <div className="container">
-    <h1>Ergonomics Kit</h1>
-    <p>Curated videos and articles—ready to embed in training.</p>
-
-    <div className="card" style={{ overflowX: "auto" }}>
-      <table className="table">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Type</th>
-            <th>Language</th>
-            <th>Open</th>
-          </tr>
-        </thead>
-        <tbody>
-          {KIT_LINKS.map((r) => (
-            <tr key={r.url}>
-              <td>{r.title}</td>
-              <td>{r.type}</td>
-              <td>{r.lang.toUpperCase()}</td>
-              <td>
-                <a className="btn secondary" href={r.url} target="_blank" rel="noreferrer">View</a>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-
-    <p style={{ marginTop: 10, color: "var(--muted)" }}>
-      Tip: Seed these into <code>public.resources</code> (Supabase) and your UI will render live data.
-    </p>
-  </div>
-);
-
-const Assess = () => {
-  const [score, setScore] = useState<number | null>(null);
-  const [email, setEmail] = useState("");
-  const pass = useMemo(() => (score ?? 0) >= 90, [score]);
-
+/* Minimal Assessment page (safe fallback) */
+function Assessment() {
   return (
-    <div className="container">
-      <h1>Self-Assessment</h1>
-      <p>7 quick checks. Pass mark: <strong>90%</strong>.</p>
-
-      <div className="card" style={{ maxWidth: 680 }}>
-        <div style={{ display: "grid", gap: 12 }}>
-          <label>
-            Your email
-            <input className="input" placeholder="you@company.com" value={email} onChange={e => setEmail(e.target.value)} />
-          </label>
-
-          <label>
-            Score (0–100)
-            <input
-              className="input"
-              type="number"
-              min={0}
-              max={100}
-              placeholder="e.g. 92"
-              value={score ?? ""}
-              onChange={e => setScore(e.target.value === "" ? null : Number(e.target.value))}
-            />
-          </label>
-
-          <div>
-            <button className="btn" onClick={() => alert("Hook this up to Supabase insert → certificate/HR export")}>
-              Submit assessment
-            </button>
-            {" "}
-            {score !== null && (
-              <span className="badge" style={{ marginLeft: 8 }}>
-                {pass ? "PASS ✅" : "Needs follow-up ⚠️"}
-              </span>
-            )}
+    <div className="section">
+      <div className="shell">
+        <div className="glass" style={{ padding: 20 }}>
+          <h2 className="display" style={{ fontSize: "clamp(28px,4vw,42px)" }}>
+            7-Point Self-Assessment
+          </h2>
+          <p className="kicker">
+            Quick check: chair height, monitor, keyboard/mouse, lighting, breaks, stretching, reporting.
+          </p>
+          <p className="kicker">
+            (You can replace this with your full assessment UI later — this is just a nice placeholder.)
+          </p>
+          <div className="mt-4">
+            <Link to="/" className="btn">Back home</Link>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-/* --------------- Router shell --------------- */
-
-export default function App(){
-  const route = useHashRoute();
-
-  return (
-    <>
-      <header className="header">
-        <nav className="nav">
-          <Brand/>
-          <div className="spacer" />
-          <Link href="#/">Home</Link>
-          <Link href="#/kit">Ergonomics Kit</Link>
-          <Link href="#/assess">Assessment</Link>
-        </nav>
-      </header>
-
-      {route === "home" && <Home/>}
-      {route === "kit" && <Kit/>}
-      {route === "assess" && <Assess/>}
-
-      <footer className="container" style={{ opacity:.7, paddingBottom: 40 }}>
-        <hr style={{ borderColor:"#243246", borderWidth:0, borderTop:"1px solid #243246", margin:"24px 0" }}/>
-        <small>© {new Date().getFullYear()} Ohshaven • Ergonomics & OHS</small>
-      </footer>
-    </>
-  );
 }
 
-/* Static links used on Kit page (matches what you seeded) */
-const KIT_LINKS = [
-  { title: "360° HEALTH: Ergonomics & Wellness", url: "https://www.youtube.com/watch?v=g8okeqaQHsU", type: "video", lang: "en" },
-  { title: "Optimize Your Ergonomics for Remote Work", url: "https://www.youtube.com/watch?v=MSU1-16ztHo", type: "video", lang: "en" },
-  { title: "Ergonomics for Your Workspace", url: "https://www.youtube.com/watch?v=nIQECMXsGdM", type: "video", lang: "en" },
-  { title: "Ergonomic tips for working at home – Kate Ayoub, PT", url: "https://www.youtube.com/watch?v=7YDeeb5SGkc", type: "video", lang: "en" },
-  { title: "Upwork: Home Office Ergonomics Tips", url: "https://www.upwork.com/resources/home-office-ergonomics-tips", type: "article", lang: "en" },
-  { title: "WFH Setup Guide – Public Health Degrees", url: "https://www.publichealthdegrees.org/resources/how-to-create-work-from-home-set-up/", type: "article", lang: "en" },
-];
+export default function App(){
+  return (
+    <HashRouter>
+      {/* NAV */}
+      <nav className="nav">
+        <div className="shell nav-inner">
+          <div className="brand">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" fill="url(#g)"/>
+              <defs>
+                <linearGradient id="g" x1="0" y1="0" x2="24" y2="24">
+                  <stop stopColor="#00AEEF"/><stop offset=".6" stopColor="#6C5CE7"/>
+                  <stop offset="1" stopColor="#10B981"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            OHSHAVEN • <span style={{ color:"#A7C8FF" }}>ErgoPulse</span>
+            <span className="badge">v1</span>
+          </div>
+          <div style={{ display:"flex", gap:"10px" }}>
+            <Link to="/" className="btn ghost">Home</Link>
+            <Link to="/assess" className="btn">Assessment</Link>
+            <Link to="/kit" className="btn indigo">Training Kit</Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* ROUTES */}
+      <Routes>
+        <Route path="/" element={<Home/>} />
+        <Route path="/assess" element={<Assessment/>} />
+        <Route path="/kit" element={<ErgonomicsKit/>} />
+      </Routes>
+
+      {/* FOOTER */}
+      <footer className="footer">
+        <div className="shell" style={{ display:"flex", justifyContent:"space-between", flexWrap:"wrap", gap:8 }}>
+          <div>© {new Date().getFullYear()} OHSHAVEN • ErgoPulse. All rights reserved.</div>
+          <div>
+            <a href="#/kit">Training</a> · <a href="#/assess">Assessment</a> ·{" "}
+            <a href="mailto:hello@ohshaven.com">Contact</a>
+          </div>
+        </div>
+      </footer>
+    </HashRouter>
+  );
+}
