@@ -2,29 +2,68 @@ import React from "react";
 import { HashRouter, Routes, Route, Link } from "react-router-dom";
 import ErgonomicsKit from "./pages/ErgonomicsKit";
 
+/** Minimal placeholder assessment to keep the route alive */
+function Assessment() {
+  return (
+    <div className="section">
+      <div className="shell">
+        <div className="glass shimmer" style={{ padding: 22 }}>
+          <h2 className="display" style={{ fontSize: "clamp(28px,4vw,42px)" }}>
+            7-Point Self-Assessment
+          </h2>
+          <p className="kicker">
+            Quick check: chair height, monitor, keyboard/mouse, lighting, breaks, stretching, reporting.
+            (Swap this for your full assessment UI later.)
+          </p>
+          <div className="mt-4">
+            <Link to="/" className="btn">Back home</Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Home() {
   return (
     <>
       {/* HERO */}
       <header className="section">
         <div className="shell">
-          <div className="glass" style={{ padding: "28px", borderRadius: "20px" }}>
+          <div className="glass shimmer" style={{ padding: 28, borderRadius: 22 }}>
             <div className="kicker">OHSHAVEN • ErgoPulse</div>
             <h1 className="display">Protect posture. Prevent injury. Stay compliant.</h1>
-            <p className="kicker" style={{ maxWidth: 800 }}>
-              AI-assisted ergonomic training for office & remote teams. Assessments,
-              micro-breaks, videos, and HR-grade audit packs — all in one sleek experience.
+            <p className="kicker" style={{ maxWidth: 820 }}>
+              AI-assisted ergonomic training for office & remote teams. Assessments, micro-breaks,
+              expert videos, and HR-grade audit packs — all in one glossy experience.
             </p>
 
-            <div className="mt-4" style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}>
-              <Link to="/assess" className="btn emerald">Start Assessment</Link>
-              <Link to="/kit" className="btn indigo">Open Training Kit</Link>
+            <div className="mt-4" style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+              <Link to="/assess" className="btn emerald">
+                {/* pulse heart icon */}
+                <svg className="icon icon-pulse" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 21s-7-4.35-9-8.5C1 9 3 6 6 6c2 0 3.5 1.5 4 2.5C10.5 7.5 12 6 14 6c3 0 5 3 3 6.5C19 16.65 12 21 12 21z" fill="#0EA5E9"/>
+                </svg>
+                Start Assessment
+              </Link>
+
+              <Link to="/kit" className="btn indigo">
+                {/* spinning shield */}
+                <svg className="icon icon-spin" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2l7 3v6c0 5-3.5 9-7 11-3.5-2-7-6-7-11V5l7-3z" fill="#E5E7FF"/>
+                </svg>
+                Open Training Kit
+              </Link>
+
               <a
                 href="https://ergonomics-ai.netlify.app/#/kit"
+                target="_blank" rel="noreferrer"
                 className="btn ghost"
-                target="_blank"
-                rel="noreferrer"
               >
+                {/* bobbing play icon */}
+                <svg className="icon icon-bob" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M8 5l12 7-12 7V5z" fill="#CFE9FF"/>
+                </svg>
                 Live Demo
               </a>
             </div>
@@ -37,22 +76,40 @@ function Home() {
         <div className="shell">
           <div className="grid">
             <article className="glass card col-4">
-              <h3 style={{ margin: "0 0 .25rem" }}>Legal-ready</h3>
+              <h3 style={{ margin: "0 0 .25rem" }}>
+                {/* badge icon */}
+                <svg className="icon icon-bob" width="18" height="18" viewBox="0 0 24 24" fill="none" style={{marginRight:8}}>
+                  <path d="M12 2l2.5 5 5.5.8-4 3.9.9 5.6L12 15l-4.9 2.3.9-5.6-4-3.9L9.5 7 12 2z" fill="#10B981"/>
+                </svg>
+                Legal-ready
+              </h3>
               <p className="kicker">
-                Aligns with SA Ergonomics Regulations (2019): training, RLS policies,
-                incident reporting, and traceable certs.
+                Aligns with SA Ergonomics Regulations (2019): training, RLS policies, incident
+                reporting, and traceable certs.
               </p>
             </article>
 
             <article className="glass card col-4">
-              <h3 style={{ margin: "0 0 .25rem" }}>HR dashboards</h3>
+              <h3 style={{ margin: "0 0 .25rem" }}>
+                {/* dashboard icon */}
+                <svg className="icon icon-pulse" width="18" height="18" viewBox="0 0 24 24" fill="none" style={{marginRight:8}}>
+                  <path d="M3 3h18v6H3V3zm0 8h8v10H3V11zm10 0h8v10h-8V11z" fill="#A5B4FC"/>
+                </svg>
+                HR dashboards
+              </h3>
               <p className="kicker">
                 Track completions, risk flags & certificates. Export to CSV with a click.
               </p>
             </article>
 
             <article className="glass card col-4">
-              <h3 style={{ margin: "0 0 .25rem" }}>Multi-language</h3>
+              <h3 style={{ margin: "0 0 .25rem" }}>
+                {/* globe icon */}
+                <svg className="icon icon-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" style={{marginRight:8}}>
+                  <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 0c3 2.5 3 15.5 0 18m0-18C9 4.5 9 17.5 12 20M2 12h20" stroke="#60A5FA" strokeWidth="1.6"/>
+                </svg>
+                Multi-language
+              </h3>
               <p className="kicker">
                 English, Afrikaans, Sotho, Xhosa, Zulu, Mandarin, Spanish (extensible).
               </p>
@@ -61,7 +118,7 @@ function Home() {
         </div>
       </section>
 
-      {/* VIDEOS / RESOURCES PREVIEW */}
+      {/* VIDEOS */}
       <section className="section">
         <div className="shell">
           <div className="glass" style={{ padding: 18 }}>
@@ -75,15 +132,11 @@ function Home() {
                     title="remote-ergonomics"
                     src="https://www.youtube.com/embed/MSU1-16ztHo"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    style={{
-                      position: "absolute", inset: 0, width: "100%", height: "100%",
-                      border: 0, borderRadius: "14px"
-                    }}
+                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: 0, borderRadius: 14 }}
                     allowFullScreen
                   />
                 </div>
               </div>
-
               <div className="glass card col-6">
                 <div className="kicker">Ergonomic Tips for Working at Home (Kate Ayoub, PT)</div>
                 <div className="mt-2" style={{ position: "relative", paddingTop: "56.25%" }}>
@@ -91,10 +144,7 @@ function Home() {
                     title="kate-ayoub"
                     src="https://www.youtube.com/embed/7YDeeb5SGkc"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    style={{
-                      position: "absolute", inset: 0, width: "100%", height: "100%",
-                      border: 0, borderRadius: "14px"
-                    }}
+                    style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: 0, borderRadius: 14 }}
                     allowFullScreen
                   />
                 </div>
@@ -107,30 +157,6 @@ function Home() {
   );
 }
 
-/* Minimal Assessment page (safe fallback) */
-function Assessment() {
-  return (
-    <div className="section">
-      <div className="shell">
-        <div className="glass" style={{ padding: 20 }}>
-          <h2 className="display" style={{ fontSize: "clamp(28px,4vw,42px)" }}>
-            7-Point Self-Assessment
-          </h2>
-          <p className="kicker">
-            Quick check: chair height, monitor, keyboard/mouse, lighting, breaks, stretching, reporting.
-          </p>
-          <p className="kicker">
-            (You can replace this with your full assessment UI later — this is just a nice placeholder.)
-          </p>
-          <div className="mt-4">
-            <Link to="/" className="btn">Back home</Link>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function App(){
   return (
     <HashRouter>
@@ -138,7 +164,8 @@ export default function App(){
       <nav className="nav">
         <div className="shell nav-inner">
           <div className="brand">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+            {/* gradient orb logo */}
+            <svg className="icon icon-bob" width="26" height="26" viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="12" r="10" fill="url(#g)"/>
               <defs>
                 <linearGradient id="g" x1="0" y1="0" x2="24" y2="24">
@@ -150,7 +177,7 @@ export default function App(){
             OHSHAVEN • <span style={{ color:"#A7C8FF" }}>ErgoPulse</span>
             <span className="badge">v1</span>
           </div>
-          <div style={{ display:"flex", gap:"10px" }}>
+          <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
             <Link to="/" className="btn ghost">Home</Link>
             <Link to="/assess" className="btn">Assessment</Link>
             <Link to="/kit" className="btn indigo">Training Kit</Link>
