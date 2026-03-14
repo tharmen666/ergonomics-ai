@@ -1,0 +1,97 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+:root {
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #00121e;
+  /* ohs-dark */
+  color: #ffffff;
+  min-height: 100vh;
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#root {
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Global Mobile Scaling < 600px */
+@media (max-width: 600px) {
+  html {
+    font-size: 14px;
+  }
+  
+  /* Reduce padding globally on mobile */
+  .p-4, .p-6, .p-8 {
+    padding: 0.75rem !important;
+  }
+}
+
+/* Force Grid & Card containment */
+.grid, .card {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  max-width: 100vw !important;
+}
+
+/* Glassmorphism Global Styles */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 4px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+  .glass {
+    border-width: 2px;
+  }
+}
+
+.text-electric-cyan {
+  color: #00FFFF;
+}
+
+.bg-electric-cyan {
+  background-color: #00FFFF;
+}
+
+/* Prevent iOS Zoom on inputs */
+input, select, textarea {
+  font-size: 16px !important;
+}
+
+.glass-melly {
+  background: rgba(249, 168, 37, 0.05);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(249, 168, 37, 0.2);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #00121e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #003D5C;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #F9A825;
+}
