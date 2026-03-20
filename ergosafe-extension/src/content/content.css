@@ -16,8 +16,6 @@
     align-items: center !important;
     font-family: 'Inter', sans-serif !important;
     color: white !important;
-    -webkit-backdrop-filter: blur(10px) !important;
-    backdrop-filter: blur(10px) !important;
 }
 
 #ergosafe-title {
