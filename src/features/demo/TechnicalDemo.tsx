@@ -145,7 +145,7 @@ export const TechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                             initial={{ y: 50, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 2 }}
-                            className="absolute bottom-24 left-1/2 -translate-x-1/2 z-30 bg-black/80 backdrop-blur-xl border border-red-500/50 p-8 rounded-3xl shadow-[0_0_50px_rgba(220,38,38,0.3)] min-w-[500px]"
+                            className="absolute bottom-12 md:bottom-24 left-1/2 -translate-x-1/2 z-30 bg-black/80 backdrop-blur-xl border border-red-500/50 p-6 md:p-8 rounded-3xl shadow-[0_0_50px_rgba(220,38,38,0.3)] w-[90%] md:w-auto md:min-w-[500px]"
                         >
                             <div className="flex items-center gap-4 mb-4">
                                 <ShieldAlert className="text-red-500 animate-pulse" size={40} />
@@ -246,20 +246,20 @@ export const TechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                             <div className="flex justify-between items-end border-b border-white/10 pb-6 mb-12">
                                 <div>
                                     <h2 className="text-sm font-black text-ohs-orange tracking-[0.3em] uppercase mb-2">Executive Overview</h2>
-                                    <h1 className="text-5xl font-black">STEWARDSHIP INTELLIGENCE GRID</h1>
+                                    <h1 className="text-3xl md:text-5xl font-black">STEWARDSHIP INTELLIGENCE GRID</h1>
                                 </div>
                                 <div className="text-right">
                                     <p className="text-gray-500 font-bold uppercase tracking-wider">Live Corporate Feed</p>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-3 gap-8">
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                                 {/* Safety Pulse Dial */}
                                 <div className="col-span-1 bg-black/40 backdrop-blur-xl border border-white/5 rounded-3xl p-10 flex flex-col items-center justify-center relative shadow-2xl">
                                     <h3 className="text-lg font-black text-gray-400 uppercase tracking-widest mb-8">Safety Pulse</h3>
 
                                     {/* Dial implementation */}
-                                    <div className="relative w-64 h-64">
+                                    <div className="relative w-48 h-48 md:w-64 md:h-64 mx-auto">
                                         <svg className="w-full h-full transform -rotate-90">
                                             <circle cx="128" cy="128" r="110" stroke="rgba(255,255,255,0.1)" strokeWidth="20" fill="none" />
                                             <motion.circle

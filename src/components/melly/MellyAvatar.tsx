@@ -6,7 +6,7 @@ import { X, PlayCircle, Globe, ShieldCheck } from 'lucide-react';
 import { translations, Language } from '../../utils/translations';
 
 export const MellyAvatar = () => {
-    const { isSpeaking, setSpeaking, setTourActive, language, setLanguage, setGuidance } = useMellyStore();
+    const { isWingmanActive, isSpeaking, setSpeaking, setTourActive, language, setLanguage, setGuidance } = useMellyStore();
     const [isExpanded, setIsExpanded] = useState(false);
     const [userInput, setUserInput] = useState('');
     const [isEmergency, setIsEmergency] = useState(false);
@@ -37,6 +37,8 @@ export const MellyAvatar = () => {
         }
         setUserInput('');
     };
+
+    if (!isWingmanActive) return null;
 
     return (
         <div

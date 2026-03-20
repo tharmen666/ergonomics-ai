@@ -83,7 +83,7 @@ export const CognitiveHandshake = () => {
                             animate={{ scale: [0, 1.2, 1] }}
                             transition={{ type: "spring" }}
                             onClick={handleTargetClick}
-                            className="absolute flex items-center justify-center w-16 h-16 bg-ohs-orange hover:bg-yellow-400 rounded-full shadow-[0_0_30px_rgba(249,168,37,0.6)] cursor-crosshair transform -translate-x-1/2 -translate-y-1/2"
+                            className="absolute flex items-center justify-center w-20 h-20 md:w-16 md:h-16 bg-ohs-orange hover:bg-yellow-400 rounded-full shadow-[0_0_30px_rgba(249,168,37,0.6)] cursor-crosshair transform -translate-x-1/2 -translate-y-1/2"
                             style={{ left: `${targetPos.x}%`, top: `${targetPos.y}%` }}
                         >
                             <Target size={28} className="text-ohs-navy" />

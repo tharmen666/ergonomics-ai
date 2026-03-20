@@ -13,6 +13,7 @@ import { SelfAssessmentPage } from './features/assessment/SelfAssessmentPage';
 import { RiskyBehaviorsPage } from './features/risks/RiskyBehaviorsPage';
 import { HRDashboard } from './features/admin/HRDashboard';
 import { TechnicalDemo } from './features/demo/TechnicalDemo';
+import { ExecutiveBriefing } from './features/dashboard/ExecutiveBriefing';
 import { PrivacyHandshake } from './assets/Privacy-Shield/PrivacyHandshake';
 import { CognitiveHandshake } from './components/AI-Coach/CognitiveHandshake';
 
@@ -21,7 +22,7 @@ import { useMellyStore } from './store/mellyStore';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const { setTourActive } = useMellyStore();
+  const { isWingmanActive, setWingmanActive } = useMellyStore();
 
   if (activeTab === 'demo') {
     return <TechnicalDemo onExit={() => setActiveTab('dashboard')} />;
@@ -53,10 +54,16 @@ function App() {
           <div className="hidden lg:flex flex-col items-end gap-2 text-right">
             <div className="flex gap-3">
               <button
-                onClick={() => setTourActive(true)}
-                className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md"
+                onClick={() => setWingmanActive(!isWingmanActive)}
+                className={`inline-flex items-center gap-2 ${isWingmanActive ? 'bg-red-500 hover:bg-red-600' : 'bg-white/10 hover:bg-white/20'} text-white px-4 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md`}
               >
-                TOUR
+                {isWingmanActive ? 'DISABLE WINGMAN' : 'ACTIVATE WINGMAN'}
+              </button>
+              <button
+                onClick={() => setActiveTab('executive')}
+                className="inline-flex items-center gap-2 bg-ohs-orange/20 hover:bg-ohs-orange/30 border border-ohs-orange/50 text-ohs-orange px-4 py-2.5 rounded-xl font-bold text-sm transition-all shadow-[0_0_15px_rgba(249,168,37,0.2)]"
+              >
+                EXECUTIVE BRIEFING
               </button>
               <button
                 onClick={() => setActiveTab('demo')}
@@ -65,13 +72,9 @@ function App() {
                 150s HQ DEMO
               </button>
             </div>
-            <p className="text-[10px] font-bold text-gray-500 mt-1 uppercase tracking-tighter">
-              Experience our AI-automated safety walkthrough instantly.
-            </p>
           </div>
 
           <div className="flex items-center gap-4">
-            <MellyAvatar />
             <div className="bg-white/5 p-3 rounded-xl border border-white/10 hidden md:block">
               <p className="text-xs text-ohs-orange font-bold uppercase tracking-wider mb-1">Status</p>
               <p className="text-sm font-medium">All Systems Nominal</p>
@@ -85,6 +88,7 @@ function App() {
       {/* Route Content */}
       <main className="min-h-screen pb-24 md:pb-0 pt-0 md:pt-4">
         {activeTab === 'dashboard' && <DashboardPage />}
+        {activeTab === 'executive' && <ExecutiveBriefing />}
         {activeTab === 'training' && <TrainingPage />}
         {activeTab === 'checklist' && <ChecklistPage />}
         {activeTab === 'risk' && <RiskPage />}
