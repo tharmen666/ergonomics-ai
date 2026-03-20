@@ -1,0 +1,105 @@
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { BrainCircuit, Target } from 'lucide-react';
+import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
+import { useMellyStore } from '../../store/mellyStore';
+
+export const CognitiveHandshake = () => {
+    const { cognitiveHandshakePassed, passCognitiveHandshake, failCognitiveHandshake } = useFatigueStore();
+    const { setGuidance, setSpeaking, setMood } = useMellyStore();
+
+    // Game State
+    const [isActive, setIsActive] = useState(false);
+    const [targetsHit, setTargetsHit] = useState(0);
+    const [targetPos, setTargetPos] = useState({ x: 50, y: 50 });
+    const [reactionTimes, setReactionTimes] = useState<number[]>([]);
+    const [lastTargetTime, setLastTargetTime] = useState(Date.now());
+    const [gameCompleted, setGameCompleted] = useState(false);
+
+    const TOTAL_TARGETS = 5;
+
+    useEffect(() => {
+        // Start game if handshake isn't passed
+        if (!cognitiveHandshakePassed && !gameCompleted) {
+            const timer = setTimeout(() => setIsActive(true), 2500); // 2.5s delay after load
+            return () => clearTimeout(timer);
+        }
+    }, [cognitiveHandshakePassed, gameCompleted]);
+
+    const handleTargetClick = () => {
+        const timeToClick = Date.now() - lastTargetTime;
+        setReactionTimes(prev => [...prev, timeToClick]);
+
+        if (targetsHit + 1 >= TOTAL_TARGETS) {
+            finishGame([...reactionTimes, timeToClick]);
+        } else {
+            setTargetsHit(prev => prev + 1);
+            setTargetPos({
+                x: Math.floor(Math.random() * 80) + 10,
+                y: Math.floor(Math.random() * 70) + 15
+            });
+            setLastTargetTime(Date.now());
+        }
+    };
+
+    const finishGame = (finalTimes: number[]) => {
+        setIsActive(false);
+        setGameCompleted(true);
+
+        const avgReaction = finalTimes.reduce((a, b) => a + b, 0) / finalTimes.length;
+        // Arbitrary threshold: 800ms. >800ms implies 20%+ cognitive lag
+        const isFatigued = avgReaction > 800;
+
+        setSpeaking(true);
+        if (isFatigued) {
+            failCognitiveHandshake();
+            setMood('concerned');
+            setGuidance("Cognitive lag detected in your handshake. I'm flagging a High-Fatigue status. Please consider a 15-minute Professional Reset.");
+        } else {
+            passCognitiveHandshake();
+            setMood('happy');
+            setGuidance("Cognitive Handshake passed! You're performing at peak levels today.");
+        }
+
+        setTimeout(() => setSpeaking(false), 6000);
+    };
+
+    if (cognitiveHandshakePassed || gameCompleted) return null;
+
+    return (
+        <AnimatePresence>
+            {isActive && (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="fixed inset-0 z-[99000] flex flex-col items-center justify-center bg-black/90 backdrop-blur-md font-sans text-white p-4"
+                >
+                    <div className="absolute top-12 text-center max-w-lg">
+                        <BrainCircuit className="text-ohs-orange mx-auto mb-4" size={48} />
+                        <h2 className="text-3xl font-black mb-2 tracking-tight">MANDATORY COGNITIVE HANDSHAKE</h2>
+                        <p className="text-gray-400 font-medium">Click the targets as quickly as possible to establish your baseline. Lag &gt; 20% will trigger Digital Wingman protocols.</p>
+
+                        <div className="mt-8 flex justify-center gap-2">
+                            {Array.from({ length: TOTAL_TARGETS }).map((_, i) => (
+                                <div key={i} className={`w-3 h-3 rounded-full ${i < targetsHit ? 'bg-ohs-orange shadow-[0_0_10px_rgba(249,168,37,0.8)]' : 'bg-white/20'}`} />
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="w-full max-w-4xl h-[60vh] relative mt-24 border border-white/10 rounded-3xl bg-ohs-navy/30 overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,0.8)]">
+                        <motion.button
+                            initial={{ scale: 0 }}
+                            animate={{ scale: [0, 1.2, 1] }}
+                            transition={{ type: "spring" }}
+                            onClick={handleTargetClick}
+                            className="absolute flex items-center justify-center w-16 h-16 bg-ohs-orange hover:bg-yellow-400 rounded-full shadow-[0_0_30px_rgba(249,168,37,0.6)] cursor-crosshair transform -translate-x-1/2 -translate-y-1/2"
+                            style={{ left: `${targetPos.x}%`, top: `${targetPos.y}%` }}
+                        >
+                            <Target size={28} className="text-ohs-navy" />
+                        </motion.button>
+                    </div>
+                </motion.div>
+            )}
+        </AnimatePresence>
+    );
+};

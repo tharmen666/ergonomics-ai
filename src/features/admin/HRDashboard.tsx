@@ -1,10 +1,12 @@
 import { motion } from 'framer-motion';
 import { GlassCard } from '../../components/ui/GlassCard';
 import { GlowButton } from '../../components/ui/GlowButton';
-import { BarChart3, Users, AlertCircle, CheckCircle, Download, ShieldAlert, Award, TrendingUp } from 'lucide-react';
+import { BarChart3, Users, AlertCircle, CheckCircle, Download, ShieldAlert, Award, TrendingUp, Lock } from 'lucide-react';
 import { getLegalShockContent } from '../../utils/escalationLogic';
+import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 
 export const HRDashboard = () => {
+    const { fatigueLevel } = useFatigueStore();
     const stats = [
         { label: 'Total Employees', value: '124', icon: Users, color: 'text-ohs-blue', bgColor: 'bg-ohs-blue/10' },
         { label: 'Compliance Rate', value: '92%', icon: CheckCircle, color: 'text-ohs-green', bgColor: 'bg-ohs-green/10' },
@@ -37,13 +39,27 @@ export const HRDashboard = () => {
                     <p className="text-gray-400 font-medium">Monitoring organizational OHS adherence & cascading accountability.</p>
                 </div>
                 <div className="flex gap-3">
-                    <GlowButton variant="secondary" className="px-5 py-2.5 text-sm">
-                        Refresh Node
-                    </GlowButton>
-                    <GlowButton className="px-5 py-2.5 text-sm">
-                        <Download size={16} className="mr-2" />
-                        Export Audit
-                    </GlowButton>
+                    {fatigueLevel === 'high' ? (
+                        <div className="flex flex-col items-end gap-1">
+                            <div className="flex gap-3">
+                                <GlowButton variant="secondary" className="px-5 py-2.5 text-sm opacity-50 cursor-not-allowed">
+                                    <Lock size={16} className="mr-2" />
+                                    DOA Lockout
+                                </GlowButton>
+                            </div>
+                            <p className="text-[10px] text-red-400 font-bold uppercase tracking-widest animate-pulse">Critical Sign-off Disabled</p>
+                        </div>
+                    ) : (
+                        <>
+                            <GlowButton variant="secondary" className="px-5 py-2.5 text-sm">
+                                Refresh Node
+                            </GlowButton>
+                            <GlowButton className="px-5 py-2.5 text-sm">
+                                <Download size={16} className="mr-2" />
+                                Export Audit
+                            </GlowButton>
+                        </>
+                    )}
                 </div>
             </div>
 
@@ -223,7 +239,7 @@ export const HRDashboard = () => {
                                     <TrendingUp className={sup.compliance > 90 ? 'text-ohs-green' : 'text-ohs-orange'} size={24} />
                                 </div>
                                 <div className={`text-[10px] font-black px-2 py-0.5 rounded-full ${sup.compliance > 90 ? 'bg-ohs-green/20 text-ohs-green border border-ohs-green/30' :
-                                        'bg-ohs-orange/20 text-ohs-orange border border-ohs-orange/30'
+                                    'bg-ohs-orange/20 text-ohs-orange border border-ohs-orange/30'
                                     }`}>
                                     {sup.status}
                                 </div>

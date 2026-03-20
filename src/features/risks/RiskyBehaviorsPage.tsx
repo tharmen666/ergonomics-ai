@@ -65,19 +65,19 @@ export const RiskyBehaviorsPage = () => {
 
                                 let warning = "";
                                 if (risk.title.includes('Bed')) {
-                                    warning = "Per OHS Act 85 Sec 8(1), working from bed is critically unstable. I am recommending Stage 1: Ergonomic Foundation immediate review.";
+                                    warning = "Working from bed limits your postural support. As your Digital Wingman, I highly suggest taking a 15-minute Professional Reset. A quick stretch and some water will do wonders for your focus.";
                                     addRecommendation('foundation');
                                 } else if (risk.title.includes('Kitchen') || risk.title.includes('Slouching')) {
-                                    warning = "Postural instability contradicts OHS Act safety directives. Recommending Stage 1: Ergonomic Foundation.";
+                                    warning = "I noticed some postural instability. To keep you at peak performance, I recommend taking a quick reset break and adjusting your chair height.";
                                     addRecommendation('foundation');
                                 } else if (risk.desc.includes('lifting') || risk.title.includes('Reaching')) {
-                                    warning = "Based on OHS Act manual handling guidelines, I recommend revisiting Stage 2: Industrial Athletics for safe movement mechanics.";
+                                    warning = "Repetitive reaching drains your stamina. Let's optimize your setup so everything is within a relaxed arm's length.";
                                     addRecommendation('industrial');
                                 } else if (risk.title.includes('Glare') || risk.title.includes('Light')) {
-                                    warning = "Visual strain violates OHS environmental regulations. Recommending Stage 3: Remote Pro modules.";
+                                    warning = "Dim lighting can cause serious cognitive fatigue. Taking a 5-minute break to adjust your room lighting will boost your energy instantly.";
                                     addRecommendation('remote');
                                 } else {
-                                    warning = `I've noted ${risk.title}. Under OHS Act standards, adding corrective modules to your Continuous Improvement plan.`;
+                                    warning = `I've noted ${risk.title}. Let's work on this together to keep you performing at your absolute best!`;
                                     addRecommendation('continuous');
                                 }
 

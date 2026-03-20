@@ -13,6 +13,8 @@ import { SelfAssessmentPage } from './features/assessment/SelfAssessmentPage';
 import { RiskyBehaviorsPage } from './features/risks/RiskyBehaviorsPage';
 import { HRDashboard } from './features/admin/HRDashboard';
 import { TechnicalDemo } from './features/demo/TechnicalDemo';
+import { PrivacyHandshake } from './assets/Privacy-Shield/PrivacyHandshake';
+import { CognitiveHandshake } from './components/AI-Coach/CognitiveHandshake';
 
 import { TourManager } from './components/agent/TourManager';
 import { useMellyStore } from './store/mellyStore';
@@ -27,6 +29,8 @@ function App() {
 
   return (
     <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
+      <PrivacyHandshake />
+      <CognitiveHandshake />
       <TourManager setActiveTab={setActiveTab} />
 
       <header className="flex flex-col md:flex-row items-center justify-between mb-8 gap-6">

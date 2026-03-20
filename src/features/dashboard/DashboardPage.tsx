@@ -5,6 +5,7 @@ import { DailySafetyChecklist } from './DailySafetyChecklist';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check } from 'lucide-react';
+import { SafetyStreaks } from '../../components/AI-Coach/SafetyStreaks';
 
 export const DashboardPage = () => {
     return (
@@ -67,24 +68,10 @@ export const DashboardPage = () => {
                         </GlassCard>
                     </div>
 
-                    {/* Recent Activity List */}
-                    <GlassCard>
-                        <h3 className="text-lg font-semibold mb-4">Live Feed</h3>
-                        <div className="space-y-4">
-                            {[1, 2, 3].map((i) => (
-                                <div key={i} className="flex items-center justify-between border-b border-white/5 pb-4 last:border-0 last:pb-0">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs">JD</div>
-                                        <div>
-                                            <p className="text-sm font-medium">John Doe completed "Neck Stretches"</p>
-                                            <p className="text-xs text-gray-500">2 mins ago</p>
-                                        </div>
-                                    </div>
-                                    <span className="text-xs text-ohs-green">+50 XP</span>
-                                </div>
-                            ))}
-                        </div>
-                    </GlassCard>
+                    {/* Digital Wingman Streaks */}
+                    <div className="h-[250px]">
+                        <SafetyStreaks />
+                    </div>
                 </div>
 
                 <div className="lg:col-span-1">
@@ -112,8 +99,8 @@ const ReportGenerator = () => {
                 onClick={handleGenerate}
                 disabled={status !== 'idle'}
                 className={`w-full py-3 px-4 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] transition-all duration-500 relative overflow-hidden ${status === 'idle' ? 'bg-ohs-orange/10 text-ohs-orange hover:bg-ohs-orange hover:text-ohs-navy shadow-lg shadow-ohs-orange/5' :
-                        status === 'generating' ? 'bg-white/5 text-gray-500 cursor-wait' :
-                            'bg-ohs-green text-ohs-navy shadow-lg shadow-ohs-green/20'
+                    status === 'generating' ? 'bg-white/5 text-gray-500 cursor-wait' :
+                        'bg-ohs-green text-ohs-navy shadow-lg shadow-ohs-green/20'
                     }`}
             >
                 <AnimatePresence mode="wait">
