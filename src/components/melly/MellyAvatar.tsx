@@ -79,7 +79,7 @@ export const MellyAvatar = () => {
                         >
                             <div className="w-full h-full rounded-full overflow-hidden relative bg-ohs-orange/20 border-[3px] border-[#F9A825]">
                                 <img
-                                    src="/assets/melly-steward-final.png?v=2026"
+                                    src="/assets/melly-new-avatar.png?v=2026"
                                     alt="Melly AI"
                                     className="w-full h-full object-cover rounded-full"
                                 />
@@ -236,7 +236,7 @@ export const MellyAvatar = () => {
                 whileTap={{ scale: 0.9 }}
             >
                 <div className="absolute inset-0 bg-ohs-navy" />
-                <img src="/assets/melly-steward-final.png?v=2026" alt="M" className="w-full h-full object-cover relative z-10 rounded-full" />
+                <img src="/assets/melly-new-avatar.png?v=2026" alt="M" className="w-full h-full object-cover relative z-10 rounded-full" />
 
                 {/* Active Pulse */}
                 <motion.div

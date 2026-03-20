@@ -12,6 +12,7 @@ import { InvoicesPage } from './features/finance/InvoicesPage';
 import { SelfAssessmentPage } from './features/assessment/SelfAssessmentPage';
 import { RiskyBehaviorsPage } from './features/risks/RiskyBehaviorsPage';
 import { HRDashboard } from './features/admin/HRDashboard';
+import { TechnicalDemo } from './features/demo/TechnicalDemo';
 
 import { TourManager } from './components/agent/TourManager';
 import { useMellyStore } from './store/mellyStore';
@@ -19,6 +20,10 @@ import { useMellyStore } from './store/mellyStore';
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const { setTourActive } = useMellyStore();
+
+  if (activeTab === 'demo') {
+    return <TechnicalDemo onExit={() => setActiveTab('dashboard')} />;
+  }
 
   return (
     <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
@@ -41,13 +46,21 @@ function App() {
         </div>
 
         <div className="flex items-center gap-6">
-          <div className="hidden lg:block text-right">
-            <button
-              onClick={() => setTourActive(true)}
-              className="inline-flex items-center gap-2 bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-6 py-2.5 rounded-xl font-black text-sm transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(249,168,37,0.3)]"
-            >
-              REQUEST A DEMO
-            </button>
+          <div className="hidden lg:flex flex-col items-end gap-2 text-right">
+            <div className="flex gap-3">
+              <button
+                onClick={() => setTourActive(true)}
+                className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-4 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md"
+              >
+                TOUR
+              </button>
+              <button
+                onClick={() => setActiveTab('demo')}
+                className="inline-flex items-center gap-2 bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-6 py-2.5 rounded-xl font-black text-sm transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(249,168,37,0.3)]"
+              >
+                150s HQ DEMO
+              </button>
+            </div>
             <p className="text-[10px] font-bold text-gray-500 mt-1 uppercase tracking-tighter">
               Experience our AI-automated safety walkthrough instantly.
             </p>
