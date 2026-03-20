@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useMellyStore } from '../../store/mellyStore';
 import { GlowButton } from '../../components/ui/GlowButton';
 
 export const SelfAssessmentPage = () => {
-    const { setGuidance, setSpeaking, setMood } = useMellyStore();
+    const { setGuidance } = useMellyStore();
     const [step, setStep] = useState(1);
 
     return (

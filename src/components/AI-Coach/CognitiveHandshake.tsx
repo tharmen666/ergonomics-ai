@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BrainCircuit, Target } from 'lucide-react';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';

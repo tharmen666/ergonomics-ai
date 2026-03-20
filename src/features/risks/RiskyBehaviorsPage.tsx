@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
 import { useMellyStore } from '../../store/mellyStore';
 import { GlowButton } from '../../components/ui/GlowButton';
 import { AlertTriangle, CheckCircle } from 'lucide-react';
