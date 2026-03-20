@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ErgoSafe Wingman</title>
+    <link rel="stylesheet" href="popup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="header">
+        <h1 class="logo">ErgoSafe <span class="accent">WINGMAN</span></h1>
+        <div class="status-indicator"></div>
+    </div>
+
+    <div class="dashboard">
+        <div class="stat-card">
+            <div class="stat-label">SAFETY STREAK</div>
+            <div class="stat-value text-gold" id="streakLabel">12 Days</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">FATIGUE INDEX</div>
+            <div class="stat-value text-green" id="fatigueLabel">Nominal</div>
+        </div>
+
+        <button id="syncBtn" class="btn">SYNC TELEMETRY</button>
+        <p class="sync-desc">Connected to <b>ergo-safe-reborn.vercel.app</b></p>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>

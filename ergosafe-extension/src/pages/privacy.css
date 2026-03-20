@@ -1,0 +1,90 @@
+body {
+    background-color: #0b0f19; /* OHS Navy */
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+    max-width: 600px;
+    padding: 2rem;
+}
+
+.shield-icon {
+    font-size: 80px;
+    margin-bottom: 1rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin: 0;
+    color: #f9a825; /* OHS Orange */
+    letter-spacing: -1px;
+}
+
+.subtitle {
+    color: #94a3b8;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+    margin-bottom: 2.5rem;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: left;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+
+.card h3 {
+    margin-top: 0;
+    color: #f9a825;
+}
+
+.card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.card li {
+    margin-bottom: 10px;
+    font-weight: 600;
+    padding: 10px;
+    background: rgba(249,168,37,0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(249,168,37,0.2);
+}
+
+button {
+    background: #f9a825;
+    color: #0b0f19;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 900;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 0 15px rgba(249,168,37,0.4);
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(249,168,37,0.6);
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
