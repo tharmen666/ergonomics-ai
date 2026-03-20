@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldAlert, Activity, Globe, CheckCircle2, FileText, AlertTriangle, PlayCircle } from 'lucide-react';
+import { speak, stopSpeaking } from '../../utils/speech';
 
 export const TechnicalDemo = ({ onExit }: { onExit: () => void }) => {
     const [scene, setScene] = useState(0); // 0: Start Screen, 1: High Risk, 2: Melly, 3: CEO Dash, 4: Admin-Zero, 5: End
@@ -28,6 +29,31 @@ export const TechnicalDemo = ({ onExit }: { onExit: () => void }) => {
             return () => { clearTimeout(i1); clearTimeout(i2); clearTimeout(i3); };
         }
     }, [scene]);
+
+    useEffect(() => {
+        if (scene === 1) {
+            setTimeout(() => speak("Non-compliance detected. Critical cervical and carpal strain warning."), 2000);
+        } else if (scene === 3) {
+            speak("Stewardship Intelligence Grid loaded. Deploying immediate mitigation strategy for Section 37 and 38 legal liability alerts.");
+        } else if (scene === 4) {
+            speak("Admin-Zero Automation Sequencing. Assembling biometric risk factors and filing secure dossier.");
+        } else if (scene === 5 || scene === 0) {
+            stopSpeaking();
+        }
+    }, [scene]);
+
+    useEffect(() => {
+        if (scene === 2) {
+            if (langPhase === 1) {
+                speak("Warning. Severe posture hazard detected. Please adjust your screen height to eye level instantly.");
+            } else if (langPhase === 2) {
+                // Shortened for TTS reliability in browser
+                speak("Isexwayiso. Kutholwe ingozi enkulu yokuma kabi komzimba.");
+            } else if (langPhase === 3) {
+                speak("Isilumkiso. Kubhaqwe ingozi enkulu yokuma kakubi komzimba.");
+            }
+        }
+    }, [scene, langPhase]);
 
     return (
         <div className="fixed inset-0 bg-black text-white z-[9999] overflow-hidden flex flex-col font-sans">

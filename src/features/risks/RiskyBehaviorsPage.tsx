@@ -8,23 +8,6 @@ import { speak } from '../../utils/speech';
 export const RiskyBehaviorsPage = () => {
     const { setGuidance, setSpeaking, setMood, addRecommendation } = useMellyStore();
 
-    useEffect(() => {
-        setSpeaking(true);
-        setMood('concerned');
-        setGuidance("Let's identify common ergonomic risks. Being aware of these behaviors is the first step to prevention.");
-
-        const timer = setTimeout(() => {
-            setSpeaking(false);
-            setMood('neutral');
-        }, 4000);
-
-        return () => {
-            setGuidance(null);
-            setSpeaking(false);
-            clearTimeout(timer);
-        };
-    }, [setGuidance, setSpeaking, setMood]);
-
     const risks = [
         { id: 1, title: 'Slouching / Turtling', desc: 'Leaning forward towards the screen creates neck strain.' },
         { id: 2, title: 'Feet Unsupported', desc: 'Dangling feet cut off circulation and strain the lower back.' },

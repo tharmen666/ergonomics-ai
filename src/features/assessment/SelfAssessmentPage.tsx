@@ -7,24 +7,6 @@ export const SelfAssessmentPage = () => {
     const { setGuidance, setSpeaking, setMood } = useMellyStore();
     const [step, setStep] = useState(1);
 
-    useEffect(() => {
-        // Melly Intro
-        setSpeaking(true);
-        setMood('happy');
-        setGuidance("Welcome to your Self-Assessment! I'll guide you through a quick check of your workspace setup. Let's start with your chair.");
-
-        const timer = setTimeout(() => {
-            setSpeaking(false);
-        }, 5000);
-
-        return () => {
-            setGuidance(null);
-            setSpeaking(false);
-            setMood('neutral');
-            clearTimeout(timer);
-        };
-    }, [setGuidance, setSpeaking, setMood]);
-
     return (
         <div className="p-6 md:p-10 max-w-5xl mx-auto pb-32">
             <motion.div

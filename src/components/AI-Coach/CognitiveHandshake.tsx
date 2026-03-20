@@ -5,11 +5,10 @@ import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 import { useMellyStore } from '../../store/mellyStore';
 
 export const CognitiveHandshake = () => {
-    const { cognitiveHandshakePassed, passCognitiveHandshake, failCognitiveHandshake } = useFatigueStore();
+    const { cognitiveHandshakePassed, showCognitiveHandshake, setShowCognitiveHandshake, passCognitiveHandshake, failCognitiveHandshake } = useFatigueStore();
     const { setGuidance, setSpeaking, setMood } = useMellyStore();
 
     // Game State
-    const [isActive, setIsActive] = useState(false);
     const [targetsHit, setTargetsHit] = useState(0);
     const [targetPos, setTargetPos] = useState({ x: 50, y: 50 });
     const [reactionTimes, setReactionTimes] = useState<number[]>([]);
@@ -17,14 +16,6 @@ export const CognitiveHandshake = () => {
     const [gameCompleted, setGameCompleted] = useState(false);
 
     const TOTAL_TARGETS = 5;
-
-    useEffect(() => {
-        // Start game if handshake isn't passed
-        if (!cognitiveHandshakePassed && !gameCompleted) {
-            const timer = setTimeout(() => setIsActive(true), 2500); // 2.5s delay after load
-            return () => clearTimeout(timer);
-        }
-    }, [cognitiveHandshakePassed, gameCompleted]);
 
     const handleTargetClick = () => {
         const timeToClick = Date.now() - lastTargetTime;
@@ -43,7 +34,7 @@ export const CognitiveHandshake = () => {
     };
 
     const finishGame = (finalTimes: number[]) => {
-        setIsActive(false);
+        setShowCognitiveHandshake(false);
         setGameCompleted(true);
 
         const avgReaction = finalTimes.reduce((a, b) => a + b, 0) / finalTimes.length;
@@ -68,7 +59,7 @@ export const CognitiveHandshake = () => {
 
     return (
         <AnimatePresence>
-            {isActive && (
+            {showCognitiveHandshake && !cognitiveHandshakePassed && (
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}

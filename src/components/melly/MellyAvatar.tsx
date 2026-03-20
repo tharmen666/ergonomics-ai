@@ -11,20 +11,6 @@ export const MellyAvatar = () => {
     const [userInput, setUserInput] = useState('');
     const [isEmergency, setIsEmergency] = useState(false);
 
-    // Auto-expand slightly on load for awareness, then minimize
-    useEffect(() => {
-        const wakeUpSequence = async () => {
-            await new Promise(resolve => setTimeout(resolve, 800));
-            setIsExpanded(true);
-            setSpeaking(true);
-            setTimeout(() => {
-                setSpeaking(false);
-                setIsExpanded(false);
-            }, 4000);
-        };
-        wakeUpSequence();
-    }, [setSpeaking]);
-
     // Audio Kill-Switch & Cleanup
     useEffect(() => {
         return () => {

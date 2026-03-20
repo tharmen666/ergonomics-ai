@@ -4,6 +4,8 @@ interface FatigueState {
     fatigueLevel: 'nominal' | 'high';
     cognitiveHandshakePassed: boolean;
     setFatigueLevel: (level: 'nominal' | 'high') => void;
+    showCognitiveHandshake: boolean;
+    setShowCognitiveHandshake: (show: boolean) => void;
     passCognitiveHandshake: () => void;
     failCognitiveHandshake: () => void;
 
@@ -16,9 +18,11 @@ interface FatigueState {
 export const useFatigueStore = create<FatigueState>((set) => ({
     fatigueLevel: 'nominal',
     cognitiveHandshakePassed: false,
+    showCognitiveHandshake: false,
+    setShowCognitiveHandshake: (show) => set({ showCognitiveHandshake: show }),
     setFatigueLevel: (level) => set({ fatigueLevel: level }),
-    passCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'nominal' }),
-    failCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'high' }),
+    passCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'nominal', showCognitiveHandshake: false }),
+    failCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'high', showCognitiveHandshake: false }),
 
     // behavioral routine
     lastLoginTime: Date.now(),

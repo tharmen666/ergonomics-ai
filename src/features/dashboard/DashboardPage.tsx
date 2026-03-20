@@ -4,14 +4,31 @@ import { Users, AlertCircle, FileText } from 'lucide-react';
 import { DailySafetyChecklist } from './DailySafetyChecklist';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { Check, ShieldCheck } from 'lucide-react';
 import { SafetyStreaks } from '../../components/AI-Coach/SafetyStreaks';
+import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
+import { GlowButton } from '../../components/ui/GlowButton';
 
 export const DashboardPage = () => {
+    const { cognitiveHandshakePassed, setShowCognitiveHandshake } = useFatigueStore();
     return (
         <div className="space-y-6">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
+                    {/* Handshake Prompt */}
+                    {!cognitiveHandshakePassed && (
+                        <div className="bg-orange-500/10 border border-orange-500/30 p-6 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+                            <div>
+                                <h3 className="text-xl font-black text-white">Daily Cognitive Sync Required</h3>
+                                <p className="text-sm text-gray-400">Establish your baseline today to activate Digital Wingman features.</p>
+                            </div>
+                            <GlowButton onClick={() => setShowCognitiveHandshake(true)} className="whitespace-nowrap">
+                                <ShieldCheck size={18} className="mr-2 inline-block -mt-1" />
+                                Initiate Handshake
+                            </GlowButton>
+                        </div>
+                    )}
+
                     {/* Top Stats */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <GlassCard>
