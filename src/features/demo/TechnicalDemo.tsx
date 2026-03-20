@@ -9,7 +9,7 @@ export const TechnicalDemo = ({ onExit }: { onExit: () => void }) => {
     useEffect(() => {
         if (scene === 0 || scene === 5) return;
 
-        let timeoutId: NodeJS.Timeout;
+        let timeoutId: ReturnType<typeof setTimeout>;
         if (scene === 1) timeoutId = setTimeout(() => setScene(2), 30000);
         else if (scene === 2) timeoutId = setTimeout(() => setScene(3), 40000);
         else if (scene === 3) timeoutId = setTimeout(() => setScene(4), 40000);
@@ -107,7 +107,7 @@ export const TechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                                 />
 
                                 {/* Tracking Lines */}
-                                <svg className="absolute inset-0 w-full h-full" style={{ strokeDasharray: '4 4' }}>
+                                <svg className="absolute inset-0 w-full h-full" strokeDasharray="4 4">
                                     <line x1="20%" y1="50%" x2="40%" y2="65%" stroke="var(--ohs-orange)" strokeWidth="2" strokeDasharray="5,5" className="opacity-50" />
                                     <line x1="80%" y1="20%" x2="55%" y2="25%" stroke="red" strokeWidth="2" strokeDasharray="5,5" className="opacity-50" />
                                 </svg>
@@ -308,7 +308,7 @@ export const TechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                         className="flex-1 bg-black flex flex-col items-center justify-center p-12 relative overflow-hidden"
                     >
                         {/* Cyber Grid Background */}
-                        <div className="absolute inset-0 bg-[#001c00]" style={{ backgroundImage: 'linear-gradient(#0f0 1px, transparent 1px), linear-gradient(90deg, #0f0 1px, transparent 1px)', backgroundSize: '40px 40px', opacity: 0.05 }} />
+                        <div className="absolute inset-0 bg-[#001c00] opacity-5 [background-image:linear-gradient(#0f0_1px,transparent_1px),linear-gradient(90deg,#0f0_1px,transparent_1px)] [background-size:40px_40px]" />
 
                         <div className="relative z-10 w-full max-w-4xl text-center">
                             <motion.div
