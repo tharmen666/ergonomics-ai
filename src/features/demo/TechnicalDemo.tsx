@@ -1,76 +1,62 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldAlert, Activity, Globe, CheckCircle2, FileText, AlertTriangle, PlayCircle } from 'lucide-react';
+import { ShieldAlert, Globe, Activity, Lock, LineChart, Target } from 'lucide-react';
 import { speak, stopSpeaking } from '../../utils/speech';
 
 export const TechnicalDemo = ({ onExit }: { onExit: () => void }) => {
-    const [scene, setScene] = useState(0); // 0: Start Screen, 1: High Risk, 2: Melly, 3: CEO Dash, 4: Admin-Zero, 5: End
+    // 0: Start, 1: Liability Trigger, 2: Cognitive Handshake, 3: Global Standard, 4: Memory Vault, 5: End
+    const [scene, setScene] = useState(0);
+    const [isoToggle, setIsoToggle] = useState(false);
 
-    // Timings: Start -> Scene 1 (30s) -> Scene 2 (40s) -> Scene 3 (40s) -> Scene 4 (40s) -> End
     useEffect(() => {
         if (scene === 0 || scene === 5) return;
 
         let timeoutId: ReturnType<typeof setTimeout>;
-        if (scene === 1) timeoutId = setTimeout(() => setScene(2), 30000);
+        if (scene === 1) timeoutId = setTimeout(() => setScene(2), 40000);
         else if (scene === 2) timeoutId = setTimeout(() => setScene(3), 40000);
         else if (scene === 3) timeoutId = setTimeout(() => setScene(4), 40000);
-        else if (scene === 4) timeoutId = setTimeout(() => setScene(5), 40000);
+        else if (scene === 4) timeoutId = setTimeout(() => setScene(5), 30000);
 
         return () => clearTimeout(timeoutId);
     }, [scene]);
 
-    const [langPhase, setLangPhase] = useState(0); // For Scene 2 Melly Translation
-
+    // ISO Dashboard Toggle Animation for Scene 3
     useEffect(() => {
-        if (scene === 2) {
-            const i1 = setTimeout(() => setLangPhase(1), 10000); // EN
-            const i2 = setTimeout(() => setLangPhase(2), 20000); // ZU
-            const i3 = setTimeout(() => setLangPhase(3), 30000); // XH
-            return () => { clearTimeout(i1); clearTimeout(i2); clearTimeout(i3); };
+        if (scene === 3) {
+            const temp = setInterval(() => setIsoToggle(prev => !prev), 4000);
+            return () => clearInterval(temp);
         }
     }, [scene]);
 
     useEffect(() => {
         if (scene === 1) {
-            setTimeout(() => speak("Non-compliance detected. Critical cervical and carpal strain warning."), 2000);
+            speak("We don't just track posture; we shield the CEO from criminal liability by documenting proactive care in real-time.");
+        } else if (scene === 2) {
+            speak("Our 10-PhD Melly detects cognitive fatigue before an error happens. If you aren't fit for duty, the system locks the 'Sign-Off' button. We stop the accident before it occurs.");
         } else if (scene === 3) {
-            speak("Stewardship Intelligence Grid loaded. Deploying immediate mitigation strategy for Section 37 and 38 legal liability alerts.");
+            speak("One platform, any jurisdiction. Melly cross-references local laws with global ISO standards, giving multinationals a single 'Truth Dashboard' for fifty countries.");
         } else if (scene === 4) {
-            speak("Admin-Zero Automation Sequencing. Assembling biometric risk factors and filing secure dossier.");
+            speak("Melly remembers your history. She doesn't just see a worker; she sees a trend. This is the 'Awakening' of OHS, A.I. that knows your team's health better than they do.");
         } else if (scene === 5 || scene === 0) {
             stopSpeaking();
         }
     }, [scene]);
 
-    useEffect(() => {
-        if (scene === 2) {
-            if (langPhase === 1) {
-                speak("Warning. Severe posture hazard detected. Please adjust your screen height to eye level instantly.");
-            } else if (langPhase === 2) {
-                // Shortened for TTS reliability in browser
-                speak("Isexwayiso. Kutholwe ingozi enkulu yokuma kabi komzimba.");
-            } else if (langPhase === 3) {
-                speak("Isilumkiso. Kubhaqwe ingozi enkulu yokuma kakubi komzimba.");
-            }
-        }
-    }, [scene, langPhase]);
-
     return (
         <div className="fixed inset-0 bg-black text-white z-[9999] overflow-hidden flex flex-col font-sans">
-            {/* Title Overlay */}
             <div className="absolute top-6 left-8 z-50 pointer-events-none">
                 <motion.h1
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     className="text-4xl font-black tracking-tighter"
                 >
-                    DESIGAN THARMEN: <span className="text-ohs-orange">PREVENTION IN PRACTICE</span>
+                    ERGOSAFE REBORN: <span className="text-ohs-orange">GOD MODE v1.3</span>
                 </motion.h1>
             </div>
 
             <button
                 onClick={onExit}
-                className="absolute top-6 right-8 z-50 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-sm font-bold backdrop-blur-md"
+                className="absolute top-6 right-8 z-50 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg text-sm font-bold backdrop-blur-md transition-all z-[10000]"
             >
                 EXIT DEMO
             </button>
@@ -80,328 +66,215 @@ export const TechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                     <motion.div
                         key="start"
                         exit={{ opacity: 0 }}
-                        className="flex-1 flex items-center justify-center bg-ohs-navy"
+                        className="flex-1 flex items-center justify-center bg-[#0b0f19]"
                     >
                         <button
                             onClick={() => setScene(1)}
-                            className="flex items-center gap-3 bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-8 py-4 rounded-2xl font-black text-xl hover:scale-105 transition-all shadow-[0_0_40px_rgba(249,168,37,0.4)]"
+                            className="bg-ohs-orange hover:bg-ohs-orange/90 text-[#0b0f19] px-10 py-5 rounded-2xl font-black text-2xl hover:scale-105 transition-all shadow-[0_0_50px_rgba(249,168,37,0.5)]"
                         >
-                            <PlayCircle size={28} />
-                            INITIATE 150s SIMULATION
+                            INITIATE MASTER PIPELINE (150s)
                         </button>
                     </motion.div>
                 )}
 
+                {/* SCENE 1: The Liability Trigger (0-40s) */}
                 {scene === 1 && (
                     <motion.div
                         key="scene1"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="flex-1 relative bg-black flex items-center justify-center"
+                        className="flex-1 relative bg-black flex flex-col items-center justify-center p-8"
                     >
-                        {/* Background Image */}
-                        <div className="absolute inset-0 z-0">
-                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black z-10" />
-                            <img
-                                src="/assets/high_risk_worker.png"
-                                className="w-full h-full object-cover opacity-60"
-                                alt="High Risk Worker"
-                            />
+                        <div className="absolute inset-0 z-0 opacity-40">
+                            <img src="/assets/high_risk_worker.png" className="w-full h-full object-cover grayscale" alt="Worker" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black" />
                         </div>
 
-                        {/* Heatmap Overlays - Animated SVG overlay mimicking RSI tracking */}
-                        <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-                            <motion.div
-                                initial={{ opacity: 0, scale: 1.5 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ duration: 2, ease: "circOut" }}
-                                className="relative w-full max-w-4xl h-full flex items-center justify-center"
-                            >
-                                {/* Simulated Neck Heatmap */}
-                                <motion.div
-                                    animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.2, 1] }}
-                                    transition={{ repeat: Infinity, duration: 1.5 }}
-                                    className="absolute top-[25%] left-[55%] w-32 h-32 bg-red-600/70 rounded-full blur-[40px]"
-                                />
+                        <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ delay: 0.5, duration: 1 }}
+                            className="relative z-10 text-center"
+                        >
+                            <ShieldAlert size={100} className="mx-auto text-red-600 animate-pulse drop-shadow-[0_0_30px_rgba(220,38,38,1)]" />
+                            <h2 className="text-7xl font-black mt-6 text-red-600 tracking-widest drop-shadow-[0_0_20px_rgba(220,38,38,0.8)]">SECTION 37 & 38</h2>
+                            <h3 className="text-5xl font-black mt-2 text-white tracking-widest bg-red-600/20 py-2 px-8 inline-block border border-red-500/50">AT RISK</h3>
+                        </motion.div>
 
-                                {/* Simulated Wrist Heatmap */}
-                                <motion.div
-                                    animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.2, 1] }}
-                                    transition={{ repeat: Infinity, duration: 1.2 }}
-                                    className="absolute bottom-[35%] left-[40%] w-24 h-24 bg-red-600/80 rounded-full blur-[30px]"
-                                />
-
-                                {/* Tracking Lines */}
-                                <svg className="absolute inset-0 w-full h-full" strokeDasharray="4 4">
-                                    <line x1="20%" y1="50%" x2="40%" y2="65%" stroke="var(--ohs-orange)" strokeWidth="2" strokeDasharray="5,5" className="opacity-50" />
-                                    <line x1="80%" y1="20%" x2="55%" y2="25%" stroke="red" strokeWidth="2" strokeDasharray="5,5" className="opacity-50" />
-                                </svg>
-                            </motion.div>
-                        </div>
-
-                        {/* Warning UI */}
                         <motion.div
                             initial={{ y: 50, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ delay: 2 }}
-                            className="absolute bottom-12 md:bottom-24 left-1/2 -translate-x-1/2 z-30 bg-black/80 backdrop-blur-xl border border-red-500/50 p-6 md:p-8 rounded-3xl shadow-[0_0_50px_rgba(220,38,38,0.3)] w-[90%] md:w-auto md:min-w-[500px]"
+                            className="absolute bottom-16 bg-black/80 backdrop-blur-xl border-l-8 border-ohs-orange p-8 max-w-3xl rounded-r-2xl"
                         >
-                            <div className="flex items-center gap-4 mb-4">
-                                <ShieldAlert className="text-red-500 animate-pulse" size={40} />
-                                <div>
-                                    <h2 className="text-3xl font-black text-red-500 tracking-widest uppercase">NON-COMPLIANCE DETECTED</h2>
-                                    <p className="text-gray-400 font-bold tracking-tight">Cervical & Carpal Strain Warning. Risk Level: CRITICAL.</p>
-                                </div>
-                            </div>
-
-                            <div className="mt-6 flex gap-4">
-                                <div className="flex-1 bg-red-500/10 border border-red-500/20 p-4 rounded-xl">
-                                    <p className="text-sm font-bold text-gray-400 uppercase">Posture Metric</p>
-                                    <p className="text-2xl font-black text-white">42° Forward Flex</p>
-                                </div>
-                                <div className="flex-1 bg-red-500/10 border border-red-500/20 p-4 rounded-xl">
-                                    <p className="text-sm font-bold text-gray-400 uppercase">Time at Risk</p>
-                                    <p className="text-2xl font-black text-white">3h 42m</p>
-                                </div>
-                            </div>
+                            <p className="text-ohs-orange font-bold uppercase tracking-widest mb-2">Proactive Stewardship</p>
+                            <p className="text-2xl font-medium leading-relaxed">"We don't just track posture; we shield the CEO from criminal liability by documenting proactive care in real-time."</p>
                         </motion.div>
                     </motion.div>
                 )}
 
+                {/* SCENE 2: The Cognitive Handshake (40-80s) */}
                 {scene === 2 && (
                     <motion.div
                         key="scene2"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="flex-1 bg-ohs-navy flex items-center justify-center relative overflow-hidden"
+                        className="flex-1 relative bg-[#0b0f19] flex items-center justify-center p-12 overflow-hidden"
                     >
-                        {/* Glowing Orb (Melly) */}
-                        <motion.div
-                            animate={{
-                                scale: [1, 1.1, 1],
-                                boxShadow: [
-                                    "0 0 100px rgba(249, 168, 37, 0.4)",
-                                    "0 0 200px rgba(249, 168, 37, 0.8)",
-                                    "0 0 100px rgba(249, 168, 37, 0.4)"
-                                ]
-                            }}
-                            transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-                            className="w-64 h-64 rounded-full bg-gradient-to-br from-ohs-orange to-yellow-600 relative z-20 flex items-center justify-center border-4 border-white/20"
-                        >
-                            <Activity className="text-white opacity-80" size={80} />
+                        <div className="w-full max-w-5xl flex gap-12 items-center">
+                            {/* Handshake Simulator */}
+                            <div className="flex-1 bg-black/50 border border-white/10 h-96 rounded-3xl relative overflow-hidden flex flex-col items-center justify-center p-8">
+                                <h3 className="text-xl font-bold text-gray-400 uppercase tracking-widest absolute top-8">30s Verification Sequence</h3>
+                                <motion.div
+                                    animate={{ scale: [1, 1.2, 1], opacity: [1, 0, 1] }}
+                                    transition={{ duration: 1.5, repeat: Infinity }}
+                                    className="w-16 h-16 bg-ohs-orange rounded-full absolute"
+                                    style={{ top: '40%', left: '30%' }}
+                                />
+                                <motion.div
+                                    animate={{ scale: [1, 1.2, 1], opacity: [1, 0, 1] }}
+                                    transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                                    className="w-16 h-16 bg-ohs-orange rounded-full absolute"
+                                    style={{ top: '60%', left: '70%' }}
+                                />
 
-                            {/* Soundwaves */}
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                {[1, 2, 3].map(i => (
-                                    <motion.div
-                                        key={i}
-                                        animate={{ scale: [1, 3], opacity: [0.5, 0] }}
-                                        transition={{ repeat: Infinity, duration: 2, delay: i * 0.6 }}
-                                        className="absolute inset-0 rounded-full border border-ohs-orange"
-                                    />
-                                ))}
+                                {/* Lockout Overlay triggers at 5s */}
+                                <motion.div
+                                    initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+                                    animate={{ opacity: 1, backdropFilter: "blur(10px)" }}
+                                    transition={{ delay: 4, duration: 1 }}
+                                    className="absolute inset-0 bg-red-900/40 z-20 flex flex-col items-center justify-center"
+                                >
+                                    <Lock size={64} className="text-red-500 mb-4 drop-shadow-[0_0_20px_rgba(239,68,68,0.8)]" />
+                                    <h2 className="text-5xl font-black text-white tracking-widest drop-shadow-xl">DOA LOCKOUT</h2>
+                                    <p className="text-red-300 font-bold mt-2 uppercase tracking-widest tracking-[0.3em]">Sign-Off Capability Disabled</p>
+                                </motion.div>
                             </div>
-                        </motion.div>
 
-                        {/* Multilingual Text */}
-                        <div className="absolute bottom-32 w-full max-w-3xl mx-auto px-8 left-1/2 -translate-x-1/2 z-30">
-                            <div className="bg-black/60 backdrop-blur-2xl border border-white/10 p-8 rounded-3xltext-center flex flex-col items-center">
-                                <Globe className="text-ohs-orange mb-4" size={32} />
-                                <AnimatePresence mode="wait">
-                                    {langPhase === 1 && (
-                                        <motion.div key="en" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                                            <p className="text-gray-400 font-bold uppercase tracking-widest text-sm mb-2">English (Default)</p>
-                                            <h3 className="text-3xl font-black text-white">"Warning: Severe posture hazard detected. Please adjust your screen height to eye level instantly."</h3>
-                                        </motion.div>
-                                    )}
-                                    {langPhase === 2 && (
-                                        <motion.div key="zu" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                                            <p className="text-gray-400 font-bold uppercase tracking-widest text-sm mb-2">isiZulu</p>
-                                            <h3 className="text-3xl font-black text-white">"Isexwayiso: Kutholwe ingozi enkulu yokuma kabi komzimba. Sicela ulungise ukuphakama kwesikrini sakho."</h3>
-                                        </motion.div>
-                                    )}
-                                    {langPhase >= 3 && (
-                                        <motion.div key="xh" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
-                                            <p className="text-gray-400 font-bold uppercase tracking-widest text-sm mb-2">isiXhosa</p>
-                                            <h3 className="text-3xl font-black text-white">"Isilumkiso: Kubhaqwe ingozi enkulu yokuma kakubi komzimba. Nceda ulungise ukuphakama kwescreen sakho."</h3>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </div>
+                            {/* Wingman Quote */}
+                            <motion.div
+                                initial={{ x: 50, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                transition={{ delay: 1 }}
+                                className="flex-1"
+                            >
+                                <Target size={48} className="text-ohs-orange mb-6" />
+                                <h2 className="text-4xl font-black mb-6">PREVENTATIVE OVERWATCH</h2>
+                                <p className="text-xl text-gray-400 leading-relaxed font-medium">
+                                    "Our 10-PhD Melly detects cognitive fatigue before an error happens. If you aren't fit for duty, the system locks the 'Sign-Off' button. We stop the accident before it occurs."
+                                </p>
+                            </motion.div>
                         </div>
                     </motion.div>
                 )}
 
+                {/* SCENE 3: The Global Standard (80-120s) */}
                 {scene === 3 && (
                     <motion.div
                         key="scene3"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 1.05 }}
-                        className="flex-1 bg-ohs-navy/95 flex flex-col items-center justify-center p-12"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex-1 bg-black flex flex-col items-center justify-center p-12 relative"
                     >
-                        <div className="w-full max-w-6xl">
-                            <div className="flex justify-between items-end border-b border-white/10 pb-6 mb-12">
-                                <div>
-                                    <h2 className="text-sm font-black text-ohs-orange tracking-[0.3em] uppercase mb-2">Executive Overview</h2>
-                                    <h1 className="text-3xl md:text-5xl font-black">STEWARDSHIP INTELLIGENCE GRID</h1>
-                                </div>
-                                <div className="text-right">
-                                    <p className="text-gray-500 font-bold uppercase tracking-wider">Live Corporate Feed</p>
-                                </div>
-                            </div>
+                        <Globe size={120} className="absolute text-ohs-orange/10 z-0 animate-spin-slow" style={{ animationDuration: '30s' }} />
 
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                                {/* Safety Pulse Dial */}
-                                <div className="col-span-1 bg-black/40 backdrop-blur-xl border border-white/5 rounded-3xl p-10 flex flex-col items-center justify-center relative shadow-2xl">
-                                    <h3 className="text-lg font-black text-gray-400 uppercase tracking-widest mb-8">Safety Pulse</h3>
-
-                                    {/* Dial implementation */}
-                                    <div className="relative w-48 h-48 md:w-64 md:h-64 mx-auto">
-                                        <svg className="w-full h-full transform -rotate-90">
-                                            <circle cx="128" cy="128" r="110" stroke="rgba(255,255,255,0.1)" strokeWidth="20" fill="none" />
-                                            <motion.circle
-                                                cx="128" cy="128" r="110"
-                                                stroke="var(--ohs-orange)" strokeWidth="20" fill="none"
-                                                strokeDasharray={2 * Math.PI * 110}
-                                                initial={{ strokeDashoffset: 2 * Math.PI * 110 }}
-                                                animate={{ strokeDashoffset: 2 * Math.PI * 110 * (1 - 0.74) }}
-                                                transition={{ duration: 2, ease: "easeOut" }}
-                                            />
-                                        </svg>
-                                        <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                            <motion.span
-                                                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}
-                                                className="text-6xl font-black text-white"
-                                            >
-                                                74<span className="text-3xl text-gray-500">%</span>
-                                            </motion.span>
-                                            <span className="text-sm font-bold text-ohs-orange uppercase mt-2">Deteriorating</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Legal Liability Alerts */}
-                                <div className="col-span-2 flex flex-col gap-6">
-                                    <motion.div
-                                        initial={{ x: 50, opacity: 0 }}
-                                        animate={{ x: 0, opacity: 1 }}
-                                        transition={{ delay: 0.5 }}
-                                        className="flex-1 bg-red-900/20 border-l-4 border-red-500 p-8 rounded-r-3xl flex items-start gap-6 relative overflow-hidden"
-                                    >
-                                        <motion.div
-                                            animate={{ opacity: [0.1, 0.3, 0.1] }}
-                                            transition={{ repeat: Infinity, duration: 2 }}
-                                            className="absolute inset-0 bg-red-500/10 pointer-events-none"
-                                        />
-                                        <AlertTriangle className="text-red-500 shrink-0" size={48} />
-                                        <div>
-                                            <h3 className="text-2xl font-black text-red-500 tracking-tighter mb-2">LEGAL LIABILITY ALERT: SECTION 37 (OHS ACT)</h3>
-                                            <p className="text-red-200/80 text-lg leading-relaxed font-medium">
-                                                Employer negligence detected across remote workforce. "Acts or omissions by employees" making CEO strictly liable. Recommend immediate mitigation strategy deployment to avoid criminal prosecution.
-                                            </p>
-                                        </div>
-                                    </motion.div>
-
-                                    <motion.div
-                                        initial={{ x: 50, opacity: 0 }}
-                                        animate={{ x: 0, opacity: 1 }}
-                                        transition={{ delay: 1 }}
-                                        className="flex-1 bg-orange-900/20 border-l-4 border-orange-500 p-8 rounded-r-3xl flex items-start gap-6 relative"
-                                    >
-                                        <ShieldAlert className="text-orange-500 shrink-0" size={48} />
-                                        <div>
-                                            <h3 className="text-2xl font-black text-orange-500 tracking-tighter mb-2">OFFENCES WARNING: SECTION 38 (OHS ACT)</h3>
-                                            <p className="text-orange-200/80 text-lg leading-relaxed font-medium">
-                                                Non-compliance with safety provisions. Continued failure to act on ergonomic risks may trigger R100,000 fine and/or 2-year imprisonment per incident.
-                                            </p>
-                                        </div>
-                                    </motion.div>
-                                </div>
-                            </div>
+                        <div className="z-10 text-center mb-12">
+                            <h2 className="text-sm font-black text-ohs-orange tracking-[0.4em] uppercase mb-4">Semantic Firewall Routing</h2>
+                            <h1 className="text-4xl md:text-6xl font-black tracking-tighter">THE GLOBAL STANDARD</h1>
                         </div>
+
+                        <div className="w-full max-w-4xl bg-[#0b0f19] border border-white/20 p-12 rounded-[2.5rem] relative overflow-hidden shadow-2xl z-10 h-80 flex items-center justify-center">
+                            <AnimatePresence mode="wait">
+                                {!isoToggle ? (
+                                    <motion.div key="sa" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="text-center w-full">
+                                        <h3 className="text-3xl font-black text-white mb-4">South African OHS Act 85</h3>
+                                        <p className="text-xl text-gray-400 font-medium">Monitoring Section 37 & 38 Liabilities</p>
+                                        <div className="mt-8 flex justify-center gap-2">
+                                            <div className="h-2 w-16 bg-ohs-orange rounded-full" />
+                                            <div className="h-2 w-16 bg-white/20 rounded-full" />
+                                        </div>
+                                    </motion.div>
+                                ) : (
+                                    <motion.div key="iso" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="text-center w-full">
+                                        <h3 className="text-3xl font-black text-white mb-4">ISO 45001 & 45003 Protocols</h3>
+                                        <p className="text-xl text-gray-400 font-medium">Monitoring Global Psychosocial Risks & Safety</p>
+                                        <div className="mt-8 flex justify-center gap-2">
+                                            <div className="h-2 w-16 bg-white/20 rounded-full" />
+                                            <div className="h-2 w-16 bg-ohs-orange rounded-full" />
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
+
+                        <motion.div className="max-w-4xl text-center mt-12 bg-white/5 p-6 rounded-2xl backdrop-blur-md border border-white/10 z-10">
+                            <p className="text-xl font-bold text-gray-300">"One platform, any jurisdiction. Melly cross-references local laws with global ISO standards, giving multinationals a single 'Truth Dashboard' for 50 countries."</p>
+                        </motion.div>
                     </motion.div>
                 )}
 
+                {/* SCENE 4: The Memory Vault (120-150s) */}
                 {scene === 4 && (
                     <motion.div
                         key="scene4"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="flex-1 bg-black flex flex-col items-center justify-center p-12 relative overflow-hidden"
+                        className="flex-1 bg-[#0b0f19] flex items-center justify-center p-12 relative"
                     >
-                        {/* Cyber Grid Background */}
-                        <div className="absolute inset-0 bg-[#001c00] opacity-5 [background-image:linear-gradient(#0f0_1px,transparent_1px),linear-gradient(90deg,#0f0_1px,transparent_1px)] [background-size:40px_40px]" />
+                        {/* Grid Background */}
+                        <div className="absolute inset-0 opacity-10 [background-image:linear-gradient(rgba(255,255,255,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.3)_1px,transparent_1px)] [background-size:40px_40px]" />
 
-                        <div className="relative z-10 w-full max-w-4xl text-center">
-                            <motion.div
-                                initial={{ y: 50, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                className="inline-flex items-center gap-4 bg-ohs-navy/80 border border-ohs-orange/50 px-8 py-4 rounded-full mb-12 shadow-[0_0_30px_rgba(249,168,37,0.2)]"
-                            >
-                                <div className="w-4 h-4 rounded-full bg-ohs-orange animate-pulse" />
-                                <span className="text-xl font-black tracking-[0.2em] text-ohs-orange">ADMIN-ZERO AUTOMATION SEQUENCING</span>
-                            </motion.div>
+                        <div className="flex flex-col lg:flex-row gap-16 items-center z-10 w-full max-w-6xl">
+                            <div className="flex-1">
+                                <h2 className="text-sm font-black text-ohs-orange tracking-[0.4em] uppercase mb-4">Predictive Wellness</h2>
+                                <h1 className="text-5xl font-black tracking-tighter mb-8 leading-tight">THE PERSISTENT MEMORY VAULT</h1>
+                                <p className="text-2xl text-gray-400 font-medium leading-relaxed">
+                                    "Melly remembers your history. She doesn't just see a worker; she sees a trend. This is the 'Awakening' of OHS—AI that knows your team's health better than they do."
+                                </p>
+                            </div>
 
-                            {/* Dossier Terminal UI */}
-                            <motion.div
-                                initial={{ scale: 0.9, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                transition={{ delay: 1 }}
-                                className="bg-black/80 backdrop-blur-xl border border-green-500/30 rounded-2xl text-left overflow-hidden shadow-[0_0_80px_rgba(0,255,0,0.1)]"
-                            >
-                                <div className="bg-green-950/50 p-4 border-b border-green-500/30 flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <FileText className="text-green-500" size={20} />
-                                        <span className="font-mono text-green-500 font-bold">COMPLIANCE_DOSSIER_AUTO_FILE.exe</span>
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <div className="w-3 h-3 rounded-full bg-green-500/50" />
-                                        <div className="w-3 h-3 rounded-full bg-green-500/50" />
-                                        <div className="w-3 h-3 rounded-full bg-green-500/50" />
-                                    </div>
+                            <div className="flex-1 bg-black/60 border border-white/20 p-8 rounded-3xl backdrop-blur-xl relative h-96 w-full flex flex-col justify-end">
+                                <Activity className="absolute top-6 right-6 text-green-500 animate-pulse" size={32} />
+                                <h3 className="absolute top-6 left-6 text-gray-400 font-bold uppercase tracking-widest text-sm">Vector History</h3>
+
+                                {/* Animated Vector Graph */}
+                                <div className="flex items-end justify-between gap-4 h-64 mt-12 pb-4 border-b border-white/20">
+                                    {[20, 35, 45, 40, 60, 50, 85].map((height, i) => (
+                                        <motion.div
+                                            key={i}
+                                            initial={{ height: 0 }}
+                                            animate={{ height: \`\${height}%\` }}
+                                    transition={{ delay: i * 0.2, duration: 1, type: 'spring' }}
+                                    className={\`w-full rounded-t-lg \${height > 80 ? 'bg-red-500 shadow-[0_0_20px_rgba(239,68,68,0.5)]' : 'bg-ohs-orange'}\`}
+                                        />
+                                    ))}
                                 </div>
-
-                                <div className="p-8 font-mono text-green-400 h-80 relative overflow-hidden flex flex-col gap-4 text-lg">
-                                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}>
-                                        &gt; Assembling biometric and postural risk factors... <span className="text-white">DONE</span>
-                                    </motion.p>
-                                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5 }}>
-                                        &gt; Cross-referencing OHS Act 85 of 1993... <span className="text-white">DONE</span>
-                                    </motion.p>
-                                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3.5 }}>
-                                        &gt; Generating automated mitigation timeline... <span className="text-white">DONE</span>
-                                    </motion.p>
-
-                                    <motion.div
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ delay: 5 }}
-                                        className="mt-8 bg-green-500/20 border border-green-500 p-6 flex flex-col items-center justify-center gap-4 relative"
-                                    >
-                                        <CheckCircle2 className="text-white" size={48} />
-                                        <h3 className="text-2xl font-black text-white px-4 py-1 bg-green-600">SECURE DOSSIER FILED TO BLOCKCHAIN LEDGER</h3>
-                                    </motion.div>
+                                <div className="flex justify-between mt-4 text-xs font-bold text-gray-500">
+                                    <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span className="text-red-500">Today</span>
                                 </div>
-                            </motion.div>
+                            </div>
                         </div>
                     </motion.div>
                 )}
 
+                {/* SCENE 5: End */}
                 {scene === 5 && (
                     <motion.div
                         key="end"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="flex-1 flex flex-col items-center justify-center bg-ohs-navy"
+                        className="flex-1 flex flex-col items-center justify-center bg-black"
                     >
-                        <h1 className="text-5xl font-black mb-6">DEMO CONCLUDED</h1>
+                        <ShieldAlert size={80} className="text-ohs-orange mb-8" />
+                        <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter">SYSTEM OVERWATCH ONLINE</h1>
+                        <p className="text-2xl text-gray-400 font-medium mb-12">v1.3 God Mode Architecture Initialized.</p>
                         <button
                             onClick={onExit}
-                            className="bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-8 py-4 rounded-xl font-black text-xl hover:scale-105 transition-all"
+                            className="bg-ohs-orange hover:bg-ohs-orange/90 text-black px-12 py-5 rounded-xl font-black text-xl hover:scale-105 transition-all shadow-[0_0_40px_rgba(249,168,37,0.3)]"
                         >
                             RETURN TO HUB
                         </button>
