@@ -247,9 +247,9 @@ export const TechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                                         <motion.div
                                             key={i}
                                             initial={{ height: 0 }}
-                                            animate={{ height: \`\${height}%\` }}
-                                    transition={{ delay: i * 0.2, duration: 1, type: 'spring' }}
-                                    className={\`w-full rounded-t-lg \${height > 80 ? 'bg-red-500 shadow-[0_0_20px_rgba(239,68,68,0.5)]' : 'bg-ohs-orange'}\`}
+                                            animate={{ height: `${height}%` }}
+                                            transition={{ delay: i * 0.2, duration: 1, type: 'spring' }}
+                                            className={`w-full rounded-t-lg ${height > 80 ? 'bg-red-500 shadow-[0_0_20px_rgba(239,68,68,0.5)]' : 'bg-ohs-orange'}`}
                                         />
                                     ))}
                                 </div>
