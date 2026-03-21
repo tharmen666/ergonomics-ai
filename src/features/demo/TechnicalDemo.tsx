@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldAlert, Globe, Activity, Lock, LineChart, Target } from 'lucide-react';
+import { ShieldAlert, Globe, Activity, Lock, Target } from 'lucide-react';
 import { speak, stopSpeaking } from '../../utils/speech';
 
 export const TechnicalDemo = ({ onExit }: { onExit: () => void }) => {
