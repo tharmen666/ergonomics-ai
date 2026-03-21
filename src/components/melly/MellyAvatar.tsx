@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ReasoningLog } from '../agent/ReasoningLog';
 import { useMellyStore } from '../../store/mellyStore';
-import { X, PlayCircle, Globe, ShieldCheck } from 'lucide-react';
+import { X, PlayCircle, Globe, ShieldCheck, Activity } from 'lucide-react';
 import { translations, Language } from '../../utils/translations';
 
 export const MellyAvatar = () => {
@@ -65,21 +65,17 @@ export const MellyAvatar = () => {
                             }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            <div className="w-full h-full rounded-full overflow-hidden relative bg-ohs-orange/20 border-[3px] border-[#F9A825]">
-                                <img
-                                    src="/assets/melly-new-avatar.png?v=2026"
-                                    alt="Melly AI"
-                                    className="w-full h-full object-cover rounded-full"
-                                />
+                            <div className="w-full h-full rounded-full overflow-hidden relative border-[3px] border-[#F9A825] bg-gradient-to-br from-ohs-orange/40 to-yellow-900/80 flex items-center justify-center">
+                                <Activity className="text-ohs-orange drop-shadow-[0_0_15px_rgba(249,168,37,0.8)]" size={48} />
                                 {isSpeaking && (
                                     <div className="absolute inset-0 bg-ohs-orange/20 flex items-center justify-center animate-pulse">
-                                        <div className="flex gap-1">
+                                        <div className="flex gap-1 absolute bottom-4">
                                             {[...Array(3)].map((_, i) => (
                                                 <motion.div
                                                     key={i}
                                                     animate={{ height: [4, 12, 4] }}
                                                     transition={{ repeat: Infinity, duration: 0.2, delay: i * 0.05 }}
-                                                    className="w-1 bg-ohs-orange rounded-full"
+                                                    className="w-1 bg-white rounded-full"
                                                 />
                                             ))}
                                         </div>
@@ -223,14 +219,15 @@ export const MellyAvatar = () => {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
             >
-                <div className="absolute inset-0 bg-ohs-navy" />
-                <img src="/assets/melly-new-avatar.png?v=2026" alt="M" className="w-full h-full object-cover relative z-10 rounded-full" />
+                <div className="absolute inset-0 bg-gradient-to-br from-ohs-navy to-black rounded-full flex items-center justify-center">
+                    <Activity className="text-ohs-orange opacity-80" size={24} />
+                </div>
 
                 {/* Active Pulse */}
                 <motion.div
                     animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
                     transition={{ repeat: Infinity, duration: 2 }}
-                    className="absolute inset-0 bg-ohs-orange/30 z-0"
+                    className="absolute inset-0 bg-ohs-orange/30 z-0 rounded-full"
                 />
 
                 {isSpeaking && (
