@@ -38,8 +38,20 @@ export const CognitiveHandshake = () => {
         setGameCompleted(true);
 
         const avgReaction = finalTimes.reduce((a, b) => a + b, 0) / finalTimes.length;
-        // Arbitrary threshold: 800ms. >800ms implies 20%+ cognitive lag
-        const isFatigued = avgReaction > 800;
+
+        // Connect to Memory Vault
+        const { reactionMemory, addReactionMemory } = useFatigueStore.getState();
+        let isFatigued = false;
+
+        if (reactionMemory.length > 0) {
+            const historicalBaseline = reactionMemory.reduce((a, b) => a + b, 0) / reactionMemory.length;
+            // >20% Cognitive Overload detection
+            isFatigued = avgReaction > (historicalBaseline * 1.20);
+        } else {
+            isFatigued = avgReaction > 800; // Seed threshold
+        }
+
+        addReactionMemory(avgReaction);
 
         setSpeaking(true);
         if (isFatigued) {

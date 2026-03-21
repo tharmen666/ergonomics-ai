@@ -51,23 +51,23 @@ function App() {
         </div>
 
         <div className="flex items-center gap-6">
-          <div className="hidden lg:flex flex-col items-end gap-2 text-right">
-            <div className="flex gap-3">
+          <div className="flex flex-col w-full lg:w-auto items-start lg:items-end gap-2 text-left lg:text-right mt-2 lg:mt-0">
+            <div className="flex flex-wrap gap-2 lg:gap-3">
               <button
                 onClick={() => setWingmanActive(!isWingmanActive)}
-                className={`inline-flex items-center gap-2 ${isWingmanActive ? 'bg-red-500 hover:bg-red-600' : 'bg-white/10 hover:bg-white/20'} text-white px-4 py-2.5 rounded-xl font-bold text-sm transition-all shadow-md`}
+                className={`inline-flex items-center gap-2 ${isWingmanActive ? 'bg-red-500 hover:bg-red-600' : 'bg-white/10 hover:bg-white/20'} text-white px-3 lg:px-4 py-2 lg:py-2.5 rounded-xl font-bold text-xs lg:text-sm transition-all shadow-md`}
               >
                 {isWingmanActive ? 'DISABLE WINGMAN' : 'ACTIVATE WINGMAN'}
               </button>
               <button
                 onClick={() => setActiveTab('executive')}
-                className="inline-flex items-center gap-2 bg-ohs-orange/20 hover:bg-ohs-orange/30 border border-ohs-orange/50 text-ohs-orange px-4 py-2.5 rounded-xl font-bold text-sm transition-all shadow-[0_0_15px_rgba(249,168,37,0.2)]"
+                className="inline-flex items-center gap-2 bg-ohs-orange/20 hover:bg-ohs-orange/30 border border-ohs-orange/50 text-ohs-orange px-3 lg:px-4 py-2 lg:py-2.5 rounded-xl font-bold text-xs lg:text-sm transition-all shadow-[0_0_15px_rgba(249,168,37,0.2)]"
               >
                 EXECUTIVE BRIEFING
               </button>
               <button
                 onClick={() => setActiveTab('demo')}
-                className="inline-flex items-center gap-2 bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-6 py-2.5 rounded-xl font-black text-sm transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(249,168,37,0.3)]"
+                className="inline-flex items-center gap-2 bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-4 lg:px-6 py-2 lg:py-2.5 rounded-xl font-black text-xs lg:text-sm transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(249,168,37,0.3)]"
               >
                 150s HQ DEMO
               </button>

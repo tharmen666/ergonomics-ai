@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface FatigueState {
     fatigueLevel: 'nominal' | 'high';
@@ -13,19 +14,32 @@ interface FatigueState {
     lastLoginTime: number | null;
     consecutiveRestBreaks: number;
     logRoutine: () => void;
+
+    // Memory Vault (Vector DB simulation)
+    reactionMemory: number[];
+    addReactionMemory: (avg: number) => void;
 }
 
-export const useFatigueStore = create<FatigueState>((set) => ({
-    fatigueLevel: 'nominal',
-    cognitiveHandshakePassed: false,
-    showCognitiveHandshake: false,
-    setShowCognitiveHandshake: (show) => set({ showCognitiveHandshake: show }),
-    setFatigueLevel: (level) => set({ fatigueLevel: level }),
-    passCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'nominal', showCognitiveHandshake: false }),
-    failCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'high', showCognitiveHandshake: false }),
+export const useFatigueStore = create<FatigueState>()(
+    persist(
+        (set) => ({
+            fatigueLevel: 'nominal',
+            cognitiveHandshakePassed: false,
+            showCognitiveHandshake: false,
+            setShowCognitiveHandshake: (show) => set({ showCognitiveHandshake: show }),
+            setFatigueLevel: (level) => set({ fatigueLevel: level }),
+            passCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'nominal', showCognitiveHandshake: false }),
+            failCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'high', showCognitiveHandshake: false }),
 
-    // behavioral routine
-    lastLoginTime: Date.now(),
-    consecutiveRestBreaks: 0,
-    logRoutine: () => set((state) => ({ consecutiveRestBreaks: state.consecutiveRestBreaks + 1 }))
-}));
+            lastLoginTime: Date.now(),
+            consecutiveRestBreaks: 0,
+            logRoutine: () => set((state) => ({ consecutiveRestBreaks: state.consecutiveRestBreaks + 1 })),
+
+            reactionMemory: [],
+            addReactionMemory: (avg) => set((state) => ({
+                reactionMemory: [...state.reactionMemory, avg].slice(-10)
+            }))
+        }),
+        { name: 'fatigue-vector-vault' }
+    )
+);

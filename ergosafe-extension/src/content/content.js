@@ -66,7 +66,18 @@
         target.style.left = \`\${x}%\`;
         target.style.top = \`\${y}%\`;
 
+        const spawnTime = Date.now();
+
         target.addEventListener('mousedown', () => {
+            const reactionTime = Date.now() - spawnTime;
+            
+            // Cognitive Overload Check: Individual target > 850ms triggers ISO warning
+            if (reactionTime > 850) {
+                clearTimeout(targetTimeout);
+                endGame(false);
+                return;
+            }
+
             targetsHit++;
             clearTimeout(targetTimeout);
             
