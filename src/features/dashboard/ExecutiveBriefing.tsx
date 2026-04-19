@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp } from 'lucide-react';
 import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
-import { LeanMetrics } from '../AI-Coach/LeanMetrics';
+import { LeanMetrics } from '../../components/AI-Coach/LeanMetrics';
 
 export const ExecutiveBriefing = () => {
     return (
@@ -61,6 +61,10 @@ export const ExecutiveBriefing = () => {
                         <h3 className="text-xl font-black text-white flex items-center gap-3"><FileText className="text-green-500" size={24} /> Admin-Zero File Status</h3>
                         <p className="text-gray-400 font-medium mt-1">All compliance actions have been automatically assembled into the organizational blockchain ledger.</p>
                     </div>
+                    <div className="bg-green-500/20 text-green-400 px-6 py-3 rounded-full font-bold uppercase tracking-widest text-sm whitespace-nowrap hidden md:block">
+                        NO PENDING OFFENCES
+                    </div>
+                </div>
             </motion.div>
 
             {/* v1.4 LPS ROI LAYER */}
