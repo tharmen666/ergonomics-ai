@@ -29,80 +29,82 @@ function App() {
   }
 
   return (
-    <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
-      <PrivacyHandshake />
-      <CognitiveHandshake />
-      <TourManager setActiveTab={setActiveTab} />
+    <div className="min-h-screen flex flex-col items-center justify-between overflow-hidden" style={{ paddingTop: 'env(safe-area-inset-top)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
+      <div className="w-full max-w-7xl mx-auto flex-1 flex flex-col p-4 w-full">
+        <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
+          <PrivacyHandshake />
+          <CognitiveHandshake />
+          <TourManager setActiveTab={setActiveTab} />
 
-      <header className="flex flex-col md:flex-row items-center justify-between mb-8 gap-6">
-        <div>
-          <h1 className="text-4xl font-black text-white tracking-tighter">
-            OHS <span className="text-ohs-orange">HAVEN</span>
-          </h1>
-          <p className="text-gray-400 mt-2 font-medium">
-            {activeTab === 'dashboard' ? 'Welcome back, Desigan. Your safety score is 98% today.' :
-              activeTab === 'training' ? 'Boost your wellbeing with these active sessions.' :
-                activeTab === 'shop' ? 'Premium ergonomic gear for your workspace.' :
-                  activeTab === 'team' ? 'Meet the intelligence behind OHS Haven.' :
-                    activeTab === 'assessment' ? 'Let Melly check your workspace setup.' :
-                      activeTab === 'risks' ? 'Identify and MITIGATE common hazards.' :
-                        'Manage compliance and operations.'}
-          </p>
-        </div>
-
-        <div className="flex items-center gap-6">
-          <div className="flex flex-col w-full lg:w-auto items-start lg:items-end gap-2 text-left lg:text-right mt-2 lg:mt-0">
-            <div className="flex flex-wrap gap-2 lg:gap-3">
-              <button
-                onClick={() => setWingmanActive(!isWingmanActive)}
-                className={`inline-flex items-center gap-2 ${isWingmanActive ? 'bg-red-500 hover:bg-red-600' : 'bg-white/10 hover:bg-white/20'} text-white px-3 lg:px-4 py-2 lg:py-2.5 rounded-xl font-bold text-xs lg:text-sm transition-all shadow-md`}
-              >
-                {isWingmanActive ? 'DISABLE WINGMAN' : 'ACTIVATE WINGMAN'}
-              </button>
-              <button
-                onClick={() => setActiveTab('executive')}
-                className="inline-flex items-center gap-2 bg-ohs-orange/20 hover:bg-ohs-orange/30 border border-ohs-orange/50 text-ohs-orange px-3 lg:px-4 py-2 lg:py-2.5 rounded-xl font-bold text-xs lg:text-sm transition-all shadow-[0_0_15px_rgba(249,168,37,0.2)]"
-              >
-                EXECUTIVE BRIEFING
-              </button>
-              <button
-                onClick={() => setActiveTab('demo')}
-                className="inline-flex items-center gap-2 bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-4 lg:px-6 py-2 lg:py-2.5 rounded-xl font-black text-xs lg:text-sm transition-all transform hover:scale-105 shadow-[0_0_20px_rgba(249,168,37,0.3)]"
-              >
-                150s HQ DEMO
-              </button>
+          <header className="flex flex-col md:flex-row items-center justify-between mb-8 gap-6">
+            <div>
+              <h1 className="text-4xl font-black text-white tracking-tighter">
+                OHS <span className="text-ohs-orange">HAVEN</span>
+              </h1>
+              <p className="text-gray-400 mt-2 font-medium">
+                {activeTab === 'dashboard' ? 'Welcome back, Desigan. Your safety score is 98% today.' :
+                  activeTab === 'training' ? 'Boost your wellbeing with these active sessions.' :
+                    activeTab === 'shop' ? 'Premium ergonomic gear for your workspace.' :
+                      activeTab === 'team' ? 'Meet the intelligence behind OHS Haven.' :
+                        activeTab === 'assessment' ? 'Let Melly check your workspace setup.' :
+                          activeTab === 'risks' ? 'Identify and MITIGATE common hazards.' :
+                            'Manage compliance and operations.'}
+              </p>
             </div>
-          </div>
 
-          <div className="flex items-center gap-4">
-            <div className="bg-white/5 p-3 rounded-xl border border-white/10 hidden md:block">
-              <p className="text-xs text-ohs-orange font-bold uppercase tracking-wider mb-1">Status</p>
-              <p className="text-sm font-medium">All Systems Nominal</p>
+            <div className="flex items-center gap-6">
+              <div className="fixed bottom-0 left-0 w-full md:static md:w-auto p-4 md:p-0 grid grid-cols-2 md:flex md:flex-row gap-2 z-50 bg-[#0b0f19]/90 md:bg-transparent backdrop-blur-xl md:backdrop-blur-none border-t border-white/10 md:border-none" style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom))' }}>
+                <button
+                  onClick={() => setWingmanActive(!isWingmanActive)}
+                  className={`flex-1 inline-flex items-center justify-center gap-2 ${isWingmanActive ? 'bg-red-500 hover:bg-red-600' : 'bg-white/10 hover:bg-white/20'} text-white px-2 md:px-4 py-3 md:py-2.5 rounded-xl font-bold text-[10px] md:text-sm transition-all shadow-md`}
+                >
+                  {isWingmanActive ? 'DISABLE WINGMAN' : 'ACTIVATE WINGMAN'}
+                </button>
+                <button
+                  onClick={() => setActiveTab('executive')}
+                  className="flex-1 inline-flex items-center justify-center gap-2 bg-ohs-orange/20 hover:bg-ohs-orange/30 border border-ohs-orange/50 text-ohs-orange px-2 md:px-4 py-3 md:py-2.5 rounded-xl font-bold text-[10px] md:text-sm transition-all shadow-[0_0_15px_rgba(249,168,37,0.2)]"
+                >
+                  EXEC BRIEFING
+                </button>
+                <button
+                  onClick={() => setActiveTab('demo')}
+                  className="col-span-2 md:col-span-1 inline-flex items-center justify-center gap-2 bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-4 md:px-6 py-3 md:py-2.5 rounded-xl font-black text-[10px] md:text-sm transition-all transform md:hover:scale-105 shadow-[0_0_20px_rgba(249,168,37,0.3)]"
+                >
+                  150s HQ DEMO
+                </button>
+              </div>
+
+              <div className="flex items-center gap-4">
+                <div className="bg-white/5 p-3 rounded-xl border border-white/10 hidden md:block">
+                  <p className="text-xs text-ohs-orange font-bold uppercase tracking-wider mb-1">Status</p>
+                  <p className="text-sm font-medium">All Systems Nominal</p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </header>
+          </header>
 
-      <MellyAvatar />
+          <MellyAvatar />
 
-      {/* Route Content */}
-      <main className="min-h-screen pb-24 md:pb-0 pt-0 md:pt-4">
-        {activeTab === 'dashboard' && <DashboardPage />}
-        {activeTab === 'executive' && <ExecutiveBriefing />}
-        {activeTab === 'training' && <TrainingPage />}
-        {activeTab === 'checklist' && <ChecklistPage />}
-        {activeTab === 'risk' && <RiskPage />}
-        {activeTab === 'team' && <TeamPage />}
-        {activeTab === 'shop' && <ShopPage />}
-        {activeTab === 'finance' && <InvoicesPage />}
-        {activeTab === 'assessment' && <SelfAssessmentPage />}
-        {activeTab === 'risks' && <RiskyBehaviorsPage />}
-        {activeTab === 'admin' && <HRDashboard />}
-        {activeTab === 'reports' && <div className="text-center p-20 text-gray-500">Analytics Module - Coming Soon</div>}
-        {activeTab === 'settings' && <div className="text-center p-20 text-gray-500">Settings Module - Coming Soon</div>}
-      </main>
+          {/* Route Content */}
+          <main className="min-h-screen pb-24 md:pb-0 pt-0 md:pt-4">
+            {activeTab === 'dashboard' && <DashboardPage />}
+            {activeTab === 'executive' && <ExecutiveBriefing />}
+            {activeTab === 'training' && <TrainingPage />}
+            {activeTab === 'checklist' && <ChecklistPage />}
+            {activeTab === 'risk' && <RiskPage />}
+            {activeTab === 'team' && <TeamPage />}
+            {activeTab === 'shop' && <ShopPage />}
+            {activeTab === 'finance' && <InvoicesPage />}
+            {activeTab === 'assessment' && <SelfAssessmentPage />}
+            {activeTab === 'risks' && <RiskyBehaviorsPage />}
+            {activeTab === 'admin' && <HRDashboard />}
+            {activeTab === 'reports' && <div className="text-center p-20 text-gray-500">Analytics Module - Coming Soon</div>}
+            {activeTab === 'settings' && <div className="text-center p-20 text-gray-500">Settings Module - Coming Soon</div>}
+          </main>
 
-    </Layout>
+        </Layout>
+      </div>
+    </div>
   );
 }
 

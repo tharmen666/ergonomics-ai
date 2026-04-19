@@ -55,9 +55,8 @@ export const MellyAvatar = () => {
                         exit={{ opacity: 0, scale: 0.9, y: 20 }}
                         className="flex flex-col items-end gap-3 pointer-events-auto mr-2 mb-2"
                     >
-                        {/* Avatar Full View - CLICK TO KILL AUDIO */}
                         <motion.div
-                            className="relative group w-32 h-32 md:w-40 md:h-40 max-w-full rounded-full border-4 border-ohs-orange/30 p-1 bg-ohs-navy shadow-2xl overflow-hidden cursor-pointer"
+                            className="relative group w-[40vw] max-w-[200px] aspect-square max-h-[30vh] md:w-40 md:h-40 rounded-full border-4 border-ohs-orange/30 p-1 bg-ohs-navy shadow-2xl overflow-hidden cursor-pointer"
                             layoutId="melly-core"
                             onClick={() => {
                                 window.speechSynthesis.cancel();
@@ -66,7 +65,7 @@ export const MellyAvatar = () => {
                             whileTap={{ scale: 0.95 }}
                         >
                             <div className="w-full h-full rounded-full overflow-hidden relative border-[3px] border-[#F9A825] bg-gradient-to-br from-ohs-orange/40 to-yellow-900/80 flex items-center justify-center">
-                                <Activity className="text-ohs-orange drop-shadow-[0_0_15px_rgba(249,168,37,0.8)]" size={48} />
+                                <Activity className="text-ohs-orange drop-shadow-[0_0_15px_rgba(249,168,37,0.8)] scale-75 sm:scale-100" size={48} />
                                 {isSpeaking && (
                                     <div className="absolute inset-0 bg-ohs-orange/20 flex items-center justify-center animate-pulse">
                                         <div className="flex gap-1 absolute bottom-4">
@@ -220,7 +219,7 @@ export const MellyAvatar = () => {
                 whileTap={{ scale: 0.9 }}
             >
                 <div className="absolute inset-0 bg-gradient-to-br from-ohs-navy to-black rounded-full flex items-center justify-center">
-                    <Activity className="text-ohs-orange opacity-80" size={24} />
+                    <Activity className="text-ohs-orange opacity-80 scale-75 sm:scale-100" size={24} />
                 </div>
 
                 {/* Active Pulse */}
