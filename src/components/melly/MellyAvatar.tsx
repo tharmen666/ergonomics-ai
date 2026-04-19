@@ -33,9 +33,15 @@ export const MellyAvatar = () => {
             setGuidance("EMERGENCY PROTOCOL ACTIVATED. Halted all non-critical processes.");
         } else {
             // Normal interaction simulation
-            setGuidance(`I hear you. Let me check the OHS standards regarding "${userInput}"...`);
+            // MPV ALGORITHM & Google-Prompting Synthesis (CAR Structure)
+            const efficiency = fatigueLevel === 'nominal' ? 100 : (fatigueLevel === 'warning' ? 85 : 75);
+            if (efficiency < 85) {
+                setGuidance(`Based on your rising Muda % to ${100 - efficiency}% (Context), please perform a 20-20-20 eye reset and posture adjustment immediately (Action) to restore your 100% O.H.E. rating and Section 37 compliance status (Result).`);
+            } else {
+                setGuidance(`I hear you. Let me check the OHS standards regarding "${userInput}"...`);
+            }
             setSpeaking(true);
-            setTimeout(() => setSpeaking(false), 3000);
+            setTimeout(() => setSpeaking(false), 5000);
         }
         setUserInput('');
     };
@@ -67,7 +73,7 @@ export const MellyAvatar = () => {
                             whileTap={{ scale: 0.95 }}
                         >
                             <div className={`w-full h-full rounded-full overflow-hidden relative border-[3px] flex items-center justify-center ${fatigueLevel === 'nominal' ? 'border-green-500 bg-gradient-to-br from-green-500/20 to-black' : fatigueLevel === 'warning' ? 'border-yellow-500 bg-gradient-to-br from-yellow-500/20 to-black' : 'border-red-500 bg-gradient-to-br from-red-500/20 to-black'}`}>
-                                <img src="/assets/melly-new-avatar.jpg" className="w-full h-full object-cover" alt="Melly Avatar" />
+                                <img src="/assets/melly-new-avatar.png" className="w-full h-full object-cover" alt="Melly Avatar" />
                                 {isSpeaking && (
                                     <div className="absolute inset-0 bg-ohs-orange/20 flex items-center justify-center animate-pulse">
                                         <div className="flex gap-1 absolute bottom-4">
@@ -220,7 +226,7 @@ export const MellyAvatar = () => {
                 whileTap={{ scale: 0.9 }}
             >
                 <div className="absolute inset-0 bg-gradient-to-br from-ohs-navy to-black rounded-full flex items-center justify-center">
-                    <img src="/assets/melly-new-avatar.jpg" className="w-full h-full object-cover rounded-full" alt="Melly Avatar" />
+                    <img src="/assets/melly-new-avatar.png" className="w-full h-full object-cover rounded-full" alt="Melly Avatar" />
                 </div>
 
                 {/* Active Pulse */}

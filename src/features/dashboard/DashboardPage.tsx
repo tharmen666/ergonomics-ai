@@ -29,6 +29,18 @@ export const DashboardPage = () => {
                         </div>
                     )}
 
+                    {/* Industrial Mode Quick Action */}
+                    <div className="bg-red-500/10 border border-red-500/30 p-6 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
+                        <div>
+                            <h3 className="text-xl font-black text-red-500">Industrial Logistics Mode</h3>
+                            <p className="text-sm text-gray-400">Warehouse and heavy equipment handlers overwatch.</p>
+                        </div>
+                        <GlowButton onClick={() => useFatigueStore.getState().setFatigueLevel?.('high')} className="whitespace-nowrap bg-red-600 hover:bg-red-700">
+                            <AlertCircle size={18} className="mr-2 inline-block -mt-1" />
+                            Report High Strain
+                        </GlowButton>
+                    </div>
+
                     {/* Top Stats */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <GlassCard>

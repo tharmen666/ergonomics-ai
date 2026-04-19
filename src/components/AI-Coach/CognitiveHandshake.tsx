@@ -14,6 +14,7 @@ export const CognitiveHandshake = () => {
     const [reactionTimes, setReactionTimes] = useState<number[]>([]);
     const [lastTargetTime, setLastTargetTime] = useState(Date.now());
     const [gameCompleted, setGameCompleted] = useState(false);
+    const [showKaizenBonus, setShowKaizenBonus] = useState(false);
 
     const TOTAL_TARGETS = 5;
 
@@ -62,8 +63,10 @@ export const CognitiveHandshake = () => {
             setGuidance("Cognitive lag detected in your handshake. I'm flagging a High-Fatigue status. Please consider a 15-minute Professional Reset.");
         } else if (historicalBaseline && avgReaction < (historicalBaseline * 1.10) && avgReaction < 700) {
             passCognitiveHandshake();
+            setShowKaizenBonus(true);
             setMood('happy');
             setGuidance("KAIZEN BONUS: Handshake cleared effortlessly. Optimal latency detected. Productive Streak multiplied.");
+            setTimeout(() => setShowKaizenBonus(false), 2000);
         } else if (historicalBaseline && avgReaction >= (historicalBaseline * 1.15)) {
             warnCognitiveHandshake();
             setMood('concerned');
@@ -81,6 +84,21 @@ export const CognitiveHandshake = () => {
 
     return (
         <AnimatePresence>
+            {showKaizenBonus && (
+                <motion.div
+                    initial={{ scale: 0.5, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 1.5, opacity: 0 }}
+                    className="fixed inset-0 z-[99001] flex flex-col items-center justify-center bg-[#a2ff00]/10 backdrop-blur-sm pointer-events-none"
+                >
+                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 2, ease: 'linear' }}>
+                        <BrainCircuit size={120} className="text-[#a2ff00] drop-shadow-[0_0_50px_rgba(162,255,0,1)]" />
+                    </motion.div>
+                    <h1 className="text-4xl md:text-6xl font-black text-[#a2ff00] drop-shadow-[0_0_20px_rgba(162,255,0,0.8)] mt-8 tracking-[0.2em] uppercase">
+                        Kaizen Master
+                    </h1>
+                </motion.div>
+            )}
             {showCognitiveHandshake && !cognitiveHandshakePassed && (
                 <motion.div
                     initial={{ opacity: 0 }}

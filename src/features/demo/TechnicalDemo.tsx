@@ -4,18 +4,20 @@ import { ShieldAlert, Globe, Activity, Lock, Target } from 'lucide-react';
 import { speak, stopSpeaking } from '../../utils/speech';
 
 export const TechnicalDemo = ({ onExit }: { onExit: () => void }) => {
-    // 0: Start, 1: Liability Trigger, 2: Cognitive Handshake, 3: Global Standard, 4: Memory Vault, 5: End
+    // 0: Start, 1: Liability Trigger, 2: Cognitive Handshake, 3: Global Standard, 4: Memory Vault, 5: Industrial Mode, 6: Credits, 7: End
     const [scene, setScene] = useState(0);
     const [isoToggle, setIsoToggle] = useState(false);
 
     useEffect(() => {
-        if (scene === 0 || scene === 5) return;
+        if (scene === 0 || scene === 7) return;
 
         let timeoutId: ReturnType<typeof setTimeout>;
-        if (scene === 1) timeoutId = setTimeout(() => setScene(2), 40000);
-        else if (scene === 2) timeoutId = setTimeout(() => setScene(3), 40000);
-        else if (scene === 3) timeoutId = setTimeout(() => setScene(4), 40000);
-        else if (scene === 4) timeoutId = setTimeout(() => setScene(5), 30000);
+        if (scene === 1) timeoutId = setTimeout(() => setScene(2), 30000);
+        else if (scene === 2) timeoutId = setTimeout(() => setScene(3), 30000);
+        else if (scene === 3) timeoutId = setTimeout(() => setScene(4), 30000);
+        else if (scene === 4) timeoutId = setTimeout(() => setScene(5), 25000);
+        else if (scene === 5) timeoutId = setTimeout(() => setScene(6), 25000);
+        else if (scene === 6) timeoutId = setTimeout(() => setScene(7), 25000);
 
         return () => clearTimeout(timeoutId);
     }, [scene]);
@@ -37,7 +39,11 @@ export const TechnicalDemo = ({ onExit }: { onExit: () => void }) => {
             speak("One platform, any jurisdiction. Melly cross-references local laws with global ISO standards, giving multinationals a single 'Truth Dashboard' for fifty countries.");
         } else if (scene === 4) {
             speak("Melly remembers your history. She doesn't just see a worker; she sees a trend. This is the 'Awakening' of OHS, A.I. that knows your team's health better than they do.");
-        } else if (scene === 5 || scene === 0) {
+        } else if (scene === 5) {
+            speak("Introducing the Industrial Nodes. Manual handlings, forklift telemetry, and dynamic DOA lockouts specifically tailored for the hazards of a warehouse floor.");
+        } else if (scene === 6) {
+            speak("This is ErgoSafe reborn. Driven by ambition. Empowered by premier Google frameworks.");
+        } else if (scene === 7 || scene === 0) {
             stopSpeaking();
         }
     }, [scene]);
@@ -261,8 +267,109 @@ export const TechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                     </motion.div>
                 )}
 
-                {/* SCENE 5: End */}
+                {/* SCENE 5: Industrial Logistics (140-165s) */}
                 {scene === 5 && (
+                    <motion.div
+                        key="scene5"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex-1 bg-gradient-to-r from-gray-900 via-gray-800 to-black flex items-center justify-center p-12 relative overflow-hidden"
+                    >
+                        <div className="absolute inset-0 z-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20" />
+
+                        <div className="flex flex-col md:flex-row gap-8 z-10 w-full max-w-6xl items-center">
+                            <motion.div
+                                initial={{ x: -100, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                className="flex-1 relative"
+                            >
+                                <div className="absolute inset-0 translate-x-4 translate-y-4 bg-ohs-orange rounded-3xl opacity-20 filter blur-xl" />
+                                <div className="bg-black/80 backdrop-blur-md border border-white/20 p-8 rounded-3xl relative h-[400px] flex flex-col justify-between">
+                                    <h3 className="text-ohs-orange font-black uppercase tracking-widest text-sm flex items-center gap-2">
+                                        <Activity size={18} /> Safe Lifting Heat Map
+                                    </h3>
+
+                                    <div className="flex-1 flex items-center justify-center relative mt-4">
+                                        {/* Abstract Human Figure Skeleton */}
+                                        <div className="w-8 h-8 rounded-full border-4 border-green-500 absolute top-10" />
+                                        <div className="w-1 h-32 bg-green-500 absolute top-18" />
+                                        <div className="w-24 h-1 bg-green-500 absolute top-24 transform rotate-12" />
+                                        <div className="w-20 h-1 bg-green-500 absolute top-36 transform -rotate-12" />
+                                        <div className="absolute bottom-10 w-8 h-8 rounded-full blur-[10px] bg-red-600 animate-pulse drop-shadow-[0_0_15px_rgba(220,38,38,1)]" />
+                                    </div>
+
+                                    <div className="bg-red-500/20 p-4 rounded-xl border border-red-500/50 mt-4">
+                                        <h4 className="text-red-500 font-bold mb-1 flex items-center gap-2"><ShieldAlert size={16} /> DOA Lockout Triggered</h4>
+                                        <p className="text-white text-xs font-medium">Strain exceeding limits on L4-L5 vertebrae. Manual handling procedures violated.</p>
+                                    </div>
+                                </div>
+                            </motion.div>
+
+                            <motion.div
+                                initial={{ x: 100, opacity: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                transition={{ delay: 0.5 }}
+                                className="flex-1 text-left"
+                            >
+                                <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tighter mb-4 leading-tight">INDUSTRIAL<br /><span className="text-ohs-orange">ERGONOMICS MODULE</span></h1>
+                                <p className="text-lg text-gray-400 font-medium mb-6">Forklifts. Trolley Jacks. Manual Heavy Lifting.</p>
+                                <p className="text-gray-300 mb-8 border-l-4 border-ohs-orange pl-4 bg-white/5 py-2">
+                                    We have extended the intelligence to warehouses and assembly lines. Monitor physiological stress factors in high-demand zones instantly.
+                                </p>
+                                <div className="flex gap-4">
+                                    <span className="bg-white/10 px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-widest text-[#a2ff00] border border-[#a2ff00]/30">Dominant Foot Analysis</span>
+                                    <span className="bg-white/10 px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-widest text-blue-400 border border-blue-400/30">Forklift Telemetry</span>
+                                </div>
+                            </motion.div>
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* SCENE 6: Credits Overlay (165-190s) */}
+                {scene === 6 && (
+                    <motion.div
+                        key="scene6"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex-1 bg-black flex flex-col items-center justify-center p-12 relative overflow-hidden text-center"
+                    >
+                        <h2 className="text-ohs-orange font-black uppercase text-xl sm:text-3xl tracking-widest mb-12 flex items-center justify-center gap-3">
+                            <Target size={32} /> 2026 Google Strategic Showcase
+                        </h2>
+
+                        <div className="relative w-full max-w-2xl h-64 overflow-hidden mb-12 mask-image-fade">
+                            <motion.div
+                                animate={{ y: ["100%", "-200%"] }}
+                                transition={{ duration: 15, ease: "linear" }}
+                                className="absolute w-full flex flex-col gap-6 items-center"
+                            >
+                                <div className="text-2xl font-bold text-gray-300">Gemini Pro (The Savior)</div>
+                                <div className="text-2xl font-bold text-gray-300">Google AI Studio</div>
+                                <div className="text-2xl font-bold text-gray-300">Google Cloud TTS</div>
+                                <div className="text-2xl font-bold text-gray-300">GDG Discovery</div>
+                                <div className="text-2xl font-bold text-gray-300">Crew AI</div>
+                                <div className="text-2xl font-bold text-gray-300">Base 44</div>
+                                <div className="text-2xl font-bold text-gray-300">GitHub & Replit</div>
+                            </motion.div>
+                        </div>
+
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ delay: 8, duration: 2 }}
+                            className="bg-white/10 backdrop-blur-md p-8 border border-white/20 rounded-2xl max-w-4xl"
+                        >
+                            <p className="text-xl sm:text-3xl text-white font-black italic tracking-tight leading-relaxed">
+                                "Developed by a 53-Year-Old AI Architect — Empowered by Google Skills & Premiere Tier Credits. Age is not a barrier to God-Mode Innovation."
+                            </p>
+                        </motion.div>
+                    </motion.div>
+                )}
+
+                {/* SCENE 7: End */}
+                {scene === 7 && (
                     <motion.div
                         key="end"
                         initial={{ opacity: 0 }}
@@ -271,7 +378,7 @@ export const TechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                     >
                         <ShieldAlert size={80} className="text-ohs-orange mb-8" />
                         <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter">SYSTEM OVERWATCH ONLINE</h1>
-                        <p className="text-2xl text-gray-400 font-medium mb-12">v1.3 God Mode Architecture Initialized.</p>
+                        <p className="text-2xl text-gray-400 font-medium mb-12">v1.8 God Mode Architecture Initialized.</p>
                         <button
                             onClick={onExit}
                             className="bg-ohs-orange hover:bg-ohs-orange/90 text-black px-12 py-5 rounded-xl font-black text-xl hover:scale-105 transition-all shadow-[0_0_40px_rgba(249,168,37,0.3)]"

@@ -1,4 +1,4 @@
-export type Language = 'en' | 'zu' | 'xh' | 'af';
+export type Language = 'en' | 'zu' | 'xh' | 'af' | 'sw' | 'zh' | 'es' | 'ko';
 
 export const translations = {
     en: {
@@ -100,5 +100,45 @@ export const translations = {
                 "corrective-flow": { title: "Korrektiewe Vloei", desc: "Gevorderde strekke vir chroniese probleemareas. OHS Wet Artikel 8 Voldoening: Versekering van 'n veilige werkstelsel.", step1: "Gefokusde nekvrystelling" }
             }
         }
+    },
+    sw: {
+        melly_intro: "Hujambo, mimi ni Melly. Mwongozo wako wa Usalama wa AI. Wacha tuhakikishe umelindwa leo.",
+        stewardship_model: "Mfumo wa Usimamizi unahakikisha kufuata sheria kupitia Mfanyakazi, Msimamizi, na Mkurugenzi Mtendaji.",
+        high_discomfort_disclaimer: "ONYO: Uchovu mkubwa umegunduliwa. Kushindwa kutatua kunaweza kusababisha uvunjaji wa sheria za OHS.",
+        legal_shock: "MUHIMU: Kutofuata sheria kunaweza kusababisha faini au kifungo kulingana na Sheria za OHS (OSHA 2007).",
+        exercise_tip: "Wakati wa kunyoosha mwili! Hii inazuia maumivu ya misuli.",
+        compliance_check: "Ukaguzi wa usalama wa kila siku unahitajika kufikia Ijumaa saa sita mchana.",
+        admin_zero: "Tathmini imekamilika. Nimehifadhi kiotomatiki katika faili lako la usalama digitali.",
+        training: { start_session: "Kuanza:", follow_guide: "Fuata maelekezo. Hatua 1:", exercises: {} }
+    },
+    zh: {
+        melly_intro: "你好，我是 Melly。你的 AI 职业安全顾问。今天让我们确保您的安全。",
+        stewardship_model: "管理结构确保从员工到首席执行官的 100% 职业安全合规。",
+        high_discomfort_disclaimer: "警告：检测到严重不适。不及时处理将违反职业健康与安全规定。",
+        legal_shock: "重要提醒：持续违规可能导致企业触犯法律，面临严重罚款或诉讼（符合 ISO 45001）。",
+        exercise_tip: "是时候进行简短的伸展了！这可以预防长期的肌肉疲劳。",
+        compliance_check: "需要每日安全扫描。请在周五中午前完成列表验证。",
+        admin_zero: "评估完成。已自动提交到您的数字 OHS 数据库。",
+        training: { start_session: "开始会话:", follow_guide: "请按照指南操作, 步骤 1:", exercises: {} }
+    },
+    es: {
+        melly_intro: "Hola, soy Melly. Tu acompañante de Seguridad AI. Asegurémonos de que estés protegido hoy.",
+        stewardship_model: "El modelo de gestión asegura el 100% de cumplimiento desde el empleado hasta el CEO.",
+        high_discomfort_disclaimer: "ADVERTENCIA: Alto malestar detectado. Ignorar esto puede incurrir en incumplimiento de normas OHS (ISO 45001).",
+        legal_shock: "IMPORTANTE: El incumplimiento puede resultar en responsabilidad penal para la empresa.",
+        exercise_tip: "¡Hora de un estiramiento rápido! Previene lesiones musculares a largo plazo.",
+        compliance_check: "Se requiere un escaneo de seguridad diario. Por favor complétalo para el mediodía.",
+        admin_zero: "Evaluación completada. Guardado automáticamente en tu dossier OHS.",
+        training: { start_session: "Empezar:", follow_guide: "Siga la guía animada. Paso 1:", exercises: {} }
+    },
+    ko: {
+        melly_intro: "안녕하세요, 저는 AI 안전 파트너 Melly입니다. 오늘 귀하의 안전을 관리하겠습니다.",
+        stewardship_model: "책임 모델은 직원부터 최고 경영자까지 100% 규정 준수를 보장합니다.",
+        high_discomfort_disclaimer: "경고: 높은 피로도가 감지되었습니다. 이를 방치하면 OHS 규정을 위반할 수 있습니다.",
+        legal_shock: "중요: 지속적인 규정 위반은 심각한 기업의 법적 책임(ISO 45001)으로 이어질 수 있습니다.",
+        exercise_tip: "잠시 스트레칭할 시간입니다! 이는 근골격계 질환을 예방합니다.",
+        compliance_check: "일일 안전 점검이 필요합니다. 금요일 정오까지 체크리스트를 완료하세요.",
+        admin_zero: "평가 완료. 디지털 OHS 데이터베이스에 자동으로 저장되었습니다.",
+        training: { start_session: "세션 시작:", follow_guide: "애니메이션 가이드를 따르세요. 1단계:", exercises: {} }
     }
 };

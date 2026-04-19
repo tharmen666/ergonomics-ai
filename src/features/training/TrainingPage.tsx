@@ -105,6 +105,34 @@ const stages = [
                 steps: ["Targeted neck release", "Deep hip opener", "Thoracic extension", "Nerve gliding"]
             }
         ]
+    },
+    {
+        id: 'industrial',
+        title: "Stage 5: Industrial Logistics",
+        description: "Logistics and warehousing overwatch.",
+        modules: [
+            {
+                id: 'manual-handling',
+                title: "Manual Handling (Lifting)",
+                description: "Ensure OHS Act compliance for heavy lifting. Prevent L4-L5 herniation.",
+                duration: "5 min",
+                steps: ["Leg-based lift", "Dominant foot back", "Core stability active", "Keep load close"]
+            },
+            {
+                id: 'forklift-safety',
+                title: "Forklift Checks (Electric/Petrol)",
+                description: "Mandatory pre-operation telemetry protocols.",
+                duration: "2 min",
+                steps: ["Verify load limits", "Test warning lights", "Check hydraulic pressure", "Secure harness"]
+            },
+            {
+                id: 'trolley-jacks',
+                title: "Trolley Jacks & Ladders",
+                description: "Equipment safety protocols and securement.",
+                duration: "3 min",
+                steps: ["Inspect locking pins", "Ensure level ground", "Check wheel bearings", "Do not overload"]
+            }
+        ]
     }
 ];
 

@@ -87,6 +87,42 @@ export const ExecutiveBriefing = () => {
                 </div>
             </motion.div>
 
+            {/* ADK Matrix Layer */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="bg-black/40 border border-white/5 p-8 rounded-3xl mt-8"
+            >
+                <h3 className="text-xl font-black text-white mb-6">ADK Change Management Matrix</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="bg-white/5 p-6 rounded-2xl border border-white/10 relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 p-2 text-ohs-orange/20 group-hover:text-ohs-orange/40 transition-colors"><ShieldAlert size={48} /></div>
+                        <h4 className="text-ohs-orange font-black mb-2 uppercase tracking-widest text-xs relative z-10">Awareness</h4>
+                        <p className="text-sm text-gray-300 font-medium relative z-10 leading-relaxed mb-4">Semantic Firewall Mapping</p>
+                        <div className="bg-black/50 p-3 rounded-xl border border-ohs-orange/30">
+                            <p className="text-[10px] text-white italic">"Did you know? Under Section 37, 'Reasonable Steps' include the Handshake you just passed."</p>
+                        </div>
+                    </div>
+                    <div className="bg-white/5 p-6 rounded-2xl border border-white/10 relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 p-2 text-[#a2ff00]/20 group-hover:text-[#a2ff00]/40 transition-colors"><TrendingUp size={48} /></div>
+                        <h4 className="text-[#a2ff00] font-black mb-2 uppercase tracking-widest text-xs relative z-10">Desire</h4>
+                        <p className="text-sm text-gray-300 font-medium relative z-10 leading-relaxed mb-4">Kaizen Bonus Gamification</p>
+                        <div className="bg-black/50 p-3 rounded-xl border border-[#a2ff00]/30">
+                            <p className="text-[10px] text-white italic">"When you hit sub-10% latency, the Cyber-Lime celebration locks your productive streak multiplier."</p>
+                        </div>
+                    </div>
+                    <div className="bg-white/5 p-6 rounded-2xl border border-white/10 relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 p-2 text-blue-500/20 group-hover:text-blue-500/40 transition-colors"><FileText size={48} /></div>
+                        <h4 className="text-blue-500 font-black mb-2 uppercase tracking-widest text-xs relative z-10">Knowledge</h4>
+                        <p className="text-sm text-gray-300 font-medium relative z-10 leading-relaxed mb-4">Melly Multilingual ISO Sync</p>
+                        <div className="bg-black/50 p-3 rounded-xl border border-blue-500/30">
+                            <p className="text-[10px] text-white italic">"Mastery Tip: ISO 45003 maps psychosocial risk—deploy training via isiZulu to cover non-native dynamics."</p>
+                        </div>
+                    </div>
+                </div>
+            </motion.div>
+
             <LeanMetrics />
         </div>
     );
