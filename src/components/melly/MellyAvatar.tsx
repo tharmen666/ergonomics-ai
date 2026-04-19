@@ -65,7 +65,7 @@ export const MellyAvatar = () => {
                             whileTap={{ scale: 0.95 }}
                         >
                             <div className="w-full h-full rounded-full overflow-hidden relative border-[3px] border-[#F9A825] bg-gradient-to-br from-ohs-orange/40 to-yellow-900/80 flex items-center justify-center">
-                                <Activity className="text-ohs-orange drop-shadow-[0_0_15px_rgba(249,168,37,0.8)] scale-75 sm:scale-100" size={48} />
+                                <img src="/assets/melly-new-avatar.jpg" className="w-full h-full object-cover" alt="Melly Avatar" />
                                 {isSpeaking && (
                                     <div className="absolute inset-0 bg-ohs-orange/20 flex items-center justify-center animate-pulse">
                                         <div className="flex gap-1 absolute bottom-4">
@@ -219,7 +219,7 @@ export const MellyAvatar = () => {
                 whileTap={{ scale: 0.9 }}
             >
                 <div className="absolute inset-0 bg-gradient-to-br from-ohs-navy to-black rounded-full flex items-center justify-center">
-                    <Activity className="text-ohs-orange opacity-80 scale-75 sm:scale-100" size={24} />
+                    <img src="/assets/melly-new-avatar.jpg" className="w-full h-full object-cover rounded-full" alt="Melly Avatar" />
                 </div>
 
                 {/* Active Pulse */}

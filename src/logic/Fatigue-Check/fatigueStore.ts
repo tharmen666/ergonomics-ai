@@ -2,13 +2,14 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 interface FatigueState {
-    fatigueLevel: 'nominal' | 'high';
+    fatigueLevel: 'nominal' | 'warning' | 'high';
     cognitiveHandshakePassed: boolean;
-    setFatigueLevel: (level: 'nominal' | 'high') => void;
+    setFatigueLevel: (level: 'nominal' | 'warning' | 'high') => void;
     showCognitiveHandshake: boolean;
     setShowCognitiveHandshake: (show: boolean) => void;
     passCognitiveHandshake: () => void;
     failCognitiveHandshake: () => void;
+    warnCognitiveHandshake: () => void;
 
     // Routine Audit
     lastLoginTime: number | null;
@@ -30,6 +31,7 @@ export const useFatigueStore = create<FatigueState>()(
             setFatigueLevel: (level) => set({ fatigueLevel: level }),
             passCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'nominal', showCognitiveHandshake: false }),
             failCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'high', showCognitiveHandshake: false }),
+            warnCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'warning', showCognitiveHandshake: false }),
 
             lastLoginTime: Date.now(),
             consecutiveRestBreaks: 0,

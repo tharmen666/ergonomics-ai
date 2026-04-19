@@ -19,6 +19,9 @@ interface MellyState {
     recommendations: string[];
     completeModule: (id: string) => void;
     addRecommendation: (id: string) => void;
+    productiveStreak: number;
+    incrementStreak: () => void;
+    resetStreak: () => void;
 }
 
 export const useMellyStore = create<MellyState>()(
@@ -46,6 +49,9 @@ export const useMellyStore = create<MellyState>()(
             addRecommendation: (id) => set((state) => ({
                 recommendations: state.recommendations.includes(id) ? state.recommendations : [...state.recommendations, id]
             })),
+            productiveStreak: 0,
+            incrementStreak: () => set((state) => ({ productiveStreak: state.productiveStreak + 1 })),
+            resetStreak: () => set({ productiveStreak: 0 }),
         }),
         { name: 'melly-storage' }
     )
