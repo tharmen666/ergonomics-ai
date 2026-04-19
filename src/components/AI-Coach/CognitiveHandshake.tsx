@@ -5,7 +5,7 @@ import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 import { useMellyStore } from '../../store/mellyStore';
 
 export const CognitiveHandshake = () => {
-    const { cognitiveHandshakePassed, showCognitiveHandshake, setShowCognitiveHandshake, passCognitiveHandshake, failCognitiveHandshake } = useFatigueStore();
+    const { cognitiveHandshakePassed, showCognitiveHandshake, setShowCognitiveHandshake, passCognitiveHandshake, failCognitiveHandshake, warnCognitiveHandshake } = useFatigueStore();
     const { setGuidance, setSpeaking, setMood } = useMellyStore();
 
     // Game State
