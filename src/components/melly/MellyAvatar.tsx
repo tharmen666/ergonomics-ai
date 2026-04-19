@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ReasoningLog } from '../agent/ReasoningLog';
 import { useMellyStore } from '../../store/mellyStore';
-import { X, PlayCircle, Globe, ShieldCheck, Activity } from 'lucide-react';
+import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
+import { X, PlayCircle, Globe, ShieldCheck } from 'lucide-react';
 import { translations, Language } from '../../utils/translations';
 
 export const MellyAvatar = () => {
     const { isWingmanActive, isSpeaking, setSpeaking, setTourActive, language, setLanguage, setGuidance } = useMellyStore();
+    const { fatigueLevel } = useFatigueStore();
     const [isExpanded, setIsExpanded] = useState(false);
     const [userInput, setUserInput] = useState('');
     const [isEmergency, setIsEmergency] = useState(false);
@@ -42,7 +44,7 @@ export const MellyAvatar = () => {
 
     return (
         <div
-            className="fixed bottom-4 right-4 z-[9999] flex flex-col items-end gap-3 pointer-events-none"
+            className="fixed bottom-4 right-4 z-[40] flex flex-col items-end gap-3 pointer-events-none"
             onMouseEnter={() => setIsExpanded(true)}
             onMouseLeave={() => !isSpeaking && setIsExpanded(false)}
         >
@@ -64,7 +66,7 @@ export const MellyAvatar = () => {
                             }}
                             whileTap={{ scale: 0.95 }}
                         >
-                            <div className="w-full h-full rounded-full overflow-hidden relative border-[3px] border-[#F9A825] bg-gradient-to-br from-ohs-orange/40 to-yellow-900/80 flex items-center justify-center">
+                            <div className={`w-full h-full rounded-full overflow-hidden relative border-[3px] flex items-center justify-center ${fatigueLevel === 'nominal' ? 'border-green-500 bg-gradient-to-br from-green-500/20 to-black' : fatigueLevel === 'warning' ? 'border-yellow-500 bg-gradient-to-br from-yellow-500/20 to-black' : 'border-red-500 bg-gradient-to-br from-red-500/20 to-black'}`}>
                                 <img src="/assets/melly-new-avatar.jpg" className="w-full h-full object-cover" alt="Melly Avatar" />
                                 {isSpeaking && (
                                     <div className="absolute inset-0 bg-ohs-orange/20 flex items-center justify-center animate-pulse">
@@ -210,11 +212,10 @@ export const MellyAvatar = () => {
                 )}
             </AnimatePresence>
 
-            {/* MINIMIZED FAB ORB (Always visible, triggers expansion) */}
             <motion.button
                 layoutId="melly-core"
                 onClick={() => setIsExpanded(!isExpanded)}
-                className={`pointer-events-auto w-14 h-14 rounded-full border-[3px] border-[#F9A825] shadow-[0_0_20px_rgba(249,168,37,0.3)] flex items-center justify-center overflow-hidden transition-all relative ${isExpanded ? 'scale-0 opacity-0' : 'scale-100 opacity-100'}`}
+                className={`pointer-events-auto w-14 h-14 rounded-full border-[3px] flex items-center justify-center overflow-hidden transition-all relative ${isExpanded ? 'scale-0 opacity-0' : 'scale-100 opacity-100'} ${fatigueLevel === 'nominal' ? 'border-green-500 shadow-[0_0_20px_rgba(34,197,94,0.3)]' : fatigueLevel === 'warning' ? 'border-yellow-500 shadow-[0_0_20px_rgba(234,179,8,0.3)]' : 'border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.3)]'}`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
             >
@@ -226,7 +227,7 @@ export const MellyAvatar = () => {
                 <motion.div
                     animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
                     transition={{ repeat: Infinity, duration: 2 }}
-                    className="absolute inset-0 bg-ohs-orange/30 z-0 rounded-full"
+                    className={`absolute inset-0 z-0 rounded-full ${fatigueLevel === 'nominal' ? 'bg-green-500' : fatigueLevel === 'warning' ? 'bg-yellow-500' : 'bg-red-500'}`}
                 />
 
                 {isSpeaking && (

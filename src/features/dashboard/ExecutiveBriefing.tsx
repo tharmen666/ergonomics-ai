@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
-import { ShieldAlert, AlertTriangle, FileText, CheckCircle2 } from 'lucide-react';
+import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp } from 'lucide-react';
 import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
+import { LeanMetrics } from '../AI-Coach/LeanMetrics';
 
 export const ExecutiveBriefing = () => {
     return (
@@ -60,11 +61,29 @@ export const ExecutiveBriefing = () => {
                         <h3 className="text-xl font-black text-white flex items-center gap-3"><FileText className="text-green-500" size={24} /> Admin-Zero File Status</h3>
                         <p className="text-gray-400 font-medium mt-1">All compliance actions have been automatically assembled into the organizational blockchain ledger.</p>
                     </div>
-                    <div className="bg-green-500/20 text-green-400 px-6 py-3 rounded-full font-bold uppercase tracking-widest text-sm whitespace-nowrap hidden md:block">
-                        NO PENDING OFFENCES
+            </motion.div>
+
+            {/* v1.4 LPS ROI LAYER */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="bg-[#0b0f19] border border-ohs-orange/30 p-8 rounded-3xl mt-8 shadow-[0_0_40px_rgba(249,168,37,0.1)] relative overflow-hidden"
+            >
+                <TrendingUp className="absolute -right-10 -bottom-10 text-ohs-orange/5" size={150} />
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+                    <div>
+                        <h3 className="text-2xl font-black text-white flex items-center gap-3">
+                            LPS ROI: <span className="text-ohs-orange">Productivity Recovered</span>
+                        </h3>
+                        <p className="text-gray-400 font-medium mt-2 leading-relaxed">
+                            via Section 37 Compliance. Our continuous Ergo Stability engine is directly tracking and recuperating lost efficiency by aligning OHS legislation directly with overall human effectiveness metrics.
+                        </p>
                     </div>
                 </div>
             </motion.div>
+
+            <LeanMetrics />
         </div>
     );
 };

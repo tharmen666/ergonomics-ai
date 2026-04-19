@@ -42,11 +42,13 @@ export const CognitiveHandshake = () => {
         // Connect to Memory Vault
         const { reactionMemory, addReactionMemory } = useFatigueStore.getState();
         let isFatigued = false;
+        let historicalBaseline = 0;
 
         if (reactionMemory.length > 0) {
-            const historicalBaseline = reactionMemory.reduce((a, b) => a + b, 0) / reactionMemory.length;
+            const historicalBaselineValue = reactionMemory.reduce((a, b) => a + b, 0) / reactionMemory.length;
+            historicalBaseline = historicalBaselineValue;
             // >20% Cognitive Overload detection
-            isFatigued = avgReaction > (historicalBaseline * 1.20);
+            isFatigued = avgReaction > (historicalBaselineValue * 1.20);
         } else {
             isFatigued = avgReaction > 800; // Seed threshold
         }
@@ -58,10 +60,18 @@ export const CognitiveHandshake = () => {
             failCognitiveHandshake();
             setMood('concerned');
             setGuidance("Cognitive lag detected in your handshake. I'm flagging a High-Fatigue status. Please consider a 15-minute Professional Reset.");
+        } else if (historicalBaseline && avgReaction < (historicalBaseline * 1.10) && avgReaction < 700) {
+            passCognitiveHandshake();
+            setMood('happy');
+            setGuidance("KAIZEN BONUS: Handshake cleared effortlessly. Optimal latency detected. Productive Streak multiplied.");
+        } else if (historicalBaseline && avgReaction >= (historicalBaseline * 1.15)) {
+            warnCognitiveHandshake();
+            setMood('concerned');
+            setGuidance("Muda lag detected. Tracking high variance from baseline. Consider an ergonomic adjustment.");
         } else {
             passCognitiveHandshake();
             setMood('happy');
-            setGuidance("Cognitive Handshake passed! You're performing at peak levels today.");
+            setGuidance("Cognitive Handshake passed! You're performing safely at standard work rates.");
         }
 
         setTimeout(() => setSpeaking(false), 6000);
