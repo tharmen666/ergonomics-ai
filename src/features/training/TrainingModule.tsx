@@ -7,7 +7,7 @@ import { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { speak, stopSpeaking } from '../../utils/speech';
 import { useMellyStore } from '../../store/mellyStore';
-import { translations, Language } from '../../utils/translations';
+import { translations } from '../../utils/translations';
 
 interface TrainingModuleProps {
     id?: string;
@@ -110,8 +110,8 @@ export const TrainingModule = ({ id, title, description, duration, steps, onClos
 
     useEffect(() => {
         if (isPlaying && voiceEnabled) {
-            const trans = translations[language as Language]?.training;
-            const exrTrans = trans?.exercises?.[id as keyof typeof trans.exercises];
+            const trans = (translations as any)[language]?.training;
+            const exrTrans = trans?.exercises?.[id as string];
 
             const transTitle = exrTrans?.title || title;
             const transDesc = exrTrans?.desc || description;
