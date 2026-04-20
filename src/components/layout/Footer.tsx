@@ -1,6 +1,6 @@
 export const Footer = () => {
     return (
-        <footer className="border-t border-white/5 bg-ohs-dark/80 backdrop-blur-xl text-gray-400 py-12 mt-20 relative overflow-hidden">
+        <footer className="border-t border-white/5 bg-ohs-dark/80 backdrop-blur-xl text-gray-400 py-12 mt-20 mb-32 pb-24 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-ohs-blue/5 to-transparent pointer-events-none" />
             <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 relative z-10">
                 <div className="text-center md:text-left">

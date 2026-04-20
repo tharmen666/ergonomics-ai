@@ -112,6 +112,10 @@ export const MellyAvatar = () => {
                                         <option value="zu" className="bg-ohs-navy">ZU</option>
                                         <option value="xh" className="bg-ohs-navy">XH</option>
                                         <option value="af" className="bg-ohs-navy">AF</option>
+                                        <option value="sw" className="bg-ohs-navy">SW</option>
+                                        <option value="zh" className="bg-ohs-navy">ZH</option>
+                                        <option value="es" className="bg-ohs-navy">ES</option>
+                                        <option value="ko" className="bg-ohs-navy">KO</option>
                                     </select>
                                     <button aria-label="Close" title="Close" onClick={() => setIsExpanded(false)} className="text-gray-500 hover:text-white ml-2"><X size={14} /></button>
                                 </div>

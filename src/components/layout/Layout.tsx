@@ -12,7 +12,7 @@ interface LayoutProps {
 
 export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
     return (
-        <div className="flex min-h-screen bg-ohs-navy text-white overflow-hidden relative font-sans">
+        <div className="flex min-h-screen w-full relative">
             {/* Background Ambience */}
             <div className="fixed inset-0 z-0 pointer-events-none">
                 <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-ohs-blue/20 rounded-full blur-[120px]" />
@@ -22,8 +22,8 @@ export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
             <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
             <MobileBottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
 
-            <main className="flex-1 ml-0 md:ml-64 p-4 md:p-8 pb-24 md:pb-8 relative z-10 h-screen overflow-y-auto custom-scrollbar flex flex-col">
-                <div className="flex-1">
+            <main className="flex-1 ml-0 md:ml-64 p-4 md:p-8 pb-32 md:pb-16 relative z-10 flex flex-col min-h-screen w-full">
+                <div className="flex-1 w-full max-w-full">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={activeTab}
