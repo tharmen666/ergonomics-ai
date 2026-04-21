@@ -11,8 +11,8 @@ import { InvoicesPage } from './features/finance/InvoicesPage';
 
 import { SelfAssessmentPage } from './features/assessment/SelfAssessmentPage';
 import { RiskyBehaviorsPage } from './features/risks/RiskyBehaviorsPage';
-import { HRDashboard } from './features/admin/HRDashboard';
-import { TechnicalDemo } from './features/demo/TechnicalDemo';
+import { AdminPortal } from './features/admin/AdminPortal';
+import { HQTechnicalDemo } from './features/demo/HQTechnicalDemo';
 import { ExecutiveBriefing } from './features/dashboard/ExecutiveBriefing';
 import { PrivacyHandshake } from './assets/Privacy-Shield/PrivacyHandshake';
 import { CognitiveHandshake } from './components/AI-Coach/CognitiveHandshake';
@@ -26,7 +26,7 @@ function App() {
   const { isWingmanActive, setWingmanActive } = useMellyStore();
 
   if (activeTab === 'demo') {
-    return <TechnicalDemo onExit={() => setActiveTab('dashboard')} />;
+    return <HQTechnicalDemo onExit={() => setActiveTab('dashboard')} />;
   }
 
   return (
@@ -98,7 +98,7 @@ function App() {
           {activeTab === 'finance' && <InvoicesPage />}
           {activeTab === 'assessment' && <SelfAssessmentPage />}
           {activeTab === 'risks' && <RiskyBehaviorsPage />}
-          {activeTab === 'admin' && <HRDashboard />}
+          {activeTab === 'admin' && <AdminPortal />}
           {activeTab === 'reports' && <div className="text-center p-20 text-gray-500">Analytics Module - Coming Soon</div>}
           {activeTab === 'settings' && <div className="text-center p-20 text-gray-500">Settings Module - Coming Soon</div>}
         </main>

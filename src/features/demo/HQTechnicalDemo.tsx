@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldAlert, Globe, Activity, Lock, Target } from 'lucide-react';
 import { speak, stopSpeaking } from '../../utils/speech';
 
-export const TechnicalDemo = ({ onExit }: { onExit: () => void }) => {
+export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
     // 0: Start, 1: Liability Trigger, 2: Cognitive Handshake, 3: Global Standard, 4: Memory Vault, 5: Industrial Mode, 6: Credits, 7: End
     const [scene, setScene] = useState(0);
     const [isoToggle, setIsoToggle] = useState(false);

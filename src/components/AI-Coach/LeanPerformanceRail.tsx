@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 import { useMellyStore } from '../../store/mellyStore';
 
-export const LeanMetrics = () => {
+export const LeanPerformanceRail = () => {
     const { fatigueLevel, reactionMemory } = useFatigueStore();
     const { productiveStreak, incrementStreak } = useMellyStore();
 

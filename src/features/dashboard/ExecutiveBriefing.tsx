@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp } from 'lucide-react';
 import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
-import { LeanMetrics } from '../../components/AI-Coach/LeanMetrics';
+import { LeanPerformanceRail } from '../../components/AI-Coach/LeanPerformanceRail';
 
 export const ExecutiveBriefing = () => {
     return (
@@ -123,7 +123,7 @@ export const ExecutiveBriefing = () => {
                 </div>
             </motion.div>
 
-            <LeanMetrics />
+            <LeanPerformanceRail />
         </div>
     );
 };

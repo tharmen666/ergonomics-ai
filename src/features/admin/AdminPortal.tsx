@@ -5,7 +5,7 @@ import { BarChart3, Users, AlertCircle, CheckCircle, Download, ShieldAlert, Awar
 import { getLegalShockContent } from '../../utils/escalationLogic';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 
-export const HRDashboard = () => {
+export const AdminPortal = () => {
     const { fatigueLevel } = useFatigueStore();
     const stats = [
         { label: 'Total Employees', value: '124', icon: Users, color: 'text-ohs-blue', bgColor: 'bg-ohs-blue/10' },
