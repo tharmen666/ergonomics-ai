@@ -16,6 +16,11 @@ export const LeanPerformanceRail = () => {
     }, [fatigueLevel, incrementStreak]);
 
     // Derived Metrics
+    // Scene-based overrides for Demo Mode
+    const isDemo = typeof window !== 'undefined' && window.location.pathname.includes('/demo'); // Or check a global state
+    // For now, we'll check if fatiguLevel store has a specific 'showcase' flag or just let it be reactive.
+    // However, the user wants "show Efficiency Gains".
+
     let mudaPercent = 0;
     if (fatigueLevel === 'high') mudaPercent = 25;
     else if (fatigueLevel === 'warning') mudaPercent = 15;
@@ -24,7 +29,19 @@ export const LeanPerformanceRail = () => {
         if (lastReact > 600) mudaPercent = Math.min(10, Math.floor((lastReact - 600) / 20));
     }
 
-    const ohe = Math.max(0, 100 - mudaPercent);
+    let ohe = Math.max(0, 100 - mudaPercent);
+
+    // Showcase logic: In demo mode, stats "level up" as the showcase progresses
+    if (isDemo) {
+        // Map productiveStreak (which grows in demo) to targets
+        // Final targets: OHE 94%, Muda <5%
+        const progress = Math.min(1, productiveStreak / 120); // 120s is the demo target
+        mudaPercent = Math.max(4, 25 - Math.floor(progress * 21)); // Drops from 25 to 4
+        ohe = Math.min(94, 75 + Math.floor(progress * 19)); // Rises from 75 to 94
+    } else if (productiveStreak > 100) {
+        mudaPercent = Math.max(0, mudaPercent - Math.floor(productiveStreak / 80));
+        ohe = Math.max(0, 100 - mudaPercent);
+    }
 
     // Takt: Assuming 3600 seconds per standard cycle, mandatory reset
     const taktRemaining = Math.max(0, 3600 - productiveStreak);

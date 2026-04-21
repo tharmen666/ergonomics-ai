@@ -1,51 +1,62 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldAlert, Globe, Activity, Lock, Target } from 'lucide-react';
 import { speak, stopSpeaking } from '../../utils/speech';
+import { MellyAvatar } from '../../components/melly/MellyAvatar';
+import { LeanPerformanceRail } from '../../components/AI-Coach/LeanPerformanceRail';
+import {
+    ShieldAlert,
+    Activity,
+    Lock,
+    Target,
+    Users,
+    CheckCircle,
+    TrendingUp,
+    Presentation
+} from 'lucide-react';
 
 export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
-    // 0: Start, 1: Liability Trigger, 2: Cognitive Handshake, 3: Global Standard, 4: Memory Vault, 5: Industrial Mode, 6: Credits, 7: End
+    // 0: Start, 1: Liability, 2: Handshake, 3: Stewardship Hub, 4: HR & LPS, 5: Training, 6: Industrial, 7: Credits, 8: End
     const [scene, setScene] = useState(0);
-    const [isoToggle, setIsoToggle] = useState(false);
+
+    const SCENE_DURATION = 20000;
 
     useEffect(() => {
-        if (scene === 0 || scene === 7) return;
+        if (scene === 0 || scene === 8) return;
 
-        let timeoutId: ReturnType<typeof setTimeout>;
-        if (scene === 1) timeoutId = setTimeout(() => setScene(2), 30000);
-        else if (scene === 2) timeoutId = setTimeout(() => setScene(3), 30000);
-        else if (scene === 3) timeoutId = setTimeout(() => setScene(4), 30000);
-        else if (scene === 4) timeoutId = setTimeout(() => setScene(5), 25000);
-        else if (scene === 5) timeoutId = setTimeout(() => setScene(6), 25000);
-        else if (scene === 6) timeoutId = setTimeout(() => setScene(7), 25000);
+        const timeoutId = setTimeout(() => {
+            setScene(prev => prev + 1);
+        }, SCENE_DURATION);
 
         return () => clearTimeout(timeoutId);
     }, [scene]);
 
-    // ISO Dashboard Toggle Animation for Scene 3
-    useEffect(() => {
-        if (scene === 3) {
-            const temp = setInterval(() => setIsoToggle(prev => !prev), 2000);
-            return () => clearInterval(temp);
-        }
-    }, [scene]);
 
+    // Synchronized Audio Narrative (sceneStart + 1000ms)
     useEffect(() => {
-        if (scene === 1) {
-            speak("We don't just track posture; we shield the CEO from criminal liability by documenting proactive care in real-time.");
-        } else if (scene === 2) {
-            speak("Our 10-PhD Melly detects cognitive fatigue before an error happens. If you aren't fit for duty, the system locks the 'Sign-Off' button. We stop the accident before it occurs.");
-        } else if (scene === 3) {
-            speak("One platform, any jurisdiction. Melly cross-references local laws with global ISO standards, giving multinationals a single 'Truth Dashboard' for fifty countries.");
-        } else if (scene === 4) {
-            speak("Melly remembers your history. She doesn't just see a worker; she sees a trend. This is the 'Awakening' of OHS, A.I. that knows your team's health better than they do.");
-        } else if (scene === 5) {
-            speak("Introducing the Industrial Nodes. Manual handlings, forklift telemetry, and dynamic DOA lockouts specifically tailored for the hazards of a warehouse floor.");
-        } else if (scene === 6) {
-            speak("This is ErgoSafe reborn. Driven by ambition. Empowered by premier Google frameworks.");
-        } else if (scene === 7 || scene === 0) {
+        if (scene === 0 || scene === 8) {
             stopSpeaking();
+            return;
         }
+
+        const audioTimeout = setTimeout(() => {
+            if (scene === 1) {
+                speak("We don't just track posture; we shield the CEO from criminal liability by documenting proactive care in real-time.");
+            } else if (scene === 2) {
+                speak("Our 10-PhD Melly detects cognitive fatigue before an error happens. If you aren't fit for duty, the system locks the 'Sign-Off' button. We stop the accident before it occurs.");
+            } else if (scene === 3) {
+                speak("Welcome to the Stewardship Hub. We automate duty of care by cascading OHS accountability from the boardroom to the floor. Total transparency for every executive.");
+            } else if (scene === 4) {
+                speak("HR and Loss Prevention integration. Melly analyzes fatigue patterns over seven days, identifying risks before they become a worker's compensation claim.");
+            } else if (scene === 5) {
+                speak("Interactive Compliance Training. Our Iris and Friends modules deliver protocol in a way that resonates. 80 percent higher retention than traditional methods.");
+            } else if (scene === 6) {
+                speak("Industrial Logistics module. Forklift telemetry, safe-lifting heat maps, and dynamic DOA lockouts for high-hazard warehouse environments.");
+            } else if (scene === 7) {
+                speak("This is ErgoSafe reborn. v2.0 is the definitive standard for industrial safety. Driven by ambition. Empowered by premier Google frameworks.");
+            }
+        }, 1000);
+
+        return () => clearTimeout(audioTimeout);
     }, [scene]);
 
     return (
@@ -78,7 +89,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                             onClick={() => setScene(1)}
                             className="bg-ohs-orange hover:bg-ohs-orange/90 text-[#0b0f19] px-6 py-3 sm:px-10 sm:py-5 rounded-2xl font-black text-base sm:text-2xl hover:scale-105 transition-all shadow-[0_0_50px_rgba(249,168,37,0.5)]"
                         >
-                            INITIATE MASTER PIPELINE (150s)
+                            INITIATE FEATURE SHOWCASE (120s)
                         </button>
                     </motion.div>
                 )}
@@ -175,53 +186,54 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                     </motion.div>
                 )}
 
-                {/* SCENE 3: The Global Standard (80-120s) */}
+                {/* SCENE 3: Stewardship Hub (NEW) */}
                 {scene === 3 && (
                     <motion.div
                         key="scene3"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="flex-1 bg-black flex flex-col items-center justify-center p-12 relative"
+                        className="flex-1 bg-ohs-navy flex items-center justify-center p-12 overflow-hidden relative"
                     >
-                        <Globe size={120} className="absolute text-ohs-orange/10 z-0 animate-spin-slow scale-75 sm:scale-100" style={{ animationDuration: '30s' }} />
+                        <div className="absolute inset-0 opacity-10 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:100px_100px]" />
 
-                        <div className="z-10 text-center mb-6 sm:mb-12">
-                            <h2 className="text-xs sm:text-sm font-black text-ohs-orange tracking-[0.2em] sm:tracking-[0.4em] uppercase mb-2 sm:mb-4">Semantic Firewall Routing</h2>
-                            <h1 className="text-2xl sm:text-4xl md:text-6xl font-black tracking-tighter">THE GLOBAL STANDARD</h1>
-                        </div>
+                        <div className="w-full max-w-6xl z-10">
+                            <motion.div
+                                initial={{ y: -20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                className="flex justify-between items-end mb-12 border-b border-white/10 pb-8"
+                            >
+                                <div>
+                                    <h2 className="text-4xl sm:text-6xl font-black text-white tracking-tighter mb-2">STEWARDSHIP <span className="text-ohs-orange">HUB</span></h2>
+                                    <p className="text-gray-400 text-xl font-medium">CEO Oversight & Cascading Accountability</p>
+                                </div>
+                                <ShieldAlert size={64} className="text-ohs-orange animate-pulse" />
+                            </motion.div>
 
-                        <div className="w-full max-w-4xl bg-[#0b0f19] border border-white/20 p-6 sm:p-12 rounded-[2.5rem] relative overflow-x-auto shadow-2xl z-10 min-h-[16rem] sm:min-h-[20rem] flex flex-col items-center justify-center">
-                            <AnimatePresence mode="wait">
-                                {!isoToggle ? (
-                                    <motion.div key="sa" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="text-center w-full min-w-max px-4">
-                                        <h3 className="text-xl sm:text-3xl font-black text-white mb-2 sm:mb-4">South African OHS Act 85</h3>
-                                        <p className="text-sm sm:text-xl text-gray-400 font-medium">Monitoring Section 37 & 38 Liabilities</p>
-                                        <div className="mt-8 flex justify-center gap-2">
-                                            <div className="h-2 w-16 bg-ohs-orange rounded-full" />
-                                            <div className="h-2 w-16 bg-white/20 rounded-full" />
-                                        </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                {[
+                                    { label: 'Board Compliance', value: '100%', icon: CheckCircle, color: 'text-green-400' },
+                                    { label: 'Risk Mitigation', value: '+$1.2M', icon: TrendingUp, color: 'text-ohs-blue' },
+                                    { label: 'Active Supervisors', value: '42', icon: Users, color: 'text-ohs-orange' }
+                                ].map((stat, i) => (
+                                    <motion.div
+                                        key={i}
+                                        initial={{ scale: 0.8, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        transition={{ delay: i * 0.1 }}
+                                        className="bg-white/5 border border-white/10 p-8 rounded-3xl backdrop-blur-xl group hover:border-ohs-orange/40 transition-all"
+                                    >
+                                        <stat.icon className={`${stat.color} mb-4`} size={40} />
+                                        <p className="text-xs font-black text-gray-500 uppercase tracking-widest mb-1">{stat.label}</p>
+                                        <h3 className="text-4xl font-black text-white">{stat.value}</h3>
                                     </motion.div>
-                                ) : (
-                                    <motion.div key="iso" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="text-center w-full min-w-[280px] px-4">
-                                        <h3 className="text-xl sm:text-3xl font-black text-white mb-2 sm:mb-4">ISO 45001 & 45003 Protocols</h3>
-                                        <p className="text-sm sm:text-xl text-gray-400 font-medium">Monitoring Global Psychosocial Risks & Safety</p>
-                                        <div className="mt-8 flex justify-center gap-2">
-                                            <div className="h-2 w-16 bg-white/20 rounded-full" />
-                                            <div className="h-2 w-16 bg-ohs-orange rounded-full" />
-                                        </div>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
+                                ))}
+                            </div>
                         </div>
-
-                        <motion.div className="max-w-4xl text-center mt-6 sm:mt-12 bg-white/5 p-4 sm:p-6 rounded-2xl backdrop-blur-md border border-white/10 z-10">
-                            <p className="text-sm sm:text-xl font-bold text-gray-300">"One platform, any jurisdiction. Melly cross-references local laws with global ISO standards, giving multinationals a single 'Truth Dashboard' for 50 countries."</p>
-                        </motion.div>
                     </motion.div>
                 )}
 
-                {/* SCENE 4: The Memory Vault (120-150s) */}
+                {/* SCENE 4: HR & LPS Integration (NEW) */}
                 {scene === 4 && (
                     <motion.div
                         key="scene4"
@@ -230,44 +242,88 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                         exit={{ opacity: 0 }}
                         className="flex-1 bg-[#0b0f19] flex items-center justify-center p-12 relative"
                     >
-                        {/* Grid Background */}
-                        <div className="absolute inset-0 opacity-10 [background-image:linear-gradient(rgba(255,255,255,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.3)_1px,transparent_1px)] [background-size:40px_40px]" />
-
                         <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center z-10 w-full max-w-6xl">
                             <div className="flex-1 text-center lg:text-left">
-                                <h2 className="text-xs sm:text-sm font-black text-ohs-orange tracking-[0.2em] sm:tracking-[0.4em] uppercase mb-2 sm:mb-4">Predictive Wellness</h2>
-                                <h1 className="text-2xl sm:text-6xl font-black tracking-tighter mb-4 sm:mb-8 leading-tight">THE PERSISTENT MEMORY VAULT</h1>
+                                <h2 className="text-xs sm:text-sm font-black text-ohs-orange tracking-[0.2em] sm:tracking-[0.4em] uppercase mb-2 sm:mb-4">HR DATA SYNC</h2>
+                                <h1 className="text-2xl sm:text-6xl font-black tracking-tighter mb-4 sm:mb-8 leading-tight">LOSS PREVENTION<br />INTEGRATION</h1>
                                 <p className="text-sm sm:text-2xl text-gray-400 font-medium leading-relaxed">
-                                    "Melly remembers your history. She doesn't just see a worker; she sees a trend. This is the 'Awakening' of OHS—AI that knows your team's health better than they do."
+                                    "Identifying fatigue patterns over 168 hours. Preventing claims before they are filed."
                                 </p>
                             </div>
 
-                            <div className="flex-1 bg-black/60 border border-white/20 p-4 sm:p-8 rounded-3xl backdrop-blur-xl relative h-64 sm:h-96 w-full flex flex-col justify-end">
-                                <Activity className="absolute top-4 sm:top-6 right-4 sm:right-6 text-green-500 animate-pulse scale-75 sm:scale-100" size={32} />
-                                <h3 className="absolute top-4 sm:top-6 left-4 sm:left-6 text-gray-400 font-bold uppercase tracking-widest text-[10px] sm:text-sm">Vector History</h3>
+                            <div className="flex-1 bg-black/60 border border-white/20 p-4 sm:p-8 rounded-3xl backdrop-blur-xl relative h-64 sm:h-96 w-full flex flex-col justify-end overflow-hidden">
+                                <Activity className="absolute top-4 sm:top-6 right-4 sm:right-6 text-red-500 animate-pulse" size={32} />
+                                <h3 className="absolute top-4 sm:top-6 left-4 sm:left-6 text-gray-400 font-bold uppercase tracking-widest text-[10px] sm:text-sm">7-Day Fatigue Curve</h3>
 
-                                {/* Animated Vector Graph */}
                                 <div className="flex items-end justify-between gap-4 h-64 mt-12 pb-4 border-b border-white/20">
-                                    {[20, 35, 45, 40, 60, 50, 85].map((height, i) => (
+                                    {[60, 45, 55, 70, 85, 95, 40].map((height, i) => (
                                         <motion.div
                                             key={i}
                                             initial={{ height: 0 }}
                                             animate={{ height: `${height}%` }}
-                                            transition={{ delay: i * 0.05, duration: 0.3, type: 'spring' }}
-                                            className={`w-full rounded-t-lg ${height > 80 ? 'bg-red-500 shadow-[0_0_20px_rgba(239,68,68,0.5)]' : 'bg-ohs-orange'}`}
+                                            transition={{ delay: i * 0.05, duration: 0.3 }}
+                                            className={`w-full rounded-t-lg ${height > 80 ? 'bg-red-500 shadow-[0_0_20px_rgba(239,68,68,0.5)]' : 'bg-ohs-blue'}`}
                                         />
                                     ))}
                                 </div>
-                                <div className="flex justify-between mt-4 text-xs font-bold text-gray-500">
-                                    <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span className="text-red-500">Today</span>
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-red-600/20 border border-red-500 p-4 rounded-xl text-center backdrop-blur-md">
+                                    <p className="text-xs font-black text-red-500 uppercase tracking-tighter">High Risk Flag</p>
+                                    <p className="text-white font-bold">Shift Gap Violation</p>
                                 </div>
                             </div>
                         </div>
                     </motion.div>
                 )}
 
-                {/* SCENE 5: Industrial Logistics (140-165s) */}
+                {/* SCENE 5: Compliance Training (NEW) */}
                 {scene === 5 && (
+                    <motion.div
+                        key="scene5"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="flex-1 bg-white flex flex-col items-center justify-center p-12 relative overflow-hidden"
+                    >
+                        <div className="absolute inset-0 z-0 opacity-10 flex flex-wrap gap-8 justify-center items-center">
+                            {Array.from({ length: 20 }).map((_, i) => (
+                                <Presentation key={i} size={100} className="text-ohs-navy" />
+                            ))}
+                        </div>
+
+                        <div className="z-10 text-center max-w-4xl">
+                            <motion.div
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="bg-ohs-navy p-12 rounded-[3rem] shadow-2xl relative overflow-hidden"
+                            >
+                                <div className="absolute top-0 left-0 w-full h-2 bg-ohs-orange" />
+                                <h1 className="text-5xl sm:text-7xl font-black text-white tracking-widest mb-4">IRIS & FRIENDS</h1>
+                                <p className="text-ohs-orange font-bold text-2xl uppercase tracking-widest mb-8 italic">Interactive Safety Protocol</p>
+
+                                <div className="relative aspect-video bg-black rounded-2xl overflow-hidden mb-8 border-4 border-white/10 group cursor-pointer shadow-[0_0_50px_rgba(249,168,37,0.3)]">
+                                    <img src="/assets/iris_and_friends_training.png" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Training" />
+                                    <div className="absolute inset-0 bg-ohs-navy/20 group-hover:bg-transparent transition-colors" />
+                                    <div className="absolute bottom-6 left-6 right-6">
+                                        <div className="h-1.5 w-full bg-white/20 rounded-full overflow-hidden">
+                                            <motion.div
+                                                animate={{ width: ["0%", "70%"] }}
+                                                transition={{ duration: 15, ease: "linear" }}
+                                                className="h-full bg-ohs-orange"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <p className="text-gray-400 text-xl font-medium leading-relaxed">
+                                    "Premium engagement through localized narrative. We bridge the gap between OHS legislation and worker comprehension 24/7."
+                                </p>
+                            </motion.div>
+                        </div>
+                    </motion.div>
+                )}
+
+                {/* SCENE 6: Industrial Logistics */}
+                {scene === 6 && (
                     <motion.div
                         key="scene5"
                         initial={{ opacity: 0 }}
@@ -290,12 +346,13 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                                     </h3>
 
                                     <div className="flex-1 flex items-center justify-center relative mt-4">
-                                        {/* Abstract Human Figure Skeleton */}
-                                        <div className="w-8 h-8 rounded-full border-4 border-green-500 absolute top-10" />
-                                        <div className="w-1 h-32 bg-green-500 absolute top-18" />
-                                        <div className="w-24 h-1 bg-green-500 absolute top-24 transform rotate-12" />
-                                        <div className="w-20 h-1 bg-green-500 absolute top-36 transform -rotate-12" />
-                                        <div className="absolute bottom-10 w-8 h-8 rounded-full blur-[10px] bg-red-600 animate-pulse drop-shadow-[0_0_15px_rgba(220,38,38,1)]" />
+                                        <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 2, repeat: Infinity }} className="relative">
+                                            <div className="w-8 h-8 rounded-full border-4 border-green-500 absolute -top-10 left-1/2 -translate-x-1/2" />
+                                            <div className="w-1 h-32 bg-green-500 absolute top-0 left-1/2 -translate-x-1/2" />
+                                            <div className="w-24 h-1 bg-green-500 absolute top-6 transform rotate-12 left-1/2 -translate-x-1/2" />
+                                            <div className="w-20 h-1 bg-green-500 absolute top-20 transform -rotate-12 left-1/2 -translate-x-1/2" />
+                                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full blur-[10px] bg-red-600 animate-pulse drop-shadow-[0_0_15px_rgba(220,38,38,1)]" />
+                                        </motion.div>
                                     </div>
 
                                     <div className="bg-red-500/20 p-4 rounded-xl border border-red-500/50 mt-4">
@@ -311,7 +368,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                                 transition={{ delay: 0.2, duration: 0.4 }}
                                 className="flex-1 text-left"
                             >
-                                <h1 className="text-2xl sm:text-6xl font-black text-white tracking-tighter mb-4 leading-tight">INDUSTRIAL<br /><span className="text-ohs-orange">ERGONOMICS MODULE</span></h1>
+                                <h1 className="text-2xl sm:text-6xl font-black text-white tracking-tighter mb-4 leading-tight">INDUSTRIAL<br /><span className="text-ohs-orange">LOGISTICS MODULE</span></h1>
                                 <p className="text-lg text-gray-400 font-medium mb-6">Forklifts. Trolley Jacks. Manual Heavy Lifting.</p>
                                 <p className="text-gray-300 mb-8 border-l-4 border-ohs-orange pl-4 bg-white/5 py-2">
                                     We have extended the intelligence to warehouses and assembly lines. Monitor physiological stress factors in high-demand zones instantly.
@@ -325,8 +382,8 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                     </motion.div>
                 )}
 
-                {/* SCENE 6: Credits Overlay (165-190s) */}
-                {scene === 6 && (
+                {/* SCENE 7: Credits */}
+                {scene === 7 && (
                     <motion.div
                         key="scene6"
                         initial={{ opacity: 0 }}
@@ -367,8 +424,8 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                     </motion.div>
                 )}
 
-                {/* SCENE 7: End */}
-                {scene === 7 && (
+                {/* SCENE 8: End */}
+                {scene === 8 && (
                     <motion.div
                         key="end"
                         initial={{ opacity: 0 }}
@@ -376,8 +433,8 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                         className="flex-1 flex flex-col items-center justify-center bg-black"
                     >
                         <ShieldAlert size={80} className="text-ohs-orange mb-8" />
-                        <h1 className="text-2xl sm:text-6xl font-black mb-6 tracking-tighter uppercase">System Overwatch Online</h1>
-                        <p className="text-2xl text-gray-400 font-medium mb-12">v1.8 God Mode Architecture Initialized.</p>
+                        <h1 className="text-2xl sm:text-6xl font-black mb-6 tracking-tighter uppercase">Showcase Complete</h1>
+                        <p className="text-2xl text-gray-400 font-medium mb-12">v2.0 Feature Expansion Deployed.</p>
                         <button
                             onClick={onExit}
                             className="bg-ohs-orange hover:bg-ohs-orange/90 text-black px-12 py-5 rounded-xl font-black text-xl hover:scale-105 transition-all shadow-[0_0_40px_rgba(249,168,37,0.3)]"
@@ -387,6 +444,15 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* PERSISTENT UI OVERLAYS FOR DEMO */}
+            <div className="absolute bottom-4 left-0 w-full z-[10000] pointer-events-none px-4">
+                <LeanPerformanceRail />
+            </div>
+
+            <div className="fixed bottom-10 right-10 z-[10000]">
+                <MellyAvatar />
+            </div>
         </div>
     );
 };
