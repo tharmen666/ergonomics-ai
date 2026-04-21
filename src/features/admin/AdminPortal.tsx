@@ -6,7 +6,7 @@ import { getLegalShockContent } from '../../utils/escalationLogic';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 
 export const AdminPortal = () => {
-    const { fatigueLevel } = useFatigueStore();
+    const { fatigueLevel, cognitiveHandshakePassed } = useFatigueStore();
     const stats = [
         { label: 'Total Employees', value: '124', icon: Users, color: 'text-ohs-blue', bgColor: 'bg-ohs-blue/10' },
         { label: 'Compliance Rate', value: '92%', icon: CheckCircle, color: 'text-ohs-green', bgColor: 'bg-ohs-green/10' },
@@ -39,7 +39,7 @@ export const AdminPortal = () => {
                     <p className="text-gray-400 font-medium">Monitoring organizational OHS adherence & cascading accountability.</p>
                 </div>
                 <div className="flex gap-3">
-                    {fatigueLevel === 'high' ? (
+                    {fatigueLevel === 'high' || !cognitiveHandshakePassed ? (
                         <div className="flex flex-col items-end gap-1">
                             <div className="flex gap-3">
                                 <GlowButton variant="secondary" className="px-5 py-2.5 text-sm opacity-50 cursor-not-allowed">

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BrainCircuit, Target } from 'lucide-react';
+import { BrainCircuit, Target, ShieldAlert } from 'lucide-react';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 import { useMellyStore } from '../../store/mellyStore';
 
@@ -15,6 +15,7 @@ export const CognitiveHandshake = () => {
     const [lastTargetTime, setLastTargetTime] = useState(Date.now());
     const [gameCompleted, setGameCompleted] = useState(false);
     const [showKaizenBonus, setShowKaizenBonus] = useState(false);
+    const [showLiabilityWarning, setShowLiabilityWarning] = useState(false);
 
     const TOTAL_TARGETS = 5;
 
@@ -48,10 +49,10 @@ export const CognitiveHandshake = () => {
         if (reactionMemory.length > 0) {
             const historicalBaselineValue = reactionMemory.reduce((a, b) => a + b, 0) / reactionMemory.length;
             historicalBaseline = historicalBaselineValue;
-            // >20% Cognitive Overload detection
-            isFatigued = avgReaction > (historicalBaselineValue * 1.20);
+            // >20% Cognitive Overload detection OR absolute threshold
+            isFatigued = avgReaction > (historicalBaselineValue * 1.20) || avgReaction > 1000;
         } else {
-            isFatigued = avgReaction > 800; // Seed threshold
+            isFatigued = avgReaction > 1000; // Seed threshold set to 1000ms as per SAIOSH requirement
         }
 
         addReactionMemory(avgReaction);
@@ -60,7 +61,8 @@ export const CognitiveHandshake = () => {
         if (isFatigued) {
             failCognitiveHandshake();
             setMood('concerned');
-            setGuidance("Cognitive lag detected in your handshake. I'm flagging a High-Fatigue status. Please consider a 15-minute Professional Reset.");
+            setGuidance("Cognitive lag detected in your handshake. I'm flagging a High-Fatigue status. Section 37 Liability Warning activated.");
+            setShowLiabilityWarning(true);
         } else if (historicalBaseline && avgReaction < (historicalBaseline * 1.10) && avgReaction < 700) {
             passCognitiveHandshake();
             setShowKaizenBonus(true);
@@ -80,10 +82,46 @@ export const CognitiveHandshake = () => {
         setTimeout(() => setSpeaking(false), 6000);
     };
 
-    if (cognitiveHandshakePassed || gameCompleted) return null;
+    if (cognitiveHandshakePassed || (gameCompleted && !showLiabilityWarning)) return null;
 
     return (
         <AnimatePresence>
+            {showLiabilityWarning && (
+                <motion.div
+                    key="liability-warning"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-red-950/90 backdrop-blur-2xl p-6 text-center"
+                >
+                    <motion.div
+                        initial={{ scale: 0.9, y: 20 }}
+                        animate={{ scale: 1, y: 0 }}
+                        className="max-w-2xl bg-black border-2 border-red-600 p-10 rounded-[3rem] shadow-[0_0_100px_rgba(220,38,38,0.4)]"
+                    >
+                        <ShieldAlert size={80} className="text-red-500 mx-auto mb-6 animate-pulse" />
+                        <h1 className="text-4xl font-black text-white mb-4 tracking-tighter uppercase">Section 37 Liability Warning</h1>
+                        <div className="h-1 w-24 bg-red-600 mx-auto mb-8 rounded-full" />
+                        <p className="text-xl text-gray-300 font-bold mb-8 leading-relaxed">
+                            UNACCEPTABLE COGNITIVE LATENCY DETECTED.
+                            <br />
+                            <span className="text-red-500 mt-2 block italic text-sm">Corporate Risk Protocol: Section 8(1) OHS Act 85 of 1993</span>
+                        </p>
+                        <p className="text-gray-400 text-sm mb-10 leading-relaxed px-4">
+                            Your reaction times have deviated significantly from safe operational baselines. To protect the organization and your personal safety, <strong>DOA Lockout</strong> has been triggered. Please contact your supervisor for a mandatory wellness check.
+                        </p>
+                        <button
+                            onClick={() => {
+                                setShowLiabilityWarning(false);
+                                setGameCompleted(true);
+                            }}
+                            className="bg-red-600 hover:bg-red-700 text-white font-black px-10 py-4 rounded-2xl transition-all hover:scale-105 active:scale-95"
+                        >
+                            ACKNOWLEDGE & DE-ESCALATE
+                        </button>
+                    </motion.div>
+                </motion.div>
+            )}
+
             {showKaizenBonus && (
                 <motion.div
                     initial={{ scale: 0.5, opacity: 0 }}

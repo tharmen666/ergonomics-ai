@@ -32,7 +32,7 @@ export const LeanPerformanceRail = () => {
     const seconds = taktRemaining % 60;
 
     return (
-        <div className="fixed bottom-16 md:bottom-8 left-0 w-full z-50 flex items-center justify-center pointer-events-none px-4">
+        <div className="fixed bottom-0 left-0 w-full z-[100] flex items-center justify-center pointer-events-none px-4">
             <div className="w-full max-w-4xl bg-ohs-navy/95 border border-white/10 backdrop-blur-xl shadow-2xl p-3 md:p-4 rounded-xl flex items-center justify-between text-[10px] sm:text-xs font-black uppercase tracking-widest text-ohs-orange pointer-events-auto">
                 <div className="flex flex-col items-center">
                     <span className="text-gray-400">O.H.E.</span>

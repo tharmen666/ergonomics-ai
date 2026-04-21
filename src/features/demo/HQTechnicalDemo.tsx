@@ -104,8 +104,8 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                             className="relative z-10 text-center"
                         >
                             <ShieldAlert size={100} className="mx-auto text-red-600 animate-pulse drop-shadow-[0_0_30px_rgba(220,38,38,1)] scale-75 sm:scale-100" />
-                            <h2 className="text-4xl sm:text-7xl font-black mt-4 sm:mt-6 text-red-600 tracking-widest drop-shadow-[0_0_20px_rgba(220,38,38,0.8)] leading-tight">SECTION 37 & 38</h2>
-                            <h3 className="text-2xl sm:text-5xl font-black mt-2 text-white tracking-widest bg-red-600/20 py-2 px-4 sm:px-8 inline-block border border-red-500/50">AT RISK</h3>
+                            <h2 className="text-2xl sm:text-6xl font-black mt-4 sm:mt-6 text-red-600 tracking-widest drop-shadow-[0_0_20px_rgba(220,38,38,0.8)] leading-tight">SECTION 37 & 38</h2>
+                            <h3 className="text-lg sm:text-4xl font-black mt-2 text-white tracking-widest bg-red-600/20 py-2 px-4 sm:px-8 inline-block border border-red-500/50">AT RISK</h3>
                         </motion.div>
 
                         <motion.div
@@ -237,7 +237,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                         <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center z-10 w-full max-w-6xl">
                             <div className="flex-1 text-center lg:text-left">
                                 <h2 className="text-xs sm:text-sm font-black text-ohs-orange tracking-[0.2em] sm:tracking-[0.4em] uppercase mb-2 sm:mb-4">Predictive Wellness</h2>
-                                <h1 className="text-3xl sm:text-5xl font-black tracking-tighter mb-4 sm:mb-8 leading-tight">THE PERSISTENT MEMORY VAULT</h1>
+                                <h1 className="text-2xl sm:text-6xl font-black tracking-tighter mb-4 sm:mb-8 leading-tight">THE PERSISTENT MEMORY VAULT</h1>
                                 <p className="text-sm sm:text-2xl text-gray-400 font-medium leading-relaxed">
                                     "Melly remembers your history. She doesn't just see a worker; she sees a trend. This is the 'Awakening' of OHS—AI that knows your team's health better than they do."
                                 </p>
@@ -312,7 +312,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                                 transition={{ delay: 0.5 }}
                                 className="flex-1 text-left"
                             >
-                                <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tighter mb-4 leading-tight">INDUSTRIAL<br /><span className="text-ohs-orange">ERGONOMICS MODULE</span></h1>
+                                <h1 className="text-2xl sm:text-6xl font-black text-white tracking-tighter mb-4 leading-tight">INDUSTRIAL<br /><span className="text-ohs-orange">ERGONOMICS MODULE</span></h1>
                                 <p className="text-lg text-gray-400 font-medium mb-6">Forklifts. Trolley Jacks. Manual Heavy Lifting.</p>
                                 <p className="text-gray-300 mb-8 border-l-4 border-ohs-orange pl-4 bg-white/5 py-2">
                                     We have extended the intelligence to warehouses and assembly lines. Monitor physiological stress factors in high-demand zones instantly.
@@ -377,7 +377,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                         className="flex-1 flex flex-col items-center justify-center bg-black"
                     >
                         <ShieldAlert size={80} className="text-ohs-orange mb-8" />
-                        <h1 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter">SYSTEM OVERWATCH ONLINE</h1>
+                        <h1 className="text-2xl sm:text-6xl font-black mb-6 tracking-tighter uppercase">System Overwatch Online</h1>
                         <p className="text-2xl text-gray-400 font-medium mb-12">v1.8 God Mode Architecture Initialized.</p>
                         <button
                             onClick={onExit}
