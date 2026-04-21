@@ -5,23 +5,26 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   build: {
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
-        // Splits libraries from app logic to improve caching and load times
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            // Group all Google-related libs into one chunk
-            if (id.includes('googleapis') || id.includes('@google')) {
-              return 'vendor-google';
+            if (id.includes('framer-motion')) {
+              return 'vendor-framer';
             }
-            // Everything else into a general vendor chunk
-            return 'vendor';
+            if (id.includes('lucide-react')) {
+              return 'vendor-icons';
+            }
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'vendor-react';
+            }
+            return 'vendor-utils';
           }
         },
       },
     },
-    // Raises the warning threshold — our vendor chunk is intentionally large
-    chunkSizeWarningLimit: 1000,
   },
 });
 
