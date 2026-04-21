@@ -30,7 +30,7 @@ export const ExecutiveBriefing = () => {
                         key={policy.id}
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.1 * idx }}
+                        transition={{ delay: 0.05 * idx, duration: 0.3 }}
                         className="bg-black/40 border border-white/5 p-8 rounded-3xl"
                     >
                         <div className="flex items-center gap-4 mb-4">
@@ -53,7 +53,7 @@ export const ExecutiveBriefing = () => {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: 0.15, duration: 0.3 }}
                 className="bg-gradient-to-r from-green-900/20 to-black border border-green-500/30 p-8 rounded-3xl mt-8"
             >
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -71,7 +71,7 @@ export const ExecutiveBriefing = () => {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
+                transition={{ delay: 0.2, duration: 0.3 }}
                 className="bg-[#0b0f19] border border-ohs-orange/30 p-8 rounded-3xl mt-8 shadow-[0_0_40px_rgba(249,168,37,0.1)] relative overflow-hidden"
             >
                 <TrendingUp className="absolute -right-10 -bottom-10 text-ohs-orange/5" size={150} />
@@ -91,7 +91,7 @@ export const ExecutiveBriefing = () => {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
+                transition={{ delay: 0.25, duration: 0.3 }}
                 className="bg-black/40 border border-white/5 p-8 rounded-3xl mt-8"
             >
                 <h3 className="text-xl font-black text-white mb-6">ADK Change Management Matrix</h3>

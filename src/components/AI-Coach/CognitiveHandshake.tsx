@@ -68,7 +68,7 @@ export const CognitiveHandshake = () => {
             setShowKaizenBonus(true);
             setMood('happy');
             setGuidance("KAIZEN BONUS: Handshake cleared effortlessly. Optimal latency detected. Productive Streak multiplied.");
-            setTimeout(() => setShowKaizenBonus(false), 2000);
+            setTimeout(() => setShowKaizenBonus(false), 800);
         } else if (historicalBaseline && avgReaction >= (historicalBaseline * 1.15)) {
             warnCognitiveHandshake();
             setMood('concerned');
@@ -79,7 +79,7 @@ export const CognitiveHandshake = () => {
             setGuidance("Cognitive Handshake passed! You're performing safely at standard work rates.");
         }
 
-        setTimeout(() => setSpeaking(false), 6000);
+        setTimeout(() => setSpeaking(false), 3000);
     };
 
     if (cognitiveHandshakePassed || (gameCompleted && !showLiabilityWarning)) return null;
@@ -159,7 +159,7 @@ export const CognitiveHandshake = () => {
                         <motion.button
                             initial={{ scale: 0 }}
                             animate={{ scale: [0, 1.2, 1] }}
-                            transition={{ type: "spring" }}
+                            transition={{ type: "spring", duration: 0.3 }}
                             onClick={handleTargetClick}
                             className="absolute flex items-center justify-center w-20 h-20 md:w-16 md:h-16 bg-ohs-orange hover:bg-yellow-400 rounded-full shadow-[0_0_30px_rgba(249,168,37,0.6)] cursor-crosshair transform -translate-x-1/2 -translate-y-1/2"
                             style={{ left: `${targetPos.x}%`, top: `${targetPos.y}%` }}

@@ -25,7 +25,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
     // ISO Dashboard Toggle Animation for Scene 3
     useEffect(() => {
         if (scene === 3) {
-            const temp = setInterval(() => setIsoToggle(prev => !prev), 4000);
+            const temp = setInterval(() => setIsoToggle(prev => !prev), 2000);
             return () => clearInterval(temp);
         }
     }, [scene]);
@@ -100,7 +100,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                         <motion.div
                             initial={{ scale: 0.8, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: 0.5, duration: 1 }}
+                            transition={{ delay: 0.2, duration: 0.4 }}
                             className="relative z-10 text-center"
                         >
                             <ShieldAlert size={100} className="mx-auto text-red-600 animate-pulse drop-shadow-[0_0_30px_rgba(220,38,38,1)] scale-75 sm:scale-100" />
@@ -111,7 +111,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                         <motion.div
                             initial={{ y: 50, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 2 }}
+                            transition={{ delay: 0.8, duration: 0.4 }}
                             className="absolute bottom-8 sm:bottom-16 bg-black/80 backdrop-blur-xl border-l-4 sm:border-l-8 border-ohs-orange p-4 sm:p-8 max-w-[90%] sm:max-w-3xl rounded-r-2xl left-0"
                         >
                             <p className="text-ohs-orange font-bold uppercase tracking-widest mb-1 sm:mb-2 text-xs sm:text-base">Proactive Stewardship</p>
@@ -146,11 +146,10 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                                     style={{ top: '60%', left: '70%' }}
                                 />
 
-                                {/* Lockout Overlay triggers at 5s */}
                                 <motion.div
                                     initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
                                     animate={{ opacity: 1, backdropFilter: "blur(10px)" }}
-                                    transition={{ delay: 4, duration: 1 }}
+                                    transition={{ delay: 1.5, duration: 0.4 }}
                                     className="absolute inset-0 bg-red-900/40 z-20 flex flex-col items-center justify-center"
                                 >
                                     <Lock size={64} className="text-red-500 mb-2 sm:mb-4 drop-shadow-[0_0_20px_rgba(239,68,68,0.8)] scale-75 sm:scale-100" />
@@ -163,7 +162,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                             <motion.div
                                 initial={{ x: 50, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
-                                transition={{ delay: 1 }}
+                                transition={{ delay: 0.4, duration: 0.4 }}
                                 className="flex-1 w-full text-center md:text-left"
                             >
                                 <Target size={48} className="text-ohs-orange mb-4 sm:mb-6 mx-auto md:mx-0 scale-75 sm:scale-100" />
@@ -254,7 +253,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                                             key={i}
                                             initial={{ height: 0 }}
                                             animate={{ height: `${height}%` }}
-                                            transition={{ delay: i * 0.2, duration: 1, type: 'spring' }}
+                                            transition={{ delay: i * 0.05, duration: 0.3, type: 'spring' }}
                                             className={`w-full rounded-t-lg ${height > 80 ? 'bg-red-500 shadow-[0_0_20px_rgba(239,68,68,0.5)]' : 'bg-ohs-orange'}`}
                                         />
                                     ))}
@@ -309,7 +308,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                             <motion.div
                                 initial={{ x: 100, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
-                                transition={{ delay: 0.5 }}
+                                transition={{ delay: 0.2, duration: 0.4 }}
                                 className="flex-1 text-left"
                             >
                                 <h1 className="text-2xl sm:text-6xl font-black text-white tracking-tighter mb-4 leading-tight">INDUSTRIAL<br /><span className="text-ohs-orange">ERGONOMICS MODULE</span></h1>
@@ -342,7 +341,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                         <div className="relative w-full max-w-2xl h-64 overflow-hidden mb-12 mask-image-fade">
                             <motion.div
                                 animate={{ y: ["100%", "-200%"] }}
-                                transition={{ duration: 15, ease: "linear" }}
+                                transition={{ duration: 8, ease: "linear" }}
                                 className="absolute w-full flex flex-col gap-6 items-center"
                             >
                                 <div className="text-2xl font-bold text-gray-300">Gemini Pro (The Savior)</div>
@@ -358,7 +357,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 8, duration: 2 }}
+                            transition={{ delay: 2, duration: 0.4 }}
                             className="bg-white/10 backdrop-blur-md p-8 border border-white/20 rounded-2xl max-w-4xl"
                         >
                             <p className="text-xl sm:text-3xl text-white font-black italic tracking-tight leading-relaxed">

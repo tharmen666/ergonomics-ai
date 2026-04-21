@@ -113,7 +113,7 @@ export const AdminPortal = () => {
                         initial={{ opacity: 0, scale: 0.95 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        transition={{ delay: i * 0.1 }}
+                        transition={{ delay: i * 0.05, duration: 0.3 }}
                     >
                         <GlassCard className="p-7 relative overflow-hidden group hover:border-white/20 transition-all">
                             <div className="flex justify-between items-start mb-5 relative z-10">
@@ -183,7 +183,7 @@ export const AdminPortal = () => {
                                 initial={{ opacity: 0, x: 20 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ delay: i * 0.1 }}
+                                transition={{ delay: i * 0.05, duration: 0.3 }}
                                 className="p-6 hover:bg-white/5 transition-all flex items-center justify-between group cursor-pointer"
                             >
                                 <div className="flex items-center gap-4">

@@ -41,7 +41,7 @@ export const MellyAvatar = () => {
                 setGuidance(`I hear you. Let me check the OHS standards regarding "${userInput}"...`);
             }
             setSpeaking(true);
-            setTimeout(() => setSpeaking(false), 5000);
+            setTimeout(() => setSpeaking(false), 3000);
         }
         setUserInput('');
     };
