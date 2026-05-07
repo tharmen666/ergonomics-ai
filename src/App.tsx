@@ -53,7 +53,7 @@ function App() {
           </div>
 
           <div className="flex items-center gap-6">
-            <div className="fixed bottom-0 left-0 w-full md:static md:w-auto p-4 md:p-0 grid grid-cols-2 md:flex md:flex-row gap-2 z-50 bg-[#0b0f19]/90 md:bg-transparent backdrop-blur-xl md:backdrop-blur-none border-t border-white/10 md:border-none safe-area-bottom-nav">
+            <div className="w-full md:w-auto grid grid-cols-2 md:flex md:flex-row gap-2 z-40 mt-4 md:mt-0">
               <button
                 onClick={() => setWingmanActive(!isWingmanActive)}
                 className={`flex-1 inline-flex items-center justify-center gap-2 ${isWingmanActive ? 'bg-red-500 hover:bg-red-600' : 'bg-white/10 hover:bg-white/20'} text-white px-2 md:px-4 py-3 md:py-2.5 rounded-xl font-bold text-[10px] md:text-sm transition-all shadow-md`}

@@ -13,7 +13,11 @@ const questions = [
 export const RiskPage = () => {
     const [step, setStep] = useState(0);
     const [answers, setAnswers] = useState<string[]>([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [completed, setCompleted] = useState(false);
+
+    // SUGAN OPTIMIZATION: Only trigger Cloud LLM (Gemini) if Local Inference detects >15% deviation.
+    // TODO: Integrate Sugan's 2-3 FPS Browser Inference link here for local Pose Detection.
 
     const handleSelect = (option: string) => {
         const newAnswers = [...answers];
@@ -25,7 +29,11 @@ export const RiskPage = () => {
         if (step < questions.length - 1) {
             setStep(step + 1);
         } else {
-            setCompleted(true);
+            setIsSubmitting(true);
+            setTimeout(() => {
+                setIsSubmitting(false);
+                setCompleted(true);
+            }, 2000);
         }
     };
 
@@ -92,8 +100,8 @@ export const RiskPage = () => {
                         </div>
 
                         <div className="mt-8 flex justify-end">
-                            <GlowButton disabled={!answers[step]} onClick={handleNext}>
-                                {step === questions.length - 1 ? "Submit" : "Next"} <ArrowRight size={18} className="inline ml-2" />
+                            <GlowButton disabled={!answers[step] || isSubmitting} onClick={handleNext}>
+                                {isSubmitting ? "Submitting..." : step === questions.length - 1 ? "Submit" : "Next"} {!isSubmitting && <ArrowRight size={18} className="inline ml-2" />}
                             </GlowButton>
                         </div>
                     </GlassCard>

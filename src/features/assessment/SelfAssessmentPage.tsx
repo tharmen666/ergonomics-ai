@@ -7,6 +7,9 @@ export const SelfAssessmentPage = () => {
     const { setGuidance } = useMellyStore();
     const [step, setStep] = useState(1);
 
+    // SUGAN OPTIMIZATION: Only trigger Cloud LLM (Gemini) if Local Inference detects >15% deviation.
+    // TODO: Integrate Sugan's 2-3 FPS Browser Inference link here for local Pose Detection.
+
     return (
         <div className="p-6 md:p-10 max-w-5xl mx-auto pb-32">
             <motion.div

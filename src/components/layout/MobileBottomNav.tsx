@@ -8,9 +8,9 @@ interface MobileBottomNavProps {
 export const MobileBottomNav = ({ activeTab, setActiveTab }: MobileBottomNavProps) => {
     const navItems = [
         { id: 'dashboard', label: 'Home', icon: Home },
-        { id: 'assessment', label: 'Assess', icon: ClipboardCheck },
+        { id: 'checklist', label: 'Checklist', icon: ClipboardCheck },
         { id: 'training', label: 'Train', icon: PlayCircle },
-        { id: 'reports', label: 'Reports', icon: BarChart3 },
+        { id: 'risk', label: 'Risk', icon: BarChart3 },
     ];
 
     return (

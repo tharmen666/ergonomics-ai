@@ -47,7 +47,7 @@ body {
   max-width: 100vw !important;
 }
 
-/* Glassmorphism Global Styles */
+/* Glassmorphism Premium Styles */
 .glass {
   background: rgba(255, 255, 255, 0.03);
   -webkit-backdrop-filter: blur(12px);
@@ -55,25 +55,12 @@ body {
   border: 4px solid rgba(255, 255, 255, 0.1);
 }
 
-@media (max-width: 768px) {
-  .glass {
-    border-width: 2px;
-  }
-}
-
-.text-electric-cyan {
-  color: #00FFFF;
-}
-
-.bg-electric-cyan {
-  background-color: #00FFFF;
-}
-
-/* Prevent iOS Zoom on inputs */
-input,
-select,
-textarea {
-  font-size: 16px !important;
+.glass-ohs {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 .glass-melly {
@@ -81,6 +68,34 @@ textarea {
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   border: 1px solid rgba(249, 168, 37, 0.2);
+  box-shadow: 0 0 20px rgba(249, 168, 37, 0.1);
+}
+
+.text-glow-orange {
+  text-shadow: 0 0 10px rgba(249, 168, 37, 0.5);
+}
+
+.text-glow-red {
+  text-shadow: 0 0 15px rgba(239, 68, 68, 0.6);
+}
+
+.premium-button {
+  @apply relative overflow-hidden transition-all duration-300 transform hover:scale-105 active:scale-95;
+}
+
+.premium-button::after {
+  content: '';
+  @apply absolute inset-0 bg-white/10 opacity-0 transition-opacity duration-300;
+}
+
+.premium-button:hover::after {
+  @apply opacity-100;
+}
+
+@media (max-width: 768px) {
+  .glass {
+    border-width: 2px;
+  }
 }
 
 /* Custom Scrollbar */

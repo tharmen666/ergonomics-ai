@@ -9,13 +9,13 @@ export const ExecutiveBriefing = () => {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center justify-between"
+                className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 sticky top-0 z-50 bg-[#00121e]/90 backdrop-blur-md p-4 -mx-4 md:p-6 md:-mx-6 rounded-2xl border-b border-ohs-orange/20 shadow-lg"
             >
                 <div>
                     <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter">EXECUTIVE <span className="text-ohs-orange">BRIEFING</span></h2>
                     <p className="text-gray-400 font-medium mt-2">Section 37/38 (OHS Act 85) Live Compliance Telemetry.</p>
                 </div>
-                <div className="bg-red-500/10 border border-red-500/30 px-6 py-3 rounded-2xl hidden md:flex items-center gap-4">
+                <div className="bg-red-500/10 border border-red-500/30 px-6 py-3 rounded-2xl flex items-center gap-4">
                     <ShieldAlert className="text-red-500 animate-pulse" size={24} />
                     <div>
                         <p className="text-xs font-bold text-red-500 uppercase tracking-widest">Active Liability Risk</p>
@@ -23,6 +23,18 @@ export const ExecutiveBriefing = () => {
                     </div>
                 </div>
             </motion.div>
+
+            {/* 150s HQ DEMO VIDEO */}
+            <div className="w-full aspect-video rounded-3xl overflow-hidden border-2 border-ohs-orange/30 shadow-[0_0_40px_rgba(249,168,37,0.2)] bg-black mt-8">
+                <video 
+                    controls 
+                    className="w-full h-full object-cover"
+                    poster="/assets/melly_exec_poster.jpg"
+                    src="/assets/ergo_demo.mp4"
+                >
+                    Your browser does not support the video tag.
+                </video>
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {GlobalComplianceEngine.fetchUnifiedBriefing().map((policy, idx) => (
