@@ -1,0 +1,15 @@
+{
+  "name": "ergosafe-gemma-challenge",
+  "version": "1.0.0",
+  "description": "ErgoSafe Reborn: Gemma 4 integration for local Edge AI risk assessment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@mediapipe/tasks-genai": "^0.10.27"
+  }
+}

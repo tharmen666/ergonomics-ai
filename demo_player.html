@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErgoSafe Reborn - 90s Demo</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
+    
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      background-color: #020617; /* Slate 950 */
+      color: #f8fafc;
+      overflow: hidden;
+    }
+
+    /* Cinematic Backgrounds */
+    .bg-gradient {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at center, #1e1b4b 0%, #020617 100%);
+      z-index: 0;
+      opacity: 0.8;
+    }
+
+    /* Scene Container */
+    .scene {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+      z-index: 10;
+      text-align: center;
+    }
+
+    .scene.active { opacity: 1; }
+
+    /* Scene 1: The Hook */
+    h1 { font-size: 4rem; font-weight: 800; letter-spacing: -2px; margin-bottom: 1rem; }
+    .subtitle { font-size: 1.5rem; color: #94a3b8; font-weight: 300; }
+    .gear-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 3rem;
+    }
+    .gear-item {
+      background: rgba(255,255,255,0.05); padding: 1.5rem 2rem; border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+      transform: translateY(20px); opacity: 0; transition: all 1s ease;
+    }
+    .scene.active .gear-item { transform: translateY(0); opacity: 1; }
+
+    /* Scene 2: Dashboard Mock */
+    .dashboard {
+      width: 80%; height: 70%; background: #0f172a; border-radius: 20px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .dash-header {
+      height: 60px; background: #1e293b; border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex; align-items: center; padding: 0 2rem; font-weight: 600;
+    }
+    .dash-content {
+      flex: 1; display: flex; padding: 2rem; gap: 2rem;
+    }
+    .video-feed {
+      flex: 2; background: #000; border-radius: 12px; position: relative;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+    .metrics {
+      flex: 1; display: flex; flex-direction: column; gap: 1rem;
+    }
+    .metric-card {
+      background: #1e293b; padding: 1.5rem; border-radius: 12px; text-align: left;
+    }
+    .metric-val { font-size: 2rem; font-weight: 800; color: #10b981; }
+
+    /* Scene 3: Google Tools & ADK */
+    .tracking-overlay {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle, transparent 40%, rgba(16,185,129,0.1) 100%);
+      border: 2px solid #10b981; border-radius: 12px;
+      animation: pulse 2s infinite; display: none;
+    }
+    .scene-3 .tracking-overlay { display: block; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); } 70% { box-shadow: 0 0 0 20px rgba(16,185,129,0); } 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); } }
+    .chat-bubble {
+      background: #3b82f6; padding: 1rem 1.5rem; border-radius: 20px 20px 0 20px;
+      position: absolute; bottom: 2rem; right: 2rem; max-width: 300px;
+      text-align: left; font-size: 0.9rem; font-weight: 400; opacity: 0; transition: opacity 1s;
+    }
+    .scene-3 .chat-bubble { opacity: 1; transition-delay: 2s; }
+
+    /* Scene 4: Ethics & Security */
+    .lock-icon {
+      width: 120px; height: 120px; border: 4px solid #10b981; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; margin-bottom: 2rem;
+      position: relative; box-shadow: 0 0 40px rgba(16,185,129,0.3);
+    }
+    .lock-icon::after {
+      content: '🔒'; font-size: 4rem;
+    }
+    .shield-ring {
+      position: absolute; width: 150px; height: 150px; border: 2px dashed #10b981;
+      border-radius: 50%; animation: spin 10s linear infinite;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .sec-text { font-size: 2rem; font-weight: 600; background: linear-gradient(to right, #10b981, #3b82f6); -webkit-background-clip: text; color: transparent; }
+
+    /* Scene 5: CTA */
+    .logo-hero { font-size: 5rem; font-weight: 800; text-shadow: 0 10px 30px rgba(59, 130, 246, 0.5); }
+    .cta-btn {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white; border: none; padding: 1.25rem 3rem; font-size: 1.5rem;
+      font-weight: 600; border-radius: 50px; margin-top: 3rem; cursor: pointer;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4); transition: transform 0.3s;
+    }
+    .scene-5.active .cta-btn { animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1s forwards; transform: scale(0); }
+    @keyframes popIn { to { transform: scale(1); } }
+
+    /* Time Bar */
+    .progress-bar { position: absolute; bottom: 0; left: 0; height: 4px; background: #3b82f6; width: 0%; z-index: 100; }
+  </style>
+</head>
+<body>
+  <div class="bg-gradient"></div>
+  
+  <div class="progress-bar" id="progress"></div>
+
+  <!-- Scene 1: The Hook (0-15s) -->
+  <div class="scene" id="scene1">
+    <h1>The Next Evolution in OHS</h1>
+    <div class="subtitle">Built on the GEAR Framework</div>
+    <div class="gear-grid">
+      <div class="gear-item" style="transition-delay: 0.5s"><strong>G</strong>rounding (OHS Act 85)</div>
+      <div class="gear-item" style="transition-delay: 1.0s"><strong>E</strong>ngineering (Next.js)</div>
+      <div class="gear-item" style="transition-delay: 1.5s"><strong>A</strong>gentic (ADK + Gemma 4)</div>
+      <div class="gear-item" style="transition-delay: 2.0s"><strong>R</strong>esponsible (Edge Privacy)</div>
+    </div>
+  </div>
+
+  <!-- Scene 2: Dashboard (15-35s) -->
+  <div class="scene" id="scene2">
+    <div class="dashboard">
+      <div class="dash-header">ErgoSafe Reborn | Safety Steward</div>
+      <div class="dash-content">
+        <div class="video-feed">
+          <div style="color:#475569; font-size:1.5rem;">[ Live Workstation Feed ]</div>
+        </div>
+        <div class="metrics">
+          <div class="metric-card">
+            <div style="color:#94a3b8; margin-bottom:0.5rem">Posture Score</div>
+            <div class="metric-val" id="postureVal">98%</div>
+          </div>
+          <div class="metric-card">
+            <div style="color:#94a3b8; margin-bottom:0.5rem">Fatigue Index</div>
+            <div class="metric-val" style="color:#eab308" id="fatigueVal">Low</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 3: Google Tools & ADK (35-55s) -->
+  <div class="scene scene-3" id="scene3">
+    <h2 style="position:absolute; top:2rem; font-size:2rem;">Powered by Google AI</h2>
+    <div class="dashboard" style="transform: scale(0.9);">
+      <div class="dash-header">ErgoSafe Reborn | ADK Integration</div>
+      <div class="dash-content">
+        <div class="video-feed">
+          <div style="color:#475569; font-size:1.5rem;">[ Live Workstation Feed ]</div>
+          <div class="tracking-overlay"></div>
+          <div class="chat-bubble">
+            <strong>Gemma 4 Wingman:</strong><br/>
+            I noticed your posture degrading. Let's do a 2-minute reset!
+          </div>
+        </div>
+        <div class="metrics">
+          <div class="metric-card">
+            <div style="color:#94a3b8; margin-bottom:0.5rem">MediaPipe Vision</div>
+            <div class="metric-val" style="font-size:1.5rem">Tracking Active</div>
+          </div>
+          <div class="metric-card">
+            <div style="color:#94a3b8; margin-bottom:0.5rem">Gemma 4 Inference</div>
+            <div class="metric-val" style="color:#3b82f6; font-size:1.5rem">On-Device</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scene 4: Ethics & Security (55-75s) -->
+  <div class="scene" id="scene4">
+    <div class="lock-icon">
+      <div class="shield-ring"></div>
+    </div>
+    <div class="sec-text">Processed on the Edge</div>
+    <p style="font-size: 1.25rem; color: #94a3b8; max-width: 600px; margin-top: 1rem; line-height: 1.6;">
+      By utilizing WebGPU and MediaPipe, your sensitive video and biometric data never leaves your device. Complete security. Absolute privacy.
+    </p>
+  </div>
+
+  <!-- Scene 5: Call to Action (75-90s) -->
+  <div class="scene scene-5" id="scene5">
+    <div class="logo-hero">ErgoSafe Reborn</div>
+    <div class="subtitle" style="font-size: 2rem; margin-top: 1rem; color: #10b981;">Safety. Reimagined.</div>
+    <button class="cta-btn">Deploy Now</button>
+  </div>
+
+  <script>
+    const scenes = document.querySelectorAll('.scene');
+    const progressBar = document.getElementById('progress');
+    const TOTAL_DURATION = 90000; // 90 seconds
+
+    function switchScene(index) {
+      scenes.forEach(s => s.classList.remove('active'));
+      if(scenes[index]) scenes[index].classList.add('active');
+    }
+
+    // Timeline configuration (ms)
+    const timeline = [
+      { time: 0,     scene: 0 }, // The Hook
+      { time: 15000, scene: 1 }, // Dashboard
+      { time: 35000, scene: 2 }, // Google Tools
+      { time: 55000, scene: 3 }, // Ethics
+      { time: 75000, scene: 4 }  // CTA
+    ];
+
+    let start = null;
+    function animate(timestamp) {
+      if (!start) start = timestamp;
+      const elapsed = timestamp - start;
+      
+      // Update progress bar
+      const progressPercent = Math.min((elapsed / TOTAL_DURATION) * 100, 100);
+      progressBar.style.width = progressPercent + '%';
+
+      // Check timeline
+      for (let i = timeline.length - 1; i >= 0; i--) {
+        if (elapsed >= timeline[i].time) {
+          switchScene(timeline[i].scene);
+          break;
+        }
+      }
+
+      // Dynamic updates in Scene 2
+      if (elapsed > 20000 && elapsed < 35000) {
+        if (Math.random() > 0.95) {
+          document.getElementById('postureVal').innerText = Math.floor(80 + Math.random() * 15) + '%';
+        }
+      }
+
+      if (elapsed < TOTAL_DURATION) {
+        requestAnimationFrame(animate);
+      }
+    }
+
+    // Start immediately
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>

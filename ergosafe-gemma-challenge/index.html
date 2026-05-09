@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ErgoSafe Reborn: Gemma 4 Edge AI</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-top: 1rem;
+    }
+    textarea {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 1rem;
+      border-radius: 8px;
+      min-height: 100px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    button {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    button:hover { background: #2563eb; }
+    button:disabled { background: #475569; cursor: not-allowed; }
+    #output {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      min-height: 60px;
+      border-left: 4px solid #10b981;
+    }
+    .status { color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <h1>ErgoSafe Reborn: The Gemma 4 Wingman</h1>
+  <p>Showcasing completely offline, private Edge-AI risk assessments using <strong>Gemma 4 via WebGPU</strong>.</p>
+  
+  <div class="glass-card">
+    <div id="statusIndicator" class="status">Loading MediaPipe GenAI Task...</div>
+    
+    <h3 style="margin-top: 0;">Provide Worker Telemetry</h3>
+    <textarea id="promptInput" placeholder="Enter worker data (e.g., Worker has been slouching for 45 mins. Heart rate elevated. High cognitive latency.)">Worker has been slouching for 45 minutes and shows a 25% increase in cognitive handshake latency. Formulate an ethical nudge.</textarea>
+    
+    <button id="generateBtn" disabled>Generate Safety Nudge</button>
+    
+    <div id="output"><em>Awaiting Edge-AI processing...</em></div>
+  </div>
+
+  <!-- Using ESM via browser module -->
+  <script type="module" src="main.js"></script>
+</body>
+</html>

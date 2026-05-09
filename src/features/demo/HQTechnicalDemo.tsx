@@ -67,7 +67,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                     animate={{ opacity: 1, x: 0 }}
                     className="text-4xl font-black tracking-tighter"
                 >
-                    ERGOSAFE REBORN: <span className="text-ohs-orange">GOD MODE v1.3</span>
+                    ERGOSAFE REBORN: <span className="text-ohs-orange">PRO MODE v1.3</span>
                 </motion.h1>
             </div>
 
@@ -418,7 +418,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                             className="bg-white/10 backdrop-blur-md p-8 border border-white/20 rounded-2xl max-w-4xl"
                         >
                             <p className="text-xl sm:text-3xl text-white font-black italic tracking-tight leading-relaxed">
-                                "Developed by a 53-Year-Old AI Architect — Empowered by Google Skills & Premiere Tier Credits. Age is not a barrier to God-Mode Innovation."
+                                "Developed by a 53-Year-Old AI Architect — Empowered by Google Skills & Premiere Tier Credits. Age is not a barrier to Pro-Mode Innovation."
                             </p>
                         </motion.div>
                     </motion.div>

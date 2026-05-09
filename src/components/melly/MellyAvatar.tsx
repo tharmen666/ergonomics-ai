@@ -62,8 +62,6 @@ export const MellyAvatar = () => {
     return (
         <div
             className="fixed bottom-24 md:bottom-4 right-4 z-[40] flex flex-col items-end gap-3 pointer-events-none"
-            onMouseEnter={() => setIsExpanded(true)}
-            onMouseLeave={() => !isSpeaking && setIsExpanded(false)}
         >
             <AnimatePresence mode="wait">
                 {isExpanded && (
@@ -80,6 +78,7 @@ export const MellyAvatar = () => {
                             onClick={() => {
                                 window.speechSynthesis.cancel();
                                 setSpeaking(false);
+                                setIsExpanded(false);
                             }}
                         />
 
