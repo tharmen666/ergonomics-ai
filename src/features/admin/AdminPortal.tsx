@@ -144,7 +144,7 @@ export const AdminPortal = () => {
                         </div>
                     </div>
 
-                    <div className="h-64 flex items-end justify-between gap-6 px-4">
+                    <div className="h-64 flex items-end justify-between gap-1 md:gap-6 px-1 md:px-4">
                         {[40, 75, 55, 95, 70, 85, 65].map((h, i) => (
                             <div key={i} className="flex-1 group relative">
                                 <motion.div

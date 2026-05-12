@@ -50,7 +50,7 @@ export const Sidebar = ({ activeTab, setActiveTab, isCollapsed, setIsCollapsed }
                         animate={{ opacity: 1 }}
                         className="font-bold text-xl tracking-wide"
                     >
-                        OHS Haven
+                        ErgoSafe Reborn
                     </motion.span>
                 )}
             </div>

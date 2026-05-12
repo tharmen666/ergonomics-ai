@@ -41,14 +41,14 @@ function App() {
           <div className="flex items-start gap-4">
             <button 
               onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
-              className="mt-1 p-2 bg-white/5 border border-white/10 rounded-lg hover:bg-white/20 transition-colors hidden md:flex items-center justify-center text-ohs-orange"
+              className="mt-1 p-2 bg-white/5 border border-white/10 rounded-lg hover:bg-white/20 transition-colors flex items-center justify-center text-ohs-orange"
               title="Toggle Sidebar"
             >
               <Menu size={24} />
             </button>
             <div>
-              <h1 className="text-4xl font-black text-white tracking-tighter">
-                OHS <span className="text-ohs-orange">HAVEN</span>
+              <h1 className="text-3xl md:text-4xl font-black text-white tracking-tighter">
+                ERGOSAFE <span className="text-ohs-orange">REBORN</span>
               </h1>
             <p className="text-gray-400 mt-2 font-medium">
               {activeTab === 'dashboard' ? 'Welcome back, Desigan. Your safety score is 98% today.' :
