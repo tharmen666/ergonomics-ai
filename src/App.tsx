@@ -30,7 +30,7 @@ function App() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-ohs-navy text-white font-sans">
+    <div className="w-full min-h-[100svh] overflow-x-hidden bg-ohs-navy text-white font-sans">
       <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
         <PrivacyHandshake />
         <CognitiveHandshake />
@@ -56,19 +56,19 @@ function App() {
             <div className="fixed bottom-0 left-0 w-full md:static md:w-auto p-4 md:p-0 grid grid-cols-2 md:flex md:flex-row gap-2 z-50 bg-[#0b0f19]/90 md:bg-transparent backdrop-blur-xl md:backdrop-blur-none border-t border-white/10 md:border-none safe-area-bottom-nav">
               <button
                 onClick={() => setWingmanActive(!isWingmanActive)}
-                className={`flex-1 inline-flex items-center justify-center gap-2 ${isWingmanActive ? 'bg-red-500 hover:bg-red-600' : 'bg-white/10 hover:bg-white/20'} text-white px-2 md:px-4 py-3 md:py-2.5 rounded-xl font-bold text-[10px] md:text-sm transition-all shadow-md`}
+                className={`flex-1 inline-flex items-center justify-center gap-2 min-h-[64px] ${isWingmanActive ? 'bg-red-500 hover:bg-red-600' : 'bg-white/10 hover:bg-white/20'} text-white px-2 md:px-4 py-3 md:py-2.5 rounded-xl font-bold text-[10px] md:text-sm transition-all shadow-md`}
               >
                 {isWingmanActive ? 'DISABLE WINGMAN' : 'ACTIVATE WINGMAN'}
               </button>
               <button
                 onClick={() => setActiveTab('executive')}
-                className="flex-1 inline-flex items-center justify-center gap-2 bg-ohs-orange/20 hover:bg-ohs-orange/30 border border-ohs-orange/50 text-ohs-orange px-2 md:px-4 py-3 md:py-2.5 rounded-xl font-bold text-[10px] md:text-sm transition-all shadow-[0_0_15px_rgba(249,168,37,0.2)]"
+                className="flex-1 inline-flex items-center justify-center gap-2 min-h-[64px] bg-ohs-orange/20 hover:bg-ohs-orange/30 border border-ohs-orange/50 text-ohs-orange px-2 md:px-4 py-3 md:py-2.5 rounded-xl font-bold text-[10px] md:text-sm transition-all shadow-[0_0_15px_rgba(249,168,37,0.2)]"
               >
                 EXEC BRIEFING
               </button>
               <button
                 onClick={() => setActiveTab('demo')}
-                className="col-span-2 md:col-span-1 inline-flex items-center justify-center gap-2 bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-4 md:px-6 py-3 md:py-2.5 rounded-xl font-black text-[10px] md:text-sm transition-all transform md:hover:scale-105 shadow-[0_0_20px_rgba(249,168,37,0.3)]"
+                className="col-span-2 md:col-span-1 inline-flex items-center justify-center gap-2 min-h-[64px] bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-4 md:px-6 py-3 md:py-2.5 rounded-xl font-black text-[10px] md:text-sm transition-all transform md:hover:scale-105 shadow-[0_0_20px_rgba(249,168,37,0.3)]"
               >
                 150s HQ DEMO
               </button>
@@ -87,7 +87,7 @@ function App() {
         <GEAROverlay />
 
         {/* Route Content */}
-        <main className="flex-1 pb-20 md:pb-10 pt-0 md:pt-4">
+        <main className="flex-1 pb-32 md:pb-10 pt-0 md:pt-4">
           {activeTab === 'dashboard' && <DashboardPage />}
           {activeTab === 'executive' && <ExecutiveBriefing />}
           {activeTab === 'training' && <TrainingPage />}

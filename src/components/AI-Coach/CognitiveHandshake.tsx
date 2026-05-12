@@ -40,6 +40,12 @@ export const CognitiveHandshake = () => {
         setGameCompleted(true);
 
         const avgReaction = finalTimes.reduce((a, b) => a + b, 0) / finalTimes.length;
+        
+        // Calculate Standard Deviation (Variance Analysis)
+        const squareDiffs = finalTimes.map(time => Math.pow(time - avgReaction, 2));
+        const avgSquareDiff = squareDiffs.reduce((a, b) => a + b, 0) / squareDiffs.length;
+        const stdDev = Math.sqrt(avgSquareDiff);
+        const variancePercentage = (stdDev / avgReaction) * 100;
 
         // Connect to Memory Vault
         const { reactionMemory, addReactionMemory } = useFatigueStore.getState();
@@ -49,10 +55,16 @@ export const CognitiveHandshake = () => {
         if (reactionMemory.length > 0) {
             const historicalBaselineValue = reactionMemory.reduce((a, b) => a + b, 0) / reactionMemory.length;
             historicalBaseline = historicalBaselineValue;
-            // >20% Cognitive Overload detection OR absolute threshold
-            isFatigued = avgReaction > (historicalBaselineValue * 1.20) || avgReaction > 1000;
+            
+            // COGNITIVE LOAD CALCULATION:
+            // 1. Reaction time > 20% of baseline
+            // 2. Variance > 35% (Inconsistent focus)
+            // 3. Absolute threshold > 1000ms
+            isFatigued = avgReaction > (historicalBaselineValue * 1.20) || 
+                         variancePercentage > 35 ||
+                         avgReaction > 1000;
         } else {
-            isFatigued = avgReaction > 1000; // Seed threshold set to 1000ms as per SAIOSH requirement
+            isFatigued = avgReaction > 1000; 
         }
 
         addReactionMemory(avgReaction);
@@ -61,18 +73,20 @@ export const CognitiveHandshake = () => {
         if (isFatigued) {
             failCognitiveHandshake();
             setMood('concerned');
-            setGuidance("Cognitive lag detected in your handshake. I'm flagging a High-Fatigue status. Section 37 Liability Warning activated.");
+            
+            const reason = variancePercentage > 35 ? "High Cognitive Variance" : "Latency Threshold Breach";
+            setGuidance(`PROTOCOL ALERT: ${reason} detected. Handshake failed with ${Math.round(variancePercentage)}% variance. Section 37 Liability Warning activated.`);
             setShowLiabilityWarning(true);
         } else if (historicalBaseline && avgReaction < (historicalBaseline * 1.10) && avgReaction < 700) {
             passCognitiveHandshake();
             setShowKaizenBonus(true);
             setMood('happy');
-            setGuidance("KAIZEN BONUS: Handshake cleared effortlessly. Optimal latency detected. Productive Streak multiplied.");
+            setGuidance("KAIZEN BONUS: Optimal latency (<700ms) and low variance detected. Handshake cleared. Productive Streak multiplied.");
             setTimeout(() => setShowKaizenBonus(false), 800);
-        } else if (historicalBaseline && avgReaction >= (historicalBaseline * 1.15)) {
+        } else if (historicalBaseline && (avgReaction >= (historicalBaseline * 1.15) || variancePercentage > 25)) {
             warnCognitiveHandshake();
             setMood('concerned');
-            setGuidance("Muda lag detected. Tracking high variance from baseline. Consider an ergonomic adjustment.");
+            setGuidance(`MUDA DETECTED: Variance is ${Math.round(variancePercentage)}% from baseline. Your cognitive consistency is slipping. Consider a professional reset.`);
         } else {
             passCognitiveHandshake();
             setMood('happy');

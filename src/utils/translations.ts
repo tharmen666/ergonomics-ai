@@ -9,6 +9,7 @@ export const translations = {
         exercise_tip: "Time for a quick stretch! This prevents long-term musculoskeletal strain.",
         compliance_check: "Daily safety scan required. Please complete your checklist by 12:00 PM Friday.",
         admin_zero: "Assessment complete. I've automatically filed this in your digital OHS dossier.",
+        first_aid: "Stop bleeding, clean the wound, cover it.",
         training: {
             start_session: "Starting session:",
             follow_guide: "Follow the animated guide. Step 1:",
@@ -34,6 +35,7 @@ export const translations = {
         exercise_tip: "Isikhathi sokuzelula kancane! Lokhu kuvimbela ukukhathala kwemisipha yesikhathi eside.",
         compliance_check: "Kudingeka ukuskenwa kokuphepha kwansuku zonke. Sicela uqedele uhlu lwakho lokuhlola ngo-12:00 PM ngoLwesihlanu.",
         admin_zero: "Ukuhlola kuqediwe. Ngiyifayile ngokuzenzakalelayo lokhu kudossier yakho ye-OHS yedijithali.",
+        first_aid: "Misa ukopha, hlambulula isilonda, usimboze.",
         training: {
             start_session: "Ukuqala iseshini:",
             follow_guide: "Landela umhlahlandlela opopayi. Isinyathelo 1:",

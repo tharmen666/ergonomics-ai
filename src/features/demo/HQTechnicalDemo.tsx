@@ -18,7 +18,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
     // 0: Start, 1: Liability, 2: Handshake, 3: Stewardship Hub, 4: HR & LPS, 5: Training, 6: Industrial, 7: Credits, 8: End
     const [scene, setScene] = useState(0);
 
-    const SCENE_DURATION = 20000;
+    const SCENE_DURATION = 14000;
 
     useEffect(() => {
         if (scene === 0 || scene === 8) return;
@@ -31,7 +31,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
     }, [scene]);
 
 
-    // Synchronized Audio Narrative (sceneStart + 1000ms)
+    // Synchronized Audio Narrative (sceneStart + 500ms)
     useEffect(() => {
         if (scene === 0 || scene === 8) {
             stopSpeaking();
@@ -54,7 +54,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
             } else if (scene === 7) {
                 speak("This is ErgoSafe reborn. v2.0 is the definitive standard for industrial safety. Driven by ambition. Empowered by premier Google frameworks.");
             }
-        }, 1000);
+        }, 500);
 
         return () => clearTimeout(audioTimeout);
     }, [scene]);
@@ -78,12 +78,12 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                 EXIT DEMO
             </button>
 
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
                 {scene === 0 && (
                     <motion.div
                         key="start"
                         exit={{ opacity: 0 }}
-                        className="flex-1 flex items-center justify-center bg-[#0b0f19]"
+                        className="absolute inset-0 flex items-center justify-center bg-[#0b0f19]"
                     >
                         <button
                             onClick={() => setScene(1)}
@@ -101,7 +101,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="flex-1 relative bg-black flex flex-col items-center justify-center p-8"
+                        className="absolute inset-0 bg-black flex flex-col items-center justify-center p-8"
                     >
                         <div className="absolute inset-0 z-0 opacity-40">
                             <img src="/assets/high_risk_worker.png" className="w-full h-full object-cover grayscale" alt="Worker" />
@@ -138,7 +138,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="flex-1 relative bg-[#0b0f19] flex items-center justify-center p-12 overflow-hidden"
+                        className="absolute inset-0 bg-[#0b0f19] flex items-center justify-center p-12 overflow-hidden"
                     >
                         <div className="w-full max-w-5xl flex flex-col md:flex-row gap-6 md:gap-12 items-center">
                             {/* Handshake Simulator */}
@@ -193,7 +193,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="flex-1 bg-ohs-navy flex items-center justify-center p-12 overflow-hidden relative"
+                        className="absolute inset-0 bg-ohs-navy flex items-center justify-center p-12 overflow-hidden relative"
                     >
                         <div className="absolute inset-0 opacity-10 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:100px_100px]" />
 
@@ -240,7 +240,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="flex-1 bg-[#0b0f19] flex items-center justify-center p-12 relative"
+                        className="absolute inset-0 bg-[#0b0f19] flex items-center justify-center p-12 relative"
                     >
                         <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center z-10 w-full max-w-6xl">
                             <div className="flex-1 text-center lg:text-left">
@@ -282,7 +282,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="flex-1 bg-white flex flex-col items-center justify-center p-12 relative overflow-hidden"
+                        className="absolute inset-0 bg-white flex flex-col items-center justify-center p-12 relative overflow-hidden"
                     >
                         <div className="absolute inset-0 z-0 opacity-10 flex flex-wrap gap-8 justify-center items-center">
                             {Array.from({ length: 20 }).map((_, i) => (
@@ -325,11 +325,11 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                 {/* SCENE 6: Industrial Logistics */}
                 {scene === 6 && (
                     <motion.div
-                        key="scene5"
+                        key="scene6"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="flex-1 bg-gradient-to-r from-gray-900 via-gray-800 to-black flex items-center justify-center p-12 relative overflow-hidden"
+                        className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-black flex items-center justify-center p-12 relative overflow-hidden"
                     >
                         <div className="absolute inset-0 z-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20" />
 
@@ -385,11 +385,11 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                 {/* SCENE 7: Credits */}
                 {scene === 7 && (
                     <motion.div
-                        key="scene6"
+                        key="scene7"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="flex-1 bg-black flex flex-col items-center justify-center p-12 relative overflow-hidden text-center"
+                        className="absolute inset-0 bg-black flex flex-col items-center justify-center p-12 relative overflow-hidden text-center"
                     >
                         <h2 className="text-ohs-orange font-black uppercase text-xl sm:text-3xl tracking-widest mb-12 flex items-center justify-center gap-3">
                             <Target size={32} /> 2026 Google Strategic Showcase
@@ -430,7 +430,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                         key="end"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="flex-1 flex flex-col items-center justify-center bg-black"
+                        className="absolute inset-0 flex flex-col items-center justify-center bg-black"
                     >
                         <ShieldAlert size={80} className="text-ohs-orange mb-8" />
                         <h1 className="text-2xl sm:text-6xl font-black mb-6 tracking-tighter uppercase">Showcase Complete</h1>
@@ -444,6 +444,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                     </motion.div>
                 )}
             </AnimatePresence>
+
 
             {/* PERSISTENT UI OVERLAYS FOR DEMO */}
             <div className="absolute bottom-4 left-0 w-full z-[10000] pointer-events-none px-4">

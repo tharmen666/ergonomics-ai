@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp } from 'lucide-react';
 import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
 import { LeanPerformanceRail } from '../../components/AI-Coach/LeanPerformanceRail';
+import { HackathonPlayer } from '../../components/HackathonPlayer';
 
 export const ExecutiveBriefing = () => {
     return (
@@ -12,7 +13,7 @@ export const ExecutiveBriefing = () => {
                 className="flex items-center justify-between"
             >
                 <div>
-                    <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter">EXECUTIVE <span className="text-ohs-orange">BRIEFING</span></h2>
+                    <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter">BOARDROOM <span className="text-ohs-orange">TRANSPARENCY HUB</span></h2>
                     <p className="text-gray-400 font-medium mt-2">Section 37/38 (OHS Act 85) Live Compliance Telemetry.</p>
                 </div>
                 <div className="bg-red-500/10 border border-red-500/30 px-6 py-3 rounded-2xl hidden md:flex items-center gap-4">
@@ -23,6 +24,8 @@ export const ExecutiveBriefing = () => {
                     </div>
                 </div>
             </motion.div>
+
+            <HackathonPlayer />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {GlobalComplianceEngine.fetchUnifiedBriefing().map((policy, idx) => (
