@@ -95,29 +95,16 @@ export const MellyAvatar = () => {
     if (!isWingmanActive) return null;
 
     return (
-        <div
-            className="fixed bottom-4 right-4 z-[99000] flex flex-col items-end gap-3 pointer-events-none"
-        >
+        <div className="fixed bottom-4 right-4 z-[9999] flex flex-col items-end pointer-events-none">
+            {/* Reasoning Hub Container */}
             <AnimatePresence mode="wait">
                 {isMellyExpanded && (
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 20 }}
-                        className="flex flex-col items-end gap-3"
+                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                        className="pointer-events-auto"
                     >
-                        {/* Core Avatar Display */}
-                        <MellyCore 
-                            isSpeaking={isSpeaking} 
-                            isExpanded={isMellyExpanded} 
-                            onClick={() => {
-                                window.speechSynthesis.cancel();
-                                setSpeaking(false);
-                                setMellyExpanded(false);
-                            }}
-                        />
-
-                        {/* Interaction Hub or Emergency UI */}
                         {isEmergency ? (
                             <MellyEmergencyUI onDeescalate={() => setIsEmergency(false)} />
                         ) : (
@@ -146,14 +133,26 @@ export const MellyAvatar = () => {
                 )}
             </AnimatePresence>
 
-            {/* Minimized Floating Avatar */}
-            {!isMellyExpanded && (
+            {/* Melly Avatar - Shifts Up When Hub is Open */}
+            <div 
+                className={`absolute right-0 transition-all duration-500 ease-in-out z-[10000] ${
+                    isMellyExpanded ? 'bottom-[420px] md:bottom-[450px]' : 'bottom-0'
+                }`}
+            >
                 <MellyCore 
                     isSpeaking={isSpeaking} 
                     isExpanded={isMellyExpanded} 
-                    onClick={() => setMellyExpanded(!isMellyExpanded)}
+                    onClick={() => {
+                        if (isMellyExpanded) {
+                            window.speechSynthesis.cancel();
+                            setSpeaking(false);
+                            setMellyExpanded(false);
+                        } else {
+                            setMellyExpanded(true);
+                        }
+                    }}
                 />
-            )}
+            </div>
         </div>
     );
 };

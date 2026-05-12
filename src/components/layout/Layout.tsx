@@ -33,7 +33,7 @@ export const Layout = memo(({ children, activeTab, setActiveTab }: LayoutProps) 
                 setIsCollapsed={setSidebarCollapsed}
             />
 
-            <main className={`flex-1 p-0 md:p-8 pb-32 md:pb-16 relative z-10 flex flex-col min-h-screen w-full transition-all duration-300 ease-in-out`}>
+            <main className={`flex-1 p-0 md:p-8 pb-32 md:pb-16 relative z-10 flex flex-col min-h-screen w-full transition-all duration-300 ease-in-out lg:pl-[260px]`}>
                 <div className="flex-1 w-full max-w-full overflow-x-hidden">
                     <AnimatePresence mode="wait">
                         <motion.div

@@ -41,7 +41,7 @@ function App() {
           <div className="flex items-center gap-3">
             <button 
               onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
-              className="p-2 bg-white/5 border border-white/10 rounded-lg hover:bg-white/20 transition-colors flex items-center justify-center text-ohs-orange shadow-lg"
+              className="p-2 bg-white/5 border border-white/10 rounded-lg hover:bg-white/20 transition-colors flex items-center justify-center text-ohs-orange shadow-lg lg:hidden"
               title="Toggle Sidebar"
             >
               <Menu size={20} />

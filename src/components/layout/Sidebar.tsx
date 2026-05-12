@@ -25,45 +25,34 @@ interface SidebarProps {
 export const Sidebar = ({ activeTab, setActiveTab, isCollapsed, setIsCollapsed }: SidebarProps) => {
     return (
         <>
-            {/* Global Overlay Backdrop */}
+            {/* Global Overlay Backdrop - Mobile Only */}
             {!isCollapsed && (
                 <div 
-                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999]"
+                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999] lg:hidden"
                     onClick={() => setIsCollapsed(true)}
                 />
             )}
 
-            <motion.div
-                initial={false}
-                animate={{
-                    x: isCollapsed ? -300 : 0,
-                    transition: { duration: 0.3, ease: "easeInOut" }
-                }}
-                className={`fixed left-0 top-0 h-screen w-[260px] bg-ohs-navy/95 backdrop-blur-xl border-r border-white/10 p-4 flex flex-col z-[1000] text-white shadow-2xl`}
+            <div
+                className={`fixed left-0 top-0 h-screen w-[260px] bg-ohs-navy/95 lg:bg-ohs-navy backdrop-blur-xl border-r border-white/10 p-4 flex flex-col z-[1000] text-white shadow-2xl transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+                    isCollapsed ? '-translate-x-full' : 'translate-x-0'
+                }`}
             >
-                {/* Close Button */}
+                {/* Close Button - Mobile Only */}
                 <button
                     onClick={() => setIsCollapsed(true)}
-                    className="absolute right-4 top-4 p-2 bg-white/5 hover:bg-white/10 transition-colors rounded-lg text-ohs-orange"
+                    className="absolute right-4 top-4 p-2 bg-white/5 hover:bg-white/10 transition-colors rounded-lg text-ohs-orange lg:hidden"
                 >
                     <X size={20} />
                 </button>
 
-                {/* Desktop Toggle Button - REMOVED since it's now a pure overlay */}
-
-            <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'} mb-10 overflow-hidden whitespace-nowrap`}>
+            <div className="flex items-center gap-3 mb-10 overflow-hidden whitespace-nowrap">
                 <div className="min-w-[40px] h-10 bg-gradient-to-br from-ohs-orange to-ohs-green rounded-full flex items-center justify-center font-bold text-lg text-ohs-navy flex-shrink-0">
                     OHS
                 </div>
-                {!isCollapsed && (
-                    <motion.span
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="font-bold text-xl tracking-wide"
-                    >
-                        ErgoSafe Reborn
-                    </motion.span>
-                )}
+                <span className="font-bold text-xl tracking-wide">
+                    ErgoSafe Reborn
+                </span>
             </div>
 
             <nav className="flex-1 space-y-2 overflow-hidden">
@@ -96,7 +85,7 @@ export const Sidebar = ({ activeTab, setActiveTab, isCollapsed, setIsCollapsed }
                         <p className="text-xs text-gray-400">Ask Melly for instant assistance.</p>
                     </div>
                 </div>
-        </motion.div>
+        </div>
     );
 };
 
