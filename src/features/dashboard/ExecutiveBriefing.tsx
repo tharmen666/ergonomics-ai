@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp } from 'lucide-react';
 import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
 import { LeanPerformanceRail } from '../../components/AI-Coach/LeanPerformanceRail';
-import { HackathonPlayer } from '../../components/HackathonPlayer';
+import { HackathonDemo } from '../../components/HackathonDemo';
 
 export const ExecutiveBriefing = () => {
     return (
@@ -25,7 +25,7 @@ export const ExecutiveBriefing = () => {
                 </div>
             </motion.div>
 
-            <HackathonPlayer />
+            <HackathonDemo />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {GlobalComplianceEngine.fetchUnifiedBriefing().map((policy, idx) => (

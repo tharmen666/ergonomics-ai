@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-export const HackathonPlayer = () => {
+export const HackathonDemo = () => {
     const videoId = 'dQw4w9WgXcQ'; // Placeholder Video ID
 
     return (
