@@ -14,7 +14,7 @@ export const ExecutiveBriefing = () => {
             >
                 <div>
                     <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter">BOARDROOM <span className="text-ohs-orange">TRANSPARENCY HUB</span></h2>
-                    <p className="text-gray-400 font-medium mt-2">Section 37/38 (OHS Act 85) Live Compliance Telemetry.</p>
+                    <p className="text-gray-400 font-medium mt-2">Section 37/38 (OHS Act 85) Live Compliance Telemetry powered by <span className="text-ohs-orange font-bold">Google Gemini</span> & <span className="text-blue-400 font-bold">MongoDB MCP Server</span>.</p>
                 </div>
                 <div className="bg-red-500/10 border border-red-500/30 px-6 py-3 rounded-2xl hidden md:flex items-center gap-4">
                     <ShieldAlert className="text-red-500 animate-pulse" size={24} />
@@ -61,8 +61,8 @@ export const ExecutiveBriefing = () => {
             >
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6">
                     <div>
-                        <h3 className="text-xl font-black text-white flex items-center gap-3"><FileText className="text-green-500" size={24} /> Admin-Zero File Status</h3>
-                        <p className="text-gray-400 font-medium mt-1">All compliance actions have been automatically assembled into the organizational blockchain ledger.</p>
+                        <h3 className="text-xl font-black text-white flex items-center gap-3"><FileText className="text-green-500" size={24} /> Admin-Zero File Status (MongoDB MCP)</h3>
+                        <p className="text-gray-400 font-medium mt-1">All compliance actions have been automatically queried and assembled by Google Cloud Agent Builder into the MongoDB compliance ledger.</p>
                     </div>
                     <div className="bg-green-500/20 text-green-400 px-6 py-3 rounded-full font-bold uppercase tracking-widest text-sm whitespace-nowrap hidden md:block">
                         NO PENDING OFFENCES

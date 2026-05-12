@@ -401,13 +401,13 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                                 transition={{ duration: 8, ease: "linear" }}
                                 className="absolute w-full flex flex-col gap-6 items-center"
                             >
-                                <div className="text-2xl font-bold text-gray-300">Gemini Pro (The Savior)</div>
-                                <div className="text-2xl font-bold text-gray-300">Google AI Studio</div>
+                                <div className="text-2xl font-bold text-gray-300">Google Cloud Agent Builder</div>
+                                <div className="text-2xl font-bold text-gray-300">Gemini Foundation Models</div>
+                                <div className="text-2xl font-bold text-gray-300">MongoDB MCP Server</div>
                                 <div className="text-2xl font-bold text-gray-300">Google Cloud TTS</div>
                                 <div className="text-2xl font-bold text-gray-300">GDG Discovery</div>
-                                <div className="text-2xl font-bold text-gray-300">Crew AI</div>
                                 <div className="text-2xl font-bold text-gray-300">Base 44</div>
-                                <div className="text-2xl font-bold text-gray-300">GitHub & Replit</div>
+                                <div className="text-2xl font-bold text-gray-300">GitHub Open Source</div>
                             </motion.div>
                         </div>
 
@@ -418,7 +418,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                             className="bg-white/10 backdrop-blur-md p-8 border border-white/20 rounded-2xl max-w-4xl"
                         >
                             <p className="text-xl sm:text-3xl text-white font-black italic tracking-tight leading-relaxed">
-                                "Developed by a 53-Year-Old AI Architect — Empowered by Google Skills & Premiere Tier Credits. Age is not a barrier to God-Mode Innovation."
+                                "Developed by a 53-Year-Old AI Architect — Empowered by Google Cloud & MongoDB MCP. Age is not a barrier to Executive Stewardship."
                             </p>
                         </motion.div>
                     </motion.div>
