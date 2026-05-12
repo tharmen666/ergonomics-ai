@@ -18,7 +18,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
     // 0: Start, 1: Liability, 2: Handshake, 3: Stewardship Hub, 4: HR & LPS, 5: Training, 6: Industrial, 7: Credits, 8: End
     const [scene, setScene] = useState(0);
 
-    const SCENE_DURATION = 14000;
+    const SCENE_DURATION = 8400;
 
     useEffect(() => {
         if (scene === 0 || scene === 8) return;
@@ -54,7 +54,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
             } else if (scene === 7) {
                 speak("This is ErgoSafe reborn. v2.0 is the definitive standard for industrial safety. Driven by ambition. Empowered by premier Google frameworks.");
             }
-        }, 500);
+        }, 300);
 
         return () => clearTimeout(audioTimeout);
     }, [scene]);

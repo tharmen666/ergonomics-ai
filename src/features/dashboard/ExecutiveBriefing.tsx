@@ -6,7 +6,7 @@ import { HackathonDemo } from '../../components/HackathonDemo';
 
 export const ExecutiveBriefing = () => {
     return (
-        <div className="p-6 md:p-10 max-w-7xl mx-auto space-y-8 mb-24">
+        <div className="p-4 md:p-10 max-w-7xl mx-auto space-y-8 mb-24 overflow-x-hidden">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

@@ -77,14 +77,14 @@ export const MellyInterface = ({
             <div className="flex flex-wrap gap-2 mt-4">
                 <button
                     onClick={onTour}
-                    className="flex-1 flex items-center justify-center gap-2 bg-ohs-orange text-ohs-navy py-2.5 rounded-xl font-bold text-[10px] transform hover:scale-105 transition-all whitespace-nowrap"
+                    className="flex-1 flex items-center justify-center gap-2 bg-ohs-orange text-ohs-navy py-2.5 min-h-[44px] rounded-xl font-bold text-[10px] transform hover:scale-105 transition-all whitespace-nowrap"
                 >
                     <PlayCircle size={14} />
                     SAFETY TOUR
                 </button>
                 <button
                     onClick={onStewardship}
-                    className="flex-1 flex items-center justify-center gap-2 bg-white/5 border border-white/10 text-white py-2.5 rounded-xl font-bold text-[10px] transform hover:scale-105 transition-all whitespace-nowrap"
+                    className="flex-1 flex items-center justify-center gap-2 bg-white/5 border border-white/10 text-white py-2.5 min-h-[44px] rounded-xl font-bold text-[10px] transform hover:scale-105 transition-all whitespace-nowrap"
                 >
                     <ShieldCheck size={14} className="text-ohs-orange" />
                     STEWARDSHIP
@@ -112,11 +112,11 @@ export const MellyInterface = ({
                     onChange={(e) => setUserInput(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && onSend()}
                     placeholder="Type symptom or query..."
-                    className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-[10px] focus:outline-none focus:border-ohs-orange/50 text-white"
+                    className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2 min-h-[44px] text-[10px] focus:outline-none focus:border-ohs-orange/50 text-white"
                 />
                 <button
                     onClick={onSend}
-                    className="bg-ohs-orange text-ohs-navy px-3 py-2 rounded-xl font-black text-[10px]"
+                    className="bg-ohs-orange text-ohs-navy px-3 py-2 min-h-[44px] rounded-xl font-black text-[10px]"
                 >
                     SEND
                 </button>
