@@ -12,9 +12,7 @@ interface LayoutProps {
 }
 
 export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
-    const [isCollapsed, setIsCollapsed] = useState(true);
-    const { isMellyExpanded } = useMellyStore();
-    const hideSidebar = activeTab === 'training' || isMellyExpanded;
+    const { isSidebarCollapsed, setSidebarCollapsed } = useMellyStore();
 
     return (
         <div className="flex min-h-screen w-full relative overflow-x-hidden">
@@ -24,17 +22,15 @@ export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
                 <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-ohs-orange/10 rounded-full blur-[120px]" />
             </div>
 
-            {!hideSidebar && (
-                <Sidebar
-                    activeTab={activeTab}
-                    setActiveTab={setActiveTab}
-                    isCollapsed={isCollapsed}
-                    setIsCollapsed={setIsCollapsed}
-                />
-            )}
+            <Sidebar
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                isCollapsed={isSidebarCollapsed}
+                setIsCollapsed={setSidebarCollapsed}
+            />
             <MobileBottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
 
-            <main className={`flex-1 ${hideSidebar ? 'md:ml-0' : (isCollapsed ? 'md:ml-[60px]' : 'md:ml-64')} p-4 md:p-8 pb-32 md:pb-16 relative z-10 flex flex-col min-h-screen w-full transition-all duration-300 ease-in-out`}>
+            <main className={`flex-1 ${isSidebarCollapsed ? 'md:ml-[60px]' : 'md:ml-[260px]'} p-4 md:p-8 pb-32 md:pb-16 relative z-10 flex flex-col min-h-screen w-full transition-all duration-300 ease-in-out`}>
                 <div className="flex-1 w-full max-w-full overflow-x-hidden">
                     <AnimatePresence mode="wait">
                         <motion.div

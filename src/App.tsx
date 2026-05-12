@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Menu } from 'lucide-react';
 import { Layout } from './components/layout/Layout';
 import { MellyAvatar } from './components/melly/MellyAvatar';
 import { DashboardPage } from './features/dashboard/DashboardPage';
@@ -23,7 +24,7 @@ import { GEAROverlay } from './components/ui/GEAROverlay';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const { isWingmanActive, setWingmanActive } = useMellyStore();
+  const { isWingmanActive, setWingmanActive, isSidebarCollapsed, setSidebarCollapsed } = useMellyStore();
 
   if (activeTab === 'demo') {
     return <HQTechnicalDemo onExit={() => setActiveTab('dashboard')} />;
@@ -37,10 +38,18 @@ function App() {
         <TourManager setActiveTab={setActiveTab} />
 
         <header className="flex flex-col md:flex-row items-center justify-between mb-8 gap-6">
-          <div>
-            <h1 className="text-4xl font-black text-white tracking-tighter">
-              OHS <span className="text-ohs-orange">HAVEN</span>
-            </h1>
+          <div className="flex items-start gap-4">
+            <button 
+              onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
+              className="mt-1 p-2 bg-white/5 border border-white/10 rounded-lg hover:bg-white/20 transition-colors hidden md:flex items-center justify-center text-ohs-orange"
+              title="Toggle Sidebar"
+            >
+              <Menu size={24} />
+            </button>
+            <div>
+              <h1 className="text-4xl font-black text-white tracking-tighter">
+                OHS <span className="text-ohs-orange">HAVEN</span>
+              </h1>
             <p className="text-gray-400 mt-2 font-medium">
               {activeTab === 'dashboard' ? 'Welcome back, Desigan. Your safety score is 98% today.' :
                 activeTab === 'training' ? 'Boost your wellbeing with these active sessions.' :

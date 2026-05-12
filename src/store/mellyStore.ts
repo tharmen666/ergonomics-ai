@@ -15,6 +15,8 @@ interface MellyState {
     setWingmanActive: (active: boolean) => void;
     isMellyExpanded: boolean;
     setMellyExpanded: (expanded: boolean) => void;
+    isSidebarCollapsed: boolean;
+    setSidebarCollapsed: (collapsed: boolean) => void;
     isIndustrialMode: boolean;
     setIndustrialMode: (active: boolean) => void;
     language: import('../utils/translations').Language;
@@ -38,6 +40,7 @@ export const useMellyStore = create<MellyState>()(
             isTourActive: false,
             isWingmanActive: false,
             isMellyExpanded: false,
+            isSidebarCollapsed: false,
             isIndustrialMode: false,
             language: 'en',
             completedModules: [],
@@ -49,6 +52,7 @@ export const useMellyStore = create<MellyState>()(
             setTourActive: (isTourActive) => set({ isTourActive }),
             setWingmanActive: (isWingmanActive) => set({ isWingmanActive }),
             setMellyExpanded: (isMellyExpanded) => set({ isMellyExpanded }),
+            setSidebarCollapsed: (isSidebarCollapsed) => set({ isSidebarCollapsed }),
             setIndustrialMode: (isIndustrialMode) => set({ isIndustrialMode }),
             setLanguage: (language) => set({ language }),
             completeModule: (id) => set((state) => ({
