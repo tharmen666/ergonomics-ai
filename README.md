@@ -7,6 +7,7 @@ This repository houses a state-of-the-art "Digital Wingman" application designed
 ## 🏆 Google Cloud Rapid Agent Hackathon Submission
 
 This project is submitted to the Google Cloud Rapid Agent Hackathon.
+
 - **Powered by Gemini & Google Cloud Agent Builder**: "Melly" is a fully functional AI agent orchestrated by Google Cloud Agent Builder and powered by the Gemini model to provide real-time, context-aware safety coaching and interventions.
 - **Partner Integration (MongoDB)**: We deeply integrate the **MongoDB MCP Server** to handle our live safety telemetry and Section 37/38 compliance ledgers. Every daily safety scan, ergonomic check, and compliance handshake is embedded into MongoDB. Melly utilizes the MCP server to autonomously query this database, dynamically alerting management to compliance gaps in real-time.
 
