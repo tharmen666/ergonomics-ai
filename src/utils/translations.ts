@@ -1,6 +1,22 @@
 export type Language = 'en' | 'zu' | 'xh' | 'af' | 'sw' | 'zh' | 'es' | 'ko';
 
-export const translations = {
+export interface TranslationEntry {
+    melly_intro: string;
+    stewardship_model: string;
+    high_discomfort_disclaimer: string;
+    legal_shock: string;
+    exercise_tip: string;
+    compliance_check: string;
+    admin_zero: string;
+    first_aid: string;
+    training: {
+        start_session: string;
+        follow_guide: string;
+        exercises: Record<string, any>;
+    };
+}
+
+export const translations: Record<Language, TranslationEntry> = {
     en: {
         melly_intro: "Hi, I'm Melly. Your AI Safety companion. Let's make sure you're protected today.",
         stewardship_model: "The Stewardship Model ensures 100% compliance through a cascading chain of command: Employee to Supervisor, Leader, and CEO.",
