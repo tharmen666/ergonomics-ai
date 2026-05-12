@@ -169,7 +169,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                                 </motion.div>
                             </div>
 
-                            {/* Wingman Quote */}
+                            {/* Stewardship Quote */}
                             <motion.div
                                 initial={{ x: 50, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}

@@ -14,7 +14,7 @@ export const SafetyStreaks = () => {
 
             <div className="flex items-start justify-between z-10">
                 <div>
-                    <h3 className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-1">Digital Wingman Status</h3>
+                    <h3 className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-1">Stewardship Authority Status</h3>
                     <h2 className="text-2xl font-black text-white flex items-center gap-2">
                         SAFETY STREAKS <Medal className="text-ohs-orange" size={24} />
                     </h2>

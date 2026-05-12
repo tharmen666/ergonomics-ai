@@ -47,7 +47,7 @@ export const RiskyBehaviorsPage = () => {
 
                                 let warning = "";
                                 if (risk.title.includes('Bed')) {
-                                    warning = "Working from bed limits your postural support. As your Digital Wingman, I highly suggest taking a 15-minute Professional Reset. A quick stretch and some water will do wonders for your focus.";
+                                    warning = "Working from bed limits your postural support. As your Stewardship Authority, I highly suggest taking a 15-minute Professional Reset. A quick stretch and some water will do wonders for your focus.";
                                     addRecommendation('foundation');
                                 } else if (risk.title.includes('Kitchen') || risk.title.includes('Slouching')) {
                                     warning = "I noticed some postural instability. To keep you at peak performance, I recommend taking a quick reset break and adjusting your chair height.";

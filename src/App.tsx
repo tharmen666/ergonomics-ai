@@ -58,7 +58,7 @@ function App() {
                 onClick={() => setWingmanActive(!isWingmanActive)}
                 className={`flex-1 inline-flex items-center justify-center gap-2 min-h-[64px] ${isWingmanActive ? 'bg-red-500 hover:bg-red-600' : 'bg-white/10 hover:bg-white/20'} text-white px-2 md:px-4 py-3 md:py-2.5 rounded-xl font-bold text-[10px] md:text-sm transition-all shadow-md`}
               >
-                {isWingmanActive ? 'DISABLE WINGMAN' : 'ACTIVATE WINGMAN'}
+                {isWingmanActive ? 'DISABLE STEWARDSHIP' : 'ACTIVATE STEWARDSHIP'}
               </button>
               <button
                 onClick={() => setActiveTab('executive')}

@@ -53,7 +53,7 @@ export const DashboardPage = () => {
                             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
                             <div className="relative z-10">
                                 <h3 className="text-2xl font-black text-white tracking-tight">Daily Cognitive Sync Required</h3>
-                                <p className="text-gray-400 font-medium max-w-md">Establish your baseline today to activate Digital Wingman features and ensure safe operational standard work rates.</p>
+                                <p className="text-gray-400 font-medium max-w-md">Establish your baseline today to activate Stewardship Authority features and ensure safe operational standard work rates.</p>
                             </div>
                             <button 
                                 onClick={() => setShowCognitiveHandshake(true)} 
@@ -127,7 +127,7 @@ export const DashboardPage = () => {
                         </div>
                     </div>
 
-                    {/* Digital Wingman Streaks */}
+                    {/* Stewardship Authority Streaks */}
                     <div className="h-[280px]">
                         <SafetyStreaks />
                     </div>
