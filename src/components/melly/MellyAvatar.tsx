@@ -59,7 +59,7 @@ export const MellyAvatar = () => {
             addLog('Melly', response);
         } else if (isFirstAid) {
             const currentLang = (language as Language) || 'en';
-            const response = translations[currentLang]?.first_aid || translations['en'].first_aid;
+            const response = (translations[currentLang] as TranslationEntry)?.first_aid || translations['en'].first_aid;
             setGuidance(response);
             addLog('Melly', response);
             setSpeaking(true);
