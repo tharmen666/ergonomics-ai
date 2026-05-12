@@ -25,23 +25,23 @@ interface SidebarProps {
 export const Sidebar = ({ activeTab, setActiveTab, isCollapsed, setIsCollapsed }: SidebarProps) => {
     return (
         <>
-            {/* Global Overlay Backdrop - Mobile Only */}
+            {/* Global Overlay Backdrop - All Screen Sizes */}
             {!isCollapsed && (
                 <div 
-                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999] lg:hidden"
+                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999]"
                     onClick={() => setIsCollapsed(true)}
                 />
             )}
 
             <div
-                className={`fixed left-0 top-0 h-screen w-[260px] bg-ohs-navy/95 lg:bg-ohs-navy backdrop-blur-xl border-r border-white/10 p-4 flex flex-col z-[1000] text-white shadow-2xl transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+                className={`fixed left-0 top-0 h-screen w-[260px] bg-ohs-navy/95 backdrop-blur-xl border-r border-white/10 p-4 flex flex-col z-[1000] text-white shadow-2xl transition-transform duration-300 ease-in-out ${
                     isCollapsed ? '-translate-x-full' : 'translate-x-0'
                 }`}
             >
-                {/* Close Button - Mobile Only */}
+                {/* Close Button */}
                 <button
                     onClick={() => setIsCollapsed(true)}
-                    className="absolute right-4 top-4 p-2 bg-white/5 hover:bg-white/10 transition-colors rounded-lg text-ohs-orange lg:hidden"
+                    className="absolute right-4 top-4 p-2 bg-white/5 hover:bg-white/10 transition-colors rounded-lg text-ohs-orange"
                 >
                     <X size={20} />
                 </button>
