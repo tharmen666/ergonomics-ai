@@ -13,21 +13,45 @@ const data = [
 
 export const ActivityChart = () => {
     return (
-        <div className="w-full h-48 flex items-end justify-between gap-2">
-            {data.map((d, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
-                    <motion.div
-                        initial={{ height: 0 }}
-                        animate={{ height: `${d.value}%` }}
-                        transition={{ duration: 1, delay: i * 0.1, type: 'spring' }}
-                        className="w-full bg-ohs-blue/50 rounded-t-lg relative overflow-hidden group-hover:bg-ohs-orange transition-colors"
-                    >
-                        <div className="absolute bottom-0 left-0 w-full h-1 bg-white/20" />
-                    </motion.div>
-                    <span className="text-xs text-gray-500 font-medium group-hover:text-white transition-colors">{d.label}</span>
-                </div>
-            ))}
-        </div>
+        <>
+            {/* Desktop View */}
+            <div className="hidden md:flex w-full h-48 items-end justify-between gap-2">
+                {data.map((d, i) => (
+                    <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
+                        <motion.div
+                            initial={{ height: 0 }}
+                            whileInView={{ height: `${d.value}%` }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, delay: i * 0.1, type: 'spring' }}
+                            className="w-full bg-ohs-blue/50 rounded-t-lg relative overflow-hidden group-hover:bg-ohs-orange transition-colors"
+                        >
+                            <div className="absolute bottom-0 left-0 w-full h-1 bg-white/20" />
+                        </motion.div>
+                        <span className="text-xs text-gray-500 font-medium group-hover:text-white transition-colors">{d.label}</span>
+                    </div>
+                ))}
+            </div>
+
+            {/* Mobile View (Vertical Stacking) */}
+            <div className="flex md:hidden flex-col w-full gap-4">
+                {data.map((d, i) => (
+                    <div key={i} className="w-full flex items-center gap-3 group">
+                        <span className="w-8 text-xs text-gray-500 font-medium">{d.label}</span>
+                        <div className="flex-1 h-6 bg-white/5 rounded-r-lg overflow-hidden">
+                            <motion.div
+                                initial={{ width: 0 }}
+                                whileInView={{ width: `${d.value}%` }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 1, delay: i * 0.1, type: 'spring' }}
+                                className="h-full bg-ohs-blue/50 group-hover:bg-ohs-orange transition-colors relative"
+                            >
+                                <div className="absolute top-0 left-0 w-1 h-full bg-white/20" />
+                            </motion.div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </>
     );
 };
 

@@ -144,7 +144,8 @@ export const AdminPortal = () => {
                         </div>
                     </div>
 
-                    <div className="h-64 flex items-end justify-between gap-1 md:gap-6 px-1 md:px-4">
+                    {/* Desktop View */}
+                    <div className="hidden md:flex h-64 items-end justify-between gap-6 px-4">
                         {[40, 75, 55, 95, 70, 85, 65].map((h, i) => (
                             <div key={i} className="flex-1 group relative">
                                 <motion.div
@@ -163,9 +164,31 @@ export const AdminPortal = () => {
                             </div>
                         ))}
                     </div>
-                    <div className="flex justify-between text-gray-500 font-bold text-xs mt-8 px-2 border-t border-white/5 pt-6">
+                    <div className="hidden md:flex justify-between text-gray-500 font-bold text-xs mt-8 px-2 border-t border-white/5 pt-6">
                         {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(day => (
                             <span key={day}>{day}</span>
+                        ))}
+                    </div>
+
+                    {/* Mobile View (Vertical Stacking) */}
+                    <div className="flex md:hidden flex-col gap-4">
+                        {[40, 75, 55, 95, 70, 85, 65].map((h, i) => (
+                            <div key={i} className="flex items-center gap-3 w-full group">
+                                <span className="w-8 text-xs text-gray-500 font-bold">{['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'][i]}</span>
+                                <div className="flex-1 h-6 bg-white/5 rounded-r-2xl relative overflow-hidden">
+                                    <motion.div
+                                        initial={{ width: 0 }}
+                                        whileInView={{ width: `${h}%` }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 1.5, delay: i * 0.1, ease: "circOut" }}
+                                        className={`h-full rounded-r-2xl ${h > 80 ? 'bg-gradient-to-r from-ohs-green to-green-300' :
+                                            h > 60 ? 'bg-gradient-to-r from-ohs-blue to-blue-300' :
+                                                'bg-gradient-to-r from-ohs-orange to-orange-300'
+                                            } opacity-70 group-hover:opacity-100 transition-all duration-500`}
+                                    />
+                                </div>
+                                <span className="text-xs font-black text-white w-8">{h}%</span>
+                            </div>
                         ))}
                     </div>
                 </GlassCard>

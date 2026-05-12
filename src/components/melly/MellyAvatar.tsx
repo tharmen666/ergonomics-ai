@@ -96,7 +96,7 @@ export const MellyAvatar = () => {
 
     return (
         <div
-            className="fixed bottom-24 right-4 z-50 flex flex-col items-end gap-3 pointer-events-none"
+            className="fixed bottom-4 right-4 z-[99000] flex flex-col items-end gap-3 pointer-events-none"
         >
             <AnimatePresence mode="wait">
                 {isMellyExpanded && (
