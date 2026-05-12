@@ -19,11 +19,12 @@ export const MellyAvatar = () => {
         setTourActive, 
         language, 
         setLanguage, 
-        setGuidance 
+        setGuidance,
+        isMellyExpanded,
+        setMellyExpanded 
     } = useMellyStore();
     
     const { fatigueLevel } = useFatigueStore();
-    const [isExpanded, setIsExpanded] = useState(false);
     const [userInput, setUserInput] = useState('');
     const [isEmergency, setIsEmergency] = useState(false);
 
@@ -79,7 +80,7 @@ export const MellyAvatar = () => {
             className="fixed bottom-24 right-4 z-50 flex flex-col items-end gap-3 pointer-events-none"
         >
             <AnimatePresence mode="wait">
-                {isExpanded && (
+                {isMellyExpanded && (
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -89,11 +90,11 @@ export const MellyAvatar = () => {
                         {/* Core Avatar Display */}
                         <MellyCore 
                             isSpeaking={isSpeaking} 
-                            isExpanded={isExpanded} 
+                            isExpanded={isMellyExpanded} 
                             onClick={() => {
                                 window.speechSynthesis.cancel();
                                 setSpeaking(false);
-                                setIsExpanded(false);
+                                setMellyExpanded(false);
                             }}
                         />
 
@@ -104,10 +105,10 @@ export const MellyAvatar = () => {
                             <MellyInterface 
                                 language={language}
                                 setLanguage={setLanguage}
-                                onClose={() => setIsExpanded(false)}
+                                onClose={() => setMellyExpanded(false)}
                                 onTour={() => {
                                     setTourActive(true);
-                                    setIsExpanded(false);
+                                    setMellyExpanded(false);
                                 }}
                                 onStewardship={() => {
                                     setSpeaking(true);
@@ -124,11 +125,11 @@ export const MellyAvatar = () => {
             </AnimatePresence>
 
             {/* Minimized Floating Avatar */}
-            {!isExpanded && (
+            {!isMellyExpanded && (
                 <MellyCore 
                     isSpeaking={isSpeaking} 
-                    isExpanded={isExpanded} 
-                    onClick={() => setIsExpanded(!isExpanded)}
+                    isExpanded={isMellyExpanded} 
+                    onClick={() => setMellyExpanded(!isMellyExpanded)}
                 />
             )}
         </div>

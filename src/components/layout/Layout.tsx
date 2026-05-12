@@ -13,8 +13,8 @@ interface LayoutProps {
 
 export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
-    const { isWingmanActive } = useMellyStore();
-    const hideSidebar = activeTab === 'training' || isWingmanActive;
+    const { isMellyExpanded } = useMellyStore();
+    const hideSidebar = activeTab === 'training' || isMellyExpanded;
 
     return (
         <div className="flex min-h-screen w-full relative overflow-x-hidden">
