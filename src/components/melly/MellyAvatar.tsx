@@ -131,7 +131,10 @@ export const MellyAvatar = () => {
                                 }}
                                 onStewardship={() => {
                                     setSpeaking(true);
-                                    setTimeout(() => setSpeaking(false), 5000);
+                                    const response = "STEWARDSHIP AUDIT: Are you currently seated at a desk or working from a bed/couch? (Please type your response)";
+                                    setGuidance(response);
+                                    addLog('Melly', response);
+                                    setTimeout(() => setSpeaking(false), 8000);
                                 }}
                                 userInput={userInput}
                                 setUserInput={setUserInput}

@@ -33,7 +33,7 @@ export const speak = (text: string, onEnd?: () => void) => {
             utterance.pitch = 1.2;
         }
 
-        utterance.rate = (selectedVoice?.lang === 'zu-ZA' || selectedVoice?.lang === 'en-ZA') ? 0.75 : 1.0;
+        utterance.rate = (selectedVoice?.lang === 'zu-ZA' || selectedVoice?.lang === 'en-ZA') ? 0.65 : 1.0;
 
         if (onEnd) {
             utterance.onend = onEnd;

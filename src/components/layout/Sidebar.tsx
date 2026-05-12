@@ -1,4 +1,4 @@
-import { Home, Activity, BarChart2, Settings, LifeBuoy, CheckSquare, ShoppingBag, FileText, Users, AlertCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Home, Activity, BarChart2, Settings, LifeBuoy, CheckSquare, ShoppingBag, FileText, Users, AlertCircle, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const navItems = [
@@ -24,21 +24,41 @@ interface SidebarProps {
 
 export const Sidebar = ({ activeTab, setActiveTab, isCollapsed, setIsCollapsed }: SidebarProps) => {
     return (
-        <motion.div
-            initial={false}
-            animate={{
-                width: isCollapsed ? 60 : 260,
-                transition: { duration: 0.3, ease: "easeInOut" }
-            }}
-            className="hidden md:flex h-screen fixed left-0 top-0 bg-ohs-navy/90 backdrop-blur-xl border-r border-white/10 p-4 flex-col z-50 text-white"
-        >
-            {/* Toggle Button */}
-            <button
-                onClick={() => setIsCollapsed(!isCollapsed)}
-                className="absolute -right-3 top-20 w-6 h-6 bg-ohs-orange rounded-full flex items-center justify-center text-ohs-navy hover:scale-110 transition-transform shadow-lg z-[60]"
+        <>
+            {/* Mobile Overlay Backdrop */}
+            {!isCollapsed && (
+                <div 
+                    className="md:hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-[999]"
+                    onClick={() => setIsCollapsed(true)}
+                />
+            )}
+
+            <motion.div
+                initial={false}
+                animate={{
+                    width: isCollapsed ? 60 : 260,
+                    x: (typeof window !== 'undefined' && window.innerWidth < 768 && isCollapsed) ? -260 : 0,
+                    transition: { duration: 0.3, ease: "easeInOut" }
+                }}
+                className={`fixed left-0 top-0 h-screen bg-ohs-navy/95 backdrop-blur-xl border-r border-white/10 p-4 flex flex-col z-[1000] text-white ${isCollapsed ? 'hidden md:flex' : 'flex'}`}
             >
-                {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-            </button>
+                {/* Close Button (Mobile Only) */}
+                {!isCollapsed && (
+                    <button
+                        onClick={() => setIsCollapsed(true)}
+                        className="md:hidden absolute right-4 top-4 p-2 bg-white/5 rounded-lg text-ohs-orange"
+                    >
+                        <X size={20} />
+                    </button>
+                )}
+
+                {/* Desktop Toggle Button */}
+                <button
+                    onClick={() => setIsCollapsed(!isCollapsed)}
+                    className="hidden md:flex absolute -right-3 top-20 w-6 h-6 bg-ohs-orange rounded-full items-center justify-center text-ohs-navy hover:scale-110 transition-transform shadow-lg z-[60]"
+                >
+                    {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+                </button>
 
             <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-3'} mb-10 overflow-hidden whitespace-nowrap`}>
                 <div className="min-w-[40px] h-10 bg-gradient-to-br from-ohs-orange to-ohs-green rounded-full flex items-center justify-center font-bold text-lg text-ohs-navy flex-shrink-0">

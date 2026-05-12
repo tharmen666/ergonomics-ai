@@ -10,7 +10,7 @@ export const MobileBottomNav = ({ activeTab, setActiveTab }: MobileBottomNavProp
         { id: 'dashboard', label: 'Home', icon: Home },
         { id: 'assessment', label: 'Assess', icon: ClipboardCheck },
         { id: 'training', label: 'Train', icon: PlayCircle },
-        { id: 'reports', label: 'Reports', icon: BarChart3 },
+        { id: 'executive', label: 'Executive', icon: BarChart3 },
     ];
 
     return (
