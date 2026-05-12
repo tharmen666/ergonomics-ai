@@ -111,6 +111,7 @@ export const translations = {
         exercise_tip: "Wakati wa kunyoosha mwili! Hii inazuia maumivu ya misuli.",
         compliance_check: "Ukaguzi wa usalama wa kila siku unahitajika kufikia Ijumaa saa sita mchana.",
         admin_zero: "Tathmini imekamilika. Nimehifadhi kiotomatiki katika faili lako la usalama digitali.",
+        first_aid: "Acha kuvuja damu, safisha kidonda, kifunike.",
         training: { start_session: "Kuanza:", follow_guide: "Fuata maelekezo. Hatua 1:", exercises: {} }
     },
     zh: {
@@ -121,6 +122,7 @@ export const translations = {
         exercise_tip: "是时候进行简短的伸展了！这可以预防长期的肌肉疲劳。",
         compliance_check: "需要每日安全扫描。请在周五中午前完成列表验证。",
         admin_zero: "评估完成。已自动提交到您的数字 OHS 数据库。",
+        first_aid: "止血，清洁伤口，包扎。",
         training: { start_session: "开始会话:", follow_guide: "请按照指南操作, 步骤 1:", exercises: {} }
     },
     es: {
@@ -131,6 +133,7 @@ export const translations = {
         exercise_tip: "¡Hora de un estiramiento rápido! Previene lesiones musculares a largo plazo.",
         compliance_check: "Se requiere un escaneo de seguridad diario. Por favor complétalo para el mediodía.",
         admin_zero: "Evaluación completada. Guardado automáticamente en tu dossier OHS.",
+        first_aid: "Detener el sangrado, limpiar la herida, cubrirla.",
         training: { start_session: "Empezar:", follow_guide: "Siga la guía animada. Paso 1:", exercises: {} }
     },
     ko: {
@@ -141,6 +144,7 @@ export const translations = {
         exercise_tip: "잠시 스트레칭할 시간입니다! 이는 근골격계 질환을 예방합니다.",
         compliance_check: "일일 안전 점검이 필요합니다. 금요일 정오까지 체크리스트를 완료하세요.",
         admin_zero: "평가 완료. 디지털 OHS 데이터베이스에 자동으로 저장되었습니다.",
+        first_aid: "출혈을 멈추고 상처를 닦고 덮으십시오.",
         training: { start_session: "세션 시작:", follow_guide: "애니메이션 가이드를 따르세요. 1단계:", exercises: {} }
     }
 };
