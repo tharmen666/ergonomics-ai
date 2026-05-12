@@ -67,7 +67,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                     animate={{ opacity: 1, x: 0 }}
                     className="text-4xl font-black tracking-tighter"
                 >
-                    ERGOSAFE REBORN: <span className="text-ohs-orange">GOD MODE v1.3</span>
+                    ERGOSAFE REBORN: <span className="text-ohs-orange">EXECUTIVE STEWARDSHIP v1.3</span>
                 </motion.h1>
             </div>
 
