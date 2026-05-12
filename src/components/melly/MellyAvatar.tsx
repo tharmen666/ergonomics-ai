@@ -6,7 +6,7 @@ import { useAgentLog } from '../../store/agentLogStore';
 import { MellyCore } from './MellyCore';
 import { MellyInterface } from './MellyInterface';
 import { MellyEmergencyUI } from './MellyEmergencyUI';
-import { translations, Language } from '../../utils/translations';
+import { translations, Language, TranslationEntry } from '../../utils/translations';
 
 /**
  * MellyAvatar: The primary entry point for the Melly AI Coach.
