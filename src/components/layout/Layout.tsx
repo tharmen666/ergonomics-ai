@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
 import { Footer } from './Footer';
 import { MobileBottomNav } from './MobileBottomNav';
@@ -13,6 +13,11 @@ interface LayoutProps {
 
 export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
     const { isSidebarCollapsed, setSidebarCollapsed } = useMellyStore();
+
+    // Force sidebar to be closed on initial load to prevent overlay blocking
+    useEffect(() => {
+        setSidebarCollapsed(true);
+    }, [setSidebarCollapsed]);
 
     return (
         <div className="flex min-h-screen w-full relative overflow-x-hidden">
@@ -30,7 +35,7 @@ export const Layout = ({ children, activeTab, setActiveTab }: LayoutProps) => {
             />
             <MobileBottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
 
-            <main className={`flex-1 ${isSidebarCollapsed ? 'md:ml-[60px]' : 'md:ml-[260px]'} p-4 md:p-8 pb-32 md:pb-16 relative z-10 flex flex-col min-h-screen w-full transition-all duration-300 ease-in-out`}>
+            <main className={`flex-1 p-4 md:p-8 pb-32 md:pb-16 relative z-10 flex flex-col min-h-screen w-full transition-all duration-300 ease-in-out`}>
                 <div className="flex-1 w-full max-w-full overflow-x-hidden">
                     <AnimatePresence mode="wait">
                         <motion.div
