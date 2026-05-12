@@ -77,14 +77,14 @@ export const MellyInterface = ({
             <div className="flex flex-wrap gap-2 mt-4">
                 <button
                     onClick={onTour}
-                    className="flex-1 flex items-center justify-center gap-2 bg-ohs-orange text-ohs-navy py-2.5 min-h-[44px] rounded-xl font-bold text-[10px] transform hover:scale-105 transition-all whitespace-nowrap"
+                    className="flex-1 flex items-center justify-center gap-2 bg-ohs-orange text-ohs-navy hover:bg-yellow-400 py-2.5 min-h-[44px] rounded-xl font-black text-[10px] transform hover:scale-105 hover:shadow-[0_10px_20px_rgba(249,168,37,0.4)] transition-all duration-300 ease-out active:scale-95 whitespace-nowrap"
                 >
                     <PlayCircle size={14} />
                     SAFETY TOUR
                 </button>
                 <button
                     onClick={onStewardship}
-                    className="flex-1 flex items-center justify-center gap-2 bg-white/5 border border-white/10 text-white py-2.5 min-h-[44px] rounded-xl font-bold text-[10px] transform hover:scale-105 transition-all whitespace-nowrap"
+                    className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-white/10 to-white/5 border border-white/20 hover:border-ohs-orange/50 hover:bg-white/10 text-white py-2.5 min-h-[44px] rounded-xl font-bold text-[10px] transform hover:scale-105 hover:shadow-[0_10px_20px_rgba(249,168,37,0.2)] transition-all duration-300 ease-out active:scale-95 whitespace-nowrap"
                 >
                     <ShieldCheck size={14} className="text-ohs-orange" />
                     STEWARDSHIP

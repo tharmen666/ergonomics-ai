@@ -57,7 +57,7 @@ export const DashboardPage = () => {
                             </div>
                             <button 
                                 onClick={() => setShowCognitiveHandshake(true)} 
-                                className="premium-button whitespace-nowrap bg-ohs-orange text-ohs-navy px-8 py-4 rounded-2xl font-black text-sm shadow-[0_10px_30px_rgba(249,168,37,0.4)]"
+                                className="premium-button whitespace-nowrap bg-ohs-orange text-ohs-navy px-8 py-4 rounded-2xl font-black text-sm shadow-[0_10px_30px_rgba(249,168,37,0.4)] hover:scale-105 hover:shadow-[0_15px_40px_rgba(249,168,37,0.6)] transition-all duration-300 ease-out active:scale-95"
                             >
                                 <ShieldCheck size={20} className="mr-2 inline-block -mt-1" />
                                 INITIATE HANDSHAKE
