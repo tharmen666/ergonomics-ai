@@ -61,6 +61,7 @@ export const translations = {
         exercise_tip: "Ixesha lokuzivula kancinci! Oku kuthintela ukudinwa kwezihlunu kwixesha elide.",
         compliance_check: "Kufuneka uskanno lokhuseleko lwemihla ngemihla. Nceda ugqibe uluhlu lwakho lokutshekisha ngo-12:00 PM ngoLwesihlanu.",
         admin_zero: "Uvavanyo lugqityiwe. Ndilufayilishe ngokuzenzekelayo kwi-dossier yakho ye-OHS yedijithali.",
+        first_aid: "Misa ukopha, coca inxeba, uligqume.",
         training: {
             start_session: "Ukuqala iseshini:",
             follow_guide: "Landela isikhokelo esinopopayi. Inyathelo 1:",
@@ -86,6 +87,7 @@ export const translations = {
         exercise_tip: "Tyd vir 'n vinnige strek! Dit voorkom langtermyn muskuloskeletale spanning.",
         compliance_check: "Daaglikse veiligheidskandering word vereis. Voltooi asseblief jou kontrolelys teen Vrydag 12:00.",
         admin_zero: "Assessering voltooi. Ek het dit outomaties in jou digitale OHS dossier geliasseer.",
+        first_aid: "Stop die bloeding, maak die wond skoon, bedek dit.",
         training: {
             start_session: "Begin sessie:",
             follow_guide: "Volg die geanimeerde gids. Stap 1:",
