@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { X, Globe, PlayCircle, ShieldCheck } from 'lucide-react';
+import { X, Globe, PlayCircle, ShieldCheck, Minimize2 } from 'lucide-react';
 import { ReasoningLog } from '../agent/ReasoningLog';
 import { translations, Language } from '../../utils/translations';
 
@@ -54,10 +54,18 @@ export const MellyInterface = ({
                         <option value="ko" className="bg-ohs-navy">KO</option>
                     </select>
                     <button 
+                        aria-label="Minimize" 
+                        title="Minimize" 
+                        onClick={onClose} 
+                        className="text-gray-500 hover:text-white ml-1"
+                    >
+                        <Minimize2 size={14} />
+                    </button>
+                    <button 
                         aria-label="Close" 
                         title="Close" 
                         onClick={onClose} 
-                        className="text-gray-500 hover:text-white ml-2"
+                        className="text-gray-500 hover:text-white ml-1"
                     >
                         <X size={14} />
                     </button>
