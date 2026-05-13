@@ -53,4 +53,4 @@ The master production branch automatically deploys to Vercel upon push, ensuring
 
 *ErgoSafe Reborn: Empowering remote teams safely, ethically, and responsibly.*
 
-<!-- FORCE REDEPLOY: Clearing Vercel build cache and triggering v1.8.3 (2026-05-12T23:33:35) -->
+<!-- FORCE REDEPLOY: v1.8.6 Universal Minimalist Navigation (2026-05-13T02:31:38+02:00) -->

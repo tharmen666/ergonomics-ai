@@ -37,7 +37,7 @@ function App() {
         <CognitiveHandshake />
         <TourManager setActiveTab={setActiveTab} />
 
-        <header className="flex items-center justify-between mb-8 gap-4 px-4 md:px-0 pt-4 md:pt-0">
+        <header className="sticky top-0 z-40 bg-ohs-navy/80 backdrop-blur-md flex items-center justify-between mb-8 gap-4 px-4 md:px-8 py-4 border-b border-white/5">
           <div className="flex items-center gap-3">
             <button 
               onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
@@ -47,7 +47,7 @@ function App() {
               <Menu size={20} />
             </button>
             <div>
-              <h1 className="text-xl md:text-4xl font-black text-white tracking-tighter uppercase">
+              <h1 className="text-xl md:text-3xl font-black text-white tracking-tighter uppercase">
                 ERGOSAFE <span className="text-ohs-orange">REBORN</span>
               </h1>
             </div>
