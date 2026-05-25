@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KRATOS // Grade 9 Maths Tutor</title>
+    <!-- Google Fonts for retro cyber and professional look -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;600;800&family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0c0c10;
+            --card-bg: rgba(18, 18, 26, 0.65);
+            --kratos-red: #ff2a2a;
+            --kratos-orange: #f4a261;
+            --kratos-cyan: #2a9d8f;
+            --text-primary: #f0f0f5;
+            --text-secondary: #9090a8;
+            --border-glow: rgba(255, 42, 42, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Scanline / CRT Effect */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 99999;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* Ambient Glow backgrounds */
+        .glow-red {
+            position: absolute;
+            top: -200px;
+            left: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 42, 42, 0.12) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glow-cyan {
+            position: absolute;
+            bottom: -200px;
+            right: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(42, 157, 143, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        header {
+            width: 100%;
+            padding: 24px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-b: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(12, 12, 16, 0.8);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-box {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--kratos-red), var(--kratos-orange));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: #000;
+            font-size: 1.2rem;
+            font-family: 'Orbitron', sans-serif;
+            box-shadow: 0 0 15px rgba(255, 42, 42, 0.3);
+        }
+
+        .logo-text h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        .logo-text span {
+            color: var(--kratos-red);
+        }
+
+        .logo-text p {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .system-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        /* Premium Buttons */
+        .btn-kratos {
+            background: linear-gradient(135deg, var(--kratos-red), #990000);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(255, 42, 42, 0.2);
+        }
+
+        .btn-kratos:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 42, 42, 0.5);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-volume {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .btn-volume:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--kratos-red);
+        }
+
+        main {
+            flex: 1;
+            padding: 40px 8%;
+            max-width: 1600px;
+            width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+            position: relative;
+            z-index: 10;
+        }
+
+        @media (min-width: 1024px) {
+            main {
+                grid-template-columns: 1.2fr 2fr;
+            }
+        }
+
+        /* Glassmorphism Cards */
+        .glass-kratos {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s;
+        }
+
+        .glass-kratos:hover {
+            border-color: rgba(255, 42, 42, 0.15);
+            box-shadow: 0 15px 35px rgba(255, 42, 42, 0.05);
+        }
+
+        .card-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--kratos-red);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Squad Grids */
+        .squad-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .warrior-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s;
+        }
+
+        .warrior-card.active {
+            border-color: var(--kratos-red);
+            background: rgba(255, 42, 42, 0.05);
+            box-shadow: inset 0 0 10px rgba(255, 42, 42, 0.1);
+        }
+
+        .warrior-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .warrior-card.active .warrior-icon {
+            background: var(--kratos-red);
+            color: #000;
+            box-shadow: 0 0 10px var(--kratos-red);
+        }
+
+        .warrior-details {
+            flex-grow: 1;
+        }
+
+        .warrior-details h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .warrior-details p {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .warrior-metric {
+            text-align: right;
+        }
+
+        .warrior-metric span {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: bold;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .warrior-metric strong {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .warrior-card.active .warrior-metric strong {
+            color: var(--kratos-red);
+            text-shadow: 0 0 5px rgba(255, 42, 42, 0.5);
+        }
+
+        /* CRT Monitor Dialogue Box */
+        .crt-monitor {
+            background: #040406;
+            border: 2px solid #222;
+            border-radius: 16px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px #000;
+        }
+
+        .crt-monitor::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle, transparent 70%, rgba(0,0,0,0.6) 100%);
+            pointer-events: none;
+        }
+
+        .kratos-avatar-feed {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 12px;
+            margin-bottom: 12px;
+        }
+
+        .kratos-pfp {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--kratos-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            box-shadow: 0 0 10px var(--kratos-red);
+            flex-shrink: 0;
+        }
+
+        .kratos-header-feed h4 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: var(--kratos-red);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .kratos-header-feed p {
+            font-size: 0.65rem;
+            color: var(--kratos-cyan);
+            font-family: 'Fira Code', monospace;
+        }
+
+        .dialogue-text {
+            color: #00ff66;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            min-height: 80px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            text-shadow: 0 0 4px rgba(0, 255, 102, 0.4);
+        }
+
+        /* Mission Center Grid */
+        .workspace-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .mission-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .mission-tab {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-secondary);
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .mission-tab:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+        }
+
+        .mission-tab.active {
+            background: var(--kratos-red);
+            color: #000;
+            border-color: var(--kratos-red);
+            box-shadow: 0 4px 15px rgba(255, 42, 42, 0.25);
+        }
+
+        .mission-display {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 24px;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .step-progress-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .step-tag {
+            background: rgba(244, 162, 97, 0.15);
+            border: 1px solid rgba(244, 162, 97, 0.3);
+            color: var(--kratos-orange);
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+
+        .step-metric-tag {
+            font-size: 0.75rem;
+            font-family: 'Fira Code', monospace;
+            color: var(--text-secondary);
+        }
+
+        .mission-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .gamer-prompt {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .combat-formula-box {
+            background: linear-gradient(135deg, rgba(20, 20, 28, 0.9), rgba(10, 10, 15, 0.95));
+            border-left: 5px solid var(--kratos-red);
+            padding: 16px 24px;
+            border-radius: 0 16px 16px 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 1.8rem;
+            color: white;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            margin: 10px 0;
+        }
+
+        .equals-portal {
+            color: var(--kratos-red);
+            animation: pulse 1.5s infinite;
+        }
+
+        /* Input area */
+        .interaction-panel {
+            display: flex;
+            gap: 12px;
+        }
+
+        .interaction-input {
+            flex-grow: 1;
+            background: #09090d;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 14px 20px;
+            color: white;
+            font-size: 1.1rem;
+            font-family: 'Fira Code', monospace;
+            transition: all 0.3s;
+        }
+
+        .interaction-input:focus {
+            outline: none;
+            border-color: var(--kratos-red);
+            box-shadow: 0 0 15px rgba(255, 42, 42, 0.2);
+        }
+
+        .interaction-input::placeholder {
+            color: rgba(255,255,255,0.25);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+        }
+
+        /* Dashboard Overview */
+        .dash-overview {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        @media (min-width: 640px) {
+            .dash-overview {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .dash-metric-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .dash-metric-card span {
+            display: block;
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .dash-metric-card strong {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: white;
+        }
+
+        .dash-metric-card.active strong {
+            color: var(--kratos-orange);
+            text-shadow: 0 0 8px rgba(244, 162, 97, 0.4);
+        }
+
+        /* SVG Grid overlay for graph mission */
+        .graph-vector-grid {
+            width: 100%;
+            height: 150px;
+            background: #09090c;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 24px;
+            text-align: center;
+            border-t: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glow-red"></div>
+    <div class="glow-cyan"></div>
+
+    <header>
+        <div class="logo-group">
+            <div class="logo-box">K</div>
+            <div class="logo-text">
+                <h1>Kratos <span>Maths</span></h1>
+                <p>Grade 9 DBE/CAPS Tutor</p>
+            </div>
+        </div>
+
+        <div class="system-controls">
+            <button class="btn-volume" id="volumeBtn" onclick="toggleVolume()" aria-label="Toggle Volume" title="Toggle Volume">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+            </button>
+            <button class="btn-kratos" onclick="resetActiveMission()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                Reset Mission
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Left Column: Warrior Squad -->
+        <div class="glass-kratos">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield"><path d="M20 13c0 5-3.5 7.5-7.66 9.7a1 1 0 0 1-.68 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z"/></svg>
+                    Warrior Squad Overview
+                </h2>
+            </div>
+
+            <div class="squad-container">
+                <!-- Warrior 1 -->
+                <div class="warrior-card" id="warrior-algebra">
+                    <div class="warrior-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-equal"><line x1="5" x2="19" y1="9" y2="9"/><line x1="5" x2="19" y1="15" y2="15"/></svg>
+                    </div>
+                    <div class="warrior-details">
+                        <h3>Algebra Vector</h3>
+                        <p>Sign-bridge crossing</p>
+                    </div>
+                    <div class="warrior-metric">
+                        <span>Score</span>
+                        <strong id="score-algebra">50%</strong>
+                    </div>
+                </div>
+
+                <!-- Warrior 2 -->
+                <div class="warrior-card" id="warrior-graph">
+                    <div class="warrior-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-up"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                    </div>
+                    <div class="warrior-details">
+                        <h3>Graph Titan</h3>
+                        <p>Cartesian sniper angles</p>
+                    </div>
+                    <div class="warrior-metric">
+                        <span>Score</span>
+                        <strong id="score-graph">50%</strong>
+                    </div>
+                </div>
+
+                <!-- Warrior 3 -->
+                <div class="warrior-card" id="warrior-geometry">
+                    <div class="warrior-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle"><path d="M13.73 4a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/></svg>
+                    </div>
+                    <div class="warrior-details">
+                        <h3>Theorem Knight</h3>
+                        <p>Fortress congruency proofs</p>
+                    </div>
+                    <div class="warrior-metric">
+                        <span>Score</span>
+                        <strong id="score-geometry">50%</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Interactive Workspace -->
+        <div class="workspace-grid">
+            <!-- CRT Dialogue Boardroom -->
+            <div class="crt-monitor">
+                <div class="kratos-avatar-feed">
+                    <div class="kratos-pfp">K</div>
+                    <div class="kratos-header-feed">
+                        <h4>Agent Kratos</h4>
+                        <p>SME // Autonomous Tutor Layer // SA syllabus active</p>
+                    </div>
+                </div>
+                <div class="dialogue-text" id="kratosDialogue">Awaiting tactical simulation sequence... Select a mission to spawn the math battlefield!</div>
+            </div>
+
+            <!-- Mission Display Center -->
+            <div class="glass-kratos">
+                <div class="card-header flex justify-between items-center" style="border-bottom: none; margin-bottom: 12px; padding-bottom: 0;">
+                    <div class="mission-selector">
+                        <button class="mission-tab active" id="tab-0" onclick="switchMission(0)">Algebra</button>
+                        <button class="mission-tab" id="tab-1" onclick="switchMission(1)">Cartesian</button>
+                        <button class="mission-tab" id="tab-2" onclick="switchMission(2)">Geometry</button>
+                    </div>
+                </div>
+
+                <div class="mission-display">
+                    <div class="step-progress-wrapper">
+                        <span class="step-tag" id="stepTag">Step 1 of 3</span>
+                        <span class="step-metric-tag" id="stepMetric">KPA-01 Sign Compliance</span>
+                    </div>
+
+                    <div class="mission-body">
+                        <p class="gamer-prompt" id="gamerPrompt">Load the battlefield constants...</p>
+                        <div class="combat-formula-box" id="formulaBox">
+                            <span>3x - 7 = 5x + 9</span>
+                        </div>
+                        
+                        <!-- Visual Assist Container for Graphing / Geometry -->
+                        <div id="visualAssist"></div>
+                    </div>
+
+                    <div class="interaction-panel">
+                        <input 
+                            type="text" 
+                            id="answerInput" 
+                            class="interaction-input" 
+                            placeholder="Type simplified formula or value..."
+                            autocomplete="off"
+                        >
+                        <button class="btn-kratos" onclick="executeSubmission()">Execute</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Session Stats Dashboard -->
+            <div class="glass-kratos">
+                <div class="card-header" style="margin-bottom: 16px; padding-bottom: 8px;">
+                    <h2 class="card-title" style="color: var(--kratos-orange)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gauge"><path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/></svg>
+                        Telemetry Performance Dashboard
+                    </h2>
+                </div>
+                <div class="dash-overview">
+                    <div class="dash-metric-card active">
+                        <span>Active Streak</span>
+                        <strong id="streakVal">0</strong>
+                    </div>
+                    <div class="dash-metric-card">
+                        <span>Session Errors</span>
+                        <strong id="errorVal">0</strong>
+                    </div>
+                    <div class="dash-metric-card">
+                        <span>Target Focus</span>
+                        <strong id="varianceVal">Nominal</strong>
+                    </div>
+                    <div class="dash-metric-card">
+                        <span>KPA Rating</span>
+                        <strong id="overallRating">50%</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>Operation Kratos // Built for Kieren by Desigan Tharmen & Antigravity</p>
+    </footer>
+
+    <script>
+        // --- MASTER DATA REGISTRY: SOUTH AFRICAN CAPS SYLLABUS GRADE 9 ---
+        const KRATOS_MISSIONS = [
+            {
+                missionId: "algebra-equations",
+                fieldTitle: "Algebraic Equations",
+                warriorId: "warrior-algebra",
+                metricLabel: "KPA-01 Sign Compliance",
+                steps: [
+                    {
+                        stepNum: 1,
+                        prompt: "CROSS THE CONSTANT '-7' OVER THE EQUALS ENERGY GATE! REMEMBER TO FLIP NEGATIVE SEVEN TO POSITIVE SEVEN.",
+                        correctAnswer: "3x = 5x + 16",
+                        formulaDisplay: "3x - 7 = 5x + 9",
+                        visualGrid: false,
+                        kratosIntro: "ALGEBRA VECTOR FLANK PREPARED. SOLVE FOR X: 3x - 7 = 5x + 9. FIRST OBJECTIVE: CROSS THE NEGATIVE SEVEN TO THE RIGHT FLANK AND MERGE IT WITH THE NINE! FLIP THE SIGN!",
+                        kratosPass: "HAH! POSITIVE 16 SECURED. YOU HAVE CROSSED THE PORTAL WITH COMPLIANCE!",
+                        kratosFail: "PORTAL LEAK DETECTED! YOU FORGOT THE SIGN FLIP! NEGATIVE SEVEN CROSSES THE BRIDGE AND MUST INVERT TO POSITIVE SEVEN! RETAKE THE SHIELD AND TRY AGAIN!"
+                    },
+                    {
+                        stepNum: 2,
+                        prompt: "BANISH THE FIVE EX ('5x') ACROSS THE PORTAL TO THE LEFT FLANK. POSITIVE BECOMES NEGATIVE!",
+                        correctAnswer: "-2x = 16",
+                        formulaDisplay: "3x = 5x + 16",
+                        visualGrid: false,
+                        kratosIntro: "NOW CONSOLIDATE THE ALGEBRA FLANK. BANISH THE FIVE EX TO JOIN THE THREE EX ON THE LEFT! CROSS THE GATE!",
+                        kratosPass: "POWERFUL WORK! 3x MINUS 5x REDUCES TO MINUS 2x. MAIN ARMOR STRIPPED!",
+                        kratosFail: "SENSELESS! THE FIVE EX WAS POSITIVE. CROSSING THE ENERGY GATE TRANSFORMS IT TO NEGATIVE! DO NOT DISGRACE THE WARRIORS!"
+                    },
+                    {
+                        stepNum: 3,
+                        prompt: "DIVIDE THE SYSTEM BY THE COEFFICIENT SHIELD TO ISOLATE THE TARGET VARIABLE X COMPLETELY.",
+                        correctAnswer: "x = -8",
+                        formulaDisplay: "-2x = 16",
+                        visualGrid: false,
+                        kratosIntro: "THE APEX POINT IS NEAR. DIVIDE BOTH FLANKS BY THE NEGATIVE TWO BOSS SHIELD AND ISOLATE X!",
+                        kratosPass: "VICTORY! X EQUALS NEGATIVE EIGHT. TARGET ENEMY NEUTRALIZED. THE SQUAD SALUTES YOUR PROGRESS!",
+                        kratosFail: "ABSURD! DIVIDE POSITIVE 16 BY THE COEFFICIENT OF NEGATIVE TWO. POSITIVE DIVIDED BY NEGATIVE IS ALWAYS NEGATIVE! SOLVE IT!"
+                    }
+                ]
+            },
+            {
+                missionId: "cartesian-functions",
+                fieldTitle: "Functions & Graphs",
+                warriorId: "warrior-graph",
+                metricLabel: "KPA-02 Graph Trajectory",
+                steps: [
+                    {
+                        stepNum: 1,
+                        prompt: "PLOT y = 2x + 3. WHAT IS THE STARTING SPAWN POINT (y-INTERCEPT) VALUE 'c' ON THE VERTICAL AXIS?",
+                        correctAnswer: "3",
+                        formulaDisplay: "y = 2x + 3",
+                        visualGrid: true,
+                        kratosIntro: "GRAPH TITAN CARTESIAN RADAR ONLINE. FORMULA TRACKED: y = 2x + 3. WHAT IS THE SPAWN POINT VALUE 'c' ON THE VERTICAL JUMP LINE?",
+                        kratosPass: "HAH! SPAWN POINT SECURED AT y = 3. THE GRAPH ANCHOR BINDING IS SOLID!",
+                        kratosFail: "INCORRECT! IN THE TRAJECTORY FORMULA y = mx + c, 'c' IS YOUR VERTICAL SPAWN POINT. HERE, IT IS POSITIVE THREE! WAKE UP!"
+                    },
+                    {
+                        stepNum: 2,
+                        prompt: "WHAT IS THE SNIPER GRADIENT STEEPNESS VALUE 'm' OF THIS PATH?",
+                        correctAnswer: "2",
+                        formulaDisplay: "y = 2x + 3",
+                        visualGrid: true,
+                        kratosIntro: "NOW ANALYZE THE GRADIENT STEEPNESS 'm'. HOW STEEP IS THIS HILL CLIMB?",
+                        kratosPass: "PRECISE CALCULATION! THE GRADIENT IS TWO, RISING TWO VERTICAL UNITS FOR EVERY SINGLE STEP FORWARD!",
+                        kratosFail: "ERROR! THE GRADIENT 'm' IS THE COEFFICIENT MULTIPLYING THE HORIZONTAL VECTOR X. LOOK AT THE COEFFICIENT!"
+                    },
+                    {
+                        stepNum: 3,
+                        prompt: "IF X IS AT COORDINATE 4, CALCULATE y'S DIRECT VECTOR JUMP VALUE.",
+                        correctAnswer: "11",
+                        formulaDisplay: "y = 2(4) + 3",
+                        visualGrid: true,
+                        kratosIntro: "THE TRAJECTORY IS ACTIVE. IF WE HORIZONTALLY STRAFE TO X = 4, WHAT IS y'S JUMP HEIGHT VALUE?",
+                        kratosPass: "BULLSEYE! y EQUALS ELEVEN. THE SNIPER VECTOR LANDS FLAWLESSLY ON TARGET!",
+                        kratosFail: "FOOLISHNESS! INJECT FOUR INTO X. TWO TIMES FOUR IS EIGHT, PLUS THE SPAWN POINT OF THREE EQUALS ELEVEN! DO THE MATH!"
+                    }
+                ]
+            },
+            {
+                missionId: "geometry-theorems",
+                fieldTitle: "Geometry & Theorems",
+                warriorId: "warrior-geometry",
+                metricLabel: "KPA-03 Theorem Compliance",
+                steps: [
+                    {
+                        stepNum: 1,
+                        prompt: "A RIGHT-ANGLED FORTRESS HAS BASE = 6 AND HEIGHT = 8. WHAT IS THE DIRECT HYPOTENUSE LINE OF SIGHT LENGTH?",
+                        correctAnswer: "10",
+                        formulaDisplay: "a² + b² = c²",
+                        visualGrid: false,
+                        triangleDraw: true,
+                        kratosIntro: "THEOREM KNIGHT DEFENSES PREPARED. IN A RIGHT-ANGLED TRIANGLE WITH SIDE LEGS OF SIX AND EIGHT, CALCULATE THE HYPOTENUSE LENGTH 'c' USING PYTHAGORAS!",
+                        kratosPass: "LEGENDARY! SIX SQUARED IS 36, EIGHT SQUARED IS 64. SUM IS 100. SQUARE ROOT SECURES TEN!",
+                        kratosFail: "PITIFUL! PYTHAGORAS RULES THE SHIELD: a SQUARED PLUS b SQUARED EQUALS c SQUARED. 36 PLUS 64 IS 100. FIND THE SQUARE ROOT!"
+                    },
+                    {
+                        stepNum: 2,
+                        prompt: "TWO TRIANGLES HAVE EXACTLY MATCHING SIDE LENGTHS (SIDE, SIDE, SIDE). WHAT CONGRUENT SHIELD CODE IS THIS?",
+                        correctAnswer: "SSS",
+                        formulaDisplay: "▲ABC ≡ ▲DEF",
+                        visualGrid: false,
+                        kratosIntro: "TRIANGULAR CLONES DETECTED. ALL THREE CORRESPONDING SIDES ARE MUTUALLY EQUAL. WHAT IS THE CONGRUENCY REASON LOG?",
+                        kratosPass: "immutable CONTRACT VERIFIED! SSS (SIDE-SIDE-SIDE) IS THE CLONE RULE!",
+                        kratosFail: "INCORRECT! WHEN ALL THREE SIDES OF TWO TRIANGLES ARE MUTUALLY EQUAL, THE REASON IS STRICTLY 'SSS'. CODE COMPLIANCE TRIGGERED!"
+                    }
+                ]
+            }
+        ];
+
+        // --- APP STATE MANAGEMENT ---
+        let currentMissionIdx = 0;
+        let currentStepIdx = 0;
+        let voiceEnabled = true;
+        let streak = 0;
+        let errors = 0;
+        let reactionTimes = [];
+        let scoreAlgebra = 50;
+        let scoreGraph = 50;
+        let scoreGeometry = 50;
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            loadStep();
+            updateStatsUI();
+            
+            // Audio trigger for start
+            speakDialogue("AGENT KRATOS SYSTEM ONLINE. SELECT A MATHEMATICAL COMBAT TRACK AND WE SHALL CONQUER THE CAPS SYLLABUS, KIEREN!");
+        });
+
+        // Switch Mission Tab
+        function switchMission(idx) {
+            document.querySelectorAll('.mission-tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`tab-${idx}`).classList.add('active');
+            
+            currentMissionIdx = idx;
+            currentStepIdx = 0;
+            loadStep();
+        }
+
+        // Reset Mission
+        function resetActiveMission() {
+            currentStepIdx = 0;
+            loadStep();
+            speakDialogue("MISSION RESET. RE-SPAWNING THE ENEMY CONSTANTS.");
+        }
+
+        // Load the Step Data
+        function loadStep() {
+            const mission = KRATOS_MISSIONS[currentMissionIdx];
+            const step = mission.steps[currentStepIdx];
+            
+            if (!step) return;
+
+            // Highlight Active Warrior
+            document.querySelectorAll('.warrior-card').forEach(c => c.classList.remove('active'));
+            document.getElementById(mission.warriorId).classList.add('active');
+
+            // Update UI Labels
+            document.getElementById('stepTag').textContent = `Step ${step.stepNum} of ${mission.steps.length}`;
+            document.getElementById('stepMetric').textContent = mission.metricLabel;
+            document.getElementById('gamerPrompt').textContent = step.prompt;
+            document.getElementById('formulaBox').innerHTML = `<span>${step.formulaDisplay}</span>`;
+
+            // Reset input box
+            const input = document.getElementById('answerInput');
+            input.value = "";
+            input.placeholder = "Type answer (e.g., " + (step.correctAnswer.includes('x') ? step.correctAnswer : '5') + ")...";
+            input.focus();
+
+            // Render Visual Assists
+            const visualContainer = document.getElementById('visualAssist');
+            visualContainer.innerHTML = "";
+            
+            if (step.visualGrid) {
+                // Cartesian Plot Assist
+                visualContainer.innerHTML = `
+                    <div class="graph-vector-grid">
+                        <svg width="100%" height="150" style="background:#09090c;">
+                            <defs>
+                                <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                                </pattern>
+                            </defs>
+                            <rect width="100%" height="100%" fill="url(#grid)" />
+                            <!-- Axes -->
+                            <line x1="0" y1="120" x2="100%" y2="120" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                            <line x1="50" y1="0" x2="50" y2="100%" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+                            <!-- Plot Point y = 2x + 3 at x = 0 (0,3) and x = 4 (4,11) -->
+                            <line x1="50" y1="120" x2="250" y2="20" stroke="var(--kratos-cyan)" stroke-width="3" />
+                            <circle cx="50" cy="90" r="5" fill="var(--kratos-red)" />
+                            <text x="60" y="95" fill="var(--kratos-red)" font-size="10" font-family="monospace">c = (0,3)</text>
+                        </svg>
+                    </div>
+                `;
+            } else if (step.triangleDraw) {
+                // Triangle Drawing Assist
+                visualContainer.innerHTML = `
+                    <div class="graph-vector-grid">
+                        <svg width="100%" height="150" style="background:#09090c; display:flex; justify-content:center;">
+                            <!-- Draw Right-Angled Triangle -->
+                            <polygon points="120,20 120,130 220,130" fill="rgba(255,42,42,0.1)" stroke="var(--kratos-red)" stroke-width="3" />
+                            <line x1="120" y1="120" x2="130" y2="120" stroke="var(--kratos-red)" stroke-width="2" />
+                            <line x1="130" y1="120" x2="130" y2="130" stroke="var(--kratos-red)" stroke-width="2" />
+                            <!-- Labels -->
+                            <text x="95" y="80" fill="white" font-size="12" font-family="monospace">Height = 8</text>
+                            <text x="150" y="145" fill="white" font-size="12" font-family="monospace">Base = 6</text>
+                            <text x="180" y="70" fill="var(--kratos-orange)" font-size="12" font-family="monospace">c = ?</text>
+                        </svg>
+                    </div>
+                `;
+            }
+
+            // Speech intro trigger
+            speakDialogue(step.kratosIntro);
+        }
+
+        // Execute submission answer checks
+        function executeSubmission() {
+            const input = document.getElementById('answerInput');
+            const kierenAnswer = input.value.trim();
+            
+            if (kierenAnswer === "") return;
+
+            const mission = KRATOS_MISSIONS[currentMissionIdx];
+            const step = mission.steps[currentStepIdx];
+
+            // Normalize values for safe matching
+            const cleanInput = kierenAnswer.replace(/\s+/g, '').toLowerCase();
+            const cleanCorrect = step.correctAnswer.replace(/\s+/g, '').toLowerCase();
+
+            if (cleanInput === cleanCorrect) {
+                // Correct Pathway
+                streak++;
+                reactionTimes.push(Date.now());
+                
+                // Adjust score vectors
+                adjustWarriorScore(mission.warriorId, 10);
+                speakDialogue(step.kratosPass);
+
+                // Move to next step or complete
+                setTimeout(() => {
+                    if (currentStepIdx < mission.steps.length - 1) {
+                        currentStepIdx++;
+                        loadStep();
+                    } else {
+                        // Complete active mission
+                        speakDialogue(`COMBAT SHIELD SECURED! LEVEL COMPLETED. ${mission.fieldTitle.toUpperCase()} IS YOURS! FORCE SUBJECT COMPLIANCE ACHIEVED.`);
+                        // Complete sequence check
+                        currentStepIdx = 0;
+                        loadStep();
+                    }
+                }, 4000);
+
+            } else {
+                // Incorrect Pathway
+                streak = 0;
+                errors++;
+                adjustWarriorScore(mission.warriorId, -15);
+                speakDialogue(step.kratosFail);
+            }
+
+            updateStatsUI();
+            input.value = "";
+            input.focus();
+        }
+
+        // Adjust specific warrior score tracking
+        function adjustWarriorScore(warriorId, change) {
+            if (warriorId === 'warrior-algebra') {
+                scoreAlgebra = Math.max(0, Math.min(100, scoreAlgebra + change));
+            } else if (warriorId === 'warrior-graph') {
+                scoreGraph = Math.max(0, Math.min(100, scoreGraph + change));
+            } else {
+                scoreGeometry = Math.max(0, Math.min(100, scoreGeometry + change));
+            }
+        }
+
+        // Update stats dashboard
+        function updateStatsUI() {
+            document.getElementById('score-algebra').textContent = `${scoreAlgebra}%`;
+            document.getElementById('score-graph').textContent = `${scoreGraph}%`;
+            document.getElementById('score-geometry').textContent = `${scoreGeometry}%`;
+            
+            document.getElementById('streakVal').textContent = streak;
+            document.getElementById('errorVal').textContent = errors;
+            
+            // Calculate overall CAPS compliance rating
+            const overall = Math.round((scoreAlgebra + scoreGraph + scoreGeometry) / 3);
+            document.getElementById('overallRating').textContent = `${overall}%`;
+
+            // Variance Focus Calculation (simulating standard deviation variance logs)
+            const varianceVal = document.getElementById('varianceVal');
+            if (errors === 0) {
+                varianceVal.textContent = "NOMINAL";
+                varianceVal.style.color = "var(--kratos-cyan)";
+            } else if (errors === 1) {
+                varianceVal.textContent = "STABLE";
+                varianceVal.style.color = "var(--kratos-orange)";
+            } else {
+                varianceVal.textContent = "HIGH VAR";
+                varianceVal.style.color = "var(--kratos-red)";
+                varianceVal.style.textShadow = "0 0 8px rgba(255,42,42,0.4)";
+            }
+        }
+
+        // Voice Synthesizer Output Layer
+        function speakDialogue(text) {
+            const box = document.getElementById('kratosDialogue');
+            
+            // Standard visual typewriter/scroll trigger
+            box.textContent = `[KRATOS DIRECTIVE]:\n"${text}"`;
+
+            if (!voiceEnabled || !window.speechSynthesis) return;
+
+            const synth = window.speechSynthesis;
+            synth.cancel(); // Abort previous
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            const voices = synth.getVoices();
+
+            // Search for premium deep authoritative male voice
+            let maleVoice = voices.find(v => v.lang === 'en-ZA' || v.name.includes('David') || v.name.includes('George') || v.name.includes('Male') || v.name.includes('Natural'));
+            
+            if (maleVoice) {
+                utterance.voice = maleVoice;
+            }
+            
+            // Custom gravelly/authoritarian parameters
+            utterance.pitch = 0.8; // Deepen tone
+            utterance.rate = 0.85;  // Slow deliberate tempo for impact
+
+            synth.speak(utterance);
+        }
+
+        // Toggle Audio controls
+        function toggleVolume() {
+            voiceEnabled = !voiceEnabled;
+            const btn = document.getElementById('volumeBtn');
+            if (voiceEnabled) {
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`;
+                speakDialogue("AUDIO LOG RE-ENABLED.");
+            } else {
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-volume-x"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></svg>`;
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        // Event listener for input enter
+        document.getElementById('answerInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                executeSubmission();
+            }
+        });
+    </script>
+</body>
+</html>
