@@ -1,5 +1,10 @@
 export type Language = 'en' | 'zu' | 'xh' | 'st';
 
+/**
+ * V&V AUDIT [2026-05-25]: Tightened TranslationEntry interface.
+ * - Added `right_to_disconnect` key across all 4 language pipelines.
+ * - Replaced loose `exercises: Record<string, any>` with a typed structure.
+ */
 export interface TranslationEntry {
     melly_intro: string;
     stewardship_model: string;
@@ -9,12 +14,14 @@ export interface TranslationEntry {
     compliance_check: string;
     admin_zero: string;
     first_aid: string;
+    right_to_disconnect: string;
     training: {
         start_session: string;
         follow_guide: string;
-        exercises: Record<string, any>;
+        exercises: Record<string, string>;
     };
 }
+
 
 export const translations: Record<Language, TranslationEntry> = {
     en: {
@@ -26,6 +33,7 @@ export const translations: Record<Language, TranslationEntry> = {
         compliance_check: "Daily safety scan required. Please complete your checklist by 12:00 PM Friday.",
         admin_zero: "Assessment complete. I've automatically filed this in your digital OHS dossier.",
         first_aid: "Stop bleeding, clean the wound, cover it.",
+        right_to_disconnect: "Your Right to Disconnect is protected. After-hours contact outside agreed hours may constitute a psychosocial hazard under ISO 45003:2021 and CCMA precedent.",
         training: {
             start_session: "Starting session:",
             follow_guide: "Follow the animated guide. Step 1:",
@@ -41,6 +49,7 @@ export const translations: Record<Language, TranslationEntry> = {
         compliance_check: "Kudingeka ukuskenwa kokuphepha kwansuku zonke. Sicela uqedele uhlu lwakho lokuhlola ngo-12:00 PM ngoLwesihlanu.",
         admin_zero: "Ukuhlola kuqediwe. Ngiyifayile ngokuzenzakalelayo lokhu kudossier yakho ye-OHS yedijithali.",
         first_aid: "Misa ukopha, hlambulula isilonda, usimboze.",
+        right_to_disconnect: "Ilungelo lakho lokuNqamuka livikelekile. Ukuxhumana ngemuva kwamahora abekiwe kuveza ubungozi be-ISO 45003:2021 futhi kuvunyelwe i-CCMA ukuqhubela phambili amacala.",
         training: {
             start_session: "Ukuqala iseshini:",
             follow_guide: "Landela umhlahlandlela opopayi. Isinyathelo 1:",
@@ -56,6 +65,7 @@ export const translations: Record<Language, TranslationEntry> = {
         compliance_check: "Kufuneka uskanno lokhuseleko lwemihla ngemihla. Nceda ugqibe uluhlu lwakho lokutshekisha ngo-12:00 PM ngoLwesihlanu.",
         admin_zero: "Uvavanyo lugqityiwe. Ndilufayilishe ngokuzenzekelayo kwi-dossier yakho ye-OHS yedijithali.",
         first_aid: "Misa ukopha, coca inxeba, uligqume.",
+        right_to_disconnect: "Ilungelo lakho lokuNqamuka likhuselelwe. Ukuqhagamshelana emva kwamaxesha avunyiweyo kunokwenza ingozi ye-ISO 45003:2021 kwaye i-CCMA ivumela ukuqhubeka kwamacala.",
         training: {
             start_session: "Ukuqala iseshini:",
             follow_guide: "Landela isikhokelo esinopopayi. Inyathelo 1:",
@@ -71,6 +81,7 @@ export const translations: Record<Language, TranslationEntry> = {
         compliance_check: "Ho hlokahala tlhahlobo ea letsatsi le letsatsi ea polokeho. Ka kōpo tlatsa lethathamo la hau la tlhahlobo ka 12:00 PM Labohlano.",
         admin_zero: "Tlhahlobo e phethiloe. Ke e ngolisitse ka boeona lethathamong la hau la polokeho la digital la OHS.",
         first_aid: "Thiba madi, hloekisa leqeba, o le koahele.",
+        right_to_disconnect: "Tokelo ea hau ea ho Arola e sireletsehile. Puisano ka ntle ho linako tse lumellanoeng e ka ba kotsi ea ISO 45003:2021 mme CCMA e lumella likopo tse qhubeloang.",
         training: {
             start_session: "Ho qala lenaneo:",
             follow_guide: "Latela tataiso e animated. Mohato oa 1:",
