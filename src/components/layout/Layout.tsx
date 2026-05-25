@@ -1,4 +1,4 @@
-import { ReactNode, useState, useEffect, memo } from 'react';
+import { ReactNode, useEffect, memo } from 'react';
 import { Sidebar } from './Sidebar';
 import { Footer } from './Footer';
 import { motion, AnimatePresence } from 'framer-motion';

@@ -3,24 +3,79 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, Circle, ShieldCheck } from 'lucide-react';
 import { GlassCard } from '../../components/ui/GlassCard';
 import { useMellyStore } from '../../store/mellyStore';
+import { Language } from '../../utils/translations';
 
 interface ChecklistItem {
-    id: string;
-    label: string;
+    id: 'monitor' | 'chair' | 'feet';
     checked: boolean;
 }
 
+const CHECKLIST_TRANSLATIONS: Record<Language, {
+    monitor: string;
+    chair: string;
+    feet: string;
+    title: string;
+    complete: string;
+    compliant: string;
+    completed: string;
+    feedback: string;
+}> = {
+    en: {
+        monitor: 'Monitor at eye level?',
+        chair: 'Chair supporting lower back?',
+        feet: 'Feet flat on floor?',
+        title: 'Daily Safety Checklist',
+        complete: 'Compliance Verified',
+        compliant: 'Fully Compliant',
+        completed: 'Completed',
+        feedback: 'Great job! Your setup is now OHS compliant for the day.'
+    },
+    zu: {
+        monitor: 'I-monitor isezingeni lamehlo?',
+        chair: 'Isitulo sisekela ingxenye engezansi yomhlane?',
+        feet: 'Izinyawo zicabeke phansi?',
+        title: 'Uhlu Lokuhlola Lokuphepha',
+        complete: 'Ukuthobela Kuqinisekisiwe',
+        compliant: 'Ukuthobela Ngokuphelele',
+        completed: 'Kugcwalisiwe',
+        feedback: 'Umsebenzi omuhle! Ukusetha kwakho manje sekuyahambisana ne-OHS kulolu suku.'
+    },
+    xh: {
+        monitor: 'Isikrini sikwinqanaba lamehlo?',
+        chair: 'Isitulo sixhasa umqolo osezantsi?',
+        feet: 'Iinyawo zicaba phantsi?',
+        title: 'Uluhlu Lokujonga Ukhuseleko',
+        complete: 'Ukuthotyelwa Kuqinisekisiwe',
+        compliant: 'Ukuthotyelwa Ngokuphelele',
+        completed: 'Kugqityiwe',
+        feedback: 'Umsebenzi omhle! Ukuseta kwakho ngoku kuhambelana ne-OHS kule mini.'
+    },
+    st: {
+        monitor: 'Skrine se boemong ba mahlo?',
+        chair: 'Setulo se tšehetsa mokokotlo o ka tlaase?',
+        feet: 'Maoto a sephara fatše?',
+        title: 'Lethathamo la Tlhahlobo ea Polokeho',
+        complete: 'Boikarabello bo Netefalitsoe',
+        compliant: 'Boikarabello ka Botlalo',
+        completed: 'Phethiloe',
+        feedback: 'Mosebetsi o motle! Setup sa hau se se se lumellana le OHS bakeng sa letsatsi.'
+    }
+};
+
 export const DailySafetyChecklist = () => {
-    const { setSpeaking, setMood } = useMellyStore();
+    const { language, setSpeaking, setMood } = useMellyStore();
     const [items, setItems] = useState<ChecklistItem[]>([
-        { id: 'monitor', label: 'Monitor at eye level?', checked: false },
-        { id: 'chair', label: 'Chair supporting lower back?', checked: false },
-        { id: 'feet', label: 'Feet flat on floor?', checked: false },
+        { id: 'monitor', checked: false },
+        { id: 'chair', checked: false },
+        { id: 'feet', checked: false },
     ]);
+
+    const activeLanguage = language as Language || 'en';
+    const t = CHECKLIST_TRANSLATIONS[activeLanguage] || CHECKLIST_TRANSLATIONS['en'];
 
     const allChecked = items.every(item => item.checked);
 
-    const toggleItem = (id: string) => {
+    const toggleItem = (id: 'monitor' | 'chair' | 'feet') => {
         setItems(prev => prev.map(item =>
             item.id === id ? { ...item, checked: !item.checked } : item
         ));
@@ -31,10 +86,11 @@ export const DailySafetyChecklist = () => {
             setSpeaking(true);
             setMood('happy');
             // Reset speaking after a delay
-            setTimeout(() => {
+            const timer = setTimeout(() => {
                 setSpeaking(false);
                 setMood('neutral');
             }, 6000);
+            return () => clearTimeout(timer);
         }
     }, [allChecked, setSpeaking, setMood]);
 
@@ -53,7 +109,7 @@ export const DailySafetyChecklist = () => {
             </AnimatePresence>
 
             <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-black text-white tracking-tight uppercase">Daily Safety Checklist</h3>
+                <h3 className="text-lg font-black text-white tracking-tight uppercase">{t.title}</h3>
                 <AnimatePresence>
                     {allChecked && (
                         <motion.div
@@ -62,36 +118,39 @@ export const DailySafetyChecklist = () => {
                             className="flex items-center gap-2 px-3 py-1 bg-ohs-green/10 border border-ohs-green/20 rounded-full"
                         >
                             <ShieldCheck className="text-ohs-green" size={14} />
-                            <span className="text-[10px] font-black text-ohs-green uppercase tracking-widest">Compliance Verified</span>
+                            <span className="text-[10px] font-black text-ohs-green uppercase tracking-widest">{t.complete}</span>
                         </motion.div>
                     )}
                 </AnimatePresence>
             </div>
 
             <div className="space-y-3">
-                {items.map((item) => (
-                    <button
-                        key={item.id}
-                        onClick={() => toggleItem(item.id)}
-                        className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all border ${item.checked
-                                ? 'bg-ohs-green/10 border-ohs-green/20'
-                                : 'bg-white/5 border-white/5 hover:border-white/10'
-                            }`}
-                    >
-                        <div className={`transition-colors ${item.checked ? 'text-ohs-green' : 'text-gray-500'}`}>
-                            {item.checked ? <CheckCircle2 size={20} /> : <Circle size={20} />}
-                        </div>
-                        <span className={`text-sm font-bold transition-all ${item.checked ? 'text-white' : 'text-gray-400'
-                            }`}>
-                            {item.label}
-                        </span>
-                    </button>
-                ))}
+                {items.map((item) => {
+                    const label = t[item.id];
+                    return (
+                        <button
+                            key={item.id}
+                            onClick={() => toggleItem(item.id)}
+                            className={`w-full flex items-center gap-4 p-4 rounded-xl transition-all border ${item.checked
+                                    ? 'bg-ohs-green/10 border-ohs-green/20'
+                                    : 'bg-white/5 border-white/5 hover:border-white/10'
+                                }`}
+                        >
+                            <div className={`transition-colors ${item.checked ? 'text-ohs-green' : 'text-gray-500'}`}>
+                                {item.checked ? <CheckCircle2 size={20} /> : <Circle size={20} />}
+                            </div>
+                            <span className={`text-sm font-bold transition-all text-left ${item.checked ? 'text-white' : 'text-gray-400'
+                                }`}>
+                                {label}
+                            </span>
+                        </button>
+                    );
+                })}
             </div>
 
             <div className="mt-6 pt-4 border-t border-white/5">
                 <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
-                    Status: {allChecked ? 'Fully Compliant' : `${items.filter(i => i.checked).length}/3 Completed`}
+                    Status: {allChecked ? t.compliant : `${items.filter(i => i.checked).length}/3 ${t.completed}`}
                 </p>
             </div>
 
@@ -103,7 +162,7 @@ export const DailySafetyChecklist = () => {
                     className="mt-4 p-3 bg-ohs-orange/10 border border-ohs-orange/20 rounded-lg"
                 >
                     <p className="text-[11px] font-bold text-ohs-orange leading-tight">
-                        "Great job! Your setup is now OHS compliant for the day."
+                        "{t.feedback}"
                     </p>
                 </motion.div>
             )}

@@ -5,8 +5,10 @@ import { LeanPerformanceRail } from '../../components/AI-Coach/LeanPerformanceRa
 import { HackathonDemo } from '../../components/HackathonDemo';
 
 import { REASONABLY_PRACTICABLE_2026, RIGHT_TO_DISCONNECT_FRAMEWORK, FINANCIAL_PITCHES } from '../../logic/financePitches';
+import { useMellyStore } from '../../store/mellyStore';
 
 export const ExecutiveBriefing = () => {
+    const { language } = useMellyStore();
     return (
         <div className="p-4 md:p-10 max-w-7xl mx-auto space-y-8 mb-24 overflow-x-hidden">
             <motion.div
@@ -30,7 +32,7 @@ export const ExecutiveBriefing = () => {
             <HackathonDemo />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {GlobalComplianceEngine.fetchUnifiedBriefing().map((policy, idx) => (
+                {GlobalComplianceEngine.fetchUnifiedBriefing(language).map((policy, idx) => (
                     <motion.div
                         key={policy.id}
                         initial={{ opacity: 0, scale: 0.95 }}

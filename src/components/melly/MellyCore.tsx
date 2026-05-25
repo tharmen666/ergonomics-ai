@@ -3,11 +3,10 @@ import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 
 interface MellyCoreProps {
     isSpeaking: boolean;
-    isExpanded: boolean;
     onClick: () => void;
 }
 
-export const MellyCore = ({ isSpeaking, isExpanded, onClick }: MellyCoreProps) => {
+export const MellyCore = ({ isSpeaking, onClick }: MellyCoreProps) => {
     const { fatigueLevel } = useFatigueStore();
 
     return (

@@ -141,7 +141,6 @@ export const MellyAvatar = () => {
             >
                 <MellyCore 
                     isSpeaking={isSpeaking} 
-                    isExpanded={isMellyExpanded} 
                     onClick={() => {
                         if (isMellyExpanded) {
                             window.speechSynthesis.cancel();
