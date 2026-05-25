@@ -4,6 +4,7 @@ import { GlowButton } from '../../components/ui/GlowButton';
 import { BarChart3, Users, AlertCircle, CheckCircle, Download, ShieldAlert, Award, TrendingUp, Lock } from 'lucide-react';
 import { getLegalShockContent } from '../../utils/escalationLogic';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
+import { FINANCIAL_PITCHES } from '../../logic/financePitches';
 
 export const AdminPortal = () => {
     const { fatigueLevel, cognitiveHandshakePassed } = useFatigueStore();
@@ -286,6 +287,43 @@ export const AdminPortal = () => {
                     ))}
                 </div>
             </GlassCard>
+
+            {/* Financial Sector Duty of Care & Right to Disconnect Pitch Control */}
+            <GlassCard className="p-8 border-ohs-blue/30 bg-gradient-to-br from-ohs-navy to-ohs-blue/5">
+                <div className="flex justify-between items-start mb-6">
+                    <div>
+                        <h3 className="text-2xl font-black text-white tracking-tight flex items-center gap-3">
+                            Sovereign Sales Outreach: Financial Sector
+                            <span className="bg-ohs-blue/20 text-ohs-blue text-[10px] px-2.5 py-1 rounded-full border border-ohs-blue/30 uppercase font-black">2026 Target Standard</span>
+                        </h3>
+                        <p className="text-gray-400 font-medium mt-1">Cross-referencing the 2026 'Reasonably Practicable' legal standard with financial leads.</p>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {Object.entries(FINANCIAL_PITCHES).map(([key, pitch]) => (
+                        <div key={key} className="p-5 bg-white/5 rounded-2xl border border-white/10 hover:border-ohs-blue/30 transition-all flex flex-col justify-between">
+                            <div>
+                                <h4 className="text-lg font-black text-white mb-2">{pitch.client}</h4>
+                                <span className="text-[9px] font-black text-ohs-orange uppercase tracking-wider block mb-3">Status: Outreach Draft Ready</span>
+                                <div className="space-y-2 text-xs">
+                                    <p className="text-gray-400 font-bold uppercase">Target: <span className="text-white normal-case font-medium">{pitch.targetAudience.split(',')[0]}</span></p>
+                                    <p className="text-gray-400 font-bold uppercase">Focus: <span className="text-gray-300 normal-case font-medium">{pitch.dutyOfCareFocus.substring(0, 60)}...</span></p>
+                                </div>
+                            </div>
+                            <div className="mt-4 pt-4 border-t border-white/5">
+                                <button 
+                                    onClick={() => alert(`Sovereign Pitch Draft for ${pitch.client} exported to Gmail Drafts successfully under autonomous mode.`)}
+                                    className="w-full py-2 bg-ohs-blue/10 hover:bg-ohs-blue/30 border border-ohs-blue/30 text-ohs-blue text-xs font-black uppercase tracking-wider rounded-xl transition-all"
+                                >
+                                    Push to Gmail Draft
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </GlassCard>
         </div>
     );
 };
+

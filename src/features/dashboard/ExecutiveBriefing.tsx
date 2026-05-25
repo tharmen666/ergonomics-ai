@@ -4,6 +4,8 @@ import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
 import { LeanPerformanceRail } from '../../components/AI-Coach/LeanPerformanceRail';
 import { HackathonDemo } from '../../components/HackathonDemo';
 
+import { REASONABLY_PRACTICABLE_2026, RIGHT_TO_DISCONNECT_FRAMEWORK, FINANCIAL_PITCHES } from '../../logic/financePitches';
+
 export const ExecutiveBriefing = () => {
     return (
         <div className="p-4 md:p-10 max-w-7xl mx-auto space-y-8 mb-24 overflow-x-hidden">
@@ -70,7 +72,7 @@ export const ExecutiveBriefing = () => {
                 </div>
             </motion.div>
 
-            {/* v1.4 LPS ROI LAYER */}
+            {/* LPS ROI Layer */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -126,7 +128,113 @@ export const ExecutiveBriefing = () => {
                 </div>
             </motion.div>
 
+            {/* 2026 SOVEREIGN FINANCIAL OUTREACH MATRIX */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.3 }}
+                className="bg-gradient-to-br from-ohs-navy via-[#0c1322] to-black border border-ohs-orange/40 p-8 rounded-[2rem] shadow-[0_0_50px_rgba(249,168,37,0.05)] mt-8"
+            >
+                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8 pb-6 border-b border-white/10">
+                    <div>
+                        <span className="text-[10px] font-black text-ohs-orange uppercase tracking-widest block mb-1">
+                            Sovereign Commercial Matrix 2026
+                        </span>
+                        <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight">
+                            FINANCIAL PITCH SENTINEL
+                        </h3>
+                        <p className="text-gray-400 font-medium text-sm mt-1">
+                            Operationalizing the home office 'Duty of Care' & 'Right to Disconnect' standards for Tier-1 Banking & Insurance.
+                        </p>
+                    </div>
+                    <div className="flex flex-wrap gap-3 bg-white/5 p-2 rounded-2xl border border-white/5">
+                        <div className="px-4 py-2 bg-ohs-orange/10 border border-ohs-orange/30 rounded-xl text-ohs-orange text-xs font-black uppercase">
+                            Reasonably Practicable Standard Active
+                        </div>
+                        <div className="px-4 py-2 bg-ohs-blue/10 border border-ohs-blue/30 rounded-xl text-ohs-blue text-xs font-black uppercase">
+                            Right to Disconnect Shield Active
+                        </div>
+                    </div>
+                </div>
+
+                {/* Statutory Background Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div className="p-6 rounded-2xl bg-white/5 border border-white/10 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-3 bg-ohs-orange/10 border-b border-l border-white/10 text-ohs-orange font-black text-[9px] uppercase tracking-wider rounded-bl-xl">
+                            {REASONABLY_PRACTICABLE_2026.statuteReference}
+                        </div>
+                        <h4 className="text-lg font-black text-white mb-2 uppercase tracking-wide flex items-center gap-2">
+                            <span className="w-2.5 h-2.5 rounded-full bg-ohs-orange" />
+                            {REASONABLY_PRACTICABLE_2026.standardName}
+                        </h4>
+                        <p className="text-gray-300 text-sm leading-relaxed font-medium mb-4">
+                            {REASONABLY_PRACTICABLE_2026.description}
+                        </p>
+                        <p className="text-xs text-red-400/90 font-bold bg-red-500/10 border border-red-500/20 p-3 rounded-xl">
+                            {REASONABLY_PRACTICABLE_2026.finesFramework}
+                        </p>
+                    </div>
+
+                    <div className="p-6 rounded-2xl bg-white/5 border border-white/10 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 p-3 bg-ohs-blue/10 border-b border-l border-white/10 text-ohs-blue font-black text-[9px] uppercase tracking-wider rounded-bl-xl">
+                            {RIGHT_TO_DISCONNECT_FRAMEWORK.ccmaRisk}
+                        </div>
+                        <h4 className="text-lg font-black text-white mb-2 uppercase tracking-wide flex items-center gap-2">
+                            <span className="w-2.5 h-2.5 rounded-full bg-ohs-blue" />
+                            {RIGHT_TO_DISCONNECT_FRAMEWORK.concept}
+                        </h4>
+                        <p className="text-gray-300 text-sm leading-relaxed font-medium mb-4">
+                            {RIGHT_TO_DISCONNECT_FRAMEWORK.description}
+                        </p>
+                        <p className="text-xs text-ohs-green font-bold bg-ohs-green/10 border border-ohs-green/20 p-3 rounded-xl">
+                            Compliance Vector: {RIGHT_TO_DISCONNECT_FRAMEWORK.complianceCode}
+                        </p>
+                    </div>
+                </div>
+
+                {/* Pitch Interactive Deck */}
+                <h4 className="text-sm font-black text-ohs-orange uppercase tracking-wider mb-4 px-1">Tailored Financial Outreach Decks</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {Object.entries(FINANCIAL_PITCHES).map(([key, pitch]) => (
+                        <div key={key} className="p-6 rounded-2xl bg-black/60 border border-white/10 flex flex-col justify-between hover:border-ohs-orange/40 transition-all duration-300 group">
+                            <div className="space-y-4">
+                                <div className="flex justify-between items-start gap-4">
+                                    <h5 className="text-xl font-black text-white tracking-tight">{pitch.client}</h5>
+                                    <span className="text-[10px] font-black text-gray-400 border border-white/15 px-2.5 py-1 rounded-full uppercase tracking-wider bg-white/5">
+                                        Active Pitch
+                                    </span>
+                                </div>
+                                
+                                <div className="space-y-2">
+                                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Target: <span className="text-white normal-case font-medium">{pitch.targetAudience}</span></p>
+                                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Duty of Care: <span className="text-gray-300 normal-case font-medium">{pitch.dutyOfCareFocus}</span></p>
+                                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Disconnect Strategy: <span className="text-gray-300 normal-case font-medium">{pitch.disconnectStrategy}</span></p>
+                                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Proposition: <span className="text-ohs-orange normal-case font-medium">{pitch.valueProposition}</span></p>
+                                </div>
+                            </div>
+
+                            <div className="mt-6 pt-6 border-t border-white/5 flex flex-col gap-3">
+                                <div className="bg-white/5 p-3 rounded-xl border border-white/10">
+                                    <span className="text-[10px] font-black text-ohs-orange uppercase block mb-1">Outreach Subject Line:</span>
+                                    <p className="text-xs font-bold text-white italic">"{pitch.outreachSubject}"</p>
+                                </div>
+                                <details className="group/details">
+                                    <summary className="text-xs font-black text-ohs-blue hover:text-white transition-colors cursor-pointer list-none flex items-center justify-between">
+                                        <span>VIEW SOVEREIGN EMAIL DRAFT</span>
+                                        <span className="transform group-open/details:rotate-180 transition-transform">▼</span>
+                                    </summary>
+                                    <div className="mt-4 p-4 bg-black/80 border border-white/5 rounded-xl font-mono text-[10px] text-gray-300 leading-relaxed max-h-48 overflow-y-auto whitespace-pre-line select-all scrollbar-thin">
+                                        {pitch.emailDraft}
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </motion.div>
+
             <LeanPerformanceRail />
         </div>
     );
 };
+

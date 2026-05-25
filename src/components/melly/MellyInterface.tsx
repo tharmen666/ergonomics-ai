@@ -47,11 +47,7 @@ export const MellyInterface = ({
                         <option value="en" className="bg-ohs-navy">EN</option>
                         <option value="zu" className="bg-ohs-navy">ZU</option>
                         <option value="xh" className="bg-ohs-navy">XH</option>
-                        <option value="af" className="bg-ohs-navy">AF</option>
-                        <option value="sw" className="bg-ohs-navy">SW</option>
-                        <option value="zh" className="bg-ohs-navy">ZH</option>
-                        <option value="es" className="bg-ohs-navy">ES</option>
-                        <option value="ko" className="bg-ohs-navy">KO</option>
+                        <option value="st" className="bg-ohs-navy">ST</option>
                     </select>
                     <button 
                         aria-label="Minimize" 

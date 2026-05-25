@@ -1,4 +1,4 @@
-export type Language = 'en' | 'zu' | 'xh' | 'af' | 'sw' | 'zh' | 'es' | 'ko';
+export type Language = 'en' | 'zu' | 'xh' | 'st';
 
 export interface TranslationEntry {
     melly_intro: string;
@@ -29,24 +29,13 @@ export const translations: Record<Language, TranslationEntry> = {
         training: {
             start_session: "Starting session:",
             follow_guide: "Follow the animated guide. Step 1:",
-            exercises: {
-                "monitor-mastery": { title: "Monitor Mastery", desc: "Optimize screen height and distance to prevent neck strain. OHS Act Section 8 Compliance: Ensuring a safe system of work.", step1: "Sit at arm's length" },
-                "lumbar-lock": { title: "Lumbar Lock-In", desc: "Secure your lower back for all-day spinal support. OHS Act Section 8 Compliance: Ensuring a safe system of work.", step1: "Sit deep in chair" },
-                "20-20-20": { title: "The 20-20-20 Eye Rule", desc: "Digital eye strain prevention protocol (for digital strain). OHS Act Section 8 Compliance: Ensuring a safe system of work.", step1: "Every 20 mins" },
-                "shoulder-rolls": { title: "Shoulder Rolls", desc: "Release upper body tension with simple circular motions. OHS Act Section 8 Compliance: Ensuring a safe system of work.", step1: "Sit up straight" },
-                "wrist-flexor": { title: "Wrist Flexor Stretches", desc: "Prevent repetitive strain in the wrists and forearms. OHS Act Section 8 Compliance: Ensuring a safe system of work.", step1: "Extend arm forward" },
-                "lateral-neck": { title: "Lateral Neck Tilts", desc: "Relieve neck stiffness from extended screen monitoring. OHS Act Section 8 Compliance: Ensuring a safe system of work.", step1: "Look straight ahead" },
-                "mobile-command": { title: "Mobile Command Center", desc: "Ergonomics for laptops and temporary workstations. OHS Act Section 8 Compliance: Ensuring a safe system of work.", step1: "Elevate laptop" },
-                "stress-dump": { title: "High-Volume Decompression", desc: "Micro-breaks to reset after difficult calls. OHS Act Section 8 Compliance: Ensuring a safe system of work.", step1: "Deep breath in" },
-                "risk-audit": { title: "Self-Audit Procedures", desc: "How to spot your own ergonomic red flags. OHS Act Section 8 Compliance: Ensuring a safe system of work.", step1: "Scan environment" },
-                "corrective-flow": { title: "Corrective Flow", desc: "Advanced stretches for chronic trouble spots. OHS Act Section 8 Compliance: Ensuring a safe system of work.", step1: "Targeted neck release" }
-            }
+            exercises: {}
         }
     },
     zu: {
         melly_intro: "Sawubona, ngingu-Melly. Umngane wakho we-AI Wezokuphepha. Masikuqinisekise ukuthi uvikelekile namuhla.",
         stewardship_model: "Imodeli ye-Stewardship iqinisekisa ukuthotshelwa kwezinhlelo okungu-100% ngochungechunge lomyalelo: Umsebenzi uye ku-Supervisor, Umholi, kanye ne-CEO.",
-        high_discomfort_disclaimer: "ISEXWAYISO: Kutholwe ukungaphatheki kahle kakhulu. Lokhu kufakwe uphawu. Ukwehluleka ukuxazulula kungaholela ekungathandini uMthetho we-OHS.",
+        high_discomfort_disclaimer: "ISEXWAYISO: Kutholwe ukungaphatheki kahle kakhulu. Lokhu kufakwe uphawu. Ukwehluleka ukuxazulula kungoholela ekungathandini uMthetho we-OHS.",
         legal_shock: "KUBALULEKILE: Ukungathobeli okuqhubekayo kungaholela ekubophelelekeni kwenkampani, kufaka phakathi inhlawulo enkulu noma ukuboshwa ngaphansi kwemithetho ye-OHS yaseNingizimu Afrika.",
         exercise_tip: "Isikhathi sokuzelula kancane! Lokhu kuvimbela ukukhathala kwemisipha yesikhathi eside.",
         compliance_check: "Kudingeka ukuskenwa kokuphepha kwansuku zonke. Sicela uqedele uhlu lwakho lokuhlola ngo-12:00 PM ngoLwesihlanu.",
@@ -55,18 +44,7 @@ export const translations: Record<Language, TranslationEntry> = {
         training: {
             start_session: "Ukuqala iseshini:",
             follow_guide: "Landela umhlahlandlela opopayi. Isinyathelo 1:",
-            exercises: {
-                "monitor-mastery": { title: "Ukuphatha Isikrini", desc: "Lungiselela ukuphakama kwebanga lesikrini ukuze ugweme ubuhlungu bentamo. Ukuthobela Umthetho we-OHS Isigaba 8: Ukuqinisekisa uhlelo lokusebenza oluphephile.", step1: "Hlala kude nebanga lengalo" },
-                "lumbar-lock": { title: "Ukuvikela Umhlane Oningezansi", desc: "Vikela umhlane wakho ongezansi ukuze uthole ukusekela kosuku lonke. Ukuthobela Umthetho we-OHS Isigaba 8: Ukuqinisekisa uhlelo lokusebenza oluphephile.", step1: "Hlala ujule esihlalweni" },
-                "20-20-20": { title: "Umthetho Wamehlo Ka-20-20-20", desc: "Umgomo wokuvikela ukukhathala kwamehlo ngenxa yezikrini. Ukuthobela Umthetho we-OHS Isigaba 8: Ukuqinisekisa uhlelo lokusebenza oluphephile.", step1: "Njalo ngemizuzu engama-20" },
-                "shoulder-rolls": { title: "Ukuzungezisa Amahlombe", desc: "Khulula ukungezwani komzimba ongenhla ngokunyakaza okulula okuyindilinga. Ukuthobela Umthetho we-OHS Isigaba 8: Ukuqinisekisa uhlelo lokusebenza oluphephile.", step1: "Hlala uqonde" },
-                "wrist-flexor": { title: "Ukunweba isihlakala", desc: "Vimbela ubuhlungu obuphindaphindiwe ezihlakaleni nasezingalweni. Ukuthobela Umthetho we-OHS Isigaba 8: Ukuqinisekisa uhlelo lokusebenza oluphephile.", step1: "Nweba ingalo phambili" },
-                "lateral-neck": { title: "Ukutshekisa Intamo", desc: "Khulula ukuqina kwentamo ngenxa yokubuka isikrini isikhathi eside. Ukuthobela Umthetho we-OHS Isigaba 8: Ukuqinisekisa uhlelo lokusebenza oluphephile.", step1: "Bheka phambili" },
-                "mobile-command": { title: "Isikhungo Sokulawula Esiqabulekayo", desc: "I-Ergonomics yama-laptops nezindawo zokusebenza zesikhashana. Ukuthobela Umthetho we-OHS Isigaba 8: Ukuqinisekisa uhlelo lokusebenza oluphephile.", step1: "Phakamisa i-laptop" },
-                "stress-dump": { title: "Ukuphumula Okukhulu", desc: "Amaphefumulo amancane okusetha kabusha ngemuva kwezingcingo ezinzima. Ukuthobela Umthetho we-OHS Isigaba 8: Ukuqinisekisa uhlelo lokusebenza oluphephile.", step1: "Phefumulela ngaphakathi kakhulu" },
-                "risk-audit": { title: "Izinqubo Zokuzicwaninga", desc: "Indlela yokubona izimpawu zakho eziyingozi ze-ergonomic. Ukuthobela Umthetho we-OHS Isigaba 8: Ukuqinisekisa uhlelo lokusebenza oluphephile.", step1: "Skena indawo" },
-                "corrective-flow": { title: "Ukugeleza Kokulungisa", desc: "Ukunweba okuthuthukile kwalezo zindawo eziyinkinga kakhulu. Ukuthobela Umthetho we-OHS Isigaba 8: Ukuqinisekisa uhlelo lokusebenza oluphephile.", step1: "Ukukhulula intamo okuhlosiwe" }
-            }
+            exercises: {}
         }
     },
     xh: {
@@ -81,88 +59,22 @@ export const translations: Record<Language, TranslationEntry> = {
         training: {
             start_session: "Ukuqala iseshini:",
             follow_guide: "Landela isikhokelo esinopopayi. Inyathelo 1:",
-            exercises: {
-                "monitor-mastery": { title: "Ulawulo Lwesikrini", desc: "Lungiselela ukuphakama kwesikrini kunye nomgama ukunqanda uxinzelelo lwentamo. Ukuthotyelwa koMthetho we-OHS iCandelo le-8: Ukuqinisekisa inkqubo yokusebenza ekhuselekileyo.", step1: "Hlala kumgama wengalo" },
-                "lumbar-lock": { title: "Ukuvalwa Komqolo Ongezantsi", desc: "Khusela umqolo wakho ongezantsi ukwenzela inkxaso yemini yonke. Ukuthotyelwa koMthetho we-OHS iCandelo le-8: Ukuqinisekisa inkqubo yokusebenza ekhuselekileyo.", step1: "Hlala nzulu esitulweni" },
-                "20-20-20": { title: "Umthetho Wamehlo ka-20-20-20", desc: "Inkqubo yothintelo loxinzelelo lwamehlo kwizikrini zedijithali. Ukuthotyelwa koMthetho we-OHS iCandelo le-8: Ukuqinisekisa inkqubo yokusebenza ekhuselekileyo.", step1: "Ngemizuzu engama-20" },
-                "shoulder-rolls": { title: "Ukujikeleza Amagxa", desc: "Khulula uxinzelelo lomzimba ongasentla ngeentshukumo ezilula eziyisangqa. Ukuthotyelwa koMthetho we-OHS iCandelo le-8: Ukuqinisekisa inkqubo yokusebenza ekhuselekileyo.", step1: "Hlala uthe tye" },
-                "wrist-flexor": { title: "Ukolulwa kwesihlahla", desc: "Thintela uxinzelelo oluphindaphindiweyo kwizihlahla nakwiingalo. Ukuthotyelwa koMthetho we-OHS iCandelo le-8: Ukuqinisekisa inkqubo yokusebenza ekhuselekileyo.", step1: "Nweba ingalo ukuya phambili" },
-                "lateral-neck": { title: "Ukutshekisa Intamo", desc: "Khulula ukuqina kwentamo ngenxa yokujonga isikrini ixesha elide. Ukuthotyelwa koMthetho we-OHS iCandelo le-8: Ukuqinisekisa inkqubo yokusebenza ekhuselekileyo.", step1: "Jonga phambili" },
-                "mobile-command": { title: "Iziko loLawulo eliHambayo", desc: "I-Ergonomics yee-laptops kunye neendawo zokusebenza zexeshana. Ukuthotyelwa koMthetho we-OHS iCandelo le-8: Ukuqinisekisa inkqubo yokusebenza ekhuselekileyo.", step1: "Phakamisa ilaptop" },
-                "stress-dump": { title: "Ukunyenyisa Uxinzelelo Olukhulu", desc: "Ikhefu elincinci ukuseta kwakhona emva kweefowuni ezinzima. Ukuthotyelwa koMthetho we-OHS iCandelo le-8: Ukuqinisekisa inkqubo yokusebenza ekhuselekileyo.", step1: "Phefumlela ngaphakathi nzulu" },
-                "risk-audit": { title: "Iinkqubo zokuZiphicotha", desc: "Indlela yokubona izilumkiso zakho ze-ergonomic. Ukuthotyelwa koMthetho we-OHS iCandelo le-8: Ukuqinisekisa inkqubo yokusebenza ekhuselekileyo.", step1: "Skena okungqongileyo" },
-                "corrective-flow": { title: "Ukuhamba Kolungiso", desc: "Ukolulwa okuhambele phambili kweendawo ezinengxaki engapheliyo. Ukuthotyelwa koMthetho we-OHS iCandelo le-8: Ukuqinisekisa inkqubo yokusebenza ekhuselekileyo.", step1: "Ukukhulula intamo okujoliswe kuko" }
-            }
+            exercises: {}
         }
     },
-    af: {
-        melly_intro: "Hallo, ek is Melly. Jou KI Veiligheidsgesel. Kom ons maak seker jy is vandag beskerm.",
-        stewardship_model: "Die Rentmeesterskapmodel verseker 100% voldoening deur 'n kaskade opdragketting: Werknemer na Toesighouer, Leier, en HUB.",
-        high_discomfort_disclaimer: "WAARSKUWING: Hoë ongemak bespeur. Dit is gemerk. Versuim om dit op te los kan lei tot nie-nakoming van die OHS Wet.",
-        legal_shock: "BELANGRIK: Voortgesette nie-nakoming kan lei tot korporatiewe aanspreeklikheid, insluitend swaar boetes of tronkstraf onder Suid-Afrikaanse OHS wette.",
-        exercise_tip: "Tyd vir 'n vinnige strek! Dit voorkom langtermyn muskuloskeletale spanning.",
-        compliance_check: "Daaglikse veiligheidskandering word vereis. Voltooi asseblief jou kontrolelys teen Vrydag 12:00.",
-        admin_zero: "Assessering voltooi. Ek het dit outomaties in jou digitale OHS dossier geliasseer.",
-        first_aid: "Stop die bloeding, maak die wond skoon, bedek dit.",
+    st: {
+        melly_intro: "Dumela, ke Melly. Molekane oa hau oa OHS oa AI. A re netefatseng hore o bolokehile kajeno.",
+        stewardship_model: "Mohlala oa Stewardship o netefatsa karolo e 100% ea boikarabello ka ketane ea taelo: ho tloha ho Mosebetsi ho isa ho Mookameli, Moetapele le CEO.",
+        high_discomfort_disclaimer: "TEMOSO: Ho utloahala ho se phutholohe ho hoholo. Sena se tšoailoe. Ho sitoa ho lokisa sena ho ka lebisa tlhōlong ea Molao oa OHS.",
+        legal_shock: "BOHLOEKI: Ho hloka molao ho tsoelang pele ho ka baka boikarabello ba khoebo, ho kenyeletsa likotlo tse boima kapa chankaneng tlas'a melao oa OHS oa Afrika Boroa.",
+        exercise_tip: "Nako ea ho otlolla litho kapele! Sena se thibela ho khathala ha mesifa ea nako e telele.",
+        compliance_check: "Ho hlokahala tlhahlobo ea letsatsi le letsatsi ea polokeho. Ka kōpo tlatsa lethathamo la hau la tlhahlobo ka 12:00 PM Labohlano.",
+        admin_zero: "Tlhahlobo e phethiloe. Ke e ngolisitse ka boeona lethathamong la hau la polokeho la digital la OHS.",
+        first_aid: "Thiba madi, hloekisa leqeba, o le koahele.",
         training: {
-            start_session: "Begin sessie:",
-            follow_guide: "Volg die geanimeerde gids. Stap 1:",
-            exercises: {
-                "monitor-mastery": { title: "Monitor Meesterskap", desc: "Optimaliseer skermhoogte en afstand om nekspanning te voorkom. OHS Wet Artikel 8 Voldoening: Versekering van 'n veilige werkstelsel.", step1: "Sit op 'n armlengte" },
-                "lumbar-lock": { title: "Lumbale Insluiting", desc: "Beveilig jou onderrug vir heeldag ruggraatondersteuning. OHS Wet Artikel 8 Voldoening: Versekering van 'n veilige werkstelsel.", step1: "Sit diep in die stoel" },
-                "20-20-20": { title: "Die 20-20-20 Oog Reël", desc: "Digitale oogstremmingsvoorkomingsprotokol (vir digitale spanning). OHS Wet Artikel 8 Voldoening: Versekering van 'n veilige werkstelsel.", step1: "Elke 20 minute" },
-                "shoulder-rolls": { title: "Skouerrolle", desc: "Verlig bolyf spanning met eenvoudige sirkelbewegings. OHS Wet Artikel 8 Voldoening: Versekering van 'n veilige werkstelsel.", step1: "Sit regop" },
-                "wrist-flexor": { title: "Polsbuig Strekoefeninge", desc: "Voorkom herhalende spanning in die polse en voorarms. OHS Wet Artikel 8 Voldoening: Versekering van 'n veilige werkstelsel.", step1: "Steek arm vorentoe uit" },
-                "lateral-neck": { title: "Laterale Nek Kantelings", desc: "Verlig nekstyfheid van langdurige skermmonitering. OHS Wet Artikel 8 Voldoening: Versekering van 'n veilige werkstelsel.", step1: "Kyk reguit vorentoe" },
-                "mobile-command": { title: "Mobiele Beheersentrum", desc: "Ergonomie vir skootrekenaars en tydelike werkstasies. OHS Wet Artikel 8 Voldoening: Versekering van 'n veilige werkstelsel.", step1: "Lig skootrekenaar op" },
-                "stress-dump": { title: "Hoë-Volume Dekompressie", desc: "Mikro-pouses om te herstel na moeilike oproepe. OHS Wet Artikel 8 Voldoening: Versekering van 'n veilige werkstelsel.", step1: "Asem diep in" },
-                "risk-audit": { title: "Self-Oudit Prosedures", desc: "Hoe om jou eie ergonomiese rooi vlae raak te sien. OHS Wet Artikel 8 Voldoening: Versekering van 'n veilige werkstelsel.", step1: "Skandeer die omgewing" },
-                "corrective-flow": { title: "Korrektiewe Vloei", desc: "Gevorderde strekke vir chroniese probleemareas. OHS Wet Artikel 8 Voldoening: Versekering van 'n veilige werkstelsel.", step1: "Gefokusde nekvrystelling" }
-            }
+            start_session: "Ho qala lenaneo:",
+            follow_guide: "Latela tataiso e animated. Mohato oa 1:",
+            exercises: {}
         }
-    },
-    sw: {
-        melly_intro: "Hujambo, mimi ni Melly. Mwongozo wako wa Usalama wa AI. Wacha tuhakikishe umelindwa leo.",
-        stewardship_model: "Mfumo wa Usimamizi unahakikisha kufuata sheria kupitia Mfanyakazi, Msimamizi, na Mkurugenzi Mtendaji.",
-        high_discomfort_disclaimer: "ONYO: Uchovu mkubwa umegunduliwa. Kushindwa kutatua kunaweza kusababisha uvunjaji wa sheria za OHS.",
-        legal_shock: "MUHIMU: Kutofuata sheria kunaweza kusababisha faini au kifungo kulingana na Sheria za OHS (OSHA 2007).",
-        exercise_tip: "Wakati wa kunyoosha mwili! Hii inazuia maumivu ya misuli.",
-        compliance_check: "Ukaguzi wa usalama wa kila siku unahitajika kufikia Ijumaa saa sita mchana.",
-        admin_zero: "Tathmini imekamilika. Nimehifadhi kiotomatiki katika faili lako la usalama digitali.",
-        first_aid: "Acha kuvuja damu, safisha kidonda, kifunike.",
-        training: { start_session: "Kuanza:", follow_guide: "Fuata maelekezo. Hatua 1:", exercises: {} }
-    },
-    zh: {
-        melly_intro: "你好，我是 Melly。你的 AI 职业安全顾问。今天让我们确保您的安全。",
-        stewardship_model: "管理结构确保从员工到首席执行官的 100% 职业安全合规。",
-        high_discomfort_disclaimer: "警告：检测到严重不适。不及时处理将违反职业健康与安全规定。",
-        legal_shock: "重要提醒：持续违规可能导致企业触犯法律，面临严重罚款或诉讼（符合 ISO 45001）。",
-        exercise_tip: "是时候进行简短的伸展了！这可以预防长期的肌肉疲劳。",
-        compliance_check: "需要每日安全扫描。请在周五中午前完成列表验证。",
-        admin_zero: "评估完成。已自动提交到您的数字 OHS 数据库。",
-        first_aid: "止血，清洁伤口，包扎。",
-        training: { start_session: "开始会话:", follow_guide: "请按照指南操作, 步骤 1:", exercises: {} }
-    },
-    es: {
-        melly_intro: "Hola, soy Melly. Tu acompañante de Seguridad AI. Asegurémonos de que estés protegido hoy.",
-        stewardship_model: "El modelo de gestión asegura el 100% de cumplimiento desde el empleado hasta el CEO.",
-        high_discomfort_disclaimer: "ADVERTENCIA: Alto malestar detectado. Ignorar esto puede incurrir en incumplimiento de normas OHS (ISO 45001).",
-        legal_shock: "IMPORTANTE: El incumplimiento puede resultar en responsabilidad penal para la empresa.",
-        exercise_tip: "¡Hora de un estiramiento rápido! Previene lesiones musculares a largo plazo.",
-        compliance_check: "Se requiere un escaneo de seguridad diario. Por favor complétalo para el mediodía.",
-        admin_zero: "Evaluación completada. Guardado automáticamente en tu dossier OHS.",
-        first_aid: "Detener el sangrado, limpiar la herida, cubrirla.",
-        training: { start_session: "Empezar:", follow_guide: "Siga la guía animada. Paso 1:", exercises: {} }
-    },
-    ko: {
-        melly_intro: "안녕하세요, 저는 AI 안전 파트너 Melly입니다. 오늘 귀하의 안전을 관리하겠습니다.",
-        stewardship_model: "책임 모델은 직원부터 최고 경영자까지 100% 규정 준수를 보장합니다.",
-        high_discomfort_disclaimer: "경고: 높은 피로도가 감지되었습니다. 이를 방치하면 OHS 규정을 위반할 수 있습니다.",
-        legal_shock: "중요: 지속적인 규정 위반은 심각한 기업의 법적 책임(ISO 45001)으로 이어질 수 있습니다.",
-        exercise_tip: "잠시 스트레칭할 시간입니다! 이는 근골격계 질환을 예방합니다.",
-        compliance_check: "일일 안전 점검이 필요합니다. 금요일 정오까지 체크리스트를 완료하세요.",
-        admin_zero: "평가 완료. 디지털 OHS 데이터베이스에 자동으로 저장되었습니다.",
-        first_aid: "출혈을 멈추고 상처를 닦고 덮으십시오.",
-        training: { start_session: "세션 시작:", follow_guide: "애니메이션 가이드를 따르세요. 1단계:", exercises: {} }
     }
 };
