@@ -11,11 +11,20 @@
  */
 
 import { Language } from '../../utils/translations';
+import irisCore from './irisCore.json';
 
 class SemanticFirewall {
     // Encrypted / Isolated Multilingual Storage
     private _ohsCore: Map<string, Record<Language, string>>;
     private _isoCore: Map<string, Record<Language, string>>;
+
+    /**
+     * GEAR v2.5 Tech Expansion: Returns the forward-compatible Multimodal Context Memory Node
+     * for advanced Google Gemini Omni and Tiger Cloud Persistence interfaces.
+     */
+    public getIrisCore() {
+        return irisCore;
+    }
 
     constructor() {
         this._ohsCore = new Map();
