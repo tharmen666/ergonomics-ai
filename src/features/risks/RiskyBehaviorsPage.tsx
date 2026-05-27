@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
-import { useMellyStore } from '../../store/mellyStore';
+import { useNellyStore } from '../../store/nellyStore';
 import { GlowButton } from '../../components/ui/GlowButton';
 import { AlertTriangle, CheckCircle } from 'lucide-react';
 import { speak } from '../../utils/speech';
 
 export const RiskyBehaviorsPage = () => {
-    const { setGuidance, setSpeaking, setMood, addRecommendation } = useMellyStore();
+    const { setGuidance, setSpeaking, setMood, addRecommendation } = useNellyStore();
 
     const risks = [
         { id: 1, title: 'Slouching / Turtling', desc: 'Leaning forward towards the screen creates neck strain.' },

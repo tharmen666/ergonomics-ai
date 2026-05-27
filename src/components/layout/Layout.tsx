@@ -2,7 +2,7 @@ import { ReactNode, useEffect, memo } from 'react';
 import { Sidebar } from './Sidebar';
 import { Footer } from './Footer';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useMellyStore } from '../../store/mellyStore';
+import { useNellyStore } from '../../store/nellyStore';
 
 interface LayoutProps {
     children: ReactNode;
@@ -11,7 +11,7 @@ interface LayoutProps {
 }
 
 export const Layout = memo(({ children, activeTab, setActiveTab }: LayoutProps) => {
-    const { isSidebarCollapsed, setSidebarCollapsed } = useMellyStore();
+    const { isSidebarCollapsed, setSidebarCollapsed } = useNellyStore();
 
     // Force sidebar to be closed on initial load to prevent overlay blocking
     useEffect(() => {

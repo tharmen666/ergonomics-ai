@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { TrainingModule } from './TrainingModule';
 import { GlassCard } from '../../components/ui/GlassCard';
 import { useAgentLog } from '../../store/agentLogStore';
-import { useMellyStore } from '../../store/mellyStore';
+import { useNellyStore } from '../../store/nellyStore';
 import { CheckCircle, Play } from 'lucide-react';
 import { FRESH_OHS_PROJECT_REGISTRY } from '../../utils/master_ohs_boot';
 
@@ -55,11 +55,11 @@ const stages = [
 
 export const TrainingPage = () => {
     const { addLog } = useAgentLog();
-    const { completedModules, recommendations } = useMellyStore();
+    const { completedModules, recommendations } = useNellyStore();
     const [selectedModule, setSelectedModule] = useState<any>(null);
 
     const handleStart = (mod: any) => {
-        addLog('Melly', `Initiating training module: ${mod.title}. Monitoring posture compliance.`);
+        addLog('Nelly', `Initiating training module: ${mod.title}. Monitoring posture compliance.`);
         setSelectedModule(mod);
     };
 

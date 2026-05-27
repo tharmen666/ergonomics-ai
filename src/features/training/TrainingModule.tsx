@@ -7,7 +7,7 @@ import { Volume2, VolumeX, X, Play, Square, ChevronLeft, ChevronRight, CheckCirc
 import { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { speak, stopSpeaking } from '../../utils/speech';
-import { useMellyStore } from '../../store/mellyStore';
+import { useNellyStore } from '../../store/nellyStore';
 import { FRESH_OHS_PROJECT_REGISTRY } from '../../utils/master_ohs_boot';
 import { Language } from '../../utils/translations';
 
@@ -109,7 +109,7 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
     const [isPlaying, setIsPlaying] = useState(false);
     const [voiceEnabled, setVoiceEnabled] = useState(true);
     const [currentStepIdx, setCurrentStepIdx] = useState(0);
-    const { completeModule, language, setLanguage } = useMellyStore();
+    const { completeModule, language, setLanguage } = useNellyStore();
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -290,7 +290,7 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
                             <div className="flex items-center gap-3">
                                 {voiceEnabled ? <Volume2 className="text-ohs-green" /> : <VolumeX className="text-gray-500" />}
                                 <div>
-                                    <span className="font-bold text-white text-sm block">Melly Active TTS Guidance</span>
+                                    <span className="font-bold text-white text-sm block">Nelly Active TTS Guidance</span>
                                     <span className="text-[10px] text-gray-400 font-medium">Automatic voice playback for localized pipelines</span>
                                 </div>
                             </div>

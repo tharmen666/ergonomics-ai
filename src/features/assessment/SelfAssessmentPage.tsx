@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { useMellyStore } from '../../store/mellyStore';
+import { useNellyStore } from '../../store/nellyStore';
 import { GlowButton } from '../../components/ui/GlowButton';
 
 export const SelfAssessmentPage = () => {
-    const { setGuidance } = useMellyStore();
+    const { setGuidance } = useNellyStore();
     const [step, setStep] = useState(1);
 
     return (
@@ -19,7 +19,7 @@ export const SelfAssessmentPage = () => {
                         Ergonomic Self-Assessment
                     </h2>
                     <p className="text-gray-400 text-lg max-w-2xl">
-                        Optimize your workspace in 5 minutes. Follow Melly's instructions for a healthier workday.
+                        Optimize your workspace in 5 minutes. Follow Nelly's instructions for a healthier workday.
                     </p>
                 </div>
 

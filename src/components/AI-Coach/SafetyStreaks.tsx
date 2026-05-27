@@ -50,7 +50,7 @@ export const SafetyStreaks = () => {
             {isHighPerforming && (
                 <div className="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-xl">
                     <p className="text-xs text-green-400 font-medium">
-                        <strong className="text-green-500 font-bold">Melly says:</strong> You're operating at peak efficiency. Keeping the human in the loop drives high-performance culture.
+                        <strong className="text-green-500 font-bold">Nelly says:</strong> You're operating at peak efficiency. Keeping the human in the loop drives high-performance culture.
                     </p>
                 </div>
             )}

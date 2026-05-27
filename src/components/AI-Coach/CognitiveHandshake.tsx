@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BrainCircuit, Target, ShieldAlert } from 'lucide-react';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
-import { useMellyStore } from '../../store/mellyStore';
+import { useNellyStore } from '../../store/nellyStore';
 
 export const CognitiveHandshake = () => {
     const { cognitiveHandshakePassed, showCognitiveHandshake, setShowCognitiveHandshake, passCognitiveHandshake, failCognitiveHandshake, warnCognitiveHandshake } = useFatigueStore();
-    const { setGuidance, setSpeaking, setMood } = useMellyStore();
+    const { setGuidance, setSpeaking, setMood } = useNellyStore();
 
     // Game State
     const [targetsHit, setTargetsHit] = useState(0);

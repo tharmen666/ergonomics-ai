@@ -6,7 +6,7 @@ export type Language = 'en' | 'zu' | 'xh' | 'st';
  * - Replaced loose `exercises: Record<string, any>` with a typed structure.
  */
 export interface TranslationEntry {
-    melly_intro: string;
+    nelly_intro: string;
     stewardship_model: string;
     high_discomfort_disclaimer: string;
     legal_shock: string;
@@ -25,7 +25,7 @@ export interface TranslationEntry {
 
 export const translations: Record<Language, TranslationEntry> = {
     en: {
-        melly_intro: "Hi, I'm Melly. Your AI Safety companion. Let's make sure you're protected today.",
+        nelly_intro: "Hi, I'm Nelly. Your AI Safety companion. Let's make sure you're protected today.",
         stewardship_model: "The Stewardship Model ensures 100% compliance through a cascading chain of command: Employee to Supervisor, Leader, and CEO.",
         high_discomfort_disclaimer: "WARNING: High discomfort detected. This has been flagged. Failure to resolve may lead to OHS Act non-compliance.",
         legal_shock: "IMPORTANT: Continued non-compliance can result in corporate liability, including heavy fines or imprisonment under South African OHS laws.",
@@ -41,7 +41,7 @@ export const translations: Record<Language, TranslationEntry> = {
         }
     },
     zu: {
-        melly_intro: "Sawubona, ngingu-Melly. Umngane wakho we-AI Wezokuphepha. Masikuqinisekise ukuthi uvikelekile namuhla.",
+        nelly_intro: "Sawubona, ngingu-Nelly. Umngane wakho we-AI Wezokuphepha. Masikuqinisekise ukuthi uvikelekile namuhla.",
         stewardship_model: "Imodeli ye-Stewardship iqinisekisa ukuthotshelwa kwezinhlelo okungu-100% ngochungechunge lomyalelo: Umsebenzi uye ku-Supervisor, Umholi, kanye ne-CEO.",
         high_discomfort_disclaimer: "ISEXWAYISO: Kutholwe ukungaphatheki kahle kakhulu. Lokhu kufakwe uphawu. Ukwehluleka ukuxazulula kungoholela ekungathandini uMthetho we-OHS.",
         legal_shock: "KUBALULEKILE: Ukungathobeli okuqhubekayo kungaholela ekubophelelekeni kwenkampani, kufaka phakathi inhlawulo enkulu noma ukuboshwa ngaphansi kwemithetho ye-OHS yaseNingizimu Afrika.",
@@ -57,7 +57,7 @@ export const translations: Record<Language, TranslationEntry> = {
         }
     },
     xh: {
-        melly_intro: "Molo, ndinguMelly. Iqabane lakho le-AI lokhuseleko. Masiqinisekise ukuba ukhuselekile namhlanje.",
+        nelly_intro: "Molo, ndinguNelly. Iqabane lakho le-AI lokhuseleko. Masiqinisekise ukuba ukhuselekile namhlanje.",
         stewardship_model: "Imodeli yo-Stewardship iqinisekisa ukuthotyelwa kweemithetho nge-100% ngothungelelwano lomyalelo: Umsebenzi ukuya ku-Supervisor, iNkokheli, kunye ne-CEO.",
         high_discomfort_disclaimer: "ISILUMKISO: Kufunyenwe ukungonwabi kakhulu. Oku kuphawuliwe. Ukusilela ekusombululeni oku kungakhokelela ekungathotyelweni koMthetho we-OHS.",
         legal_shock: "KUBALULEKILE: Ukungathobeli okuqhubekayo kunokukhokelela kuxanduva lwequmrhu, kubandakanywa isohlwayo esinzulu okanye ukuvalelwa phantsi kwemithetho ye-OHS yoMzantsi Afrika.",
@@ -73,7 +73,7 @@ export const translations: Record<Language, TranslationEntry> = {
         }
     },
     st: {
-        melly_intro: "Dumela, ke Melly. Molekane oa hau oa OHS oa AI. A re netefatseng hore o bolokehile kajeno.",
+        nelly_intro: "Dumela, ke Nelly. Molekane oa hau oa OHS oa AI. A re netefatseng hore o bolokehile kajeno.",
         stewardship_model: "Mohlala oa Stewardship o netefatsa karolo e 100% ea boikarabello ka ketane ea taelo: ho tloha ho Mosebetsi ho isa ho Mookameli, Moetapele le CEO.",
         high_discomfort_disclaimer: "TEMOSO: Ho utloahala ho se phutholohe ho hoholo. Sena se tšoailoe. Ho sitoa ho lokisa sena ho ka lebisa tlhōlong ea Molao oa OHS.",
         legal_shock: "BOHLOEKI: Ho hloka molao ho tsoelang pele ho ka baka boikarabello ba khoebo, ho kenyeletsa likotlo tse boima kapa chankaneng tlas'a melao oa OHS oa Afrika Boroa.",

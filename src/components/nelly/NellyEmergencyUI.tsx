@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
 
-interface MellyEmergencyUIProps {
+interface NellyEmergencyUIProps {
     onDeescalate: () => void;
 }
 
-export const MellyEmergencyUI = ({ onDeescalate }: MellyEmergencyUIProps) => {
+export const NellyEmergencyUI = ({ onDeescalate }: NellyEmergencyUIProps) => {
     return (
         <motion.div
             initial={{ opacity: 0, scale: 0.9 }}

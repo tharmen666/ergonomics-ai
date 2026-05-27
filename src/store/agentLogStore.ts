@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-export type AgentType = 'Melly' | 'Marcus' | 'Sarah' | 'System' | 'Finance' | 'Training' | 'User';
+export type AgentType = 'Nelly' | 'Marcus' | 'Sarah' | 'System' | 'Finance' | 'Training' | 'User';
 
 interface LogEntry {
     id: string;

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
-import { useMellyStore } from '../../store/mellyStore';
+import { useNellyStore } from '../../store/nellyStore';
 import { speak, stopSpeaking } from '../../utils/speech';
 
 interface TourManagerProps {
@@ -7,7 +7,7 @@ interface TourManagerProps {
 }
 
 export const TourManager = ({ setActiveTab }: TourManagerProps) => {
-    const { isTourActive, setTourActive, setSpeaking, setMood, setGuidance } = useMellyStore();
+    const { isTourActive, setTourActive, setSpeaking, setMood, setGuidance } = useNellyStore();
     const [step, setStep] = useState(0);
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 

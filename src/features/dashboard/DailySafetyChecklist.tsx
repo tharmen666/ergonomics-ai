@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, Circle, ShieldCheck } from 'lucide-react';
 import { GlassCard } from '../../components/ui/GlassCard';
-import { useMellyStore } from '../../store/mellyStore';
+import { useNellyStore } from '../../store/nellyStore';
 import { Language } from '../../utils/translations';
 
 interface ChecklistItem {
@@ -63,7 +63,7 @@ const CHECKLIST_TRANSLATIONS: Record<Language, {
 };
 
 export const DailySafetyChecklist = () => {
-    const { language, setSpeaking, setMood } = useMellyStore();
+    const { language, setSpeaking, setMood } = useNellyStore();
     const [items, setItems] = useState<ChecklistItem[]>([
         { id: 'monitor', checked: false },
         { id: 'chair', checked: false },
@@ -154,7 +154,7 @@ export const DailySafetyChecklist = () => {
                 </p>
             </div>
 
-            {/* Melly's message preview (logical) */}
+            {/* Nelly's message preview (logical) */}
             {allChecked && (
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}

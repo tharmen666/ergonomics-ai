@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { Layout } from './components/layout/Layout';
-import { MellyAvatar } from './components/melly/MellyAvatar';
+import { NellyAvatar } from './components/nelly/NellyAvatar';
 import { DashboardPage } from './features/dashboard/DashboardPage';
 import { TrainingPage } from './features/training/TrainingPage';
 import { ChecklistPage } from './features/checklist/ChecklistPage';
@@ -19,12 +19,12 @@ import { PrivacyHandshake } from './assets/Privacy-Shield/PrivacyHandshake';
 import { CognitiveHandshake } from './components/AI-Coach/CognitiveHandshake';
 
 import { TourManager } from './components/agent/TourManager';
-import { useMellyStore } from './store/mellyStore';
+import { useNellyStore } from './store/nellyStore';
 import { GEAROverlay } from './components/ui/GEAROverlay';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const { isWingmanActive, setWingmanActive, isSidebarCollapsed, setSidebarCollapsed } = useMellyStore();
+  const { isWingmanActive, setWingmanActive, isSidebarCollapsed, setSidebarCollapsed } = useNellyStore();
 
   if (activeTab === 'demo') {
     return <HQTechnicalDemo onExit={() => setActiveTab('dashboard')} />;
@@ -85,7 +85,7 @@ function App() {
           </div>
         </header>
 
-        <MellyAvatar />
+        <NellyAvatar />
         <GEAROverlay />
 
         {/* Route Content */}

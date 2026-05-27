@@ -3,7 +3,7 @@ import { X, Globe, PlayCircle, ShieldCheck, Minimize2 } from 'lucide-react';
 import { ReasoningLog } from '../agent/ReasoningLog';
 import { translations, Language } from '../../utils/translations';
 
-interface MellyInterfaceProps {
+interface NellyInterfaceProps {
     language: Language;
     setLanguage: (lang: Language) => void;
     onClose: () => void;
@@ -15,7 +15,7 @@ interface MellyInterfaceProps {
     isSpeaking: boolean;
 }
 
-export const MellyInterface = ({
+export const NellyInterface = ({
     language,
     setLanguage,
     onClose,
@@ -25,7 +25,7 @@ export const MellyInterface = ({
     setUserInput,
     onSend,
     isSpeaking
-}: MellyInterfaceProps) => {
+}: NellyInterfaceProps) => {
     return (
         <motion.div
             initial={{ x: 50, opacity: 0 }}
@@ -34,7 +34,7 @@ export const MellyInterface = ({
         >
             {/* Header */}
             <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
-                <span className="text-[10px] font-black text-ohs-orange uppercase tracking-widest">Melly Intelligence Grid</span>
+                <span className="text-[10px] font-black text-ohs-orange uppercase tracking-widest">Nelly Intelligence Grid</span>
                 <div className="flex items-center gap-2">
                     <Globe size={12} className="text-gray-500" />
                     <select
@@ -71,7 +71,7 @@ export const MellyInterface = ({
             {/* Intro Text */}
             <div className="mb-4">
                 <p className="text-sm text-white font-medium italic leading-relaxed break-words whitespace-normal">
-                    "{translations[language].melly_intro}"
+                    "{translations[language].nelly_intro}"
                 </p>
             </div>
 

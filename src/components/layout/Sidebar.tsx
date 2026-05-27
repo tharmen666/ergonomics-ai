@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Home, Activity, BarChart2, Settings, LifeBuoy, CheckSquare, ShoppingBag, FileText, Users, AlertCircle, X } from 'lucide-react';
-import { useMellyStore } from '../../store/mellyStore';
+import { useNellyStore } from '../../store/nellyStore';
 
 const navItems = [
     { icon: Home, label: "Dashboard", id: "dashboard" },
@@ -24,7 +24,7 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ activeTab, setActiveTab, isCollapsed, setIsCollapsed }: SidebarProps) => {
-    const { isWingmanActive, setWingmanActive } = useMellyStore();
+    const { isWingmanActive, setWingmanActive } = useNellyStore();
 
     useEffect(() => {
         if (!isCollapsed) {
@@ -136,7 +136,7 @@ export const Sidebar = ({ activeTab, setActiveTab, isCollapsed, setIsCollapsed }
                             <LifeBuoy size={18} className="text-ohs-orange" />
                             <span className="text-sm font-medium">Need Help?</span>
                         </div>
-                        <p className="text-xs text-gray-400">Ask Melly for instant assistance.</p>
+                        <p className="text-xs text-gray-400">Ask Nelly for instant assistance.</p>
                     </div>
                 </div>
             </div>

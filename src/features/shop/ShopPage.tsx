@@ -5,7 +5,7 @@ import { useAgentLog } from '../../store/agentLogStore';
 
 const products = [
     { id: 1, name: "ErgoSafe Lumbar Pillow", price: "$29.99", image: "🛋️" },
-    { id: 2, name: "Melly Approved Blue Light Glasses", price: "$19.99", image: "👓" },
+    { id: 2, name: "Nelly Approved Blue Light Glasses", price: "$19.99", image: "👓" },
     { id: 3, name: "Adjustable Desk Riser", price: "$149.99", image: "🖥️" },
     { id: 4, name: "Hydrate Smart Bottle", price: "$39.99", image: "💧" },
     { id: 5, name: "Safety First Mug", price: "$12.99", image: "☕" },

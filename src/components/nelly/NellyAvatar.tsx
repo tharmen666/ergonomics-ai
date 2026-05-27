@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useMellyStore } from '../../store/mellyStore';
+import { useNellyStore } from '../../store/nellyStore';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 import { useAgentLog } from '../../store/agentLogStore';
-import { MellyCore } from './MellyCore';
-import { MellyInterface } from './MellyInterface';
-import { MellyEmergencyUI } from './MellyEmergencyUI';
+import { NellyCore } from './NellyCore';
+import { NellyInterface } from './NellyInterface';
+import { NellyEmergencyUI } from './NellyEmergencyUI';
 import { translations, Language, TranslationEntry } from '../../utils/translations';
 
 /**
- * MellyAvatar: The primary entry point for the Melly AI Coach.
+ * NellyAvatar: The primary entry point for the Nelly AI Coach.
  * Orchestrates the Core Avatar, Interface, and Emergency UI.
  */
-export const MellyAvatar = () => {
+export const NellyAvatar = () => {
     const { 
         isWingmanActive, 
         isSpeaking, 
@@ -21,9 +21,9 @@ export const MellyAvatar = () => {
         language, 
         setLanguage, 
         setGuidance,
-        isMellyExpanded,
-        setMellyExpanded 
-    } = useMellyStore();
+        isNellyExpanded,
+        setNellyExpanded 
+    } = useNellyStore();
     const { addLog } = useAgentLog();
     
     const { fatigueLevel } = useFatigueStore();
@@ -56,24 +56,24 @@ export const MellyAvatar = () => {
             setSpeaking(true);
             const response = "EMERGENCY PROTOCOL ACTIVATED. Halted all non-critical processes. Contacting onsite first-aid immediately.";
             setGuidance(response);
-            addLog('Melly', response);
+            addLog('Nelly', response);
         } else if (isFirstAid) {
             const currentLang = (language as Language) || 'en';
             const response = (translations[currentLang] as TranslationEntry)?.first_aid || translations['en'].first_aid;
             setGuidance(response);
-            addLog('Melly', response);
+            addLog('Nelly', response);
             setSpeaking(true);
             setTimeout(() => setSpeaking(false), 5000);
         } else if (isSymptom) {
             setSpeaking(true);
             const response = "WARNING: Nerve compression detected. Tingling in the extremities is a high-risk indicator for Carpal Tunnel Syndrome or cervical compression. ACTION: Please stand up, perform 5 shoulder rolls, and avoid repetitive clicking for the next 10 minutes. I am logging this as a Section 37 Liability Risk.";
             setGuidance(response);
-            addLog('Melly', response);
+            addLog('Nelly', response);
             setTimeout(() => setSpeaking(false), 8000);
         } else {
             // Context-Aware Response Algorithm
             setSpeaking(true);
-            addLog('Melly', "Analyzing telemetry for Stewardship AI response...");
+            addLog('Nelly', "Analyzing telemetry for Stewardship AI response...");
             
             // 3-second fail-safe timer
             setTimeout(() => {
@@ -85,7 +85,7 @@ export const MellyAvatar = () => {
                     response = `Stewardship Protocol Active: OHS standards verified for your query. Maintaining continuous compliance telemetry.`;
                 }
                 setGuidance(response);
-                addLog('Melly', response);
+                addLog('Nelly', response);
                 setTimeout(() => setSpeaking(false), 3000);
             }, 3000);
         }
@@ -98,7 +98,7 @@ export const MellyAvatar = () => {
         <div className="fixed bottom-4 right-4 z-[9999] flex flex-col items-end pointer-events-none">
             {/* Reasoning Hub Container */}
             <AnimatePresence mode="wait">
-                {isMellyExpanded && (
+                {isNellyExpanded && (
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -106,21 +106,21 @@ export const MellyAvatar = () => {
                         className="pointer-events-auto"
                     >
                         {isEmergency ? (
-                            <MellyEmergencyUI onDeescalate={() => setIsEmergency(false)} />
+                            <NellyEmergencyUI onDeescalate={() => setIsEmergency(false)} />
                         ) : (
-                            <MellyInterface 
+                            <NellyInterface 
                                 language={language}
                                 setLanguage={setLanguage}
-                                onClose={() => setMellyExpanded(false)}
+                                onClose={() => setNellyExpanded(false)}
                                 onTour={() => {
                                     setTourActive(true);
-                                    setMellyExpanded(false);
+                                    setNellyExpanded(false);
                                 }}
                                 onStewardship={() => {
                                     setSpeaking(true);
                                     const response = "STEWARDSHIP AUDIT: Are you currently seated at a desk or working from a bed/couch? (Please type your response)";
                                     setGuidance(response);
-                                    addLog('Melly', response);
+                                    addLog('Nelly', response);
                                     setTimeout(() => setSpeaking(false), 8000);
                                 }}
                                 userInput={userInput}
@@ -133,21 +133,21 @@ export const MellyAvatar = () => {
                 )}
             </AnimatePresence>
 
-            {/* Melly Avatar - Shifts Up When Hub is Open */}
+            {/* Nelly Avatar - Shifts Up When Hub is Open */}
             <div 
                 className={`absolute right-0 transition-all duration-500 ease-in-out z-[10000] ${
-                    isMellyExpanded ? 'bottom-[420px] md:bottom-[450px]' : 'bottom-0'
+                    isNellyExpanded ? 'bottom-[420px] md:bottom-[450px]' : 'bottom-0'
                 }`}
             >
-                <MellyCore 
+                <NellyCore 
                     isSpeaking={isSpeaking} 
                     onClick={() => {
-                        if (isMellyExpanded) {
+                        if (isNellyExpanded) {
                             window.speechSynthesis.cancel();
                             setSpeaking(false);
-                            setMellyExpanded(false);
+                            setNellyExpanded(false);
                         } else {
-                            setMellyExpanded(true);
+                            setNellyExpanded(true);
                         }
                     }}
                 />

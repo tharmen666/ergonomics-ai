@@ -35,7 +35,7 @@ export const REASONABLY_PRACTICABLE_2026 = {
 export const RIGHT_TO_DISCONNECT_FRAMEWORK = {
     concept: "2026 'Right to Disconnect' Safeguard",
     ccmaRisk: "CCMA 'Digital Tethering' Claims",
-    description: "Spiking by 142% in 2026, remote workers are successfully bringing constructive dismissal and unpaid overtime claims against financial institutions due to after-hours messaging and systemic digital exhaustion. Ergo-Safe locks down digital access via Melly's Fatigue-Gate and DOA Lockouts, providing immediate legal evidence that the employer took all 'Reasonably Practicable' steps to prevent digital tethering and psychosocial hazards.",
+    description: "Spiking by 142% in 2026, remote workers are successfully bringing constructive dismissal and unpaid overtime claims against financial institutions due to after-hours messaging and systemic digital exhaustion. Ergo-Safe locks down digital access via Nelly's Fatigue-Gate and DOA Lockouts, providing immediate legal evidence that the employer took all 'Reasonably Practicable' steps to prevent digital tethering and psychosocial hazards.",
     complianceCode: "ISO 45003:2021 (Psychosocial Risk Management), ISO 45001:2018 Clause 6.1.2, and CCMA Arbitration Precedents 2024–2026."
 } as const;
 
@@ -45,7 +45,7 @@ export const FINANCIAL_PITCHES: Record<string, PitchTemplate> = {
         sector: 'financial',
         targetAudience: "HR Executive, Operations Leads, IT Infrastructure Team",
         dutyOfCareFocus: "Ergonomic validation for 12,000+ hybrid branch administrators and call center staff working from home.",
-        disconnectStrategy: "Melly AI active burnout checks, automatically logging screen-time and suggesting micro-stretches to standardise off-hours disconnection.",
+        disconnectStrategy: "Nelly AI active burnout checks, automatically logging screen-time and suggesting micro-stretches to standardise off-hours disconnection.",
         valueProposition: "Protects Standard Bank from vicarious liability under Section 37 of the OHS Act while optimizing remote workforce productivity via localized isiZulu and Sesotho safety coaching.",
         outreachSubject: "Sovereign Board Briefing: Mitigating 2026 OHS Home-Office Liability at Standard Bank",
         complianceStandards: [
@@ -71,7 +71,7 @@ Ergo-Safe OHS Task Force`
         sector: 'financial',
         targetAudience: "Chief Risk Officer, Employee Wellness Director",
         dutyOfCareFocus: "Mitigating CCMA constructive dismissal risks from remote software developers and digital banking operations teams.",
-        disconnectStrategy: "Active Fatigue-Check gatekeeping. When employees log consecutive late-night commits or operations, Melly triggers a mandatory cognitive handshake, logging off-hours safety metrics.",
+        disconnectStrategy: "Active Fatigue-Check gatekeeping. When employees log consecutive late-night commits or operations, Nelly triggers a mandatory cognitive handshake, logging off-hours safety metrics.",
         valueProposition: "Direct integration into FNB's employee wellness apps, translating compliance actions into FNB 'eBucks' or internal wellness rewards to drive 95%+ daily compliance.",
         outreachSubject: "Securing FNB's Hybrid Perimeter: 2026 OHS Compliance & Digital Tethering Defense",
         complianceStandards: [
@@ -84,7 +84,7 @@ Ergo-Safe OHS Task Force`
 
 As FNB continues leading digital banking, remote operations have created a new regulatory vulnerability. In 2026, CCMA 'Digital Tethering' claims are rising sharply, with remote workers securing substantial compensation for after-hours cognitive strain. Under the OHS Act's 'Reasonably Practicable' mandate and ISO 45003:2021, FNB is legally required to actively manage these home-office psychosocial risks.
 
-Ergo-Safe Reborn offers an automated solution. Melly's Cognitive Handshake and Fatigue-Gate protocols integrate directly into employee daily workflows, guaranteeing continuous compliance telemetry while enforcing the Right to Disconnect. Our gamified compliance model aligns perfectly with FNB's innovation culture, ensuring wellness is tracked, verified, and logged in a digital OHS ledger admissible under Section 24 incident reporting obligations.
+Ergo-Safe Reborn offers an automated solution. Nelly's Cognitive Handshake and Fatigue-Gate protocols integrate directly into employee daily workflows, guaranteeing continuous compliance telemetry while enforcing the Right to Disconnect. Our gamified compliance model aligns perfectly with FNB's innovation culture, ensuring wellness is tracked, verified, and logged in a digital OHS ledger admissible under Section 24 incident reporting obligations.
 
 Let us schedule a 10-minute briefing to review FNB's OHS risk mitigation posture.
 
@@ -168,5 +168,38 @@ We formally propose a Digital Partnership Agreement positioning Ergo-Safe as the
 
 Sincerely,
 Ergo-Safe OHS Task Force | Ergo-Safe (Pty) Ltd`
+    },
+
+    service_stations: {
+        client: "Service Stations (Engen / BP / Shell / Astron Energy)",
+        sector: 'industrial',
+        targetAudience: "Service Station Owner / Group Operations Manager",
+        dutyOfCareFocus: "Eliminating forecourt liability and standardizing instant emergency spill and evacuation procedures.",
+        disconnectStrategy: "Providing frontline teams with physical OHS Haven Dual-Layer Safety Lanyards connected directly to the digital ErgoSafe LMS.",
+        valueProposition: "Instantly bridges physical on-site emergencies with digital compliance tracking, safeguarding Section 16(2) manager liability tracks.",
+        outreachSubject: "Eliminating Forecourt Liability & Upskilling Attendants on the Spot - OHS Haven",
+        complianceStandards: [
+            { code: "OHS Act S.8", clause: "Section 8 – General Duties", relevance: "Proves 'Reasonably Practicable' safety measures are actively accessible on the forecourt." },
+            { code: "OHS Act S.16", clause: "Section 16(2) – Manager Liability", relevance: "Safeguards appointed managers by verifying staff training." },
+            { code: "ISO 45001:2018", clause: "Clause 7.4 – Communication", relevance: "Bilingual (English & isiZulu) emergency steps fulfill communication mandates." },
+        ],
+        emailDraft: `Dear Service Station Owner / Group Operations Manager,
+
+When a fuel spill occurs or a customer queries your brand transition on the forecourt, your brand reputation and regulatory compliance are decided in under 60 seconds. Relying on physical paper training manuals stored away in a back office leaves your site exposed to massive liability gaps under the South African OHS Act.
+
+We have standardized on-site compliance with the OHS Haven Dual-Layer Safety Lanyards, designed explicitly in your exact corporate brand layouts (Engen / BP / Shell / Astron Energy).
+
+Worn directly by your frontline team, these premium, color-coded lanyards provide immediate step-by-step procedures:
+- Side A: Instant Emergency Evacuation & HazMat Spill Containment Steps (English & isiZulu)
+- Side B: Step-by-Step Customer Service Routines & Caltex-to-Astron Transition FAQ Tracks
+
+This physical onboarding asset links directly to our interactive digital LMS platform, enabling staff to clear mandatory regulatory assessments on their mobile viewports. It completely safeguards your Section 16(2) manager liability tracks.
+
+Reply directly to this mail to secure a live 5-minute workspace demonstration and lock down your site's customized layout order bundle.
+
+Sincerely,
+Desigan Tharmen (DEZO)
+Lead Systems Architect & OHS Compliance Specialist
+OHS Haven & ErgoSafe Framework Suite`
     }
 };

@@ -14,7 +14,7 @@ export const HackathonDemo = () => {
                     src="/assets/recording.mp4"
                     controls
                     preload="auto"
-                    poster="/assets/melly-steward-final.png"
+                    poster="/assets/nelly-steward-final.png"
                     title="ErgoSafe Reborn Hackathon Demo"
                 ></video>
             </div>

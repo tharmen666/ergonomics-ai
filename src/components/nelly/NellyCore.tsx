@@ -1,22 +1,22 @@
 import { motion } from 'framer-motion';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 
-interface MellyCoreProps {
+interface NellyCoreProps {
     isSpeaking: boolean;
     onClick: () => void;
 }
 
-export const MellyCore = ({ isSpeaking, onClick }: MellyCoreProps) => {
+export const NellyCore = ({ isSpeaking, onClick }: NellyCoreProps) => {
     const { fatigueLevel } = useFatigueStore();
 
     return (
         <motion.div
             className={`relative group w-16 h-16 rounded-full border-4 border-ohs-orange/30 p-1 bg-ohs-navy shadow-2xl overflow-hidden cursor-pointer pointer-events-auto`}
-            layoutId="melly-core"
+            layoutId="nelly-core"
             onClick={onClick}
             whileTap={{ scale: 0.95 }}
-            aria-label="Melly AI Avatar"
-            title="Melly AI Avatar"
+            aria-label="Nelly AI Avatar"
+            title="Nelly AI Avatar"
         >
             <div className={`w-full h-full rounded-full overflow-hidden relative border-[3px] flex items-center justify-center transition-colors duration-500 ${
                 fatigueLevel === 'nominal' ? 'border-green-500 bg-gradient-to-br from-green-500/20 to-black' : 
@@ -24,9 +24,9 @@ export const MellyCore = ({ isSpeaking, onClick }: MellyCoreProps) => {
                 'border-red-500 bg-gradient-to-br from-red-500/20 to-black'
             }`}>
                 <img 
-                    src="/assets/melly-new-avatar.png" 
+                    src="/assets/nelly-new-avatar.png" 
                     className="w-full h-full object-cover" 
-                    alt="Melly Avatar" 
+                    alt="Nelly Avatar" 
                 />
                 
                 {/* Speaking Animation Overlay */}

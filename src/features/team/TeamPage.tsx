@@ -3,7 +3,7 @@ import { User, Shield, Heart, Zap } from 'lucide-react';
 
 const members = [
     {
-        name: "Melly",
+        name: "Nelly",
         role: "CEO & AI Safety Officer",
         desc: "Oversees all operations accurately. Never sleeps, never misses a hazard.",
         icon: Zap,

@@ -5,10 +5,10 @@ import { LeanPerformanceRail } from '../../components/AI-Coach/LeanPerformanceRa
 import { HackathonDemo } from '../../components/HackathonDemo';
 
 import { REASONABLY_PRACTICABLE_2026, RIGHT_TO_DISCONNECT_FRAMEWORK, FINANCIAL_PITCHES } from '../../logic/financePitches';
-import { useMellyStore } from '../../store/mellyStore';
+import { useNellyStore } from '../../store/nellyStore';
 
 export const ExecutiveBriefing = () => {
-    const { language } = useMellyStore();
+    const { language } = useNellyStore();
     return (
         <div className="p-4 md:p-10 max-w-7xl mx-auto space-y-8 mb-24 overflow-x-hidden">
             <motion.div
@@ -122,7 +122,7 @@ export const ExecutiveBriefing = () => {
                     <div className="bg-white/5 p-6 rounded-2xl border border-white/10 relative overflow-hidden group">
                         <div className="absolute top-0 right-0 p-2 text-blue-500/20 group-hover:text-blue-500/40 transition-colors"><FileText size={48} /></div>
                         <h4 className="text-blue-500 font-black mb-2 uppercase tracking-widest text-xs relative z-10">Knowledge</h4>
-                        <p className="text-sm text-gray-300 font-medium relative z-10 leading-relaxed mb-4">Melly Multilingual ISO Sync</p>
+                        <p className="text-sm text-gray-300 font-medium relative z-10 leading-relaxed mb-4">Nelly Multilingual ISO Sync</p>
                         <div className="bg-black/50 p-3 rounded-xl border border-blue-500/30">
                             <p className="text-[10px] text-white italic">"Mastery Tip: ISO 45003 maps psychosocial risk—deploy training via isiZulu to cover non-native dynamics."</p>
                         </div>

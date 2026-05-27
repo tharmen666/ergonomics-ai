@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-interface MellyState {
+interface NellyState {
     isSpeaking: boolean;
     currentGuidance: string | null;
     showAvatar: boolean;
@@ -13,8 +13,8 @@ interface MellyState {
     setTourActive: (active: boolean) => void;
     isWingmanActive: boolean;
     setWingmanActive: (active: boolean) => void;
-    isMellyExpanded: boolean;
-    setMellyExpanded: (expanded: boolean) => void;
+    isNellyExpanded: boolean;
+    setNellyExpanded: (expanded: boolean) => void;
     isSidebarCollapsed: boolean;
     setSidebarCollapsed: (collapsed: boolean) => void;
     isIndustrialMode: boolean;
@@ -30,7 +30,7 @@ interface MellyState {
     resetStreak: () => void;
 }
 
-export const useMellyStore = create<MellyState>()(
+export const useNellyStore = create<NellyState>()(
     persist(
         (set) => ({
             isSpeaking: false,
@@ -39,7 +39,7 @@ export const useMellyStore = create<MellyState>()(
             mood: 'neutral',
             isTourActive: false,
             isWingmanActive: false,
-            isMellyExpanded: false,
+            isNellyExpanded: false,
             isSidebarCollapsed: false,
             isIndustrialMode: false,
             language: 'en',
@@ -51,7 +51,7 @@ export const useMellyStore = create<MellyState>()(
             toggleAvatar: () => set((state) => ({ showAvatar: !state.showAvatar })),
             setTourActive: (isTourActive) => set({ isTourActive }),
             setWingmanActive: (isWingmanActive) => set({ isWingmanActive }),
-            setMellyExpanded: (isMellyExpanded) => set({ isMellyExpanded }),
+            setNellyExpanded: (isNellyExpanded) => set({ isNellyExpanded }),
             setSidebarCollapsed: (isSidebarCollapsed) => set({ isSidebarCollapsed }),
             setIndustrialMode: (isIndustrialMode) => set({ isIndustrialMode }),
             setLanguage: (language) => set({ language }),
@@ -65,6 +65,6 @@ export const useMellyStore = create<MellyState>()(
             incrementStreak: () => set((state) => ({ productiveStreak: state.productiveStreak + 1 })),
             resetStreak: () => set({ productiveStreak: 0 }),
         }),
-        { name: 'melly-storage' }
+        { name: 'nelly-storage' }
     )
 );
