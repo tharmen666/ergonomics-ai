@@ -9,6 +9,7 @@ import { RiskPage } from './features/risk/RiskPage';
 import { TeamPage } from './features/team/TeamPage';
 import { ShopPage } from './features/shop/ShopPage';
 import { InvoicesPage } from './features/finance/InvoicesPage';
+import { LanyardMatrixUI } from './features/training/LanyardMatrixUI';
 
 import { SelfAssessmentPage } from './features/assessment/SelfAssessmentPage';
 import { RiskyBehaviorsPage } from './features/risks/RiskyBehaviorsPage';
@@ -97,6 +98,7 @@ function App() {
           {activeTab === 'risk' && <RiskPage />}
           {activeTab === 'team' && <TeamPage />}
           {activeTab === 'shop' && <ShopPage />}
+          {activeTab === 'lanyards' && <LanyardMatrixUI />}
           {activeTab === 'finance' && <InvoicesPage />}
           {activeTab === 'assessment' && <SelfAssessmentPage />}
           {activeTab === 'risks' && <RiskyBehaviorsPage />}
