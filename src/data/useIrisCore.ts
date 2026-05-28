@@ -17,7 +17,6 @@ import type {
   SOPTrack,
   FAQCard,
   LocaleCode,
-  IrisCoreDatabase,
 } from "./irisSchema";
 
 /**
@@ -139,10 +138,10 @@ export function useSearchSOPs(
  * Hook: Get localized content for all SOPs and FAQs
  */
 export function useLocalizedIrisContent(locale: LocaleCode = "en") {
-  const [content, setContent] = useState({
-    emergencySOPs: [] as SOPTrack[],
-    serviceSOPs: [] as SOPTrack[],
-    faqDeck: [] as FAQCard[],
+  const [content, setContent] = useState<any>({
+    emergencySOPs: [],
+    serviceSOPs: [],
+    faqDeck: [],
   });
   const [loading, setLoading] = useState(true);
 
