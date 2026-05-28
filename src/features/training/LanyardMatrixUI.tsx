@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { FORECOURT_LANYARD_MATRIX } from '../../data/lanyardMatrix';
-import { ShieldAlert, Droplets, Smile, MessageCircle, Mic, Globe2, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { ShieldAlert, Droplets, Smile, MessageCircle, Mic, Globe2, ChevronRight, CheckCircle2, ScanFace } from 'lucide-react';
+import { LanyardCardPreview } from './LanyardCardPreview';
 
 export const LanyardMatrixUI = () => {
     const [activeLanguage, setActiveLanguage] = useState<'en' | 'zu'>('en');
-    const [activeTab, setActiveTab] = useState<'sideA' | 'sideB' | 'faq'>('sideA');
+    const [activeTab, setActiveTab] = useState<'sideA' | 'sideB' | 'faq' | 'mockup'>('sideA');
 
     const matrix = FORECOURT_LANYARD_MATRIX;
 
@@ -61,6 +62,12 @@ export const LanyardMatrixUI = () => {
                     className={`flex-1 min-w-[150px] flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-bold transition-all ${activeTab === 'faq' ? 'bg-ohs-orange/20 text-ohs-orange border border-ohs-orange/30' : 'text-gray-400 hover:bg-white/5'}`}
                 >
                     <MessageCircle size={18} /> Astron FAQ Deck
+                </button>
+                <button 
+                    onClick={() => setActiveTab('mockup')}
+                    className={`flex-1 min-w-[150px] flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-bold transition-all ${activeTab === 'mockup' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30' : 'text-gray-400 hover:bg-white/5'}`}
+                >
+                    <ScanFace size={18} /> Physical Mockup
                 </button>
             </div>
 
@@ -178,6 +185,11 @@ export const LanyardMatrixUI = () => {
                             </div>
                         ))}
                     </div>
+                )}
+
+                {/* PHYSICAL MOCKUP VIEW */}
+                {activeTab === 'mockup' && (
+                    <LanyardCardPreview />
                 )}
             </div>
         </div>
