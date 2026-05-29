@@ -1,0 +1,33 @@
+{
+  "buckets": [
+    {
+      "id": "PROJECT_REBORN",
+      "name": "ErgoSafe Reborn: Stewardship & Fatigue Engine",
+      "path": "C:/Users/dthar/Downloads/ErgoSafe_Project/",
+      "stack": "React/TypeScript",
+      "performanceTarget": "Stable 60 FPS animation loops",
+      "mediaPipeline": "public/assets/recording.mp4",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "PROJECT_HAVEN",
+      "name": "OHS Haven: LMS Forecourt & Compliance Matrix",
+      "path": "C:/Users/dthar/Desktop/Desktop/pdf sep 2025",
+      "alignment": "SAQA Unit Standard 259622 NQF Level 2",
+      "complianceRules": "irisCore.json",
+      "features": ["Multi-lingual record matrices", "On-site PPE compliance checking"],
+      "status": "ACTIVE"
+    },
+    {
+      "id": "PROJECT_CREDIT",
+      "name": "Trade Credit Automation & Risk Mitigation Engine",
+      "path": "C:/Users/dthar/Downloads/ErgoSafe_Project/ergo-safe-reborn/src/logic/financePitches.ts",
+      "recoveryMethodology": "Historical R38 Million recovery methodologies & Pre-legal dispute resolutions",
+      "automatedHooks": ["Standard Bank", "FNB", "Discovery", "Sanlam"],
+      "status": "STAGED"
+    }
+  ],
+  "lastSync": "2026-05-29T18:02:22+02:00",
+  "steward": "Nelly (Safety Knight Backend Core)",
+  "copilot": "Iris"
+}
