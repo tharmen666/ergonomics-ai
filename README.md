@@ -4,13 +4,20 @@ Welcome to **ErgoSafe Reborn**, the pinnacle of Privacy-First OHS Architecture.
 
 This repository houses a state-of-the-art "Digital Wingman" application designed specifically to protect remote workforces from ergonomic deterioration, cognitive fatigue, and the chronic "Bed-Working" rot that plagues modern distributed teams.
 
+## 🏆 Google Cloud Rapid Agent Hackathon Submission
+
+This project is submitted to the Google Cloud Rapid Agent Hackathon.
+
+- **Powered by Gemini & Google Cloud Agent Builder**: "Nelly" is a fully functional AI agent orchestrated by Google Cloud Agent Builder and powered by the Gemini model to provide real-time, context-aware safety coaching and interventions.
+- **Partner Integration (MongoDB)**: We deeply integrate the **MongoDB MCP Server** to handle our live safety telemetry and Section 37/38 compliance ledgers. Every daily safety scan, ergonomic check, and compliance handshake is embedded into MongoDB. Nelly utilizes the MCP server to autonomously query this database, dynamically alerting management to compliance gaps in real-time.
+
 ## 🛡️ The Philosophy: "Human-in-the-Loop"
 
 ErgoSafe Reborn is fundamentally **a performance tool, not a spy tool**. Our core philosophy revolves around the "Human-in-the-Loop" guarantee:
 
 - We track posture and interaction data locally and securely.
 - We do not use this data to punish or penalize employees.
-- Instead, the AI agent (Melly) acts as an ethical coach, issuing **nudges** and suggesting **Professional Resets** instead of cold, punitive warnings.
+- Instead, the AI agent (Nelly) acts as an ethical coach, issuing **nudges** and suggesting **Professional Resets** instead of cold, punitive warnings.
 - *Your Data is Your Shield.* All compliance reports and behavioral audits are end-to-end encrypted and filed securely into zero-knowledge dossiers.
 
 ## ⚖️ Legal Guardrails: Sections 37 & 38
@@ -45,3 +52,5 @@ The master production branch automatically deploys to Vercel upon push, ensuring
 ---
 
 *ErgoSafe Reborn: Empowering remote teams safely, ethically, and responsibly.*
+
+<!-- FORCE REDEPLOY: v1.8.6 Universal Minimalist Navigation (2026-05-13T02:31:38+02:00) -->
