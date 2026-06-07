@@ -14,7 +14,7 @@ export const SafetyStreaks = () => {
 
             <div className="flex items-start justify-between z-10">
                 <div>
-                    <h3 className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-1">Digital Wingman Status</h3>
+                    <h3 className="text-gray-400 font-bold uppercase tracking-widest text-xs mb-1">Stewardship Authority Status</h3>
                     <h2 className="text-2xl font-black text-white flex items-center gap-2">
                         SAFETY STREAKS <Medal className="text-ohs-orange" size={24} />
                     </h2>
@@ -50,7 +50,7 @@ export const SafetyStreaks = () => {
             {isHighPerforming && (
                 <div className="mt-4 p-3 bg-green-500/10 border border-green-500/20 rounded-xl">
                     <p className="text-xs text-green-400 font-medium">
-                        <strong className="text-green-500 font-bold">Melly says:</strong> You're operating at peak efficiency. Keeping the human in the loop drives high-performance culture.
+                        <strong className="text-green-500 font-bold">Nelly says:</strong> You're operating at peak efficiency. Keeping the human in the loop drives high-performance culture.
                     </p>
                 </div>
             )}

@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BrainCircuit, Target, ShieldAlert } from 'lucide-react';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
-import { useMellyStore } from '../../store/mellyStore';
+import { useNellyStore } from '../../store/nellyStore';
 
 export const CognitiveHandshake = () => {
     const { cognitiveHandshakePassed, showCognitiveHandshake, setShowCognitiveHandshake, passCognitiveHandshake, failCognitiveHandshake, warnCognitiveHandshake } = useFatigueStore();
-    const { setGuidance, setSpeaking, setMood } = useMellyStore();
+    const { setGuidance, setSpeaking, setMood } = useNellyStore();
 
     // Game State
     const [targetsHit, setTargetsHit] = useState(0);
@@ -160,7 +160,7 @@ export const CognitiveHandshake = () => {
                     <div className="absolute top-12 text-center max-w-lg">
                         <BrainCircuit className="text-ohs-orange mx-auto mb-4" size={48} />
                         <h2 className="text-3xl font-black mb-2 tracking-tight">MANDATORY COGNITIVE HANDSHAKE</h2>
-                        <p className="text-gray-400 font-medium">Click the targets as quickly as possible to establish your baseline. Lag &gt; 20% will trigger Digital Wingman protocols.</p>
+                        <p className="text-gray-400 font-medium">Click the targets as quickly as possible to establish your baseline. Lag &gt; 20% will trigger Executive Stewardship protocols.</p>
 
                         <div className="mt-8 flex justify-center gap-2">
                             {Array.from({ length: TOTAL_TARGETS }).map((_, i) => (

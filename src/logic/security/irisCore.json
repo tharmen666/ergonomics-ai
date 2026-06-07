@@ -1,0 +1,87 @@
+{
+  "$schema": "https://ergosafe.io/schemas/multimodal-core-v2.json",
+  "metadata": {
+    "engine": "GEAR Pillars v2.5 / OHS Haven",
+    "assistant": "Iris, the Safety Agent",
+    "version": "2.5.0",
+    "multimodalReady": true,
+    "lastSynchronized": "2026-05-27T22:09:04+02:00"
+  },
+  "ppe_inspection_matrix": {
+    "targetElements": [
+      {
+        "id": "hardhat",
+        "description": "Industrial Safety Hard Hat / Helmet",
+        "complianceStandard": "SANS 1397 / ISO 3873",
+        "detectionThreshold": 0.85,
+        "hazardMitigation": "Protects against falling debris and impact trauma in active zones."
+      },
+      {
+        "id": "high_vis_vest",
+        "description": "High-Visibility Reflective Safety Vest",
+        "complianceStandard": "SANS 50471 / EN ISO 20471",
+        "detectionThreshold": 0.90,
+        "hazardMitigation": "Guarantees frontline worker visibility to heavy logistics machinery."
+      },
+      {
+        "id": "safety_boots",
+        "description": "Steel-Toed Protective Safety Footwear",
+        "complianceStandard": "SANS 20345 / ISO 20345",
+        "detectionThreshold": 0.80,
+        "hazardMitigation": "Mitigates crush injuries and puncture hazards underfoot."
+      },
+      {
+        "id": "ergonomic_posture",
+        "description": "L4-L5 Vertebrae Lifting Angle Check",
+        "complianceStandard": "ISO 11228-1 (Manual Handling)",
+        "detectionThreshold": 0.75,
+        "hazardMitigation": "Bypasses musculoskeletal strain and remote bed-work ergonomic rot."
+      }
+    ]
+  },
+  "vocal_profile_config": {
+    "primaryAccent": {
+      "locale": "en-ZA",
+      "voiceName": "en-ZA-Wavenet-Iris",
+      "speakingRate": 1.05,
+      "pitchShift": "+2.0st",
+      "tone": "Vibrant Happy-Go-Lucky Corporate Safety Professor"
+    },
+    "secondaryLanguage": {
+      "locale": "zu-ZA",
+      "voiceName": "zu-ZA-Standard-A",
+      "speakingRate": 0.98,
+      "pitchShift": "+0.5st",
+      "tone": "Warm Authoritative Native isiZulu"
+    }
+  },
+  "tiger_cloud_sync_schema": {
+    "persistenceEngine": "Serverless Tiger Cloud Postgres Layer",
+    "logMappingTable": "frontline_compliance_logs",
+    "fields": [
+      { "name": "log_id", "type": "UUID", "primaryKey": true, "default": "gen_random_uuid()" },
+      { "name": "timestamp", "type": "TIMESTAMPTZ", "nullable": false },
+      { "name": "employee_id", "type": "VARCHAR(64)", "nullable": false },
+      { "name": "compliance_streak", "type": "INT", "default": 0 },
+      { "name": "fatigue_index", "type": "DECIMAL(5,2)", "nullable": false },
+      { "name": "language_preference", "type": "VARCHAR(5)", "default": "en" },
+      { "name": "ppe_verified_status", "type": "BOOLEAN", "default": false },
+      { "name": "dossier_hash_sha256", "type": "VARCHAR(64)", "nullable": true },
+      { "name": "compliance_score_percent", "type": "NUMERIC(5,2)", "default": 100.00 }
+    ],
+    "migrationDirectives": {
+      "autoMigrationEnabled": true,
+      "syncIntervalMs": 300000,
+      "failoverPersistence": "localJSONCache"
+    }
+  },
+  "multimodal_gemini_omni_triggers": {
+    "supportedInputStreams": ["video_h264_frame", "image_jpeg", "audio_pcm_duplex"],
+    "processingFrequencyFps": 15,
+    "voiceEgressMode": "realtime_tts_stream_duplex",
+    "onSiteInspectionDirectives": {
+      "analyzePPE": "Flag immediately if detectionThreshold is unmet on any targetElement during camera feed activation.",
+      "analyzeFatigue": "Evaluate facial micro-expression telemetry for signs of cognitive fatigue or severe pain, triggering immediate DOA Lockouts on anomaly detection."
+    }
+  }
+}

@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
-import { useMellyStore } from '../../store/mellyStore';
+import { useNellyStore } from '../../store/nellyStore';
 
 export const LeanPerformanceRail = () => {
     const { fatigueLevel, reactionMemory } = useFatigueStore();
-    const { productiveStreak, incrementStreak } = useMellyStore();
+    const { productiveStreak, incrementStreak } = useNellyStore();
 
     useEffect(() => {
         if (fatigueLevel === 'nominal') {

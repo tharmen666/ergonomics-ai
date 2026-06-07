@@ -1,4 +1,4 @@
-import { GlassCard } from '../../components/ui/GlassCard';
+
 import { ActivityChart, ComplianceRing } from './Charts';
 import { Users, AlertCircle, FileText } from 'lucide-react';
 import { DailySafetyChecklist } from './DailySafetyChecklist';
@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Check, ShieldCheck } from 'lucide-react';
 import { SafetyStreaks } from '../../components/AI-Coach/SafetyStreaks';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
-import { GlowButton } from '../../components/ui/GlowButton';
+
 
 export const DashboardPage = () => {
     const { cognitiveHandshakePassed, setShowCognitiveHandshake } = useFatigueStore();
@@ -17,7 +17,7 @@ export const DashboardPage = () => {
             <motion.div 
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="glass-ohs p-6 rounded-[2rem] border-l-8 border-ohs-orange flex items-center justify-between overflow-hidden relative"
+                className="glass-ohs p-6 rounded-[2rem] border-l-8 border-ohs-orange flex flex-col sm:flex-row sm:items-center justify-between gap-4 overflow-hidden relative"
             >
                 <div className="absolute top-0 right-0 w-64 h-64 bg-ohs-orange/5 rounded-full blur-3xl -mr-32 -mt-32" />
                 <div className="relative z-10">
@@ -25,18 +25,18 @@ export const DashboardPage = () => {
                         <ShieldCheck size={16} className="text-ohs-orange" />
                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-ohs-orange">Stewardship Protocol Active</span>
                     </div>
-                    <h2 className="text-2xl font-black tracking-tighter text-white">BOARDROOM TRANSPARENCY HUB</h2>
-                    <p className="text-sm text-gray-400 font-medium">Cascading OHS Section 37 Liability from Employee to CEO.</p>
+                    <h2 className="text-xl sm:text-2xl font-black tracking-tighter text-white">BOARDROOM TRANSPARENCY HUB</h2>
+                    <p className="text-xs sm:text-sm text-gray-400 font-medium">Cascading OHS Section 37 Liability from Employee to CEO.</p>
                 </div>
-                <div className="hidden md:flex gap-4 relative z-10">
-                    <div className="text-right">
+                <div className="flex gap-4 relative z-10 justify-start sm:justify-end">
+                    <div className="text-left sm:text-right">
                         <p className="text-[9px] font-black text-gray-500 uppercase">Board Compliance</p>
-                        <p className="text-xl font-black text-ohs-green">100%</p>
+                        <p className="text-lg sm:text-xl font-black text-ohs-green">100%</p>
                     </div>
                     <div className="w-px h-10 bg-white/10" />
-                    <div className="text-right">
+                    <div className="text-left sm:text-right">
                         <p className="text-[9px] font-black text-gray-500 uppercase">Risk Mitigation</p>
-                        <p className="text-xl font-black text-ohs-blue">SECURE</p>
+                        <p className="text-lg sm:text-xl font-black text-ohs-blue">SECURE</p>
                     </div>
                 </div>
             </motion.div>
@@ -53,11 +53,11 @@ export const DashboardPage = () => {
                             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
                             <div className="relative z-10">
                                 <h3 className="text-2xl font-black text-white tracking-tight">Daily Cognitive Sync Required</h3>
-                                <p className="text-gray-400 font-medium max-w-md">Establish your baseline today to activate Digital Wingman features and ensure safe operational standard work rates.</p>
+                                <p className="text-gray-400 font-medium max-w-md">Establish your baseline today to activate Stewardship Authority features and ensure safe operational standard work rates.</p>
                             </div>
                             <button 
                                 onClick={() => setShowCognitiveHandshake(true)} 
-                                className="premium-button whitespace-nowrap bg-ohs-orange text-ohs-navy px-8 py-4 rounded-2xl font-black text-sm shadow-[0_10px_30px_rgba(249,168,37,0.4)]"
+                                className="premium-button whitespace-nowrap bg-ohs-orange text-ohs-navy px-8 py-4 rounded-2xl font-black text-sm shadow-[0_10px_30px_rgba(249,168,37,0.4)] hover:scale-105 hover:shadow-[0_15px_40px_rgba(249,168,37,0.6)] transition-all duration-300 ease-out active:scale-95"
                             >
                                 <ShieldCheck size={20} className="mr-2 inline-block -mt-1" />
                                 INITIATE HANDSHAKE
@@ -127,7 +127,7 @@ export const DashboardPage = () => {
                         </div>
                     </div>
 
-                    {/* Digital Wingman Streaks */}
+                    {/* Stewardship Authority Streaks */}
                     <div className="h-[280px]">
                         <SafetyStreaks />
                     </div>

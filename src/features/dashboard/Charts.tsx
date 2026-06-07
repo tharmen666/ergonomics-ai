@@ -13,18 +13,21 @@ const data = [
 
 export const ActivityChart = () => {
     return (
-        <div className="w-full h-48 flex items-end justify-between gap-2">
+        <div className="flex w-full h-48 items-end justify-between gap-1.5 xs:gap-2">
             {data.map((d, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
-                    <motion.div
-                        initial={{ height: 0 }}
-                        animate={{ height: `${d.value}%` }}
-                        transition={{ duration: 1, delay: i * 0.1, type: 'spring' }}
-                        className="w-full bg-ohs-blue/50 rounded-t-lg relative overflow-hidden group-hover:bg-ohs-orange transition-colors"
-                    >
-                        <div className="absolute bottom-0 left-0 w-full h-1 bg-white/20" />
-                    </motion.div>
-                    <span className="text-xs text-gray-500 font-medium group-hover:text-white transition-colors">{d.label}</span>
+                <div key={i} className="flex-1 flex flex-col items-center gap-2 group h-full justify-end">
+                    <div className="w-full flex-1 relative flex items-end">
+                        <motion.div
+                            initial={{ height: 0 }}
+                            whileInView={{ height: `${d.value}%` }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, delay: i * 0.1, type: 'spring' }}
+                            className="w-full bg-ohs-blue/50 rounded-t-lg relative overflow-hidden group-hover:bg-ohs-orange transition-colors"
+                        >
+                            <div className="absolute bottom-0 left-0 w-full h-1 bg-white/20" />
+                        </motion.div>
+                    </div>
+                    <span className="text-[10px] xs:text-xs text-gray-500 font-medium group-hover:text-white transition-colors">{d.label}</span>
                 </div>
             ))}
         </div>

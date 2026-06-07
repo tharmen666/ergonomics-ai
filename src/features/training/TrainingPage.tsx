@@ -3,134 +3,51 @@ import { useState } from 'react';
 import { TrainingModule } from './TrainingModule';
 import { GlassCard } from '../../components/ui/GlassCard';
 import { useAgentLog } from '../../store/agentLogStore';
-import { useMellyStore } from '../../store/mellyStore';
+import { useNellyStore } from '../../store/nellyStore';
 import { CheckCircle, Play } from 'lucide-react';
+import { FRESH_OHS_PROJECT_REGISTRY } from '../../utils/master_ohs_boot';
 
-// Define the Professional Curriculum Stages
+// Define the Statutory OHS Curriculum dynamically using our master data registry
 const stages = [
     {
-        id: 'foundation',
-        title: "Stage 1: Ergonomic Foundation",
-        description: "Master the basics of neutral posture and workspace setup.",
+        id: 'first-aid',
+        title: "Stage 1: Basic First Aid (Service Stations)",
+        description: "OHS Act compliance first-aid response and biohazard management.",
         modules: [
             {
-                id: 'monitor-mastery',
-                title: "Monitor Mastery",
-                description: "Optimize screen height and distance to prevent neck strain. OHS Act Section 8 Compliance: Ensuring a safe system of work.",
-                duration: "3 min",
-                steps: ["Sit at arm's length", "Top of screen at eye level", "Tilt slightly back", "Adjust brightness"]
-            },
-            {
-                id: 'lumbar-lock',
-                title: "Lumbar Lock-In",
-                description: "Secure your lower back for all-day spinal support. OHS Act Section 8 Compliance: Ensuring a safe system of work.",
-                duration: "2 min",
-                steps: ["Sit deep in chair", "Adjust lumbar support height", "Feet flat on floor", "Hips slightly above knees"]
-            },
-            {
-                id: '20-20-20',
-                title: "The 20-20-20 Eye Rule",
-                description: "Digital eye strain prevention protocol (for digital strain). OHS Act Section 8 Compliance: Ensuring a safe system of work.",
-                duration: "1 min",
-                steps: ["Every 20 mins", "Look 20 feet away", "For 20 seconds", "Blink rapidly"]
+                id: 'BASIC_FIRST_AID',
+                title: FRESH_OHS_PROJECT_REGISTRY.BASIC_FIRST_AID.title,
+                description: "Master emergency scene safety assessment, biological protection, high-pressure fuel eye flushes, and statutory handover.",
+                duration: "7 min",
+                steps: FRESH_OHS_PROJECT_REGISTRY.BASIC_FIRST_AID.steps.map(s => s.title)
             }
         ]
     },
     {
-        id: 'office-alignment',
-        title: "Stage 2: Office Alignment",
-        description: "Targeted exercises for desk workers.",
+        id: 'fire-fighting',
+        title: "Stage 2: Basic Fire Fighting & Equipment",
+        description: "Emergency fire suppression, traffic containment, and evacuation control.",
         modules: [
             {
-                id: 'shoulder-rolls',
-                title: "Shoulder Rolls",
-                description: "Release upper body tension with simple circular motions. OHS Act Section 8 Compliance: Ensuring a safe system of work.",
-                duration: "2 min",
-                steps: ["Sit up straight", "Roll shoulders back", "Repeat 10 times", "Breathe deeply"]
-            },
-            {
-                id: 'wrist-flexor',
-                title: "Wrist Flexor Stretches",
-                description: "Prevent repetitive strain in the wrists and forearms. OHS Act Section 8 Compliance: Ensuring a safe system of work.",
-                duration: "2 min",
-                steps: ["Extend arm forward", "Pull fingers back", "Hold 15 seconds", "Switch arms"]
-            },
-            {
-                id: 'lateral-neck',
-                title: "Lateral Neck Tilts",
-                description: "Relieve neck stiffness from extended screen monitoring. OHS Act Section 8 Compliance: Ensuring a safe system of work.",
-                duration: "1 min",
-                steps: ["Look straight ahead", "Tilt ear to shoulder", "Hold 10 seconds", "Switch sides"]
+                id: 'BASIC_FIRE_FIGHTING',
+                title: FRESH_OHS_PROJECT_REGISTRY.BASIC_FIRE_FIGHTING.title,
+                description: "Master alarm activation, panic control, shift sheet log retention, and active fire suppression.",
+                duration: "7 min",
+                steps: FRESH_OHS_PROJECT_REGISTRY.BASIC_FIRE_FIGHTING.steps.map(s => s.title)
             }
         ]
     },
     {
-        id: 'remote',
-        title: "Stage 3: Remote & Call Center Pro",
-        description: "Specialized tactics for mobile and high-volume desk work.",
+        id: 'spill-response',
+        title: "Stage 3: Emergency Spill Response Training",
+        description: "Hydrocarbon and chemical spill containment and environmental protection.",
         modules: [
             {
-                id: 'mobile-command',
-                title: "Mobile Command Center",
-                description: "Ergonomics for laptops and temporary workstations. OHS Act Section 8 Compliance: Ensuring a safe system of work.",
-                duration: "4 min",
-                steps: ["Elevate laptop", "External keyboard/mouse", "Check lighting", "Sit supportive"]
-            },
-            {
-                id: 'stress-dump',
-                title: "High-Volume Decompression",
-                description: "Micro-breaks to reset after difficult calls. OHS Act Section 8 Compliance: Ensuring a safe system of work.",
-                duration: "2 min",
-                steps: ["Deep breath in", "Box breathing", "Shake out hands", "Reset posture"]
-            }
-        ]
-    },
-    {
-        id: 'continuous',
-        title: "Stage 4: Continuous Improvement",
-        description: "Agent-led analysis of risky behaviors and corrective actions.",
-        modules: [
-            {
-                id: 'risk-audit',
-                title: "Self-Audit Procedures",
-                description: "How to spot your own ergonomic red flags. OHS Act Section 8 Compliance: Ensuring a safe system of work.",
-                duration: "5 min",
-                steps: ["Scan environment", "Check body tension", "Review daily log", "Adjust as needed"]
-            },
-            {
-                id: 'corrective-flow',
-                title: "Corrective Flow",
-                description: "Advanced stretches for chronic trouble spots. OHS Act Section 8 Compliance: Ensuring a safe system of work.",
-                duration: "6 min",
-                steps: ["Targeted neck release", "Deep hip opener", "Thoracic extension", "Nerve gliding"]
-            }
-        ]
-    },
-    {
-        id: 'industrial',
-        title: "Stage 5: Industrial Logistics",
-        description: "Logistics and warehousing overwatch.",
-        modules: [
-            {
-                id: 'manual-handling',
-                title: "Manual Handling (Lifting)",
-                description: "Ensure OHS Act compliance for heavy lifting. Prevent L4-L5 herniation.",
-                duration: "5 min",
-                steps: ["Leg-based lift", "Dominant foot back", "Core stability active", "Keep load close"]
-            },
-            {
-                id: 'forklift-safety',
-                title: "Forklift Checks (Electric/Petrol)",
-                description: "Mandatory pre-operation telemetry protocols.",
-                duration: "2 min",
-                steps: ["Verify load limits", "Test warning lights", "Check hydraulic pressure", "Secure harness"]
-            },
-            {
-                id: 'trolley-jacks',
-                title: "Trolley Jacks & Ladders",
-                description: "Equipment safety protocols and securement.",
-                duration: "3 min",
-                steps: ["Inspect locking pins", "Ensure level ground", "Check wheel bearings", "Do not overload"]
+                id: 'EMERGENCY_SPILL',
+                title: FRESH_OHS_PROJECT_REGISTRY.EMERGENCY_SPILL.title,
+                description: "Master emergency shutoff isolation, vapor egress, spill containment, and vehicle entry prevention.",
+                duration: "7 min",
+                steps: FRESH_OHS_PROJECT_REGISTRY.EMERGENCY_SPILL.steps.map(s => s.title)
             }
         ]
     }
@@ -138,11 +55,11 @@ const stages = [
 
 export const TrainingPage = () => {
     const { addLog } = useAgentLog();
-    const { completedModules, recommendations } = useMellyStore();
+    const { completedModules, recommendations } = useNellyStore();
     const [selectedModule, setSelectedModule] = useState<any>(null);
 
     const handleStart = (mod: any) => {
-        addLog('Melly', `Initiating training module: ${mod.title}. Monitoring posture compliance.`);
+        addLog('Nelly', `Initiating training module: ${mod.title}. Monitoring posture compliance.`);
         setSelectedModule(mod);
     };
 
@@ -151,7 +68,7 @@ export const TrainingPage = () => {
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div>
                     <h2 className="text-3xl font-black text-white tracking-tight">Professional Curriculum</h2>
-                    <p className="text-gray-400 font-medium">Master the 4 Pillars of Ergonomic Excellence.</p>
+                    <p className="text-gray-400 font-medium">Master the 3 Pillars of OHS Statutory Compliance.</p>
                 </div>
                 <GlassCard className="py-2 px-6 bg-ohs-green/10 border-ohs-green/30">
                     <span className="text-ohs-green font-black uppercase text-xs tracking-widest">

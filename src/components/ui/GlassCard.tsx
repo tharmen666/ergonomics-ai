@@ -18,7 +18,7 @@ export const GlassCard = ({ children, className, hoverEffect = true }: GlassCard
         <motion.div
             whileHover={hoverEffect ? { scale: 1.02, boxShadow: "0 0 20px rgba(0, 61, 92, 0.5)" } : {}}
             className={cn(
-                "backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6 shadow-xl",
+                "backdrop-blur-md bg-white/5 border border-white/10 rounded-2xl p-6 shadow-xl card",
                 "relative overflow-hidden",
                 className
             )}

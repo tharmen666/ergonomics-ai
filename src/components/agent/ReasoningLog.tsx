@@ -48,7 +48,7 @@ export const ReasoningLog = () => {
                             className="flex gap-2 text-gray-300 items-start"
                         >
                             <span className="text-gray-600 shrink-0 text-[10px] mt-0.5">[{log.timestamp}]</span>
-                            <span className={`font-bold shrink-0 ${log.agent === 'Melly' ? 'text-ohs-orange' :
+                            <span className={`font-bold shrink-0 ${log.agent === 'Nelly' ? 'text-ohs-orange' :
                                     log.agent === 'Marcus' ? 'text-blue-400' :
                                         log.agent === 'Sarah' ? 'text-pink-400' :
                                             log.agent === 'Finance' ? 'text-yellow-400' :

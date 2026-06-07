@@ -7,6 +7,11 @@
   color-scheme: dark;
 }
 
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -15,8 +20,10 @@ body {
   color: #ffffff;
   min-height: 100vh;
   overflow-x: hidden;
+  max-width: 100vw;
   width: 100%;
   box-sizing: border-box;
+  position: relative;
 }
 
 #root {
@@ -36,6 +43,21 @@ body {
   .p-6,
   .p-8 {
     padding: 0.75rem !important;
+  }
+
+  /* Thumb-friendly buttons for mobile */
+  button, 
+  .premium-button,
+  .glow-button {
+    min-height: 48px !important;
+    padding: 12px 16px !important;
+  }
+
+  /* Executive Hub Card Lock */
+  .glass-ohs, .glass, .card {
+    width: 92vw !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 }
 
@@ -63,7 +85,7 @@ body {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
-.glass-melly {
+.glass-nelly {
   background: rgba(249, 168, 37, 0.05);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);

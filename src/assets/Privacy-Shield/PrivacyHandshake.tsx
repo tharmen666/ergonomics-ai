@@ -47,7 +47,7 @@ export const PrivacyHandshake = () => {
 
                         <div className="space-y-4 mb-8">
                             <p className="text-gray-300 leading-relaxed text-sm">
-                                ErgoSafe Reborn operates strictly as a <strong>Digital Wingman</strong>. This is a <strong>performance tool, not a spy tool</strong>. Your cognitive and ergonomic assessment data is end-to-end encrypted and completely anonymized.
+                                ErgoSafe Reborn operates strictly as a <strong>Stewardship Authority</strong>. This is a <strong>performance tool, not a spy tool</strong>. Your cognitive and ergonomic assessment data is end-to-end encrypted and completely anonymized.
                             </p>
                             <div className="bg-white/5 border border-white/5 rounded-xl p-4 flex items-start gap-4">
                                 <Lock className="text-white opacity-50 shrink-0 mt-1" size={20} />

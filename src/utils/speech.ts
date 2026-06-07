@@ -14,8 +14,9 @@ export const speak = (text: string, onEnd?: () => void) => {
     const loadVoices = () => {
         const voices = synth.getVoices();
 
-        // Priority: Google UK English Female -> Microsoft Zira -> Any Female
-        let selectedVoice = voices.find(v =>
+        // Priority: Zulu Native -> Google UK English Female -> Microsoft Zira -> Any Female
+        let selectedVoice = voices.find(v => v.lang === 'zu-ZA' || v.lang === 'en-ZA') || 
+            voices.find(v =>
             (v.name.includes('Google') && v.name.includes('UK') && v.name.includes('Female')) ||
             v.name.includes('Zira')
         );
@@ -26,13 +27,13 @@ export const speak = (text: string, onEnd?: () => void) => {
 
         if (selectedVoice) {
             utterance.voice = selectedVoice;
-            utterance.pitch = 1.05; // Natural lift
+            utterance.pitch = (selectedVoice.lang === 'zu-ZA' || selectedVoice.lang === 'en-ZA') ? 1.15 : 1.05; // Natural lift
         } else {
             // Fallback to default but slightly higher pitch to sound less robotic/male if possible
             utterance.pitch = 1.2;
         }
 
-        utterance.rate = 1.0;
+        utterance.rate = (selectedVoice?.lang === 'zu-ZA' || selectedVoice?.lang === 'en-ZA') ? 0.65 : 1.0;
 
         if (onEnd) {
             utterance.onend = onEnd;

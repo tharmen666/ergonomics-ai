@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { speak, stopSpeaking } from '../../utils/speech';
-import { MellyAvatar } from '../../components/melly/MellyAvatar';
+import { NellyAvatar } from '../../components/nelly/NellyAvatar';
 import { LeanPerformanceRail } from '../../components/AI-Coach/LeanPerformanceRail';
 import {
     ShieldAlert,
@@ -18,7 +18,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
     // 0: Start, 1: Liability, 2: Handshake, 3: Stewardship Hub, 4: HR & LPS, 5: Training, 6: Industrial, 7: Credits, 8: End
     const [scene, setScene] = useState(0);
 
-    const SCENE_DURATION = 14000;
+    const SCENE_DURATION = 8400;
 
     useEffect(() => {
         if (scene === 0 || scene === 8) return;
@@ -42,11 +42,11 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
             if (scene === 1) {
                 speak("We don't just track posture; we shield the CEO from criminal liability by documenting proactive care in real-time.");
             } else if (scene === 2) {
-                speak("Our 10-PhD Melly detects cognitive fatigue before an error happens. If you aren't fit for duty, the system locks the 'Sign-Off' button. We stop the accident before it occurs.");
+                speak("Our 10-PhD Nelly detects cognitive fatigue before an error happens. If you aren't fit for duty, the system locks the 'Sign-Off' button. We stop the accident before it occurs.");
             } else if (scene === 3) {
                 speak("Welcome to the Stewardship Hub. We automate duty of care by cascading OHS accountability from the boardroom to the floor. Total transparency for every executive.");
             } else if (scene === 4) {
-                speak("HR and Loss Prevention integration. Melly analyzes fatigue patterns over seven days, identifying risks before they become a worker's compensation claim.");
+                speak("HR and Loss Prevention integration. Nelly analyzes fatigue patterns over seven days, identifying risks before they become a worker's compensation claim.");
             } else if (scene === 5) {
                 speak("Interactive Compliance Training. Our Iris and Friends modules deliver protocol in a way that resonates. 80 percent higher retention than traditional methods.");
             } else if (scene === 6) {
@@ -54,7 +54,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
             } else if (scene === 7) {
                 speak("This is ErgoSafe reborn. v2.0 is the definitive standard for industrial safety. Driven by ambition. Empowered by premier Google frameworks.");
             }
-        }, 500);
+        }, 300);
 
         return () => clearTimeout(audioTimeout);
     }, [scene]);
@@ -67,7 +67,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                     animate={{ opacity: 1, x: 0 }}
                     className="text-4xl font-black tracking-tighter"
                 >
-                    ERGOSAFE REBORN: <span className="text-ohs-orange">PRO MODE v1.3</span>
+                    ERGOSAFE REBORN: <span className="text-ohs-orange">EXECUTIVE STEWARDSHIP v1.3</span>
                 </motion.h1>
             </div>
 
@@ -169,7 +169,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                                 </motion.div>
                             </div>
 
-                            {/* Wingman Quote */}
+                            {/* Stewardship Quote */}
                             <motion.div
                                 initial={{ x: 50, opacity: 0 }}
                                 animate={{ x: 0, opacity: 1 }}
@@ -179,7 +179,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                                 <Target size={48} className="text-ohs-orange mb-4 sm:mb-6 mx-auto md:mx-0 scale-75 sm:scale-100" />
                                 <h2 className="text-2xl sm:text-4xl font-black mb-4 sm:mb-6">PREVENTATIVE OVERWATCH</h2>
                                 <p className="text-sm sm:text-xl text-gray-400 leading-relaxed font-medium">
-                                    "Our 10-PhD Melly detects cognitive fatigue before an error happens. If you aren't fit for duty, the system locks the 'Sign-Off' button. We stop the accident before it occurs."
+                                    "Our 10-PhD Nelly detects cognitive fatigue before an error happens. If you aren't fit for duty, the system locks the 'Sign-Off' button. We stop the accident before it occurs."
                                 </p>
                             </motion.div>
                         </div>
@@ -401,13 +401,13 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                                 transition={{ duration: 8, ease: "linear" }}
                                 className="absolute w-full flex flex-col gap-6 items-center"
                             >
-                                <div className="text-2xl font-bold text-gray-300">Gemini Pro (The Savior)</div>
-                                <div className="text-2xl font-bold text-gray-300">Google AI Studio</div>
+                                <div className="text-2xl font-bold text-gray-300">Google Cloud Agent Builder</div>
+                                <div className="text-2xl font-bold text-gray-300">Gemini Foundation Models</div>
+                                <div className="text-2xl font-bold text-gray-300">MongoDB MCP Server</div>
                                 <div className="text-2xl font-bold text-gray-300">Google Cloud TTS</div>
                                 <div className="text-2xl font-bold text-gray-300">GDG Discovery</div>
-                                <div className="text-2xl font-bold text-gray-300">Crew AI</div>
                                 <div className="text-2xl font-bold text-gray-300">Base 44</div>
-                                <div className="text-2xl font-bold text-gray-300">GitHub & Replit</div>
+                                <div className="text-2xl font-bold text-gray-300">GitHub Open Source</div>
                             </motion.div>
                         </div>
 
@@ -418,7 +418,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                             className="bg-white/10 backdrop-blur-md p-8 border border-white/20 rounded-2xl max-w-4xl"
                         >
                             <p className="text-xl sm:text-3xl text-white font-black italic tracking-tight leading-relaxed">
-                                "Developed by a 53-Year-Old AI Architect — Empowered by Google Skills & Premiere Tier Credits. Age is not a barrier to Pro-Mode Innovation."
+                                "Developed by a 53-Year-Old AI Architect — Empowered by Google Cloud & MongoDB MCP. Age is not a barrier to Executive Stewardship."
                             </p>
                         </motion.div>
                     </motion.div>
@@ -452,7 +452,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
             </div>
 
             <div className="fixed bottom-10 right-10 z-[10000]">
-                <MellyAvatar />
+                <NellyAvatar />
             </div>
         </div>
     );

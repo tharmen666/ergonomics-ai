@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Settings, Shield, Zap, FileCheck, Brain } from 'lucide-react';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
-import { useMellyStore } from '../../store/mellyStore';
+import { useNellyStore } from '../../store/nellyStore';
 
 export const GEAROverlay = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { fatigueLevel } = useFatigueStore();
-    const { productiveStreak } = useMellyStore();
+    const { productiveStreak } = useNellyStore();
 
     // Map metrics to G.E.A.R
     const governance = 100; // Hardcoded static for Sect 37 simulation
