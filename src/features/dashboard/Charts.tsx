@@ -19,8 +19,7 @@ export const ActivityChart = () => {
                     <div className="w-full flex-1 relative flex items-end">
                         <motion.div
                             initial={{ height: 0 }}
-                            whileInView={{ height: `${d.value}%` }}
-                            viewport={{ once: true }}
+                            animate={{ height: `${d.value}%` }}
                             transition={{ duration: 1, delay: i * 0.1, type: 'spring' }}
                             className="w-full bg-ohs-blue/50 rounded-t-lg relative overflow-hidden group-hover:bg-ohs-orange transition-colors"
                         >

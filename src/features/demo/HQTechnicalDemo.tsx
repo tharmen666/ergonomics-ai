@@ -61,11 +61,11 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
 
     return (
         <div className="fixed inset-0 bg-black text-white z-[9999] overflow-hidden flex flex-col font-sans">
-            <div className="absolute top-6 left-8 z-50 pointer-events-none">
+            <div className="absolute top-4 left-4 sm:top-6 sm:left-8 z-50 pointer-events-none">
                 <motion.h1
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="text-4xl font-black tracking-tighter"
+                    className="text-[10px] xs:text-xs sm:text-2xl md:text-4xl font-black tracking-tighter"
                 >
                     ERGOSAFE REBORN: <span className="text-ohs-orange">EXECUTIVE STEWARDSHIP v1.3</span>
                 </motion.h1>
@@ -391,8 +391,8 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                         exit={{ opacity: 0 }}
                         className="absolute inset-0 bg-black flex flex-col items-center justify-center p-12 relative overflow-hidden text-center"
                     >
-                        <h2 className="text-ohs-orange font-black uppercase text-xl sm:text-3xl tracking-widest mb-12 flex items-center justify-center gap-3">
-                            <Target size={32} /> 2026 Google Strategic Showcase
+                        <h2 className="text-ohs-orange font-black uppercase text-xs sm:text-3xl tracking-widest mb-4 sm:mb-12 flex items-center justify-center gap-1.5 sm:gap-3">
+                            <Target className="scale-75 sm:scale-100" /> 2026 Google Strategic Showcase
                         </h2>
 
                         <div className="relative w-full max-w-2xl h-64 overflow-hidden mb-12 mask-image-fade">

@@ -151,8 +151,7 @@ export const AdminPortal = () => {
                                 <div className="w-full flex-1 relative flex items-end">
                                     <motion.div
                                         initial={{ height: 0 }}
-                                        whileInView={{ height: `${h}%` }}
-                                        viewport={{ once: true }}
+                                        animate={{ height: `${h}%` }}
                                         transition={{ duration: 1.5, delay: i * 0.1, ease: "circOut" }}
                                         className={`w-full rounded-t-xl sm:rounded-t-2xl relative overflow-hidden ${h > 80 ? 'bg-gradient-to-t from-ohs-green to-green-300' :
                                             h > 60 ? 'bg-gradient-to-t from-ohs-blue to-blue-300' :
@@ -257,7 +256,7 @@ export const AdminPortal = () => {
                                 <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
                                     <motion.div
                                         initial={{ width: 0 }}
-                                        whileInView={{ width: `${sup.compliance}%` }}
+                                        animate={{ width: `${sup.compliance}%` }}
                                         className={`h-full ${sup.compliance > 90 ? 'bg-ohs-green' : 'bg-ohs-orange'}`}
                                     />
                                 </div>
