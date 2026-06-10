@@ -113,3 +113,32 @@ body {
         box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
     }
 }
+
+.lang-selector {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding-top: 15px;
+}
+
+.lang-select-label {
+    font-size: 0.7rem;
+    font-weight: 900;
+    color: #64748b;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.lang-select {
+    background: #111827;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+}

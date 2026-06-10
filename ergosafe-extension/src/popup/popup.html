@@ -11,25 +11,37 @@
 
 <body>
     <div class="header">
-        <h1 class="logo">ErgoSafe <span class="accent">WINGMAN</span></h1>
+        <h1 class="logo" id="logoText">ErgoSafe <span class="accent">WINGMAN</span></h1>
         <div class="status-indicator"></div>
     </div>
 
     <div class="dashboard">
         <div class="stat-card">
-            <div class="stat-label">SAFETY STREAK</div>
+            <div class="stat-label" id="streakLabelText">SAFETY STREAK</div>
             <div class="stat-value text-gold" id="streakLabel">12 Days</div>
         </div>
 
         <div class="stat-card">
-            <div class="stat-label">FATIGUE INDEX</div>
+            <div class="stat-label" id="fatigueLabelText">FATIGUE INDEX</div>
             <div class="stat-value text-green" id="fatigueLabel">Nominal</div>
         </div>
 
         <button id="syncBtn" class="btn">SYNC TELEMETRY</button>
-        <p class="sync-desc">Connected to <b>ergo-safe-reborn.vercel.app</b></p>
+        <p class="sync-desc" id="connectedText">Connected to <b>ergo-safe-reborn.vercel.app</b></p>
+        
+        <div class="lang-selector">
+            <span class="lang-select-label" id="langSelectLabel">Language</span>
+            <select id="langSelect" class="lang-select">
+                <option value="en">English (EN)</option>
+                <option value="sw">Kiswahili (SW)</option>
+                <option value="zu">isiZulu (ZU)</option>
+                <option value="xh">isiXhosa (XH)</option>
+                <option value="st">Sesotho (ST)</option>
+            </select>
+        </div>
     </div>
 
+    <script src="../utils/translations.js"></script>
     <script src="popup.js"></script>
 </body>
 

@@ -59,6 +59,56 @@ const CHECKLIST_TRANSLATIONS: Record<Language, {
         compliant: 'Boikarabello ka Botlalo',
         completed: 'Phethiloe',
         feedback: 'Mosebetsi o motle! Setup sa hau se se se lumellana le OHS bakeng sa letsatsi.'
+    },
+    af: {
+        monitor: 'Monitor op ooghoogte?',
+        chair: 'Stoel wat laer rug ondersteun?',
+        feet: 'Voete plat op vloer?',
+        title: 'Daaglikse Veiligheidskontrolelys',
+        complete: 'Voldoening Geverifieer',
+        compliant: 'Ten volle Voldoenend',
+        completed: 'Voltooi',
+        feedback: 'Mooi so! Jou opstelling voldoen nou aan die OHS-wet vir die dag.'
+    },
+    sw: {
+        monitor: 'Je, skrini ipo kwenye kiwango cha macho?',
+        chair: 'Je, kiti kinasaidia mgongo wa chini?',
+        feet: 'Je, miguu imelala sakafuni?',
+        title: 'Orodha ya Ukaguzi ya Kila Siku ya Usalama',
+        complete: 'Kufuata Sheria Kumethibitishwa',
+        compliant: 'Kufuata Kikamilifu',
+        completed: 'Imekamilika',
+        feedback: 'Kazi nzuri! Mipangilio yako sasa inafuata sheria za OHS kwa siku ya leo.'
+    },
+    zh: {
+        monitor: '显示器是否与眼睛齐平？',
+        chair: '椅子是否支撑下背部？',
+        feet: '双脚是否平放于地面？',
+        title: '每日安全检查表',
+        complete: '安全合规已验证',
+        compliant: '完全合规',
+        completed: '已完成',
+        feedback: '做得好！您的设置今天已完全符合职业安全与健康（OHS）标准。'
+    },
+    es: {
+        monitor: '¿Monitor a la altura de los ojos?',
+        chair: '¿Silla que apoya la parte baja de la espalda?',
+        feet: '¿Pies planos sobre el suelo?',
+        title: 'Lista de Verificación de Seguridad Diaria',
+        complete: 'Cumplimiento Verificado',
+        compliant: 'Totalmente Cumplidor',
+        completed: 'Completado',
+        feedback: '¡Buen trabajo! Su configuración ahora cumple con OHS para el día.'
+    },
+    ko: {
+        monitor: '모니터가 눈높이에 있습니까?',
+        chair: '의자가 허리를 지탱합니까?',
+        feet: '발이 바닥에 평평하게 닿습니까?',
+        title: '일일 안전 체크리스트',
+        complete: '규정 준수 확인됨',
+        compliant: '완전 준수',
+        completed: '완료됨',
+        feedback: '잘하셨습니다! 귀하의 설정은 오늘 OHS 규정을 준수합니다.'
     }
 };
 

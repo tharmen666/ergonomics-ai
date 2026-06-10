@@ -19,6 +19,13 @@
     "activeTab",
     "scripting"
   ],
+  "host_permissions": [
+    "https://ergo-safe-reborn.vercel.app/*",
+    "https://*.vercel.app/*"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://ergo-safe-reborn.vercel.app https://*.vercel.app;"
+  },
   "content_scripts": [
     {
       "matches": [

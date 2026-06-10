@@ -15,11 +15,15 @@
     }
     .glass-card {
       background: rgba(30, 41, 59, 0.7);
+      -webkit-backdrop-filter: blur(12px);
       backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       padding: 2rem;
       margin-top: 1rem;
+    }
+    .glass-card h3 {
+      margin-top: 0;
     }
     textarea {
       width: 100%;
@@ -63,7 +67,7 @@
   <div class="glass-card">
     <div id="statusIndicator" class="status">Loading MediaPipe GenAI Task...</div>
     
-    <h3 style="margin-top: 0;">Provide Worker Telemetry</h3>
+    <h3>Provide Worker Telemetry</h3>
     <textarea id="promptInput" placeholder="Enter worker data (e.g., Worker has been slouching for 45 mins. Heart rate elevated. High cognitive latency.)">Worker has been slouching for 45 minutes and shows a 25% increase in cognitive handshake latency. Formulate an ethical nudge.</textarea>
     
     <button id="generateBtn" disabled>Generate Safety Nudge</button>
