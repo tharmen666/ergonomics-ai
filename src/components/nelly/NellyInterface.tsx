@@ -26,6 +26,8 @@ export const NellyInterface = ({
     onSend,
     isSpeaking
 }: NellyInterfaceProps) => {
+    const activeLang: Language = (language && translations[language]) ? language : 'en';
+
     return (
         <motion.div
             initial={{ x: 50, opacity: 0 }}
@@ -40,7 +42,7 @@ export const NellyInterface = ({
                     <select
                         aria-label="Select Language"
                         title="Select Language"
-                        value={language}
+                        value={activeLang}
                         onChange={(e) => setLanguage(e.target.value as Language)}
                         className="bg-transparent text-[10px] font-bold text-gray-400 focus:outline-none cursor-pointer"
                     >
@@ -76,7 +78,7 @@ export const NellyInterface = ({
             {/* Intro Text */}
             <div className="mb-4">
                 <p className="text-sm text-white font-medium italic leading-relaxed break-words whitespace-normal">
-                    "{translations[language].nelly_intro}"
+                    "{translations[activeLang].nelly_intro}"
                 </p>
             </div>
 
@@ -108,7 +110,7 @@ export const NellyInterface = ({
                     className="mt-4 p-3 bg-ohs-orange/10 border border-ohs-orange/20 rounded-xl"
                 >
                     <p className="text-[11px] text-ohs-orange font-bold leading-tight">
-                        {translations[language].stewardship_model}
+                        {translations[activeLang].stewardship_model}
                     </p>
                 </motion.div>
             )}

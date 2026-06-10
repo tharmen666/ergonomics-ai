@@ -9,7 +9,7 @@ This standalone browser extension acts as an autonomous "Digital Wingman" for re
 - **POPI Shield:** First-run privacy handshake ensuring end-to-end encryption and "Human in the Loop" compliance.
 - **Cognitive Interception:** Injects a Mandatory 30-Second Cognitive Handshake overlay directly onto `mail.google.com`, `teams.microsoft.com`, and `slack.com`.
 - **DOA Lockout Logic:** If cognitive latency exceeds acceptable thresholds, the extension sets global fatigue to `HIGH` and simulates a lockout.
-- **Dashboard Telemetry Sync:** The `popup.html` dashboard provides a persistent view of your Safety Streak and Fatigue Index with simulated fetches to the Vercel backend.
+- **Dashboard Telemetry Sync:** The `popup.html` dashboard provides a persistent view of your Safety Streak and Fatigue Index with simulated fetches to the Vercel.
 
 ## Installation Instructions (Developer Mode)
 

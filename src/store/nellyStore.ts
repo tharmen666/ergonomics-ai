@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { translations, Language } from '../utils/translations';
 
 interface NellyState {
     isSpeaking: boolean;
@@ -19,8 +20,8 @@ interface NellyState {
     setSidebarCollapsed: (collapsed: boolean) => void;
     isIndustrialMode: boolean;
     setIndustrialMode: (active: boolean) => void;
-    language: import('../utils/translations').Language;
-    setLanguage: (lang: import('../utils/translations').Language) => void;
+    language: Language;
+    setLanguage: (lang: Language) => void;
     completedModules: string[];
     recommendations: string[];
     completeModule: (id: string) => void;
@@ -65,6 +66,15 @@ export const useNellyStore = create<NellyState>()(
             incrementStreak: () => set((state) => ({ productiveStreak: state.productiveStreak + 1 })),
             resetStreak: () => set({ productiveStreak: 0 }),
         }),
-        { name: 'nelly-storage' }
+        {
+            name: 'nelly-storage',
+            merge: (persistedState: any, currentState) => {
+                const merged = { ...currentState, ...persistedState };
+                if (!merged.language || !translations[merged.language as Language]) {
+                    merged.language = 'en';
+                }
+                return merged;
+            }
+        }
     )
 );
