@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                          lang === 'zu' ? 'Ulimi' :
                                          lang === 'xh' ? 'Ulwimi' :
                                          lang === 'st' ? 'Puo' :
+                                         lang === 'zh' ? '语言' :
+                                         lang === 'de' ? 'Sprache' :
                                          'Language';
         }
 
