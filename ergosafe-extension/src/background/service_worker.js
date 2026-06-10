@@ -1,3 +1,4 @@
+if (typeof chrome !== 'undefined' && chrome.runtime) {
 chrome.runtime.onInstalled.addListener((details) => {
     if (details.reason === 'install') {
         chrome.tabs.create({ url: chrome.runtime.getURL('src/pages/privacy.html') });
@@ -16,3 +17,4 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         return true; // Keep message channel open for async response
     }
 });
+}

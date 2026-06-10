@@ -1,3 +1,4 @@
+if (typeof chrome !== 'undefined' && chrome.runtime) {
 document.addEventListener('DOMContentLoaded', () => {
     const fatigueLabel = document.getElementById('fatigueLabel');
     const streakLabel = document.getElementById('streakLabel');
@@ -113,3 +114,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+}

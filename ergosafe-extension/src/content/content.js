@@ -1,3 +1,4 @@
+if (typeof chrome !== 'undefined' && chrome.runtime) {
 (function () {
     // Only run if not already injected
     if (document.getElementById('ergosafe-overlay')) return;
@@ -204,3 +205,4 @@
         }
     }
 })();
+}

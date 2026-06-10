@@ -1,3 +1,4 @@
+if (typeof chrome !== 'undefined' && chrome.runtime) {
 document.addEventListener('DOMContentLoaded', () => {
     const popiTitle = document.getElementById('popiTitle');
     const popiSubtitle = document.getElementById('popiSubtitle');
@@ -49,3 +50,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+}
