@@ -41,24 +41,24 @@ export const RIGHT_TO_DISCONNECT_FRAMEWORK = {
 
 export const FINANCIAL_PITCHES: Record<string, PitchTemplate> = {
     standard_bank: {
-        client: "Standard Bank of South Africa",
+        client: "Banks",
         sector: 'financial',
         targetAudience: "HR Executive, Operations Leads, IT Infrastructure Team",
         dutyOfCareFocus: "Ergonomic validation for 12,000+ hybrid branch administrators and call center staff working from home.",
         disconnectStrategy: "Nelly AI active burnout checks, automatically logging screen-time and suggesting micro-stretches to standardise off-hours disconnection.",
-        valueProposition: "Protects Standard Bank from vicarious liability under Section 37 of the OHS Act while optimizing remote workforce productivity via localized isiZulu and Sesotho safety coaching.",
-        outreachSubject: "Sovereign Board Briefing: Mitigating 2026 OHS Home-Office Liability at Standard Bank",
+        valueProposition: "Protects banking institutions from vicarious liability under Section 37 of the OHS Act while optimizing remote workforce productivity via localized multilingual safety coaching.",
+        outreachSubject: "Sovereign Board Briefing: Mitigating 2026 OHS Home-Office Liability in Banking",
         complianceStandards: [
             { code: "OHS Act S.8", clause: "Section 8 – General Duties", relevance: "Extends employer duty of care to remote home offices." },
-            { code: "OHS Act S.37", clause: "Section 37 – Vicarious Liability", relevance: "Bank is liable for ergonomic injuries sustained by remote staff." },
+            { code: "OHS Act S.37", clause: "Section 37 – Vicarious Liability", relevance: "Employer is liable for ergonomic injuries sustained by remote staff." },
             { code: "ISO 45001:2018", clause: "Clause 6.1 – Risk Assessment", relevance: "Automated hazard identification for 12,000+ remote workers." },
             { code: "ISO 9001:2015", clause: "Clause 9.1 – Performance Evaluation", relevance: "Continuous compliance telemetry as documented quality evidence." },
         ],
-        emailDraft: `Dear Standard Bank HR Executive,
+        emailDraft: `Dear HR Executive,
 
-Under the 2026 'Reasonably Practicable' legal standard (OHS Act Section 8), Standard Bank's statutory duty of care extends fully to remote home offices. Standard Bank faces severe compliance exposure under Section 38(1) — with fines now reaching R5,000,000 or 10% of annual turnover — due to remote musculoskeletal injuries and the 2026 spike in CCMA 'Digital Tethering' claims.
+Under the 2026 'Reasonably Practicable' legal standard (OHS Act Section 8), our institution's statutory duty of care extends fully to remote home offices. Banking organizations face severe compliance exposure under Section 38(1) — with fines now reaching R5,000,000 or 10% of annual turnover — due to remote musculoskeletal injuries and the 2026 spike in CCMA 'Digital Tethering' claims.
 
-Ergo-Safe Reborn resolves this. Our AI-driven platform provides continuous ergonomic telemetry, active fatigue coaching, and a 'Right to Disconnect' tracking framework compliant with ISO 45003:2021. By deploying Ergo-Safe, you establish a legally defensible digital audit trail proving that Standard Bank has taken all 'Reasonably Practicable' measures to manage physical and psychosocial hazards for remote employees — in English, isiZulu, and Sesotho.
+Ergo-Safe Reborn resolves this. Our AI-driven platform provides continuous ergonomic telemetry, active fatigue coaching, and a 'Right to Disconnect' tracking framework compliant with ISO 45003:2021. By deploying Ergo-Safe, you establish a legally defensible digital audit trail proving that our bank has taken all 'Reasonably Practicable' measures to manage physical and psychosocial hazards for remote employees — in English, isiZulu, and Sesotho.
 
 We propose a 10-minute digital partnership briefing at your convenience.
 
@@ -67,139 +67,106 @@ Ergo-Safe OHS Task Force`
     },
 
     fnb: {
-        client: "First National Bank (FNB)",
+        client: "Corporate",
         sector: 'financial',
         targetAudience: "Chief Risk Officer, Employee Wellness Director",
         dutyOfCareFocus: "Mitigating CCMA constructive dismissal risks from remote software developers and digital banking operations teams.",
         disconnectStrategy: "Active Fatigue-Check gatekeeping. When employees log consecutive late-night commits or operations, Nelly triggers a mandatory cognitive handshake, logging off-hours safety metrics.",
-        valueProposition: "Direct integration into FNB's employee wellness apps, translating compliance actions into FNB 'eBucks' or internal wellness rewards to drive 95%+ daily compliance.",
-        outreachSubject: "Securing FNB's Hybrid Perimeter: 2026 OHS Compliance & Digital Tethering Defense",
+        valueProposition: "Direct integration into corporate employee wellness apps, translating compliance actions into wellness rewards or internal points to drive 95%+ daily compliance.",
+        outreachSubject: "Securing Corporate's Hybrid Perimeter: 2026 OHS Compliance & Digital Tethering Defense",
         complianceStandards: [
             { code: "OHS Act S.8", clause: "Section 8 – General Duties", relevance: "Extends to home-office digital work environments." },
             { code: "OHS Act S.38", clause: "Section 38 – Penalties", relevance: "R5M fine exposure for unmanaged remote psychosocial risks." },
             { code: "ISO 45003:2021", clause: "Clause 6.1.2 – Psychosocial Hazards", relevance: "After-hours digital tethering is a classifiable psychosocial hazard." },
             { code: "ISO 9001:2015", clause: "Clause 10.2 – Continual Improvement", relevance: "Gamified wellness streaks document ongoing QMS improvement cycles." },
         ],
-        emailDraft: `Dear FNB Chief Risk Officer,
+        emailDraft: `Dear Chief Risk Officer,
 
-As FNB continues leading digital banking, remote operations have created a new regulatory vulnerability. In 2026, CCMA 'Digital Tethering' claims are rising sharply, with remote workers securing substantial compensation for after-hours cognitive strain. Under the OHS Act's 'Reasonably Practicable' mandate and ISO 45003:2021, FNB is legally required to actively manage these home-office psychosocial risks.
+As our organization continues leading in digital transformation, remote operations have created a new regulatory vulnerability. In 2026, CCMA 'Digital Tethering' claims are rising sharply, with remote workers securing substantial compensation for after-hours cognitive strain. Under the OHS Act's 'Reasonably Practicable' mandate and ISO 45003:2021, we are legally required to actively manage these home-office psychosocial risks.
 
-Ergo-Safe Reborn offers an automated solution. Nelly's Cognitive Handshake and Fatigue-Gate protocols integrate directly into employee daily workflows, guaranteeing continuous compliance telemetry while enforcing the Right to Disconnect. Our gamified compliance model aligns perfectly with FNB's innovation culture, ensuring wellness is tracked, verified, and logged in a digital OHS ledger admissible under Section 24 incident reporting obligations.
+Ergo-Safe Reborn offers an automated solution. Nelly's Cognitive Handshake and Fatigue-Gate protocols integrate directly into employee daily workflows, guaranteeing continuous compliance telemetry while enforcing the Right to Disconnect. Our gamified compliance model aligns perfectly with our innovation culture, ensuring wellness is tracked, verified, and logged in a digital OHS ledger admissible under Section 24 incident reporting obligations.
 
-Let us schedule a 10-minute briefing to review FNB's OHS risk mitigation posture.
+Let us schedule a 10-minute briefing to review our OHS risk mitigation posture.
 
 Sincerely,
 Ergo-Safe OHS Task Force`
     },
 
     discovery: {
-        client: "Discovery Group (Vitality)",
+        client: "Insurance",
         sector: 'insurance',
-        targetAudience: "Executive Director – Vitality & Corporate Wellness",
-        dutyOfCareFocus: "Linking remote ergonomic health score metrics directly to active Vitality wellness points and insurance premium discounts.",
+        targetAudience: "Executive Director – Corporate Wellness & Underwriting",
+        dutyOfCareFocus: "Linking remote ergonomic health score metrics directly to active wellness points and insurance premium discounts.",
         disconnectStrategy: "Enforcing daily compliance streaks and mandatory posture breaks, automatically logged in a secure MongoDB MCP ledger.",
         valueProposition: "Combines statutory compliance with commercial underwriting optimisation. Employees who pass daily OHS ergonomic check-ins earn wellness points — directly reducing corporate healthcare claims and improving underwriting margins.",
-        outreachSubject: "Vitality + Ergo-Safe: Linking OHS 'Duty of Care' to Dynamic Corporate Underwriting",
+        outreachSubject: "Wellness + Ergo-Safe: Linking OHS 'Duty of Care' to Dynamic Corporate Underwriting",
         complianceStandards: [
             { code: "OHS Act S.8", clause: "Section 8 – General Duties", relevance: "Corporate clients must prove home-office duty of care compliance." },
             { code: "ISO 45001:2018", clause: "Clause 5.4 – Worker Participation", relevance: "Daily check-in streaks fulfill worker participation obligation." },
             { code: "ISO 45003:2021", clause: "Clause 8.1 – Operational Controls", relevance: "Fatigue-Gate controls psychosocial risk operationally." },
             { code: "ISO 14001:2015", clause: "Clause 8.1 – Operational Planning", relevance: "Remote work energy footprint tracking for ESG reporting." },
         ],
-        emailDraft: `Dear Discovery Corporate Wellness Executive,
+        emailDraft: `Dear Corporate Wellness Executive,
 
-The OHS Amendment Bill has changed hybrid work dynamics: employers must now prove continuous 'Reasonably Practicable' safety measures in home offices. For Discovery, this represents both a statutory compliance requirement and a commercial underwriting opportunity.
+The OHS Amendment Bill has changed hybrid work dynamics: employers must now prove continuous 'Reasonably Practicable' safety measures in home offices. For insurance providers, this represents both a statutory compliance requirement and a commercial underwriting opportunity.
 
-Ergo-Safe Reborn is the first platform that translates OHS compliance (Section 8) and psychosocial wellness (ISO 45003:2021) into verifiable digital data points. We propose integrating Ergo-Safe's ergonomic telemetry with Discovery Vitality. By rewarding corporate members for completing daily safety handshakes and micro-stretches, we reduce corporate health claims while providing absolute OHS legal compliance — with full ISO 9001:2015 quality audit trail documentation.
+Ergo-Safe Reborn is the first platform that translates OHS compliance (Section 8) and psychosocial wellness (ISO 45003:2021) into verifiable digital data points. We propose integrating Ergo-Safe's ergonomic telemetry with corporate wellness incentives. By rewarding corporate members for completing daily safety handshakes and micro-stretches, we reduce corporate health claims while providing absolute OHS legal compliance — with full ISO 9001:2015 quality audit trail documentation.
 
-Let us explore a strategic pilot to integrate Ergo-Safe with Discovery's corporate wellness and underwriting portfolio.
+Let us explore a strategic pilot to integrate Ergo-Safe with your corporate wellness and underwriting portfolio.
 
 Sincerely,
 Ergo-Safe OHS Task Force`
     },
 
     sanlam: {
-        client: "Sanlam Group",
+        client: "Insurance Advisor Networks",
         sector: 'insurance',
         targetAudience: "Chief Legal Officer, Group HR Director",
-        dutyOfCareFocus: "Asset protection and long-term liability shielding for Sanlam's extensive financial advisor and consultant network working remotely.",
+        dutyOfCareFocus: "Asset protection and long-term liability shielding for extensive financial advisor and consultant networks working remotely.",
         disconnectStrategy: "Continuous OHS dashboard audits and localized voice guidance (isiZulu, isiXhosa, Sesotho, English) ensuring remote advisors actively understand and manage ergonomic risks.",
-        valueProposition: "Protects Sanlam from high-value group negligence lawsuits by establishing a rigorous digital audit trail that exceeds OHS Act Section 37 vicarious liability requirements — across all 4 official language pipelines.",
-        outreachSubject: "Shielding Sanlam's Remote Network: 2026 OHS Executive Duty of Care Compliance",
+        valueProposition: "Protects insurance groups from high-value group negligence lawsuits by establishing a rigorous digital audit trail that exceeds OHS Act Section 37 vicarious liability requirements — across all 4 official language pipelines.",
+        outreachSubject: "Shielding Remote Advisor Networks: 2026 OHS Executive Duty of Care Compliance",
         complianceStandards: [
-            { code: "OHS Act S.37", clause: "Section 37 – Vicarious Liability", relevance: "Sanlam is liable for its distributed remote advisor network." },
+            { code: "OHS Act S.37", clause: "Section 37 – Vicarious Liability", relevance: "Organization is liable for its distributed remote advisor network." },
             { code: "OHS Act S.38", clause: "Section 38 – Penalties", relevance: "R5M fine exposure without a centralized remote compliance system." },
             { code: "ISO 45001:2018", clause: "Clause 7.4 – Communication", relevance: "Multilingual (4-language) safety coaching satisfies worker communication requirements." },
             { code: "ISO 9001:2015", clause: "Clause 7.5 – Documented Information", relevance: "Digital OHS dossiers constitute the documented information required under QMS." },
         ],
-        emailDraft: `Dear Sanlam Group HR Director,
+        emailDraft: `Dear Group HR Director,
 
-Sanlam's network of thousands of remote financial advisors represents a significant OHS risk area. Under the 2026 'Reasonably Practicable' legal standard, Sanlam is vicariously liable (Section 37) for the safety of these remote consultants. Without a centralised, digital audit system, the group faces administrative fines up to R5,000,000 or 10% of annual turnover under Section 38(1).
+An organization's network of thousands of remote financial advisors represents a significant OHS risk area. Under the 2026 'Reasonably Practicable' legal standard, we are vicariously liable (Section 37) for the safety of these remote consultants. Without a centralised, digital audit system, the group faces administrative fines up to R5,000,000 or 10% of annual turnover under Section 38(1).
 
-Ergo-Safe Reborn provides a comprehensive, centralised compliance solution. With multilingual safety coaching in English, isiZulu, isiXhosa, and Sesotho — aligned with ISO 45001:2018 Clause 7.4 communication requirements — Sanlam can continuously audit its remote network and generate ISO 9001:2015-compliant documented evidence of its quality management performance.
+Ergo-Safe Reborn provides a comprehensive, centralised compliance solution. With multilingual safety coaching in English, isiZulu, isiXhosa, and Sesotho — aligned with ISO 45001:2018 Clause 7.4 communication requirements — our insurance group can continuously audit its remote network and generate ISO 9001:2015-compliant documented evidence of its quality management performance.
 
-We invite you to a brief executive presentation of our OHS Compliance Matrix tailored for Sanlam.
+We invite you to a brief executive presentation of our OHS Compliance Matrix tailored for remote advisor networks.
 
 Sincerely,
 Ergo-Safe OHS Task Force`
     },
 
     del_government: {
-        client: "Department of Employment & Labour (DEL)",
+        client: "Government",
         sector: 'government',
         targetAudience: "Director-General, Chief Inspector of Labour, Digital Transformation Unit",
-        dutyOfCareFocus: "Supporting the DEL's 2026 Public Sector Digitalisation Mandate by providing a turnkey digital OHS inspection and compliance support tool for labour inspectors.",
-        disconnectStrategy: "Ergo-Safe acts as an official pre-inspection self-audit tool, allowing employers to demonstrate 'Reasonably Practicable' compliance before a labour inspector visit — reducing DEL enforcement backlog.",
-        valueProposition: "Positions Ergo-Safe as an official DEL-endorsed 'Digital Compliance Partner' — the only platform capable of generating standardised ISO 45001/OHS Act inspection-ready compliance reports in all 4 major South African languages.",
-        outreachSubject: "DEL Digital Partner Proposal: Ergo-Safe as the Official OHS Remote Inspection Support Tool – 2026 Digitalisation Mandate",
+        dutyOfCareFocus: "Supporting the public sector's 2026 Digitalisation Mandate by providing a turnkey digital OHS inspection and compliance support tool for labour inspectors.",
+        disconnectStrategy: "Ergo-Safe acts as an official pre-inspection self-audit tool, allowing employers to demonstrate 'Reasonably Practicable' compliance before a labour inspector visit — reducing enforcement backlog.",
+        valueProposition: "Positions Ergo-Safe as an official government-endorsed 'Digital Compliance Partner' — the only platform capable of generating standardised ISO 45001/OHS Act inspection-ready compliance reports in all 4 major local languages.",
+        outreachSubject: "Digital Partner Proposal: Ergo-Safe as the Official OHS Remote Inspection Support Tool – 2026 Digitalisation Mandate",
         complianceStandards: [
-            { code: "OHS Act S.8", clause: "Section 8 – General Duties", relevance: "Ergo-Safe operationalises this duty for the DEL's enforcement mandate." },
-            { code: "OHS Act S.24", clause: "Section 24 – Incident Reporting", relevance: "Automated digital incident reporting supports DEL's notification systems." },
-            { code: "ISO 45001:2018", clause: "Clause 10.3 – Continual Improvement", relevance: "Aligns with DEL's mandate for ongoing improvement of national OHS standards." },
-            { code: "ISO 9001:2015", clause: "Clause 8.4 – External Providers", relevance: "Ergo-Safe can serve as a certified DEL external compliance tool provider." },
+            { code: "OHS Act S.8", clause: "Section 8 – General Duties", relevance: "Ergo-Safe operationalises this duty for enforcement mandates." },
+            { code: "OHS Act S.24", clause: "Section 24 – Incident Reporting", relevance: "Automated digital incident reporting supports notification systems." },
+            { code: "ISO 45001:2018", clause: "Clause 10.3 – Continual Improvement", relevance: "Aligns with the mandate for ongoing improvement of national OHS standards." },
+            { code: "ISO 9001:2015", clause: "Clause 8.4 – External Providers", relevance: "Ergo-Safe can serve as a certified external compliance tool provider." },
         ],
-        emailDraft: `Dear Director-General, Department of Employment & Labour,
+        emailDraft: `Dear Director-General,
 
-The 2026 Public Sector Digitalisation Mandate presents a critical opportunity to modernise South Africa's OHS inspection and enforcement framework. The DEL currently faces an enforcement backlog due to the rapid expansion of remote and hybrid work, where traditional inspection visits cannot keep pace with the scale of home-office safety obligations.
+The 2026 Public Sector Digitalisation Mandate presents a critical opportunity to modernise the OHS inspection and enforcement framework. The department currently faces an enforcement backlog due to the rapid expansion of remote and hybrid work, where traditional inspection visits cannot keep pace with the scale of home-office safety obligations.
 
-Ergo-Safe Reborn is purpose-built to resolve this. As a digital OHS audit and compliance platform operating across English, isiZulu, isiXhosa, and Sesotho, Ergo-Safe can function as an official pre-inspection self-audit tool for employers — generating standardised, ISO 45001:2018-compliant inspection-ready reports before a DEL labour inspector visit. This directly reduces enforcement backlog while ensuring greater national compliance coverage.
+Ergo-Safe Reborn is purpose-built to resolve this. As a digital OHS audit and compliance platform operating across English, isiZulu, isiXhosa, and Sesotho, Ergo-Safe can function as an official pre-inspection self-audit tool for employers — generating standardised, ISO 45001:2018-compliant inspection-ready reports before a labour inspector visit. This directly reduces enforcement backlog while ensuring greater national compliance coverage.
 
-We formally propose a Digital Partnership Agreement positioning Ergo-Safe as the DEL's endorsed 'Continuous Compliance Verification Tool' under the 2026 Digitalisation Mandate.
+We formally propose a Digital Partnership Agreement positioning Ergo-Safe as the endorsed 'Continuous Compliance Verification Tool' under the 2026 Digitalisation Mandate.
 
 Sincerely,
 Ergo-Safe OHS Task Force | Ergo-Safe (Pty) Ltd`
-    },
-
-    service_stations: {
-        client: "Service Stations (Engen / BP / Shell / Astron Energy)",
-        sector: 'industrial',
-        targetAudience: "Service Station Owner / Group Operations Manager",
-        dutyOfCareFocus: "Eliminating forecourt liability and standardizing instant emergency spill and evacuation procedures.",
-        disconnectStrategy: "Providing frontline teams with physical OHS Haven Dual-Layer Safety Lanyards connected directly to the digital ErgoSafe LMS.",
-        valueProposition: "Instantly bridges physical on-site emergencies with digital compliance tracking, safeguarding Section 16(2) manager liability tracks.",
-        outreachSubject: "Eliminating Forecourt Liability & Upskilling Attendants on the Spot - OHS Haven",
-        complianceStandards: [
-            { code: "OHS Act S.8", clause: "Section 8 – General Duties", relevance: "Proves 'Reasonably Practicable' safety measures are actively accessible on the forecourt." },
-            { code: "OHS Act S.16", clause: "Section 16(2) – Manager Liability", relevance: "Safeguards appointed managers by verifying staff training." },
-            { code: "ISO 45001:2018", clause: "Clause 7.4 – Communication", relevance: "Bilingual (English & isiZulu) emergency steps fulfill communication mandates." },
-        ],
-        emailDraft: `Dear Service Station Owner / Group Operations Manager,
-
-When a fuel spill occurs or a customer queries your brand transition on the forecourt, your brand reputation and regulatory compliance are decided in under 60 seconds. Relying on physical paper training manuals stored away in a back office leaves your site exposed to massive liability gaps under the South African OHS Act.
-
-We have standardized on-site compliance with the OHS Haven Dual-Layer Safety Lanyards, designed explicitly in your exact corporate brand layouts (Engen / BP / Shell / Astron Energy).
-
-Worn directly by your frontline team, these premium, color-coded lanyards provide immediate step-by-step procedures:
-- Side A: Instant Emergency Evacuation & HazMat Spill Containment Steps (English & isiZulu)
-- Side B: Step-by-Step Customer Service Routines & Caltex-to-Astron Transition FAQ Tracks
-
-This physical onboarding asset links directly to our interactive digital LMS platform, enabling staff to clear mandatory regulatory assessments on their mobile viewports. It completely safeguards your Section 16(2) manager liability tracks.
-
-Reply directly to this mail to secure a live 5-minute workspace demonstration and lock down your site's customized layout order bundle.
-
-Sincerely,
-Desigan Tharmen (DEZO)
-Lead Systems Architect & OHS Compliance Specialist
-OHS Haven & ErgoSafe Framework Suite`
     }
 };
