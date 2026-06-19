@@ -48,7 +48,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
             } else if (scene === 4) {
                 speak("HR and Loss Prevention integration. Nelly analyzes fatigue patterns over seven days, identifying risks before they become a worker's compensation claim.");
             } else if (scene === 5) {
-                speak("Interactive Compliance Training. Our Iris and Friends modules deliver protocol in a way that resonates. 80 percent higher retention than traditional methods.");
+                speak("Interactive Compliance Training. Our Nelly and Friends modules deliver protocol in a way that resonates. 80 percent higher retention than traditional methods.");
             } else if (scene === 6) {
                 speak("Industrial Logistics module. Forklift telemetry, safe-lifting heat maps, and dynamic DOA lockouts for high-hazard warehouse environments.");
             } else if (scene === 7) {
@@ -297,11 +297,11 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                                 className="bg-ohs-navy p-12 rounded-[3rem] shadow-2xl relative overflow-hidden"
                             >
                                 <div className="absolute top-0 left-0 w-full h-2 bg-ohs-orange" />
-                                <h1 className="text-5xl sm:text-7xl font-black text-white tracking-widest mb-4">IRIS & FRIENDS</h1>
+                                <h1 className="text-5xl sm:text-7xl font-black text-white tracking-widest mb-4">NELLY & FRIENDS</h1>
                                 <p className="text-ohs-orange font-bold text-2xl uppercase tracking-widest mb-8 italic">Interactive Safety Protocol</p>
 
                                 <div className="relative aspect-video bg-black rounded-2xl overflow-hidden mb-8 border-4 border-white/10 group cursor-pointer shadow-[0_0_50px_rgba(249,168,37,0.3)]">
-                                    <img src="/assets/iris_and_friends_training.png" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Training" />
+                                    <img src="/assets/nelly-professional.png" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" alt="Training" />
                                     <div className="absolute inset-0 bg-ohs-navy/20 group-hover:bg-transparent transition-colors" />
                                     <div className="absolute bottom-6 left-6 right-6">
                                         <div className="h-1.5 w-full bg-white/20 rounded-full overflow-hidden">

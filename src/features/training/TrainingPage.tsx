@@ -10,44 +10,30 @@ import { FRESH_OHS_PROJECT_REGISTRY } from '../../utils/master_ohs_boot';
 // Define the Statutory OHS Curriculum dynamically using our master data registry
 const stages = [
     {
-        id: 'first-aid',
-        title: "Stage 1: Basic First Aid (Service Stations)",
-        description: "OHS Act compliance first-aid response and biohazard management.",
+        id: 'posture',
+        title: "Stage 1: Workstation Engineering",
+        description: "OHS compliance for office posture and ergonomic workstation setup.",
         modules: [
             {
-                id: 'BASIC_FIRST_AID',
-                title: FRESH_OHS_PROJECT_REGISTRY.BASIC_FIRST_AID.title,
-                description: "Master emergency scene safety assessment, biological protection, high-pressure fuel eye flushes, and statutory handover.",
+                id: 'CORPORATE_POSTURE',
+                title: FRESH_OHS_PROJECT_REGISTRY.CORPORATE_POSTURE.title,
+                description: "Master ergonomic workstation setup, computer display alignment, and critical warnings against chair hazards (spinning and kneeling).",
                 duration: "7 min",
-                steps: FRESH_OHS_PROJECT_REGISTRY.BASIC_FIRST_AID.steps.map(s => s.title)
+                steps: FRESH_OHS_PROJECT_REGISTRY.CORPORATE_POSTURE.steps.map(s => s.title)
             }
         ]
     },
     {
-        id: 'fire-fighting',
-        title: "Stage 2: Basic Fire Fighting & Equipment",
-        description: "Emergency fire suppression, traffic containment, and evacuation control.",
+        id: 'office-pranks',
+        title: "Stage 2: Kinetic Liability & Office Conduct",
+        description: "Explicit hazard training focusing on high-risk behaviors and personal civil/criminal liability.",
         modules: [
             {
-                id: 'BASIC_FIRE_FIGHTING',
-                title: FRESH_OHS_PROJECT_REGISTRY.BASIC_FIRE_FIGHTING.title,
-                description: "Master alarm activation, panic control, shift sheet log retention, and active fire suppression.",
+                id: 'OFFICE_PRANKS',
+                title: FRESH_OHS_PROJECT_REGISTRY.OFFICE_PRANKS.title,
+                description: "Understand high-risk behaviors, the ban on 'pulling the chair away' pranks, traumatic head/wheel injury hazards, and statutory OHS responsibilities.",
                 duration: "7 min",
-                steps: FRESH_OHS_PROJECT_REGISTRY.BASIC_FIRE_FIGHTING.steps.map(s => s.title)
-            }
-        ]
-    },
-    {
-        id: 'spill-response',
-        title: "Stage 3: Emergency Spill Response Training",
-        description: "Hydrocarbon and chemical spill containment and environmental protection.",
-        modules: [
-            {
-                id: 'EMERGENCY_SPILL',
-                title: FRESH_OHS_PROJECT_REGISTRY.EMERGENCY_SPILL.title,
-                description: "Master emergency shutoff isolation, vapor egress, spill containment, and vehicle entry prevention.",
-                duration: "7 min",
-                steps: FRESH_OHS_PROJECT_REGISTRY.EMERGENCY_SPILL.steps.map(s => s.title)
+                steps: FRESH_OHS_PROJECT_REGISTRY.OFFICE_PRANKS.steps.map(s => s.title)
             }
         ]
     }

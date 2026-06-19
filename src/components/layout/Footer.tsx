@@ -6,7 +6,7 @@ export const Footer = () => {
                 <div className="text-center md:text-left">
                     <div className="flex items-center gap-3 justify-center md:justify-start mb-2">
                         <div className="w-8 h-8 bg-ohs-orange rounded-lg flex items-center justify-center font-black text-ohs-navy text-sm">OHS</div>
-                        <p className="font-black text-white text-xl tracking-tight">OHS Haven</p>
+                        <p className="font-black text-white text-xl tracking-tight">ErgoSafe Reborn</p>
                     </div>
                     <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">Advanced Ergonomic Intelligence System</p>
                 </div>
@@ -26,7 +26,7 @@ export const Footer = () => {
                 </div>
             </div>
             <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[10px] font-black text-gray-600 uppercase tracking-widest gap-4">
-                <p>© 2026 OHS HAVEN INTELLIGENCE. ALL RIGHTS RESERVED.</p>
+                <p>© 2026 ERGOSAFE REBORN. ALL RIGHTS RESERVED.</p>
                 <div className="flex gap-6">
                     <button className="hover:text-white transition-colors">Privacy Protcol</button>
                     <button className="hover:text-white transition-colors">Security Node</button>

@@ -14,7 +14,7 @@ export const TourManager = ({ setActiveTab }: TourManagerProps) => {
     const tourSteps = [
         {
             tab: 'dashboard',
-            text: "Welcome to OHS Haven. This is your central command center. Here you can monitor your safety score and quick stats at a glance.",
+            text: "Welcome to ErgoSafe Reborn. This is your central command center. Here you can monitor your safety score and quick stats at a glance.",
             mood: 'happy' as const,
         },
         {

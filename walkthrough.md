@@ -1,35 +1,50 @@
-# ErgoSafe Reborn V3 Release Walkthrough
+# ErgoSafe Reborn V3 Restoration Walkthrough
 
-All updates, bug fixes, design adjustments, and integration pipeline runs have been completed, verified, and pushed to production.
+All OHS Haven, LMS, and Iris core database integrations have been completely purged from the repository, successfully restoring **ErgoSafe Reborn** as a pure, lightweight, standalone ergonomics web application. Per the amended plan, the assistant name **Nelly** has been retained as the core avatar and store name.
 
-## 🛠️ Summary of Actions Taken
+## 🛠️ Summary of Purge Actions
 
-### 1. Local Dependency Restoration (OpenClaw)
-- Restored the missing local package `openclaw` (including `openclaw.cmd` and its configurations) from the local downloads archive to resolve TypeScript compilation errors during the build pipeline.
-- Executed `npm install` to establish correct symlink parameters inside `node_modules/`.
+### 1. Workspace Bloat Removal
+We have deleted all files, folders, and resources belonging to the unrelated OHS Haven, LMS, and Iris integration platforms:
+- **`LMS_READY/`**: Purged all accredited SAQA training manuals and assessment banks.
+- **`knowledge_base/`**: Removed historical OHS audit reports.
+- **`nelly/`**: Deleted the root-level Agent Builder configurations.
+- **`api/`**: Deleted the cross-platform sync logic (`sync.js`).
+- **`public/she_representative_manual.md`**: Deleted the SAQA manual.
+- **`public/assets/ohs-haven-logo.jpg`**: Deleted the OHS Haven logo.
+- **`src/data/lanyardMatrix.ts`**: Deleted the lanyard tracking.
+- **`src/features/shop/ShopPage.tsx`**: Deleted the safety shop page.
+- **`src/features/training/LanyardCardPreview.tsx` & `LanyardMatrixUI.tsx`**: Deleted the lanyard preview elements.
+- **`src/features/dashboard/SectorPacksPage.tsx`**: Deleted the sector packs UI.
+- **`src/features/finance/InvoicesPage.tsx`**: Deleted the invoices and finance pages.
+- **All Iris Database files**: Deleted `irisCore.json`, `irisDataLoader.ts`, `irisSchema.ts`, `useIrisCore.ts`, `IRIS_DATABASE_README.md`, `DELIVERY_SUMMARY.md`, `INDEX.md`, `QUICK_START.md`, and the duplicate `src/logic/security/irisCore.json`.
 
-### 2. Global Avatar Overhaul (Nelly)
-- Replaced the old drawn avatar image (`nelly-steward-final.png`) with the modern 3D companion avatar (`nelly-new-avatar.png`).
-- Overwrote the physical asset `nelly-steward-final.png` with `nelly-new-avatar.png` to avoid stale assets or caching issues.
-- Updated all references in [HackathonDemo.tsx](file:///c:/Users/dthar/Desktop/Desktop/ErgoSafe_Project/ergo-safe-reborn/src/components/HackathonDemo.tsx) and [index.html](file:///c:/Users/dthar/Desktop/Desktop/ErgoSafe_Project/ergo-safe-reborn/index.html) to point to the new Nelly avatar.
-- Verified that "Nelly" (and not "Melly") is consistently spelled and configured across all UI headers, text prompts, and translation matrices.
+### 2. Code Refactoring & De-Integration
+All references to the deleted modules, pages, and Iris logic have been stripped from the core application files:
+- **`src/App.tsx`**: Cleaned up imports and routes to remove the Safety Shop, Safety Lanyards, and Finance/Invoice pages.
+- **`src/components/layout/Sidebar.tsx`**: Removed navigation menu items for "Safety Lanyards", "Safety Shop", "Finance & Invoices", and "Sector Compliance Packs".
+- **`src/components/layout/Footer.tsx`**: Replaced all remaining branding text pointing to "OHS Haven" and "OHS HAVEN INTELLIGENCE" with "ErgoSafe Reborn".
+- **`src/components/agent/TourManager.tsx`**: Replaced the "OHS Haven" greeting text with "ErgoSafe Reborn".
+- **`src/logic/security/semanticFirewall.ts`**: Removed the `irisCore` imports, `getIrisCore()` method, and OHS Haven references.
+- **`src/utils/master_ohs_boot.ts`**: Reverted the OHS course registry back to ergonomics and office conduct only (Workstation Engineering and Office Pranks/Conduct), removing the firefighting and spill mitigation courses.
+- **`src/features/training/TrainingPage.tsx`**: Restored the linear ergonomic training stages, eliminating multi-facility/location overlays.
+- **`src/features/demo/HQTechnicalDemo.tsx`**: Removed "Iris & Friends" speech sequences and remapped the image to `/assets/nelly-professional.png`.
+- **`workspace_buckets.json` & `src/data/workspace_buckets.json`**: Purged all references to `PROJECT_HAVEN` and the copilot `Iris`.
+- **`public/assets/iris_and_friends_training.png`**: Deleted the unused Iris training image asset.
 
-### 3. Outreach Pitch Generalization
-- Removed specific bank/corporate brand names (Standard Bank, FNB, Discovery, Sanlam) in [financePitches.ts](file:///c:/Users/dthar/Desktop/Desktop/ErgoSafe_Project/ergo-safe-reborn/src/logic/financePitches.ts) to enable global sector pitches.
-- Remapped target clients to generalized categories: **Banks**, **Corporate**, **Insurance**, and **Government**.
-- Removed the **Service Stations** pitch entirely as requested since the application does not target that sector.
-
-### 4. Build, Deploy & Repository Sync
-- Purged local Vite cache and build output directories.
-- Compiled the finalized production-ready bundle successfully with zero warnings.
-- Force-deployed the build to Vercel, bypassing edge caches.
-- Staged all changes and performed a clean commit and push to `origin/main`.
+### 3. Nelly Core Avatar & Store Retention
+Per the amended instructions, all components, state stores, and references using the name **Nelly** were kept as is:
+- **`src/store/nellyStore.ts`**: Retained and preserved without renaming.
+- **`src/components/nelly/`**: Retained all Nelly UI components (`NellyAvatar.tsx`, `NellyCore.tsx`, `NellyEmergencyUI.tsx`, `NellyInterface.tsx`) exactly as they were.
+- **`index.html`**: Title remains "ErgoSafe Reborn" and points to the Nelly avatar icon.
 
 ---
 
-## 🚀 Final Deployment Parameters
+## 🚀 Build Verification
 
-- **Live Production URL**: [https://ergo-safe-reborn.vercel.app](https://ergo-safe-reborn.vercel.app)
-- **Telemetry Sync Endpoint**: [https://ergo-safe-reborn.vercel.app/api/sync](https://ergo-safe-reborn.vercel.app/api/sync)
-- **Git Commit Message**: `fix: resolve loading state blocks, enforce comprehensive responsive mobile layout validation, and trigger production release V3`
-- **Synchronization Status**: **100% SUCCESS**
+- **TypeScript Compilation & Bundling Status**: **100% SUCCESS**
+- **Build Output Summary**:
+  - `dist/index.html` (1.75 kB)
+  - `dist/assets/index-CbE5qFBI.css` (66.96 kB)
+  - `dist/assets/index-CE9YEbJF.js` (200.93 kB)
+  - `dist/assets/vendor-utils-CmBrjx_x.js` (715.56 kB)
