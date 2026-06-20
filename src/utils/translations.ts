@@ -1,4 +1,4 @@
-export type Language = 'en' | 'zu' | 'xh' | 'sw' | 'zh' | 'de' | 'st';
+export type Language = 'en' | 'zu' | 'xh' | 'sw' | 'zh' | 'de' | 'st' | 'af';
 
 export interface TranslationEntry {
     nelly_intro: string;
@@ -340,6 +340,50 @@ export const translations: Record<Language, TranslationEntry> = {
                 "stress-dump": { title: "Decompression e Phahameng ea Bophahamo", desc: "Ho phomola ho honyenyane ho tsosolosa ka mor'a mehala e boima. Tumellano ea OHS Act Karolo ea 8: Ho netefatsa tsamaiso e bolokehileng ea mosebetsi.", step1: "Hemela hare haholo" },
                 "risk-audit": { title: "Mekhoa ea ho Ithlahloba", desc: "Mokhoa oa ho lemoha matšoao a hao a kotsi a ergonomic. Tumellano ea OHS Act Karolo ea 8: Ho netefatsa tsamaiso e bolokehileng ea mosebetsi.", step1: "Hlahloba tikoloho" },
                 "corrective-flow": { title: "Tsela ea ho Lopolla", desc: "Ho otlolla ho tsoetseng pele bakeng sa libaka tse nang le mathata a sa feleng. Tumellano ea OHS Act Karolo ea 8: Ho netefatsa tsamaiso e bolokehileng ea mosebetsi.", step1: "Tokollo e lebisitsoeng ea molala" }
+            }
+        }
+    },
+    af: {
+        nelly_intro: "Hallo, ek is Nelly. Jou KI Veiligheidsmetgesel. Kom ons maak seker jy is vandag beskerm.",
+        stewardship_model: "Die Rentmeesterskapmodel verseker 100% nakoming deur 'n bevelketting: Werknemer na Toesighouer, Leier, en uitvoerende hoof.",
+        high_discomfort_disclaimer: "WAARSKUWING: Hoë ongemak bespeur. Dit is gemerk. Versuim om dit op te los kan lei tot nie-nakoming van die OHS-wet.",
+        legal_shock: "BELANGRIK: Voortgesette nie-nakoming kan lei tot korporatiewe aanspreeklikheid, insluitend swaar boetes of tronkstraf onder Suid-Afrikaanse OHS-wette.",
+        exercise_tip: "Tyd vir 'n vinnige strek! Dit voorkom langtermyn spierspanning.",
+        compliance_check: "Daaglikse veiligheidskandering word vereis. Voltooi asseblief jou kontrolelys teen Vrydag om 12:00 nm.",
+        admin_zero: "Assessering voltooi. Ek het dit outomaties in jou digitale OHS-dossier geliasseer.",
+        first_aid: "Stop bloeding, maak die wond skoon, bedek dit.",
+        right_to_disconnect: "Jou reg om te ontkoppel is beskerm. Na-ure kontak buite ooreengekome ure kan 'n psigososiale gevaar inhou onder ISO 45003:2021.",
+        popi_title: "JOU DATA IS JOU SKILD",
+        popi_subtitle: "Privaatheid-Eerste OHS Argitektuur",
+        popi_desc: "ErgoSafe Reborn funksioneer slegs as 'n Digitale Metgesel. Dit is 'n prestasie-instrument, nie 'n spioenasie-instrument nie. Jou data word geënkripteer en geanonimiseer.",
+        popi_guarantee_title: "Mens in die Lus Waarborg",
+        popi_guarantee_desc: "Veiligheid is ons #1 prioriteit. Alle verslae word veilig geberg.",
+        popi_accept: "AANVAAR PRIVAATHEIDSOOREENKOMS",
+        cognitive_title: "VERPLIGTE KOGNITIEWE OOREENKOMS",
+        cognitive_subtitle: "Klik so vinnig as moontlik op die teikens. Vertraging > 20% sal protokolle aktiveer.",
+        cognitive_fail: "PROTOKOL WAARSKUWING: {reason} bespeur. Ooreenkoms het misluk.",
+        cognitive_pass_optimal: "KAIZEN BONUS: Optimale latency (<700ms). Produktiwiteit vermenigvuldig.",
+        cognitive_warn: "MUDA BESPEUR: Afwyking is {variance}% van basislyn. Jou kognitiewe konsekwentheid neem af.",
+        cognitive_pass: "Kognitiewe Ooreenkoms geslaag! Jy werk veilig.",
+        liability_title: "Artikel 37 Aanspreeklikheidswaarskuwing",
+        liability_subtitle: "ONVERWAARBARE KOGNITIEWE VERTRAGING BESPEUR.",
+        liability_desc: "Jou reaksietye het aansienlik afgewyk. Kontak asseblief jou toesighouer.",
+        liability_action: "ERKEN EN DEËSKALEER",
+        kaizen_master: "Kaizen Meester",
+        training: {
+            start_session: "Begin sessie:",
+            follow_guide: "Volg gids. Stap 1:",
+            exercises: {
+                "monitor-mastery": { title: "Skermbeheer", desc: "Optimaliseer skermhoogte. OHS-wet Artikel 8 Nakoming.", step1: "Sit armlengte weg" },
+                "lumbar-lock": { title: "Onderrugsteun", desc: "Beveilig jou laerug. OHS-wet Artikel 8 Nakoming.", step1: "Sit diep in stoel" },
+                "20-20-20": { title: "20-20-20 Oogreël", desc: "Digitale oogstremming voorkoming. OHS-wet Artikel 8 Nakoming.", step1: "Elke 20 minute" },
+                "shoulder-rolls": { title: "Skouerrolle", desc: "Verlig bolyfspanning. OHS-wet Artikel 8 Nakoming.", step1: "Sit regop" },
+                "wrist-flexor": { title: "Polsstrek", desc: "Voorkom herhalende spanning in die polse. OHS-wet Artikel 8 Nakoming.", step1: "Strek arm vorentoe" },
+                "lateral-neck": { title: "Nekstrek", desc: "Verlig nekstyfheid. OHS-wet Artikel 8 Nakoming.", step1: "Kyk reguit vorentoe" },
+                "mobile-command": { title: "Mobiele Stasie", desc: "Ergonomie vir skootrekenaars. OHS-wet Artikel 8 Nakoming.", step1: "Verhoog skootrekenaar" },
+                "stress-dump": { title: "Stresverligting", desc: "Mikro-pouses. OHS-wet Artikel 8 Nakoming.", step1: "Asem diep in" },
+                "risk-audit": { title: "Self-Oudit", desc: "Hoe om jou eie gevare te identifiseer. OHS-wet Artikel 8 Nakoming.", step1: "Skandeer omgewing" },
+                "corrective-flow": { title: "Korrektiewe Vloei", desc: "Gevorderde strekke. OHS-wet Artikel 8 Nakoming.", step1: "Teiken nekstrek" }
             }
         }
     }

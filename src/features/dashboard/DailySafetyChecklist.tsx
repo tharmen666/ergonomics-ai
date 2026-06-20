@@ -89,6 +89,16 @@ const CHECKLIST_TRANSLATIONS: Record<Language, {
         compliant: 'Vollständig konform',
         completed: 'Abgeschlossen',
         feedback: 'Gute Arbeit! Deine Einrichtung ist heute OHS-konform.'
+    },
+    af: {
+        monitor: 'Skerm op ooghoogte?',
+        chair: 'Stoel ondersteun onderrug?',
+        feet: 'Voete plat op die vloer?',
+        title: 'Daaglikse Veiligheids Kontrolelys',
+        complete: 'Nakoming Geverifieer',
+        compliant: 'Ten Volle Voldoenend',
+        completed: 'Voltooi',
+        feedback: 'Goeie werk! Jou opstelling is nou OHS-nakomend vir die dag.'
     }
 };
 

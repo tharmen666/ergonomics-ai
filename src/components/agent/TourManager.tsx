@@ -7,7 +7,7 @@ interface TourManagerProps {
 }
 
 export const TourManager = ({ setActiveTab }: TourManagerProps) => {
-    const { isTourActive, setTourActive, setSpeaking, setMood, setGuidance } = useNellyStore();
+    const { isTourActive, setTourActive, setSpeaking, setMood, setGuidance, language } = useNellyStore();
     const [step, setStep] = useState(0);
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -92,7 +92,7 @@ export const TourManager = ({ setActiveTab }: TourManagerProps) => {
             // Set safety fallback
             timeoutRef.current = setTimeout(nextStep, 15000);
 
-            speak(current.text, nextStep);
+            speak(current.text, language, nextStep);
         };
 
         runStep(step);

@@ -1,39 +1,41 @@
-export const speak = (text: string, onEnd?: () => void) => {
+export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => {
     if (!window.speechSynthesis) {
         console.error("Speech Synthesis not supported");
         return;
     }
 
     const synth = window.speechSynthesis;
-    // Cancel previous
     synth.cancel();
 
     const utterance = new SpeechSynthesisUtterance(text);
 
-    // Robust voice selection
     const loadVoices = () => {
         const voices = synth.getVoices();
-
-        // Priority: Zulu Native -> Google UK English Female -> Microsoft Zira -> Any Female
-        let selectedVoice = voices.find(v => v.lang === 'zu-ZA' || v.lang === 'en-ZA') || 
-            voices.find(v =>
-            (v.name.includes('Google') && v.name.includes('UK') && v.name.includes('Female')) ||
-            v.name.includes('Zira')
-        );
-
-        if (!selectedVoice) {
-            selectedVoice = voices.find(v => v.name.includes('Female'));
+        
+        let selectedVoice;
+        
+        // Match voice to selected language
+        if (lang === 'zu') {
+            selectedVoice = voices.find(v => v.lang.startsWith('zu') || v.lang === 'en-ZA');
+        } else if (lang === 'af') {
+            selectedVoice = voices.find(v => v.lang.startsWith('af') || v.lang === 'en-ZA');
+        } else {
+            // Default to English (prefer female voices)
+            selectedVoice = voices.find(v => 
+                (v.lang.startsWith('en') && v.name.includes('Female')) || 
+                v.name.includes('Zira') || 
+                v.name.includes('Google UK')
+            ) || voices.find(v => v.lang.startsWith('en'));
         }
 
         if (selectedVoice) {
             utterance.voice = selectedVoice;
-            utterance.pitch = (selectedVoice.lang === 'zu-ZA' || selectedVoice.lang === 'en-ZA') ? 1.15 : 1.05; // Natural lift
+            utterance.pitch = (lang === 'zu' || lang === 'af') ? 1.15 : 1.05;
         } else {
-            // Fallback to default but slightly higher pitch to sound less robotic/male if possible
             utterance.pitch = 1.2;
         }
 
-        utterance.rate = (selectedVoice?.lang === 'zu-ZA' || selectedVoice?.lang === 'en-ZA') ? 0.65 : 1.0;
+        utterance.rate = (lang === 'zu' || lang === 'af') ? 0.8 : 1.0;
 
         if (onEnd) {
             utterance.onend = onEnd;
@@ -45,10 +47,8 @@ export const speak = (text: string, onEnd?: () => void) => {
     if (synth.getVoices().length > 0) {
         loadVoices();
     } else {
-        // Wait for voices to load
         synth.onvoiceschanged = () => {
             loadVoices();
-            // Remove listener to prevent multiple triggers
             synth.onvoiceschanged = null;
         };
     }
@@ -59,3 +59,4 @@ export const stopSpeaking = () => {
         window.speechSynthesis.cancel();
     }
 };
+
