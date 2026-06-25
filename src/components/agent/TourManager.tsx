@@ -102,7 +102,6 @@ export const TourManager = ({ setActiveTab }: TourManagerProps) => {
             // Actually, useEffect will re-run when `step` changes.
             // So we just need to ignore the 'runStep' internal definition and rely on effect.
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isTourActive, step]);
     // Removed other deps to avoid re-triggering mid-speech if visual props change, 
     // although they shouldn't. The critical driver is `step` and `isTourActive`.
