@@ -3,17 +3,34 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Box, Cylinder, Html } from '@react-three/drei';
 import * as THREE from 'three';
 
-const Vertebra = ({ position, rotation, color, scale }: any) => {
+const Vertebra = ({ position, rotation, color, scale, showDisc }: any) => {
     return (
         <group position={position} rotation={rotation} scale={scale}>
             {/* The main body of the vertebra */}
-            <Cylinder args={[0.5, 0.5, 0.6, 16]} rotation={[Math.PI / 2, 0, 0]}>
-                <meshStandardMaterial color={color} roughness={0.7} metalness={0.1} />
+            <Cylinder name="bone" args={[0.48, 0.48, 0.5, 16]} rotation={[Math.PI / 2, 0, 0]}>
+                <meshStandardMaterial color={color} roughness={0.5} metalness={0.2} />
             </Cylinder>
             {/* Spinous process (back spike) */}
-            <Box args={[0.2, 0.2, 0.8]} position={[0, 0, -0.6]}>
-                <meshStandardMaterial color={color} roughness={0.7} metalness={0.1} />
+            <Box name="bone" args={[0.18, 0.18, 0.7]} position={[0, 0, -0.5]}>
+                <meshStandardMaterial color={color} roughness={0.6} metalness={0.2} />
             </Box>
+            {/* Intervertebral disc (fibrous cartilage connection) */}
+            {showDisc && (
+                <Cylinder name="disc" args={[0.42, 0.42, 0.3, 16]} position={[0, -0.4, 0]}>
+                    <meshStandardMaterial color="#111827" roughness={0.9} metalness={0.1} />
+                </Cylinder>
+            )}
+            {/* Spinal Cord segment (glowing tube in the vertebral canal) */}
+            {showDisc && (
+                <Cylinder name="cord" args={[0.08, 0.08, 0.8, 8]} position={[0, -0.4, -0.22]}>
+                    <meshStandardMaterial 
+                        color={color} 
+                        emissive={color} 
+                        emissiveIntensity={0.8}
+                        roughness={0.3} 
+                    />
+                </Cylinder>
+            )}
         </group>
     );
 };
@@ -56,7 +73,7 @@ const SpineModel = ({ postureState }: { postureState: 'good' | 'warning' | 'crit
 
     useFrame((state, delta) => {
         // Smoothly interpolate colors
-        currentColor.current.lerp(targetColor, delta * 3);
+        currentColor.current.lerp(targetColor, delta * 8);
         
         if (groupRef.current) {
             // Gentle breathing animation
@@ -65,15 +82,19 @@ const SpineModel = ({ postureState }: { postureState: 'good' | 'warning' | 'crit
             groupRef.current.children.forEach((child, i) => {
                 const { zOffset, pitch } = getCurve(i);
                 
-                // Interpolate positions for smooth transition
-                child.position.z = THREE.MathUtils.lerp(child.position.z, -zOffset, delta * 2);
-                child.rotation.x = THREE.MathUtils.lerp(child.rotation.x, -pitch, delta * 2);
+                // Interpolate positions for smooth transition (increased speed)
+                child.position.z = THREE.MathUtils.lerp(child.position.z, -zOffset, delta * 8);
+                child.rotation.x = THREE.MathUtils.lerp(child.rotation.x, -pitch, delta * 8);
 
-                // Update material color
+                // Update material color for bones and cord only
                 child.children.forEach((mesh: any) => {
-                    if (mesh.material) {
+                    if (mesh.material && mesh.name !== 'disc') {
                         mesh.material.color.copy(currentColor.current);
-                        mesh.material.emissive.copy(currentColor.current).multiplyScalar(0.2);
+                        if (mesh.name === 'cord') {
+                            mesh.material.emissive.copy(currentColor.current).multiplyScalar(0.8);
+                        } else {
+                            mesh.material.emissive.copy(currentColor.current).multiplyScalar(0.2);
+                        }
                     }
                 });
             });
@@ -89,6 +110,7 @@ const SpineModel = ({ postureState }: { postureState: 'good' | 'warning' | 'crit
                     rotation={[0, 0, 0]}
                     scale={[1 - i * 0.02, 1 - i * 0.02, 1 - i * 0.02]} // Taper slightly towards top
                     color={baseColors.good}
+                    showDisc={i > 0}
                 />
             ))}
         </group>
@@ -98,18 +120,18 @@ const SpineModel = ({ postureState }: { postureState: 'good' | 'warning' | 'crit
 export const SpineViewer = () => {
     const [postureState, setPostureState] = useState<'good' | 'warning' | 'critical'>('good');
 
-    // Simulate telemetry changes
+    // Simulate telemetry changes (reduced interval for faster demonstration pacing)
     useEffect(() => {
         const interval = setInterval(() => {
             const states: ('good' | 'warning' | 'critical')[] = ['good', 'warning', 'critical', 'warning'];
             const next = states[Math.floor(Math.random() * states.length)];
             setPostureState(next);
-        }, 5000);
+        }, 4000);
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <div className="w-full h-full min-h-[400px] relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-b from-ohs-navy/80 to-black/90">
+        <div className="w-full h-full min-h-[250px] sm:min-h-[300px] md:min-h-[400px] relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-b from-ohs-navy/80 to-black/90">
             {/* Overlay Telemetry HUD */}
             <div className="absolute top-4 left-4 z-10 pointer-events-none">
                 <div className="bg-black/50 backdrop-blur-md border border-white/10 p-4 rounded-2xl">
