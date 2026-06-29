@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { speak, stopSpeaking } from '../../utils/speech';
+import { speak, stopSpeaking, VOICEOVER_ACCENT_MAP } from '../../utils/speech';
 import { useNellyStore } from '../../store/nellyStore';
 import { SpineViewer } from '../../components/agent/SpineViewer';
 import {
@@ -159,19 +159,13 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                     fallbackTriggered = true;
                     console.log(`Audio file not found or failed to load: ${sceneConfig.audioPath}. Falling back to TTS.`);
                     speak(sceneConfig.text, currentLang, () => {
-                        // After speech ends, wait 2 seconds and transition
-                        setTimeout(() => {
-                            triggerNextScene();
-                        }, 2000);
+                        triggerNextScene();
                     });
                 };
 
                 audio.addEventListener('error', handleFallback);
                 audio.addEventListener('ended', () => {
-                    // After audio ends, wait 2 seconds and transition
-                    setTimeout(() => {
-                        triggerNextScene();
-                    }, 2000);
+                    triggerNextScene();
                 });
 
                 audio.play().catch(() => {
@@ -181,7 +175,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
             };
 
             // Small delay to let scene render before starting audio
-            const delayTimeout = setTimeout(playAudio, 600);
+            const delayTimeout = setTimeout(playAudio, 0);
             return () => {
                 clearTimeout(delayTimeout);
                 cleanupAudio();
@@ -221,12 +215,11 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                                 onChange={(e) => handleLanguageChange(e.target.value)}
                                 className="bg-white/10 hover:bg-white/15 border border-white/20 text-white rounded-lg px-2 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-sm font-bold focus:outline-none focus:ring-2 focus:ring-ohs-orange backdrop-blur-md cursor-pointer transition-all"
                             >
-                                <option value="en" className="bg-[#0b0f19] text-white">English (ZA)</option>
-                                <option value="zu" className="bg-[#0b0f19] text-white">isiZulu</option>
-                                <option value="xh" className="bg-[#0b0f19] text-white">isiXhosa</option>
-                                <option value="st" className="bg-[#0b0f19] text-white">Sesotho</option>
-                                <option value="af" className="bg-[#0b0f19] text-white">Afrikaans</option>
-                                <option value="sw" className="bg-[#0b0f19] text-white">KiSwahili</option>
+                                {Object.entries(VOICEOVER_ACCENT_MAP).map(([code, config]) => (
+                                    <option key={code} value={code} className="bg-[#0b0f19] text-white">
+                                        {config.displayName} ({config.regionalAccent})
+                                    </option>
+                                ))}
                             </select>
                         </div>
                     )}
@@ -281,7 +274,7 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                                     Real-time postural telemetry mapped to procedurally connected 3D primitives. Visualizing spinal cord stress and intervertebral loads.
                                 </p>
                             </div>
-                            <div className="w-full md:flex-1 h-[250px] sm:h-[350px] md:h-[450px] lg:h-[550px] rounded-2xl sm:rounded-3xl overflow-hidden border border-white/10 shadow-lg">
+                            <div className="w-full md:flex-1 h-full max-w-full flex items-stretch">
                                 <SpineViewer />
                             </div>
                         </motion.div>

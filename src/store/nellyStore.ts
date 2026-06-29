@@ -18,8 +18,6 @@ interface NellyState {
     setNellyExpanded: (expanded: boolean) => void;
     isSidebarCollapsed: boolean;
     setSidebarCollapsed: (collapsed: boolean) => void;
-    isIndustrialMode: boolean;
-    setIndustrialMode: (active: boolean) => void;
     language: Language;
     setLanguage: (lang: Language) => void;
     completedModules: string[];
@@ -42,7 +40,6 @@ export const useNellyStore = create<NellyState>()(
             isWingmanActive: false,
             isNellyExpanded: false,
             isSidebarCollapsed: false,
-            isIndustrialMode: false,
             language: 'en',
             completedModules: [],
             recommendations: [],
@@ -54,7 +51,6 @@ export const useNellyStore = create<NellyState>()(
             setWingmanActive: (isWingmanActive) => set({ isWingmanActive }),
             setNellyExpanded: (isNellyExpanded) => set({ isNellyExpanded }),
             setSidebarCollapsed: (isSidebarCollapsed) => set({ isSidebarCollapsed }),
-            setIndustrialMode: (isIndustrialMode) => set({ isIndustrialMode }),
             setLanguage: (language) => set({ language }),
             completeModule: (id) => set((state) => ({
                 completedModules: state.completedModules.includes(id) ? state.completedModules : [...state.completedModules, id]

@@ -54,7 +54,7 @@ export const RiskyBehaviorsPage = () => {
                                     addRecommendation('foundation');
                                 } else if (risk.desc.includes('lifting') || risk.title.includes('Reaching')) {
                                     warning = "Repetitive reaching drains your stamina. Let's optimize your setup so everything is within a relaxed arm's length.";
-                                    addRecommendation('industrial');
+                                    addRecommendation('foundation');
                                 } else if (risk.title.includes('Glare') || risk.title.includes('Light')) {
                                     warning = "Dim lighting can cause serious cognitive fatigue. Taking a 5-minute break to adjust your room lighting will boost your energy instantly.";
                                     addRecommendation('remote');

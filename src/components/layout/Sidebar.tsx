@@ -11,6 +11,7 @@ const navItems = [
     { icon: AlertCircle, label: "Risky Behaviors", id: "risks" },
     { icon: Users, label: "HR Dashboard", id: "admin" },
     { icon: Users, label: "Our Team", id: "team" },
+    { icon: FileText, label: "Invoice Manager", id: "invoices" },
     { icon: Settings, label: "Settings", id: "settings" },
 ];
 

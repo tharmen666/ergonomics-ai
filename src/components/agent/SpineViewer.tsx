@@ -73,7 +73,7 @@ const SpineModel = ({ postureState }: { postureState: 'good' | 'warning' | 'crit
 
     useFrame((state, delta) => {
         // Smoothly interpolate colors
-        currentColor.current.lerp(targetColor, delta * 8);
+        currentColor.current.lerp(targetColor, delta * 16);
         
         if (groupRef.current) {
             // Gentle breathing animation
@@ -83,8 +83,8 @@ const SpineModel = ({ postureState }: { postureState: 'good' | 'warning' | 'crit
                 const { zOffset, pitch } = getCurve(i);
                 
                 // Interpolate positions for smooth transition (increased speed)
-                child.position.z = THREE.MathUtils.lerp(child.position.z, -zOffset, delta * 8);
-                child.rotation.x = THREE.MathUtils.lerp(child.rotation.x, -pitch, delta * 8);
+                child.position.z = THREE.MathUtils.lerp(child.position.z, -zOffset, delta * 16);
+                child.rotation.x = THREE.MathUtils.lerp(child.rotation.x, -pitch, delta * 16);
 
                 // Update material color for bones and cord only
                 child.children.forEach((mesh: any) => {
@@ -126,7 +126,7 @@ export const SpineViewer = () => {
             const states: ('good' | 'warning' | 'critical')[] = ['good', 'warning', 'critical', 'warning'];
             const next = states[Math.floor(Math.random() * states.length)];
             setPostureState(next);
-        }, 4000);
+        }, 2000);
         return () => clearInterval(interval);
     }, []);
 

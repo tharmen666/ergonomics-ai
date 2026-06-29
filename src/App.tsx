@@ -14,6 +14,7 @@ import { HQTechnicalDemo } from './features/demo/HQTechnicalDemo';
 import { ExecutiveBriefing } from './features/dashboard/ExecutiveBriefing';
 import { PrivacyHandshake } from './assets/Privacy-Shield/PrivacyHandshake';
 import { CognitiveHandshake } from './components/AI-Coach/CognitiveHandshake';
+import { InvoicePortal } from './features/invoices/InvoicePortal';
 
 import { TourManager } from './components/agent/TourManager';
 import { GEAROverlay } from './components/ui/GEAROverlay';
@@ -46,6 +47,7 @@ function App() {
           {activeTab === 'assessment' && <SelfAssessmentPage />}
           {activeTab === 'risks' && <RiskyBehaviorsPage />}
           {activeTab === 'admin' && <AdminPortal />}
+          {activeTab === 'invoices' && <InvoicePortal />}
           {activeTab === 'reports' && <div className="text-center p-20 text-gray-500">Analytics Module - Coming Soon</div>}
           {activeTab === 'settings' && <div className="text-center p-20 text-gray-500">Settings Module - Coming Soon</div>}
         </main>
