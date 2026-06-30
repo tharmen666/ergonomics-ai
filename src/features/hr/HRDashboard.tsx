@@ -64,9 +64,10 @@ export const HRDashboard = () => {
                                 {logs.length > 0 && (
                                     <div className="mt-6 pt-6 border-t border-red-500/20 space-y-2">
                                         <h4 className="text-xs font-black text-white uppercase tracking-wider">Breach Details:</h4>
-                                        <div className="bg-black/40 p-4 rounded-xl text-xs space-y-1 font-mono text-red-200 border border-red-500/10">
+                                        <div className="bg-black/40 p-4 rounded-xl text-xs space-y-1 font-mono text-red-200 border border-red-500/10 whitespace-normal break-words">
                                             <p>Score: {logs[0].score} (Threshold: {logs[0].threshold})</p>
                                             <p>Triggered At: {new Date(logs[0].timestamp).toLocaleString()}</p>
+                                            {logs[0].reason && <p className="mt-2 text-ohs-orange">Reason: {logs[0].reason}</p>}
                                         </div>
                                     </div>
                                 )}
@@ -105,6 +106,7 @@ export const HRDashboard = () => {
                                         <div key={idx} className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5 text-xs">
                                             <div className="space-y-1">
                                                 <p className="font-bold text-white">Ergonomic Breach Event (Score: {log.score})</p>
+                                                {log.reason && <p className="text-ohs-orange my-1">{log.reason}</p>}
                                                 <p className="text-gray-400">{new Date(log.timestamp).toLocaleString()}</p>
                                             </div>
                                             <span className="text-red-400 font-bold uppercase text-[10px] bg-red-500/10 border border-red-500/20 px-2.5 py-1 rounded-md">

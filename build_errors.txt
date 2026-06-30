@@ -1,0 +1,15 @@
+
+> ergo-safe-reborn@0.0.0 build
+> tsc && vite build
+
+[36mvite v5.4.21 [32mbuilding for production...[36m[39m
+transforming...
+[32m✓[39m 2463 modules transformed.
+[31mx[39m Build failed in 2m 18s
+[31merror during build:
+[31mEPERM, Permission denied: \\?\C:\Users\dthar\Desktop\Desktop\ErgoSafe_Project\ergo-safe-reborn\dist\assets '\\?\C:\Users\dthar\Desktop\Desktop\ErgoSafe_Project\ergo-safe-reborn\dist\assets'[31m
+    at Object.rmSync (node:fs:1222:18)
+    at emptyDir (file:///C:/Users/dthar/Desktop/Desktop/ErgoSafe_Project/ergo-safe-reborn/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:17082:19)
+    at prepareOutDir (file:///C:/Users/dthar/Desktop/Desktop/ErgoSafe_Project/ergo-safe-reborn/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:65746:7)
+    at build (file:///C:/Users/dthar/Desktop/Desktop/ErgoSafe_Project/ergo-safe-reborn/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:65711:7)
+    at async CAC.<anonymous> (file:///C:/Users/dthar/Desktop/Desktop/ErgoSafe_Project/ergo-safe-reborn/node_modules/vite/dist/node/cli.js:829:5)[39m

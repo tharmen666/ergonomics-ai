@@ -8,8 +8,9 @@ import { RiskPage } from './features/risk/RiskPage';
 import { TeamPage } from './features/team/TeamPage';
 
 import { SelfAssessmentPage } from './features/assessment/SelfAssessmentPage';
-import { RiskyBehaviorsPage } from './features/risks/RiskyBehaviorsPage';
+import { RiskyBehaviorsPage } from './features/risk/RiskyBehaviorsPage';
 import { AdminPortal } from './features/admin/AdminPortal';
+import { HRDashboard } from './features/hr/HRDashboard';
 import { HQTechnicalDemo } from './features/demo/HQTechnicalDemo';
 import { ExecutiveBriefing } from './features/dashboard/ExecutiveBriefing';
 import { PrivacyHandshake } from './assets/Privacy-Shield/PrivacyHandshake';
@@ -46,6 +47,7 @@ function App() {
           {activeTab === 'team' && <TeamPage />}
           {activeTab === 'assessment' && <SelfAssessmentPage />}
           {activeTab === 'risks' && <RiskyBehaviorsPage />}
+          {activeTab === 'hr' && <HRDashboard />}
           {activeTab === 'admin' && <AdminPortal />}
           {activeTab === 'invoices' && <InvoicePortal />}
           {activeTab === 'reports' && <div className="text-center p-20 text-gray-500">Analytics Module - Coming Soon</div>}
