@@ -133,7 +133,7 @@ export const IncidentLogger = () => {
                             <form onSubmit={handleSubmit} className="space-y-4">
                                 <div>
                                     <label className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 block">Category</label>
-                                    <div className="grid grid-cols-2 gap-2">
+                                    <div className="flex flex-col md:grid md:grid-cols-2 gap-2">
                                         <button
                                             type="button"
                                             onClick={() => setCategory('personal_complacency')}

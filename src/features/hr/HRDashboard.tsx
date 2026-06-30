@@ -1,12 +1,62 @@
-import { motion } from 'framer-motion';
-import { ShieldAlert, ShieldCheck, User, Shield, AlertTriangle } from 'lucide-react';
-import { useComplianceStore } from '../../store/complianceStore';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { 
+    ShieldAlert, 
+    ShieldCheck, 
+    User, 
+    Shield, 
+    AlertTriangle, 
+    Clock, 
+    ChevronRight, 
+    X, 
+    CheckCircle, 
+    UserCheck,
+    ArrowRight
+} from 'lucide-react';
+import { useComplianceStore, EmployeeCase, EscalationState } from '../../store/complianceStore';
 
 export const HRDashboard = () => {
-    const { status, requiresEscalation, logs, resetCompliance } = useComplianceStore();
+    const { 
+        status, 
+        requiresEscalation, 
+        logs, 
+        cases, 
+        resolveCase, 
+        tickSimulatedTime, 
+        resetCompliance 
+    } = useComplianceStore();
+
+    const [selectedCase, setSelectedCase] = useState<EmployeeCase | null>(null);
+
+    // Dynamic timer ticker: 1 real second = 1 simulated hour
+    useEffect(() => {
+        const interval = setInterval(() => {
+            tickSimulatedTime();
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [tickSimulatedTime]);
+
+    // Keep selectedCase reference fresh if state updates in store
+    const activeCase = selectedCase ? cases.find(c => c.id === selectedCase.id) || null : null;
+
+    // Helper to calculate simulated hours left
+    const getCountdown = (ex: EmployeeCase) => {
+        if (ex.escalationState === 'resolved') return { value: 0, text: 'Resolved', status: 'resolved' };
+        if (ex.escalationState === 'escalated_level_2') return { value: 0, text: 'BREACHED - ESCALATED TO CEO', status: 'breached' };
+        
+        const now = new Date().getTime();
+        const created = new Date(ex.createdAt).getTime();
+        const elapsedHours = (now - created) / 1000; // 1s = 1h
+        const remaining = Math.max(0, ex.timeframeHours - Math.floor(elapsedHours));
+        
+        if (remaining <= 0) {
+            return { value: 0, text: 'Breached', status: 'breached' };
+        }
+        return { value: remaining, text: `${remaining}h remaining`, status: 'active' };
+    };
 
     return (
-        <div className="p-6 md:p-10 max-w-5xl mx-auto pb-32">
+        <div className="p-6 md:p-10 max-w-7xl mx-auto pb-32 relative">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -16,184 +66,302 @@ export const HRDashboard = () => {
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/10 pb-6">
                     <div>
                         <h2 className="text-3xl font-black text-white tracking-tight uppercase">
-                            OHS Compliance & Incident Panel
+                            OHS Compliance & Escalation Audit Trail
                         </h2>
                         <p className="text-gray-400 font-medium">
-                            Stewardship escalation and legal liability tracking dashboard.
+                            Monitoring Line Manager resolution windows, statutory duties, and HR escalations.
                         </p>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <span className="text-xs font-bold text-gray-500 uppercase">System Status:</span>
+                    
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={resetCompliance}
+                            className="bg-white/5 hover:bg-white/10 text-white border border-white/10 px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all cursor-pointer"
+                        >
+                            Reset All Cases
+                        </button>
                         <div className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest flex items-center gap-2 ${
                             status === 'COMPLIANT' 
                                 ? 'bg-ohs-green/20 border border-ohs-green/50 text-ohs-green' 
                                 : 'bg-red-500/20 border border-red-500/50 text-red-500 animate-pulse'
                         }`}>
                             {status === 'COMPLIANT' ? <ShieldCheck size={14} /> : <ShieldAlert size={14} />}
-                            {status}
+                            System Status: {status}
                         </div>
                     </div>
                 </div>
 
-                {/* Main Dashboard Layout */}
+                {/* Main Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Left & Middle: Compliance Overview & Alert Widget */}
+                    {/* Left: OHS Employee Audit Grid */}
                     <div className="lg:col-span-2 space-y-6">
-                        {status === 'BREACH' ? (
-                            <motion.div
-                                initial={{ scale: 0.95, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                className="bg-red-500/10 border border-red-500/30 p-8 rounded-3xl relative overflow-hidden"
-                            >
-                                <div className="absolute top-0 left-0 w-full h-1.5 bg-red-500 animate-pulse" />
-                                <div className="flex items-start gap-4">
-                                    <div className="p-3 bg-red-500/20 rounded-2xl text-red-500 animate-bounce">
-                                        <AlertTriangle size={32} />
-                                    </div>
-                                    <div className="space-y-3">
-                                        <h3 className="text-2xl font-black text-white uppercase tracking-tight">
-                                            CRITICAL NON-COMPLIANCE ALERT
-                                        </h3>
-                                        <p className="text-red-300 text-sm leading-relaxed font-medium">
-                                            A severe ergonomic/OHS breach has been triggered by a self-assessment score crossing safety thresholds. Continued unresolved breach risks corporate negligence under Section 37/38 of OHS Act 85.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                {/* Breach logs */}
-                                {logs.length > 0 && (
-                                    <div className="mt-6 pt-6 border-t border-red-500/20 space-y-2">
-                                        <h4 className="text-xs font-black text-white uppercase tracking-wider">Breach Details:</h4>
-                                        <div className="bg-black/40 p-4 rounded-xl text-xs space-y-1 font-mono text-red-200 border border-red-500/10 whitespace-normal break-words">
-                                            <p>Score: {logs[0].score} (Threshold: {logs[0].threshold})</p>
-                                            <p>Triggered At: {new Date(logs[0].timestamp).toLocaleString()}</p>
-                                            {logs[0].reason && <p className="mt-2 text-ohs-orange">Reason: {logs[0].reason}</p>}
-                                        </div>
-                                    </div>
-                                )}
-
-                                <div className="mt-8 flex justify-start">
-                                    <button
-                                        onClick={resetCompliance}
-                                        className="bg-red-500 hover:bg-red-600 text-white font-black text-xs px-6 py-3.5 rounded-xl uppercase tracking-wider shadow-lg shadow-red-500/20 active:scale-95 transition-all cursor-pointer"
-                                    >
-                                        RESOLVE INTERVENTION & UPDATE HR RECORDS
-                                    </button>
-                                </div>
-                            </motion.div>
-                        ) : (
-                            <div className="bg-white/5 border border-white/10 p-8 rounded-3xl text-center space-y-4">
-                                <div className="w-16 h-16 bg-ohs-green/20 text-ohs-green rounded-full flex items-center justify-center mx-auto">
-                                    <ShieldCheck size={32} />
-                                </div>
-                                <h3 className="text-xl font-bold text-white">All Workplace Audits Clear</h3>
-                                <p className="text-gray-400 text-sm max-w-md mx-auto">
-                                    No active compliance breaches or OHS issues registered. Employees are currently reporting within safe ergonomics baselines.
-                                </p>
+                        <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden shadow-xl">
+                            <div className="p-6 border-b border-white/10 bg-white/5">
+                                <h3 className="text-xl font-black text-white uppercase tracking-tight">Active Employee Incident Tracker</h3>
+                                <p className="text-gray-400 text-xs mt-1">Select an employee profile to view full OHS escalation audit details.</p>
                             </div>
-                        )}
-
-                        {/* Recent compliance logging timeline */}
-                        <div className="bg-white/5 border border-white/10 p-6 rounded-3xl space-y-4">
-                            <h4 className="text-sm font-black text-white uppercase tracking-wider">
-                                Historic Compliance Logs
-                            </h4>
-                            {logs.length === 0 ? (
-                                <p className="text-xs text-gray-500 font-medium">No prior compliance logs filed.</p>
-                            ) : (
-                                <div className="space-y-3">
-                                    {logs.map((log, idx) => (
-                                        <div key={idx} className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5 text-xs">
-                                            <div className="space-y-1">
-                                                <p className="font-bold text-white">Ergonomic Breach Event (Score: {log.score})</p>
-                                                {log.reason && <p className="text-ohs-orange my-1">{log.reason}</p>}
-                                                <p className="text-gray-400">{new Date(log.timestamp).toLocaleString()}</p>
+                            
+                            <div className="divide-y divide-white/5">
+                                {cases.map((c) => {
+                                    const countdown = getCountdown(c);
+                                    return (
+                                        <div
+                                            key={c.id}
+                                            onClick={() => setSelectedCase(c)}
+                                            className={`p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:bg-white/5 transition-all cursor-pointer group ${
+                                                activeCase?.id === c.id ? 'bg-ohs-blue/10 border-l-4 border-ohs-orange' : ''
+                                            }`}
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black transition-all ${
+                                                    c.status === 'BREACH' 
+                                                        ? 'bg-red-500/20 text-red-500' 
+                                                        : c.status === 'RISK_ALERT' 
+                                                            ? 'bg-ohs-orange/20 text-ohs-orange' 
+                                                            : 'bg-ohs-green/20 text-ohs-green'
+                                                }`}>
+                                                    {c.employeeName.charAt(0)}
+                                                </div>
+                                                <div>
+                                                    <div className="flex items-center gap-2">
+                                                        <h4 className="font-bold text-white text-lg leading-tight group-hover:text-ohs-orange transition-colors">
+                                                            {c.employeeName}
+                                                        </h4>
+                                                        <span className="text-[10px] text-gray-500 bg-white/5 px-2 py-0.5 rounded uppercase font-semibold">{c.dept}</span>
+                                                    </div>
+                                                    <p className="text-xs text-gray-400 mt-1 line-clamp-1">{c.hazardTrigger}</p>
+                                                </div>
                                             </div>
-                                            <span className="text-red-400 font-bold uppercase text-[10px] bg-red-500/10 border border-red-500/20 px-2.5 py-1 rounded-md">
-                                                Audited
-                                            </span>
+
+                                            <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
+                                                <div className="text-right">
+                                                    <p className={`text-sm font-black ${
+                                                        c.status === 'BREACH' ? 'text-red-500' : c.status === 'RISK_ALERT' ? 'text-ohs-orange' : 'text-ohs-green'
+                                                    }`}>
+                                                        Score: {c.score}%
+                                                    </p>
+                                                    <div className="flex items-center gap-1 justify-end mt-0.5">
+                                                        <span className={`w-1.5 h-1.5 rounded-full ${
+                                                            c.escalationState === 'resolved' ? 'bg-ohs-green' : 
+                                                            c.escalationState === 'escalated_level_2' ? 'bg-red-500 animate-pulse' : 'bg-ohs-orange'
+                                                        }`} />
+                                                        <span className="text-[9px] font-black text-gray-400 uppercase tracking-wider">
+                                                            {c.escalationState === 'resolved' ? 'Resolved' : 
+                                                             c.escalationState === 'escalated_level_2' ? 'CEO Escalated' : 'With Manager'}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <ChevronRight className="text-gray-500 group-hover:text-white transition-colors" size={20} />
+                                            </div>
                                         </div>
-                                    ))}
-                                </div>
-                            )}
+                                    );
+                                })}
+                            </div>
                         </div>
                     </div>
 
-                    {/* Right Side: Stewardship Escalation Timeline */}
-                    <div className="bg-white/5 border border-white/10 p-6 rounded-3xl space-y-6">
-                        <div>
-                            <h4 className="text-sm font-black text-white uppercase tracking-wider mb-1">
-                                Stewardship Escalation
-                            </h4>
-                            <p className="text-xs text-gray-400">
-                                Cascading chain of command verification.
-                            </p>
-                        </div>
-
-                        <div className="relative border-l-2 border-white/10 pl-6 ml-4 space-y-8 py-2">
-                            {/* Step 1: User */}
-                            <div className="relative">
-                                <div className={`absolute -left-9 w-6 h-6 rounded-full flex items-center justify-center border text-xs ${
-                                    status === 'BREACH' 
-                                        ? 'bg-red-500/20 border-red-500 text-red-400' 
-                                        : 'bg-ohs-green/20 border-ohs-green text-ohs-green'
-                                }`}>
-                                    <User size={12} />
-                                </div>
-                                <div className="space-y-1">
-                                    <p className="text-xs font-black text-white uppercase tracking-wider">Step 1: Employee Flagged</p>
-                                    <p className="text-[11px] text-gray-400">Self-assessment score exceeded threshold.</p>
-                                    <span className={`inline-block text-[9px] font-bold px-2 py-0.5 rounded-full ${
-                                        status === 'BREACH' ? 'bg-red-500/20 text-red-400' : 'bg-ohs-green/20 text-ohs-green'
-                                    }`}>
-                                        {status === 'BREACH' ? 'ACTIVE BREACH' : 'COMPLIANT'}
-                                    </span>
-                                </div>
+                    {/* Right: Cascade Escalation Visual Chain */}
+                    <div className="space-y-6">
+                        <div className="bg-white/5 border border-white/10 p-6 rounded-3xl space-y-6">
+                            <div>
+                                <h4 className="text-sm font-black text-white uppercase tracking-wider mb-1">
+                                    Stewardship Escalation Path
+                                </h4>
+                                <p className="text-xs text-gray-400">
+                                    Cascading statutory OHS accountability.
+                                </p>
                             </div>
 
-                            {/* Step 2: Line Manager */}
-                            <div className="relative">
-                                <div className={`absolute -left-9 w-6 h-6 rounded-full flex items-center justify-center border text-xs ${
-                                    requiresEscalation 
-                                        ? 'bg-red-500/20 border-red-500 text-red-400 animate-pulse' 
-                                        : 'bg-white/10 border-white/10 text-gray-500'
-                                }`}>
-                                    <Shield size={12} />
-                                </div>
-                                <div className="space-y-1">
-                                    <p className="text-xs font-black text-white uppercase tracking-wider">Step 2: Line Manager Escalation</p>
-                                    <p className="text-[11px] text-gray-400">Notification sent to immediate supervisor for correction.</p>
-                                    <span className={`inline-block text-[9px] font-bold px-2 py-0.5 rounded-full ${
-                                        requiresEscalation ? 'bg-red-500/20 text-red-400' : 'bg-white/5 text-gray-500'
+                            <div className="relative border-l-2 border-white/10 pl-6 ml-4 space-y-8 py-2">
+                                <div className="relative">
+                                    <div className={`absolute -left-9 w-6 h-6 rounded-full flex items-center justify-center border text-[9px] font-black ${
+                                        status === 'BREACH' ? 'bg-red-500/20 border-red-500 text-red-400' : 'bg-ohs-green/20 border-ohs-green text-ohs-green'
                                     }`}>
-                                        {requiresEscalation ? 'PENDING ACTION' : 'IDLE'}
-                                    </span>
+                                        U
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-black text-white uppercase tracking-wider">Employee Triggered</p>
+                                        <p className="text-[10px] text-gray-400">Telemetry violation or exception submission.</p>
+                                    </div>
                                 </div>
-                            </div>
 
-                            {/* Step 3: HR Head */}
-                            <div className="relative">
-                                <div className={`absolute -left-9 w-6 h-6 rounded-full flex items-center justify-center border text-xs ${
-                                    requiresEscalation 
-                                        ? 'bg-red-500/20 border-red-500 text-red-400 animate-pulse' 
-                                        : 'bg-white/10 border-white/10 text-gray-500'
-                                }`}>
-                                    <Shield size={12} />
-                                </div>
-                                <div className="space-y-1">
-                                    <p className="text-xs font-black text-white uppercase tracking-wider">Step 3: HR Head Escalation</p>
-                                    <p className="text-[11px] text-gray-400">Formal notification filed to HR head directory.</p>
-                                    <span className={`inline-block text-[9px] font-bold px-2 py-0.5 rounded-full ${
-                                        requiresEscalation ? 'bg-red-500/20 text-red-400' : 'bg-white/5 text-gray-500'
+                                <div className="relative">
+                                    <div className={`absolute -left-9 w-6 h-6 rounded-full flex items-center justify-center border text-[9px] font-black ${
+                                        requiresEscalation ? 'bg-ohs-orange/20 border-ohs-orange text-ohs-orange' : 'bg-white/5 border-white/10 text-gray-500'
                                     }`}>
-                                        {requiresEscalation ? 'PENDING AUDIT' : 'IDLE'}
-                                    </span>
+                                        LM
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-black text-white uppercase tracking-wider">Level 1: Line Manager (LM)</p>
+                                        <p className="text-[10px] text-gray-400">Assigned manager must resolve in 24h/72h.</p>
+                                    </div>
+                                </div>
+
+                                <div className="relative">
+                                    <div className={`absolute -left-9 w-6 h-6 rounded-full flex items-center justify-center border text-[9px] font-black ${
+                                        requiresEscalation && cases.some(c => c.escalationState === 'escalated_level_2')
+                                            ? 'bg-red-500/20 border-red-500 text-red-500 animate-pulse' 
+                                            : 'bg-white/5 border-white/10 text-gray-500'
+                                    }`}>
+                                        CEO
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-black text-white uppercase tracking-wider">Level 2: CEO / HR Head</p>
+                                        <p className="text-[10px] text-gray-400">Statutory liability triggered. Administrative lockout active.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </motion.div>
+
+            {/* Slide-out / Expandable Drawer Panel: Escalation Details */}
+            <AnimatePresence>
+                {activeCase && (
+                    <>
+                        {/* Overlay backdrop */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 0.5 }}
+                            exit={{ opacity: 0 }}
+                            onClick={() => setSelectedCase(null)}
+                            className="fixed inset-0 bg-black z-40 pointer-events-auto"
+                        />
+
+                        {/* Drawer */}
+                        <motion.div
+                            initial={{ x: '100%' }}
+                            animate={{ x: 0 }}
+                            exit={{ x: '100%' }}
+                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                            className="fixed right-0 top-0 h-full w-full max-w-md bg-ohs-navy/95 border-l border-white/10 p-8 shadow-2xl z-50 overflow-y-auto pointer-events-auto flex flex-col justify-between"
+                        >
+                            <div className="space-y-8">
+                                {/* Header */}
+                                <div className="flex justify-between items-start">
+                                    <div>
+                                        <span className="text-[10px] font-black text-ohs-orange uppercase tracking-widest block mb-1">
+                                            HR Audit Records
+                                        </span>
+                                        <h3 className="text-2xl font-black text-white uppercase tracking-tight">
+                                            Escalation Details
+                                        </h3>
+                                    </div>
+                                    <button 
+                                        onClick={() => setSelectedCase(null)}
+                                        className="p-2 bg-white/5 hover:bg-white/10 rounded-xl transition-all text-gray-400 hover:text-white cursor-pointer"
+                                    >
+                                        <X size={18} />
+                                    </button>
+                                </div>
+
+                                {/* Employee Profile Info */}
+                                <div className="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border border-white/5">
+                                    <div className="w-12 h-12 bg-ohs-orange/20 text-ohs-orange rounded-xl flex items-center justify-center font-black text-lg">
+                                        {activeCase.employeeName.charAt(0)}
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-white">{activeCase.employeeName}</h4>
+                                        <p className="text-xs text-gray-400">{activeCase.dept} Department</p>
+                                    </div>
+                                </div>
+
+                                {/* Countdown / Breach State Widget */}
+                                <div className="space-y-2">
+                                    <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest block">Resolution Performance Status</span>
+                                    {activeCase.escalationState === 'resolved' ? (
+                                        <div className="bg-ohs-green/10 border border-ohs-green/20 p-4 rounded-2xl flex items-center gap-3 text-ohs-green">
+                                            <UserCheck size={20} />
+                                            <div className="text-xs font-bold">
+                                                Intervention Resolved & Compliant
+                                            </div>
+                                        </div>
+                                    ) : activeCase.escalationState === 'escalated_level_2' ? (
+                                        <div className="bg-red-500/10 border border-red-500/30 p-4 rounded-2xl flex items-start gap-3 text-red-400 animate-pulse">
+                                            <ShieldAlert size={20} className="shrink-0 mt-0.5" />
+                                            <div className="text-xs">
+                                                <strong className="block font-black uppercase">Level 1 Window Breached</strong>
+                                                Manager failed to respond. Escalated to Executive Head (CEO Liability Triggered).
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="bg-ohs-orange/10 border border-ohs-orange/30 p-4 rounded-2xl flex items-center gap-3 text-ohs-orange">
+                                            <Clock size={20} className="animate-spin" />
+                                            <div className="text-xs font-bold">
+                                                Line Manager Action Pending: {getCountdown(activeCase).text} (Simulated)
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* OHS Audit Timeline */}
+                                <div className="space-y-4">
+                                    <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest block">Audit Trail Timeline</span>
+                                    
+                                    <div className="relative border-l-2 border-white/5 pl-4 ml-2 space-y-6 text-xs">
+                                        {/* Hazard Triggered */}
+                                        <div className="relative">
+                                            <span className="absolute -left-[21px] top-0.5 w-2 h-2 rounded-full bg-ohs-orange" />
+                                            <div className="space-y-1">
+                                                <p className="font-bold text-white">Hazard Trigger / Incident Logged</p>
+                                                <p className="text-gray-400 text-[10px]">{new Date(activeCase.createdAt).toLocaleString()}</p>
+                                                <p className="text-gray-400 italic">"{activeCase.hazardTrigger}"</p>
+                                            </div>
+                                        </div>
+
+                                        {/* Assigned Line Manager */}
+                                        <div className="relative">
+                                            <span className={`absolute -left-[21px] top-0.5 w-2 h-2 rounded-full ${
+                                                activeCase.escalationState !== 'triggered' ? 'bg-ohs-orange' : 'bg-gray-700'
+                                            }`} />
+                                            <div className="space-y-1">
+                                                <p className="font-bold text-white">Escalated to Line Manager</p>
+                                                <p className="text-gray-400 text-[10px]">Manager: <span className="text-white font-bold">{activeCase.managerName}</span></p>
+                                                <p className="text-gray-400 text-[10px]">Resolution Window: <span className="text-ohs-orange font-bold">{activeCase.timeframeHours} Hours (Simulated Seconds)</span></p>
+                                            </div>
+                                        </div>
+
+                                        {/* CEO / Executive Head */}
+                                        <div className="relative">
+                                            <span className={`absolute -left-[21px] top-0.5 w-2 h-2 rounded-full ${
+                                                activeCase.escalationState === 'escalated_level_2' ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : 'bg-gray-700'
+                                            }`} />
+                                            <div className="space-y-1">
+                                                <p className="font-bold text-white">Level 2 Escalation (CEO & HR head)</p>
+                                                <p className="text-gray-400 text-[10px]">
+                                                    {activeCase.escalationState === 'escalated_level_2' 
+                                                        ? 'Active: Corporate statutory liability triggered.' 
+                                                        : 'Status: Standby pending resolution window.'}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="pt-6 border-t border-white/10 space-y-3">
+                                {activeCase.escalationState !== 'resolved' && (
+                                    <button
+                                        onClick={() => resolveCase(activeCase.id)}
+                                        className="w-full bg-ohs-green text-ohs-navy hover:bg-green-400 py-3.5 rounded-xl font-black text-xs uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(74,222,128,0.2)] active:scale-95 cursor-pointer"
+                                    >
+                                        RESOLVE INTERVENTION & UPDATE HR RECORDS
+                                    </button>
+                                )}
+                                <button
+                                    onClick={() => setSelectedCase(null)}
+                                    className="w-full bg-white/5 hover:bg-white/10 border border-white/10 text-white py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all cursor-pointer"
+                                >
+                                    Dismiss Panel
+                                </button>
+                            </div>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
+export default HRDashboard;

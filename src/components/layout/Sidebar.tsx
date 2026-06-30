@@ -38,23 +38,23 @@ export const Sidebar = ({ activeTab, setActiveTab, isCollapsed, setIsCollapsed }
 
     return (
         <>
-            {/* Global Overlay Backdrop - All Screen Sizes */}
+            {/* Global Overlay Backdrop - Mobile Only */}
             {!isCollapsed && (
                 <div 
-                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999]"
+                    className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[999] md:hidden"
                     onClick={() => setIsCollapsed(true)}
                 />
             )}
 
             <div
-                className={`fixed left-0 top-0 h-[100dvh] w-[260px] bg-ohs-navy/95 backdrop-blur-xl border-r border-white/10 p-4 flex flex-col z-[1000] text-white shadow-2xl transition-transform duration-300 ease-in-out ${
+                className={`fixed left-0 top-0 h-[100dvh] w-[260px] bg-ohs-navy/95 backdrop-blur-xl border-r border-white/10 p-4 flex flex-col z-[1000] text-white shadow-2xl transition-transform duration-300 ease-in-out md:translate-x-0 ${
                     isCollapsed ? '-translate-x-full' : 'translate-x-0'
                 }`}
             >
-                {/* Close Button */}
+                {/* Close Button - Mobile Only */}
                 <button
                     onClick={() => setIsCollapsed(true)}
-                    className="absolute right-4 top-4 p-2 bg-white/5 hover:bg-white/10 transition-colors rounded-lg text-ohs-orange"
+                    className="absolute right-4 top-4 p-2 bg-white/5 hover:bg-white/10 transition-colors rounded-lg text-ohs-orange md:hidden"
                     aria-label="Close Sidebar"
                 >
                     <X size={20} />

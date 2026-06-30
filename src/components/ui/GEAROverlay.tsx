@@ -3,47 +3,38 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Settings, Shield, Zap, FileCheck, Brain } from 'lucide-react';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 import { useNellyStore } from '../../store/nellyStore';
+import { useComplianceStore } from '../../store/complianceStore';
 
 export const GEAROverlay = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const { fatigueLevel } = useFatigueStore();
-    const { productiveStreak } = useNellyStore();
-
-    // Map metrics to G.E.A.R
-    const governance = 100; // Hardcoded static for Sect 37 simulation
-
-    let efficiency = 100;
-    if (fatigueLevel === 'warning') efficiency = 85;
-    if (fatigueLevel === 'high') efficiency = 75;
-
-    const accountability = 100; // Sync to Admin-Zero reports
-    const resilience = productiveStreak > 120 ? 100 : Math.min(100, Math.floor((productiveStreak / 120) * 100)); // Sample logic
+    const { gear } = useComplianceStore();
+    const { governance, efficiency, accountability, resilience } = gear;
 
     const pillars = [
         { id: 'G', title: 'Governance', value: governance, icon: Shield, desc: 'Sec 37 & ISO 45001' },
         { id: 'E', title: 'Efficiency', value: efficiency, icon: Zap, desc: 'O.H.E & Muda' },
         { id: 'A', title: 'Accountability', value: accountability, icon: FileCheck, desc: 'Admin-Zero' },
-        { id: 'R', title: 'Resilience', value: resilience, icon: Brain, desc: 'Cognitive' }
+        { id: 'R', title: 'Resilience', value: resilience, icon: Brain, desc: 'Escalation response' }
     ];
 
     return (
-        <div className="fixed top-24 right-4 md:right-8 z-[50]">
+        <div className="fixed top-20 right-4 md:top-24 md:right-8 z-[50]">
             <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-12 h-12 rounded-full bg-ohs-orange border-2 border-yellow-300 shadow-[0_0_15px_rgba(249,168,37,0.5)] flex items-center justify-center text-ohs-dark"
+                className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-ohs-orange border-2 border-yellow-300 shadow-[0_0_15px_rgba(249,168,37,0.5)] flex items-center justify-center text-ohs-dark"
             >
-                <Settings className={`w-6 h-6 transition-transform duration-500 ${isOpen ? 'rotate-180' : ''}`} />
+                <Settings className={`w-5 h-5 md:w-6 md:h-6 transition-transform duration-500 ${isOpen ? 'rotate-180' : ''}`} />
             </motion.button>
 
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.9, y: -20, transformOrigin: 'top right' }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, y: -20 }}
-                        className="absolute top-16 right-0 w-72 bg-ohs-navy/95 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-[0_0_30px_rgba(0,0,0,0.8)] z-50 pointer-events-auto"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        className="fixed bottom-4 left-4 right-4 md:absolute md:bottom-auto md:left-auto md:top-16 md:right-0 w-auto md:w-72 bg-ohs-navy/95 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-[0_0_30px_rgba(0,0,0,0.8)] z-50 pointer-events-auto"
                     >
                         <h3 className="text-ohs-orange font-black uppercase text-xs tracking-widest mb-4 flex items-center gap-2">
                             <Settings size={14} /> G.E.A.R System

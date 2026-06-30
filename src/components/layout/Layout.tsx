@@ -40,12 +40,12 @@ export const Layout = memo(({ children, activeTab, setActiveTab }: LayoutProps) 
             />
 
             {/* Unified Premium Responsive Header Grid */}
-            <header className="sticky top-0 z-40 bg-ohs-navy/80 backdrop-blur-md flex items-center justify-between gap-0.5 xs:gap-2 px-1 py-2.5 xs:px-4 md:px-8 border-b border-white/5 relative z-50">
+            <header className="sticky top-0 z-40 bg-ohs-navy/80 backdrop-blur-md flex items-center justify-between gap-0.5 xs:gap-2 px-1 py-2.5 xs:px-4 md:px-8 border-b border-white/5 relative z-50 md:pl-[284px]">
                 {/* Left Branding and Navigation Toggle */}
                 <div className="flex items-center gap-1 xs:gap-3 flex-shrink-0">
                     <button 
                         onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
-                        className="p-1 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-colors flex items-center justify-center text-ohs-orange shadow-lg flex-shrink-0"
+                        className="p-1 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-colors flex items-center justify-center text-ohs-orange shadow-lg flex-shrink-0 md:hidden"
                         title="Toggle Sidebar"
                     >
                         <Menu size={14} className="xs:size-4 md:size-5" />
@@ -97,7 +97,7 @@ export const Layout = memo(({ children, activeTab, setActiveTab }: LayoutProps) 
                 </div>
             </header>
 
-            <main className="flex-1 p-4 md:p-8 pb-32 md:pb-16 relative z-10 flex flex-col w-full transition-all duration-300 ease-in-out">
+            <main className="flex-1 p-4 md:p-8 pb-32 md:pb-16 relative z-10 flex flex-col w-full transition-all duration-300 ease-in-out md:pl-[284px]">
                 <div className="flex-1 w-full max-w-full overflow-x-hidden">
                     <AnimatePresence mode="wait">
                         <motion.div

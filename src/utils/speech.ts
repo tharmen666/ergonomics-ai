@@ -51,6 +51,9 @@ export const VOICEOVER_ACCENT_MAP: Record<string, VoiceConfig> = {
     }
 };
 
+// Pre-buffered speech queue loop to eliminate speech latency
+let speechQueue: { text: string; lang: string; onEnd?: () => void }[] = [];
+
 export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => {
     if (!window.speechSynthesis) {
         console.error("Speech Synthesis not supported");
@@ -58,54 +61,76 @@ export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => 
     }
 
     const synth = window.speechSynthesis;
-    synth.cancel();
+    
+    // Preempt and clean queue to guarantee instant transitions
+    speechQueue = [{ text, lang, onEnd }];
 
-    const utterance = new SpeechSynthesisUtterance(text);
+    const playNext = () => {
+        if (speechQueue.length === 0) {
+            return;
+        }
 
-    const loadVoices = () => {
+        const currentItem = speechQueue.shift();
+        if (!currentItem) return;
+
+        // Perform clean cancel before speaking next block
+        synth.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(currentItem.text);
         const voices = synth.getVoices();
         
         let selectedVoice;
-        const config = VOICEOVER_ACCENT_MAP[lang];
+        const config = VOICEOVER_ACCENT_MAP[currentItem.lang];
         
         if (config) {
-            // Find voice matching regional locale first (e.g. en-ZA, zu-ZA)
-            selectedVoice = voices.find(v => 
-                v.lang.toLowerCase() === config.locale.toLowerCase() ||
-                v.lang.toLowerCase().replace('_', '-').startsWith(lang.toLowerCase())
-            );
+            // Match regional locale (prefer exact match)
+            selectedVoice = voices.find(v => v.lang.toLowerCase() === config.locale.toLowerCase());
         }
 
+        // Force South African English ('en-ZA') search for 'en' lang
+        if (currentItem.lang === 'en') {
+            selectedVoice = voices.find(v => v.lang.toLowerCase() === 'en-za') || selectedVoice;
+        }
+
+        // Deep fallback searching specifically for local South African English accents
         if (!selectedVoice) {
-            // Fallback: Default to English (prefer female voices)
-            selectedVoice = voices.find(v => 
-                (v.lang.startsWith('en') && v.name.includes('Female')) || 
-                v.name.includes('Zira') || 
-                v.name.includes('Google UK')
-            ) || voices.find(v => v.lang.startsWith('en'));
+            selectedVoice = voices.find(v => v.lang.toLowerCase() === 'en-za') ||
+                            voices.find(v => 
+                                (v.lang.startsWith('en') && v.name.includes('Female')) || 
+                                v.name.includes('Zira') || 
+                                v.name.includes('Google UK')
+                            ) || voices.find(v => v.lang.startsWith('en'));
         }
 
         if (selectedVoice) {
             utterance.voice = selectedVoice;
-            utterance.pitch = (lang === 'zu' || lang === 'af' || lang === 'xh' || lang === 'st' || lang === 'sw') ? 1.15 : 1.05;
+            utterance.pitch = (currentItem.lang === 'zu' || currentItem.lang === 'af' || currentItem.lang === 'xh' || currentItem.lang === 'st' || currentItem.lang === 'sw') ? 1.15 : 1.05;
         } else {
             utterance.pitch = 1.2;
         }
 
-        utterance.rate = (lang === 'zu' || lang === 'af' || lang === 'xh' || lang === 'st' || lang === 'sw') ? 0.8 : 1.0;
+        utterance.rate = (currentItem.lang === 'zu' || currentItem.lang === 'af' || currentItem.lang === 'xh' || currentItem.lang === 'st' || currentItem.lang === 'sw') ? 0.8 : 1.0;
 
-        if (onEnd) {
-            utterance.onend = onEnd;
-        }
+        utterance.onend = () => {
+            if (currentItem.onEnd) currentItem.onEnd();
+            playNext();
+        };
 
-        synth.speak(utterance);
+        utterance.onerror = () => {
+            playNext();
+        };
+
+        // Brief timeout ensures OS speech engine processes the cancel() cleanly before speak()
+        setTimeout(() => {
+            synth.speak(utterance);
+        }, 30);
     };
 
     if (synth.getVoices().length > 0) {
-        loadVoices();
+        playNext();
     } else {
         synth.onvoiceschanged = () => {
-            loadVoices();
+            playNext();
             synth.onvoiceschanged = null;
         };
     }
@@ -115,5 +140,5 @@ export const stopSpeaking = () => {
     if (window.speechSynthesis) {
         window.speechSynthesis.cancel();
     }
+    speechQueue = [];
 };
-
