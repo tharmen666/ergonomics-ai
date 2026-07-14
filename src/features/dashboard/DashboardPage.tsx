@@ -25,18 +25,18 @@ export const DashboardPage = () => {
                         <ShieldCheck size={16} className="text-ohs-orange" />
                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-ohs-orange">Stewardship Protocol Active</span>
                     </div>
-                    <h2 className="text-xl sm:text-2xl font-black tracking-tighter text-white">BOARDROOM TRANSPARENCY HUB</h2>
-                    <p className="text-xs sm:text-sm text-gray-400 font-medium">Cascading OHS Section 37 Liability from Employee to CEO.</p>
+                    <h2 className="text-xl sm:text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-300 drop-shadow-[0_2px_8px_rgba(45,212,191,0.25)]">BOARDROOM TRANSPARENCY HUB</h2>
+                    <p className="text-xs sm:text-sm text-slate-100 font-bold text-shadow-sm">Cascading OHS Section 37 Liability from Employee to CEO.</p>
                 </div>
                 <div className="flex gap-4 relative z-10 justify-start sm:justify-end">
                     <div className="text-left sm:text-right">
                         <p className="text-[9px] font-black text-gray-500 uppercase">Board Compliance</p>
-                        <p className="text-lg sm:text-xl font-black text-ohs-green">100%</p>
+                        <p className="text-lg sm:text-xl font-black text-glow-emerald text-[#10b981]">100%</p>
                     </div>
                     <div className="w-px h-10 bg-white/10" />
                     <div className="text-left sm:text-right">
                         <p className="text-[9px] font-black text-gray-500 uppercase">Risk Mitigation</p>
-                        <p className="text-lg sm:text-xl font-black text-ohs-blue">SECURE</p>
+                        <p className="text-lg sm:text-xl font-black text-glow-emerald text-[#34d399]">SECURE</p>
                     </div>
                 </div>
             </motion.div>

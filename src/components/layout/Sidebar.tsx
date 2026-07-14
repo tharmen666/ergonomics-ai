@@ -4,14 +4,13 @@ import { useNellyStore } from '../../store/nellyStore';
 import { useTenantStore } from '../../store/tenantStore';
 
 const navItems = [
-    { icon: Home, label: "Dashboard", id: "dashboard" },
-    { icon: Activity, label: "Interactive Ergonomic Training", id: "training" },
-    { icon: CheckSquare, label: "Daily Checklist", id: "checklist" },
-    { icon: BarChart2, label: "Risk Assessment", id: "risk" },
-    { icon: Activity, label: "Self-Risk Assessment", id: "assessment" },
-    { icon: AlertCircle, label: "Risky Behaviors", id: "risks" },
+    { icon: Home, label: "Stewardship Overview", id: "dashboard" },
+    { icon: BarChart2, label: "G.E.A.R. Metric Suite", id: "gear" },
+    { icon: AlertCircle, label: "Human-in-the-Loop RCA", id: "risk" },
+    { icon: FileText, label: "Executive Briefing", id: "executive" },
     { icon: Users, label: "HR Dashboard", id: "hr" },
-    { icon: Users, label: "Our Team", id: "team" },
+    { icon: Activity, label: "Ergonomic Training", id: "training" },
+    { icon: CheckSquare, label: "Daily Checklist", id: "checklist" },
     { icon: FileText, label: "Invoice Manager", id: "invoices" },
     { icon: Settings, label: "Settings", id: "settings" },
 ];

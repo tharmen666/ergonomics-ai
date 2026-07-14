@@ -36,28 +36,14 @@ export const NellyInterface = ({
             className="w-[92vw] max-w-[350px] bg-ohs-navy/95 backdrop-blur-2xl border border-white/10 rounded-2xl p-4 shadow-2xl pointer-events-auto"
         >
             {/* Header */}
-            <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-2">
+            <div className="flex items-center justify-between mb-2 border-b border-white/5 pb-2">
                 <span className="text-[10px] font-black text-ohs-orange uppercase tracking-widest">Nelly Intelligence Grid</span>
-                <div className="flex items-center gap-2">
-                    <Globe size={12} className="text-gray-500" />
-                    <select
-                        aria-label="Select Language"
-                        title="Select Language"
-                        value={activeLang}
-                        onChange={(e) => setLanguage(e.target.value as Language)}
-                        className="bg-transparent text-[10px] font-bold text-gray-400 focus:outline-none cursor-pointer"
-                    >
-                        {Object.entries(VOICEOVER_ACCENT_MAP).map(([code, config]) => (
-                            <option key={code} value={code} className="bg-ohs-navy">
-                                {config.displayName} ({config.regionalAccent})
-                            </option>
-                        ))}
-                    </select>
+                <div className="flex items-center gap-1">
                     <button 
                         aria-label="Minimize" 
                         title="Minimize" 
                         onClick={onClose} 
-                        className="text-gray-500 hover:text-white ml-1"
+                        className="text-gray-500 hover:text-white p-1"
                     >
                         <Minimize2 size={14} />
                     </button>
@@ -65,11 +51,31 @@ export const NellyInterface = ({
                         aria-label="Close" 
                         title="Close" 
                         onClick={onClose} 
-                        className="text-gray-500 hover:text-white ml-1"
+                        className="text-gray-500 hover:text-white p-1"
                     >
                         <X size={14} />
                     </button>
                 </div>
+            </div>
+
+            {/* Premium Language Preference Selection Bar */}
+            <div className="flex items-center justify-between gap-1 mb-4 bg-white/5 p-1 rounded-xl border border-white/5">
+                {Object.entries(VOICEOVER_ACCENT_MAP).map(([code, config]) => {
+                    const isSelected = activeLang === code;
+                    return (
+                        <button
+                            key={code}
+                            onClick={() => setLanguage(code as Language)}
+                            className={`flex-1 text-[9px] font-black py-1.5 px-1 rounded-lg transition-all duration-300 ${
+                                isSelected 
+                                    ? 'bg-ohs-orange text-ohs-navy shadow-[0_0_10px_rgba(249,168,37,0.3)]' 
+                                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                            }`}
+                        >
+                            {config.regionalAccent}
+                        </button>
+                    );
+                })}
             </div>
 
             {/* Intro Text */}

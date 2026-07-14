@@ -155,31 +155,31 @@ export const CognitiveHandshake = () => {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="fixed inset-0 z-[99000] flex flex-col items-center justify-center bg-black/90 backdrop-blur-md font-sans text-white p-4"
+                    className="fixed inset-0 z-[99000] flex flex-col items-center justify-center bg-black/95 backdrop-blur-md font-sans text-white p-4"
                 >
-                    <div className="absolute top-12 text-center max-w-lg">
-                        <BrainCircuit className="text-ohs-orange mx-auto mb-4" size={48} />
-                        <h2 className="text-3xl font-black mb-2 tracking-tight">MANDATORY COGNITIVE HANDSHAKE</h2>
-                        <p className="text-gray-400 font-medium">Click the targets as quickly as possible to establish your baseline. Lag &gt; 20% will trigger Executive Stewardship protocols.</p>
+                    <div className="w-full max-w-md flex flex-col items-center text-center">
+                        <BrainCircuit className="text-ohs-orange mb-3" size={40} />
+                        <h2 className="text-2xl font-black mb-1.5 tracking-tight">MANDATORY COGNITIVE HANDSHAKE</h2>
+                        <p className="text-xs text-gray-400 font-medium px-4">Click the targets as quickly as possible to establish your baseline. Lag &gt; 20% will trigger Executive Stewardship protocols.</p>
 
-                        <div className="mt-8 flex justify-center gap-2">
+                        <div className="mt-4 flex justify-center gap-2">
                             {Array.from({ length: TOTAL_TARGETS }).map((_, i) => (
-                                <div key={i} className={`w-3 h-3 rounded-full ${i < targetsHit ? 'bg-ohs-orange shadow-[0_0_10px_rgba(249,168,37,0.8)]' : 'bg-white/20'}`} />
+                                <div key={i} className={`w-2.5 h-2.5 rounded-full ${i < targetsHit ? 'bg-ohs-orange shadow-[0_0_10px_rgba(249,168,37,0.8)]' : 'bg-white/20'}`} />
                             ))}
                         </div>
-                    </div>
-
-                    <div className="w-full max-w-4xl h-[60vh] relative mt-24 border border-white/10 rounded-3xl bg-ohs-navy/30 overflow-hidden shadow-[inset_0_0_100px_rgba(0,0,0,0.8)]">
-                        <motion.button
-                            initial={{ scale: 0 }}
-                            animate={{ scale: [0, 1.2, 1] }}
-                            transition={{ type: "spring", duration: 0.3 }}
-                            onClick={handleTargetClick}
-                            className="absolute flex items-center justify-center w-20 h-20 md:w-16 md:h-16 bg-ohs-orange hover:bg-yellow-400 rounded-full shadow-[0_0_30px_rgba(249,168,37,0.6)] cursor-crosshair transform -translate-x-1/2 -translate-y-1/2"
-                            style={{ left: `${targetPos.x}%`, top: `${targetPos.y}%` }}
-                        >
-                            <Target size={28} className="text-ohs-navy" />
-                        </motion.button>
+                        
+                        <div className="w-full aspect-square relative mt-8 border border-white/10 rounded-3xl bg-ohs-navy/30 overflow-hidden shadow-[inset_0_0_60px_rgba(0,0,0,0.8)]">
+                            <motion.button
+                                initial={{ scale: 0 }}
+                                animate={{ scale: [0, 1.2, 1] }}
+                                transition={{ type: "spring", duration: 0.3 }}
+                                onClick={handleTargetClick}
+                                className="absolute flex items-center justify-center w-14 h-14 bg-ohs-orange hover:bg-yellow-400 rounded-full shadow-[0_0_20px_rgba(249,168,37,0.6)] cursor-crosshair transform -translate-x-1/2 -translate-y-1/2"
+                                style={{ left: `${targetPos.x}%`, top: `${targetPos.y}%` }}
+                            >
+                                <Target size={22} className="text-ohs-navy" />
+                            </motion.button>
+                        </div>
                     </div>
                 </motion.div>
             )}

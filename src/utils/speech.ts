@@ -8,46 +8,39 @@ export interface VoiceConfig {
 
 export const VOICEOVER_ACCENT_MAP: Record<string, VoiceConfig> = {
     en: {
-        displayName: "South African English",
-        regionalAccent: "Gauteng Corporate",
+        displayName: "English",
+        regionalAccent: "en-ZA",
         elevenLabsModel: "eleven_multilingual_v2",
         locale: "en-ZA",
         audioPathPattern: "/assets/audio/en_za/scene{scene}.mp3"
     },
-    zu: {
-        displayName: "isiZulu",
-        regionalAccent: "Authentic Native",
-        elevenLabsModel: "eleven_multilingual_v2",
-        locale: "zu-ZA",
-        audioPathPattern: "/assets/audio/zu/scene{scene}.mp3"
-    },
     xh: {
         displayName: "isiXhosa",
-        regionalAccent: "Authentic Native",
+        regionalAccent: "XH",
         elevenLabsModel: "eleven_multilingual_v2",
         locale: "xh-ZA",
         audioPathPattern: "/assets/audio/xh/scene{scene}.mp3"
     },
-    st: {
-        displayName: "Sesotho",
-        regionalAccent: "Authentic Native",
+    zu: {
+        displayName: "isiZulu",
+        regionalAccent: "ZU",
         elevenLabsModel: "eleven_multilingual_v2",
-        locale: "st-ZA",
-        audioPathPattern: "/assets/audio/st/scene{scene}.mp3"
-    },
-    af: {
-        displayName: "Afrikaans",
-        regionalAccent: "Natural RSA Regional",
-        elevenLabsModel: "eleven_multilingual_v2",
-        locale: "af-ZA",
-        audioPathPattern: "/assets/audio/af/scene{scene}.mp3"
+        locale: "zu-ZA",
+        audioPathPattern: "/assets/audio/zu/scene{scene}.mp3"
     },
     sw: {
         displayName: "KiSwahili",
-        regionalAccent: "East African Elite Standard",
+        regionalAccent: "SW",
         elevenLabsModel: "eleven_multilingual_v2",
         locale: "sw-KE",
         audioPathPattern: "/assets/audio/sw/scene{scene}.mp3"
+    },
+    zh: {
+        displayName: "Mandarin",
+        regionalAccent: "ZH",
+        elevenLabsModel: "eleven_multilingual_v2",
+        locale: "zh-CN",
+        audioPathPattern: "/assets/audio/zh/scene{scene}.mp3"
     }
 };
 
@@ -87,7 +80,7 @@ export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => 
             // Priority 1: en-ZA female voice
             const saFemale = voices.find(v => 
                 v.lang.toLowerCase() === 'en-za' && 
-                (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('natural'))
+                (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('zola') || v.name.toLowerCase().includes('nomsa'))
             );
             if (saFemale) return saFemale;
 
@@ -95,7 +88,7 @@ export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => 
             const saAny = voices.find(v => v.lang.toLowerCase() === 'en-za');
             if (saAny) return saAny;
 
-            // Priority 3: high quality female English fallback (strictly avoid monotone Zira, David, Hazel)
+            // Priority 3: high quality female English fallback
             return voices.find(v => 
                 v.lang.toLowerCase().startsWith('en') && 
                 (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('salli') || v.name.toLowerCase().includes('joanna')) &&
@@ -105,8 +98,23 @@ export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => 
             );
         };
 
+        const findZAAuthenticFemale = (langCode: string) => {
+            const nativeFemale = voices.find(v => 
+                v.lang.toLowerCase() === `${langCode}-za` && 
+                (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google'))
+            );
+            if (nativeFemale) return nativeFemale;
+            
+            const nativeAny = voices.find(v => v.lang.toLowerCase().startsWith(langCode));
+            if (nativeAny) return nativeAny;
+            
+            return findSAYouthFemale();
+        };
+
         if (currentItem.lang === 'en') {
             selectedVoice = findSAYouthFemale();
+        } else if (currentItem.lang === 'zu' || currentItem.lang === 'xh') {
+            selectedVoice = findZAAuthenticFemale(currentItem.lang);
         } else if (config) {
             // Match regional locale
             selectedVoice = voices.find(v => v.lang.toLowerCase() === config.locale.toLowerCase());
@@ -125,13 +133,19 @@ export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => 
             utterance.voice = selectedVoice;
         }
 
-        // Enforce Nelly's voice parameters: natural, happy, vibrant cadence (rate: 0.9, pitch: 1.05) for English
+        // Enforce Nelly's voice parameters: natural, happy, vibrant cadence for each language
         if (currentItem.lang === 'en') {
             utterance.pitch = 1.05;
             utterance.rate = 0.9;
+        } else if (currentItem.lang === 'zu' || currentItem.lang === 'xh') {
+            utterance.pitch = 1.02;
+            utterance.rate = 0.85; // Warm, natural cadence matching native South African female voiceovers
+        } else if (currentItem.lang === 'zh' || currentItem.lang === 'sw') {
+            utterance.pitch = 1.0;
+            utterance.rate = 0.9; // Fluent, clear, comfortable pace
         } else {
-            utterance.pitch = (currentItem.lang === 'zu' || currentItem.lang === 'af' || currentItem.lang === 'xh' || currentItem.lang === 'st' || currentItem.lang === 'sw') ? 1.15 : 1.05;
-            utterance.rate = (currentItem.lang === 'zu' || currentItem.lang === 'af' || currentItem.lang === 'xh' || currentItem.lang === 'st' || currentItem.lang === 'sw') ? 0.8 : 1.0;
+            utterance.pitch = 1.05;
+            utterance.rate = 0.9;
         }
 
         utterance.onend = () => {

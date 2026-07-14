@@ -24,6 +24,7 @@ import { useTenantStore } from './store/tenantStore';
 
 import { TourManager } from './components/agent/TourManager';
 import { GEAROverlay } from './components/ui/GEAROverlay';
+import { GEARDashboardPage } from './features/dashboard/GEARDashboardPage';
 
 function App() {
   const { companyId, isAdmin } = useTenantStore();
@@ -56,9 +57,9 @@ function App() {
         <NellyAvatar />
         <GEAROverlay />
 
-        {/* Route Content */}
         <main className="flex-1 pb-32 md:pb-10 pt-0 md:pt-4">
           {activeTab === 'dashboard' && <DashboardPage />}
+          {activeTab === 'gear' && <GEARDashboardPage />}
           {activeTab === 'executive' && <ExecutiveBriefing />}
           {activeTab === 'training' && <TrainingPage />}
           {activeTab === 'checklist' && <ChecklistPage />}

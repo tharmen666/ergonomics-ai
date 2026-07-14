@@ -67,26 +67,26 @@ export const GEARDashboardPage = () => {
             {/* Header */}
             <div>
                 <span className="text-[10px] font-black text-ohs-orange uppercase tracking-[0.3em] block mb-1">Enterprise Analytics</span>
-                <h1 className="text-3xl font-black text-white tracking-tight">G.E.A.R. SYSTEM DASHBOARD</h1>
-                <p className="text-xs text-gray-400">Continuous Governance, Efficiency, Accountability, and Resilience Telemetry</p>
+                <h1 className="text-3xl font-black gradient-heading tracking-tight">G.E.A.R. SYSTEM DASHBOARD</h1>
+                <p className="text-xs text-slate-100 font-bold text-shadow-sm">Continuous Governance, Efficiency, Accountability, and Resilience Telemetry</p>
             </div>
 
             {/* Quick Summary Banner */}
             <div className="bg-gradient-to-r from-ohs-navy via-ohs-navy to-black border border-white/10 rounded-3xl p-6 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
                 <div className="space-y-1">
-                    <h3 className="text-lg font-black text-white flex items-center gap-2">
+                    <h3 className="text-lg font-black text-slate-100 flex items-center gap-2">
                         <CheckCircle2 className="text-emerald-400" size={20} /> Overall Compliance Rating
                     </h3>
-                    <p className="text-xs text-gray-400">All administrative zero-knowledge audits are up-to-date and registered on-chain.</p>
+                    <p className="text-xs text-slate-300 font-medium text-shadow-sm">All administrative zero-knowledge audits are up-to-date and registered on-chain.</p>
                 </div>
                 <div className="flex gap-4">
                     <div className="bg-white/5 px-6 py-3 rounded-2xl border border-white/5 text-center">
                         <span className="text-[9px] font-bold text-gray-500 uppercase block tracking-wider">Average Compliance</span>
-                        <span className="text-2xl font-black text-emerald-400">{Math.round((governance + efficiency + accountability + resilience) / 4)}%</span>
+                        <span className="text-2xl font-black text-glow-emerald text-emerald-400">{Math.round((governance + efficiency + accountability + resilience) / 4)}%</span>
                     </div>
                     <div className="bg-white/5 px-6 py-3 rounded-2xl border border-white/5 text-center">
                         <span className="text-[9px] font-bold text-gray-500 uppercase block tracking-wider">Risk Level</span>
-                        <span className="text-2xl font-black text-blue-400">NOMINAL</span>
+                        <span className="text-2xl font-black text-glow-emerald text-emerald-400">NOMINAL</span>
                     </div>
                 </div>
             </div>
@@ -111,12 +111,12 @@ export const GEARDashboardPage = () => {
                                 </div>
                                 <div>
                                     <span className={`text-xs font-black uppercase tracking-widest ${pillar.color}`}>{pillar.id} - Pillar</span>
-                                    <h3 className="text-xl font-black text-white tracking-tight">{pillar.title}</h3>
+                                    <h3 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-emerald-300 drop-shadow-[0_1px_4px_rgba(45,212,191,0.15)] tracking-tight">{pillar.title}</h3>
                                 </div>
                             </div>
                             <div className="text-right">
-                                <span className="text-2xl font-mono font-black text-white">{pillar.value}%</span>
-                                <span className="text-[9px] text-gray-400 block font-bold uppercase tracking-wider">Active Rating</span>
+                                <span className="text-2xl font-mono font-black text-slate-100 text-glow-emerald">{pillar.value}%</span>
+                                <span className="text-[9px] text-gray-500 block font-bold uppercase tracking-wider">Active Rating</span>
                             </div>
                         </div>
 
@@ -132,8 +132,8 @@ export const GEARDashboardPage = () => {
                             </div>
 
                             <div className="space-y-2">
-                                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest block">{pillar.desc}</span>
-                                <p className="text-xs text-gray-400 leading-relaxed">{pillar.details}</p>
+                                <span className="text-[10px] font-black text-slate-200 uppercase tracking-widest block text-shadow-sm">{pillar.desc}</span>
+                                <p className="text-xs text-slate-300 font-medium leading-relaxed text-shadow-sm">{pillar.details}</p>
                             </div>
                         </div>
                     </motion.div>
