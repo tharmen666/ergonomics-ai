@@ -4,6 +4,7 @@ import { CheckCircle2, Circle, ShieldCheck } from 'lucide-react';
 import { GlassCard } from '../../components/ui/GlassCard';
 import { useNellyStore } from '../../store/nellyStore';
 import { Language } from '../../utils/translations';
+import { useTenantStore } from '../../store/tenantStore';
 
 interface ChecklistItem {
     id: 'monitor' | 'chair' | 'feet';
@@ -89,6 +90,16 @@ const CHECKLIST_TRANSLATIONS: Record<Language, {
         compliant: 'Vollständig konform',
         completed: 'Abgeschlossen',
         feedback: 'Gute Arbeit! Deine Einrichtung ist heute OHS-konform.'
+    },
+    af: {
+        monitor: 'Skerm op ooghoogte?',
+        chair: 'Stoel ondersteun onderrug?',
+        feet: 'Voete plat op die vloer?',
+        title: 'Daaglikse Veiligheids Kontrolelys',
+        complete: 'Nakoming Geverifieer',
+        compliant: 'Ten Volle Voldoenend',
+        completed: 'Voltooi',
+        feedback: 'Goeie werk! Jou opstelling is nou OHS-nakomend vir die dag.'
     }
 };
 
@@ -113,6 +124,7 @@ export const DailySafetyChecklist = () => {
 
     useEffect(() => {
         if (allChecked) {
+            useTenantStore.getState().recordUsage();
             setSpeaking(true);
             setMood('happy');
             // Reset speaking after a delay

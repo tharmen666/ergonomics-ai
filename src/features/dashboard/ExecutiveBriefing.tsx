@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp } from 'lucide-react';
 import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
 import { LeanPerformanceRail } from '../../components/AI-Coach/LeanPerformanceRail';
-import { HackathonDemo } from '../../components/HackathonDemo';
 
 import { REASONABLY_PRACTICABLE_2026, RIGHT_TO_DISCONNECT_FRAMEWORK, FINANCIAL_PITCHES } from '../../logic/financePitches';
 import { useNellyStore } from '../../store/nellyStore';
@@ -28,8 +27,6 @@ export const ExecutiveBriefing = () => {
                     </div>
                 </div>
             </motion.div>
-
-            <HackathonDemo />
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {GlobalComplianceEngine.fetchUnifiedBriefing(language).map((policy, idx) => (

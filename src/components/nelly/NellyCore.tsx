@@ -11,14 +11,14 @@ export const NellyCore = ({ isSpeaking, onClick }: NellyCoreProps) => {
 
     return (
         <motion.div
-            className={`relative group w-16 h-16 rounded-full border-4 border-ohs-orange/30 p-1 bg-ohs-navy shadow-2xl overflow-hidden cursor-pointer pointer-events-auto`}
+            className={`relative group w-16 h-16 rounded-full border-4 border-ohs-orange/30 p-1 bg-ohs-navy shadow-2xl overflow-hidden cursor-pointer pointer-events-auto flex-shrink-0 aspect-square`}
             layoutId="nelly-core"
             onClick={onClick}
             whileTap={{ scale: 0.95 }}
             aria-label="Nelly AI Avatar"
             title="Nelly AI Avatar"
         >
-            <div className={`w-full h-full rounded-full overflow-hidden relative border-[3px] flex items-center justify-center transition-colors duration-500 ${
+            <div className={`w-full h-full rounded-full overflow-hidden relative border-[3px] flex items-center justify-center transition-colors duration-500 flex-shrink-0 aspect-square ${
                 fatigueLevel === 'nominal' ? 'border-green-500 bg-gradient-to-br from-green-500/20 to-black' : 
                 fatigueLevel === 'warning' ? 'border-yellow-500 bg-gradient-to-br from-yellow-500/20 to-black' : 
                 'border-red-500 bg-gradient-to-br from-red-500/20 to-black'

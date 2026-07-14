@@ -7,14 +7,14 @@ interface TourManagerProps {
 }
 
 export const TourManager = ({ setActiveTab }: TourManagerProps) => {
-    const { isTourActive, setTourActive, setSpeaking, setMood, setGuidance } = useNellyStore();
+    const { isTourActive, setTourActive, setSpeaking, setMood, setGuidance, language } = useNellyStore();
     const [step, setStep] = useState(0);
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     const tourSteps = [
         {
             tab: 'dashboard',
-            text: "Welcome to OHS Haven. This is your central command center. Here you can monitor your safety score and quick stats at a glance.",
+            text: "Welcome to ErgoSafe Reborn. This is your central command center. Here you can monitor your safety score and quick stats at a glance.",
             mood: 'happy' as const,
         },
         {
@@ -92,7 +92,7 @@ export const TourManager = ({ setActiveTab }: TourManagerProps) => {
             // Set safety fallback
             timeoutRef.current = setTimeout(nextStep, 15000);
 
-            speak(current.text, nextStep);
+            speak(current.text, language, nextStep);
         };
 
         runStep(step);
@@ -102,7 +102,6 @@ export const TourManager = ({ setActiveTab }: TourManagerProps) => {
             // Actually, useEffect will re-run when `step` changes.
             // So we just need to ignore the 'runStep' internal definition and rely on effect.
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isTourActive, step]);
     // Removed other deps to avoid re-triggering mid-speech if visual props change, 
     // although they shouldn't. The critical driver is `step` and `isTourActive`.

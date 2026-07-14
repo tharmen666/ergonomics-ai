@@ -5,28 +5,51 @@ import { BarChart3, Users, AlertCircle, CheckCircle, Download, ShieldAlert, Awar
 import { getLegalShockContent } from '../../utils/escalationLogic';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 import { FINANCIAL_PITCHES } from '../../logic/financePitches';
+import { useTenantStore } from '../../store/tenantStore';
 
 export const AdminPortal = () => {
     const { fatigueLevel, cognitiveHandshakePassed } = useFatigueStore();
+    const currentCompanyId = useTenantStore(state => state.companyId);
+
+    const allEmployees: Record<string, { name: string; dept: string; score: string; status: string; trend: string; escalation?: string }[]> = {
+        'COMP-001': [
+            { name: 'Sarah Jenkins', dept: 'Marketing', score: '98%', status: 'Compliant', trend: 'up' },
+            { name: 'Mike Ross', dept: 'Engineering', score: '65%', status: 'Risk Alert', trend: 'down', escalation: 'Supervisor Notified' },
+            { name: 'Jessica Pearson', dept: 'Legal', score: '100%', status: 'Compliant', trend: 'stable' },
+            { name: 'Harvey Specter', dept: 'Legal', score: '88%', status: 'Pending Review', trend: 'up' },
+        ],
+        'COMP-002': [
+            { name: 'Louis Litt', dept: 'Finance', score: '42%', status: 'Liability', trend: 'down', escalation: 'CEO ESCALATED' },
+            { name: 'Rachel Zane', dept: 'Operations', score: '95%', status: 'Compliant', trend: 'up' },
+            { name: 'Harold Gunderson', dept: 'Logistics', score: '58%', status: 'Risk Alert', trend: 'down', escalation: 'Supervisor Notified' },
+        ],
+        'COMP-003': [
+            { name: 'Katrina Bennett', dept: 'Compliance', score: '99%', status: 'Compliant', trend: 'stable' },
+            { name: 'Donna Paulsen', dept: 'Administration', score: '96%', status: 'Compliant', trend: 'up' },
+        ]
+    };
+
+    const allSupervisors = {
+        'COMP-001': [
+            { name: 'Robert Zane', team: 'Legal', compliance: 95, status: 'Elite' },
+            { name: 'Gretchen Bodinski', team: 'Operations', compliance: 88, status: 'Steady' },
+        ],
+        'COMP-002': [
+            { name: 'Sheila Sazs', team: 'Finance', compliance: 62, status: 'At Risk' },
+        ],
+        'COMP-003': [
+            { name: 'Benjamin', team: 'IT Systems', compliance: 91, status: 'Elite' },
+        ]
+    };
+
+    const employees = allEmployees[currentCompanyId as keyof typeof allEmployees] || allEmployees['COMP-001'];
+    const supervisors = allSupervisors[currentCompanyId as keyof typeof allSupervisors] || allSupervisors['COMP-001'];
+
     const stats = [
-        { label: 'Total Employees', value: '124', icon: Users, color: 'text-ohs-blue', bgColor: 'bg-ohs-blue/10' },
-        { label: 'Compliance Rate', value: '92%', icon: CheckCircle, color: 'text-ohs-green', bgColor: 'bg-ohs-green/10' },
-        { label: 'Open Risks', value: '8', icon: AlertCircle, color: 'text-ohs-orange', bgColor: 'bg-ohs-orange/10' },
-        { label: 'Training Hours', value: '342h', icon: BarChart3, color: 'text-purple-400', bgColor: 'bg-purple-400/10' },
-    ];
-
-    const employees = [
-        { name: 'Sarah Jenkins', dept: 'Marketing', score: '98%', status: 'Compliant', trend: 'up' },
-        { name: 'Mike Ross', dept: 'Engineering', score: '65%', status: 'Risk Alert', trend: 'down', escalation: 'Supervisor Notified' },
-        { name: 'Jessica Pearson', dept: 'Legal', score: '100%', status: 'Compliant', trend: 'stable' },
-        { name: 'Harvey Specter', dept: 'Legal', score: '88%', status: 'Pending Review', trend: 'up' },
-        { name: 'Louis Litt', dept: 'Finance', score: '42%', status: 'Liability', trend: 'down', escalation: 'CEO ESCALATED' },
-    ];
-
-    const supervisors = [
-        { name: 'Robert Zane', team: 'Legal', compliance: 95, status: 'Elite' },
-        { name: 'Sheila Sazs', team: 'Finance', compliance: 62, status: 'At Risk' },
-        { name: 'Gretchen Bodinski', team: 'Operations', compliance: 88, status: 'Steady' },
+        { label: 'Total Employees', value: employees.length.toString(), icon: Users, color: 'text-ohs-blue', bgColor: 'bg-ohs-blue/10' },
+        { label: 'Compliance Rate', value: currentCompanyId === 'COMP-002' ? '72%' : '92%', icon: CheckCircle, color: 'text-ohs-green', bgColor: 'bg-ohs-green/10' },
+        { label: 'Open Risks', value: employees.filter(e => e.status !== 'Compliant').length.toString(), icon: AlertCircle, color: 'text-ohs-orange', bgColor: 'bg-ohs-orange/10' },
+        { label: 'Training Hours', value: currentCompanyId === 'COMP-002' ? '180h' : '342h', icon: BarChart3, color: 'text-purple-400', bgColor: 'bg-purple-400/10' },
     ];
 
     return (
@@ -189,7 +212,7 @@ export const AdminPortal = () => {
                                 className="p-6 hover:bg-white/5 transition-all flex items-center justify-between group cursor-pointer"
                             >
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center font-black text-gray-500 group-hover:bg-ohs-blue group-hover:text-white transition-all">
+                                    <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center font-black text-gray-500 group-hover:bg-ohs-blue group-hover:text-white transition-all flex-shrink-0 aspect-square">
                                         {emp.name.charAt(0)}
                                     </div>
                                     <div>

@@ -6,7 +6,7 @@ import { GlowButton } from '../../components/ui/GlowButton';
 import { Volume2, VolumeX, X, Play, Square, ChevronLeft, ChevronRight, CheckCircle, Globe } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { speak, stopSpeaking } from '../../utils/speech';
+import { speak, stopSpeaking, VOICEOVER_ACCENT_MAP } from '../../utils/speech';
 import { useNellyStore } from '../../store/nellyStore';
 import { FRESH_OHS_PROJECT_REGISTRY } from '../../utils/master_ohs_boot';
 import { Language } from '../../utils/translations';
@@ -229,10 +229,11 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
                                     onChange={(e) => setLanguage(e.target.value as Language)}
                                     className="bg-transparent text-xs font-bold text-white focus:outline-none cursor-pointer uppercase"
                                 >
-                                    <option value="en" className="bg-ohs-navy">EN</option>
-                                    <option value="zu" className="bg-ohs-navy">ZU</option>
-                                    <option value="xh" className="bg-ohs-navy">XH</option>
-                                    <option value="st" className="bg-ohs-navy">ST</option>
+                                    {Object.entries(VOICEOVER_ACCENT_MAP).map(([code, config]) => (
+                                        <option key={code} value={code} className="bg-ohs-navy">
+                                            {config.displayName} ({config.regionalAccent})
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                         </div>

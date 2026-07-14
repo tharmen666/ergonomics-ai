@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { X, Globe, PlayCircle, ShieldCheck, Minimize2 } from 'lucide-react';
 import { ReasoningLog } from '../agent/ReasoningLog';
 import { translations, Language } from '../../utils/translations';
+import { VOICEOVER_ACCENT_MAP } from '../../utils/speech';
 
 interface NellyInterfaceProps {
     language: Language;
@@ -46,13 +47,11 @@ export const NellyInterface = ({
                         onChange={(e) => setLanguage(e.target.value as Language)}
                         className="bg-transparent text-[10px] font-bold text-gray-400 focus:outline-none cursor-pointer"
                     >
-                        <option value="en" className="bg-ohs-navy">EN</option>
-                        <option value="zu" className="bg-ohs-navy">ZU</option>
-                        <option value="xh" className="bg-ohs-navy">XH</option>
-                        <option value="sw" className="bg-ohs-navy">SW</option>
-                        <option value="zh" className="bg-ohs-navy">ZH</option>
-                        <option value="de" className="bg-ohs-navy">DE</option>
-                        <option value="st" className="bg-ohs-navy">ST</option>
+                        {Object.entries(VOICEOVER_ACCENT_MAP).map(([code, config]) => (
+                            <option key={code} value={code} className="bg-ohs-navy">
+                                {config.displayName} ({config.regionalAccent})
+                            </option>
+                        ))}
                     </select>
                     <button 
                         aria-label="Minimize" 

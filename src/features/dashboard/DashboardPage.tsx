@@ -1,13 +1,13 @@
-
 import { ActivityChart, ComplianceRing } from './Charts';
-import { Users, AlertCircle, FileText } from 'lucide-react';
+import { Users, AlertCircle, FileText, Target, Shield, Lock } from 'lucide-react';
 import { DailySafetyChecklist } from './DailySafetyChecklist';
+import { WorkspaceAudit } from './WorkspaceAudit';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, ShieldCheck } from 'lucide-react';
 import { SafetyStreaks } from '../../components/AI-Coach/SafetyStreaks';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
-
+import { SpineViewer } from '../../components/agent/SpineViewer';
 
 export const DashboardPage = () => {
     const { cognitiveHandshakePassed, setShowCognitiveHandshake } = useFatigueStore();
@@ -41,6 +41,25 @@ export const DashboardPage = () => {
                 </div>
             </motion.div>
 
+            {/* Privacy First Banner */}
+            <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="bg-ohs-navy border border-white/10 p-4 rounded-xl flex items-center gap-4 shadow-lg relative overflow-hidden"
+            >
+                <div className="absolute inset-0 bg-gradient-to-r from-ohs-blue/10 to-transparent pointer-events-none" />
+                <div className="p-2 bg-ohs-blue/20 rounded-lg relative z-10">
+                    <Lock className="text-ohs-blue" size={20} />
+                </div>
+                <div className="relative z-10">
+                    <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                        Privacy-First Telemetry
+                    </h3>
+                    <p className="text-xs text-gray-400 font-medium">Zero raw camera data is stored. All skeletal telemetry is processed locally and discarded instantly.</p>
+                </div>
+            </motion.div>
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-6">
                     {/* Handshake Prompt */}
@@ -64,6 +83,35 @@ export const DashboardPage = () => {
                             </button>
                         </motion.div>
                     )}
+
+                    {/* 3D Spine Viewer - Primary Interactive Element */}
+                    <div className="h-[400px]">
+                        <SpineViewer />
+                    </div>
+
+                    {/* Operational Video Walkthrough */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="glass-ohs p-6 rounded-[2rem] border border-white/10 relative overflow-hidden"
+                    >
+                        <h3 className="text-lg font-black text-white tracking-tight uppercase mb-4 flex items-center gap-2">
+                            <div className="w-2 h-2 bg-ohs-orange rounded-full" />
+                            System Walkthrough Demonstration
+                        </h3>
+                        <div className="relative w-full rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(249,168,37,0.15)] border border-white/10 bg-black aspect-video">
+                            <video
+                                className="w-full h-full object-contain"
+                                src="/assets/recording.mp4"
+                                controls
+                                preload="auto"
+                                playsInline
+                                poster="/assets/nelly-steward-final.png"
+                                title="ErgoSafe Reborn Walkthrough"
+                            />
+                        </div>
+                    </motion.div>
 
                     {/* Top Stats */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -91,21 +139,32 @@ export const DashboardPage = () => {
                             </div>
                         </div>
 
-                        <div className="glass-ohs p-6 rounded-[2rem]">
-                            <div className="flex flex-col gap-4">
+                        <div className="glass-ohs p-6 rounded-[2rem] relative overflow-hidden group flex flex-col justify-between">
+                            <div className="absolute right-0 top-0 opacity-10 transform translate-x-4 -translate-y-4">
+                                <Target size={80} />
+                            </div>
+                            <div className="flex flex-col gap-4 relative z-10">
                                 <div className="flex items-center gap-4">
-                                    <div className="p-4 bg-ohs-orange/10 rounded-2xl text-ohs-orange border border-ohs-orange/20">
-                                        <FileText size={28} />
+                                    <div className="p-4 bg-ohs-green/10 rounded-2xl text-ohs-green border border-ohs-green/20">
+                                        <Target size={28} />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Reports Pending</p>
-                                        <h3 className="text-3xl font-black text-white">12</h3>
+                                        <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest leading-tight">Baseline Target</p>
+                                        <h3 className="text-2xl font-black text-white">35%</h3>
                                     </div>
                                 </div>
+                                <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+                                    <div className="h-full bg-ohs-green w-[22%]" />
+                                </div>
+                                <p className="text-[9px] text-gray-400 font-bold uppercase tracking-wider text-center">Currently at 22%</p>
+                            </div>
+                            <div className="mt-4 pt-4 border-t border-white/10 relative z-10">
                                 <ReportGenerator />
                             </div>
                         </div>
                     </div>
+
+                    <WorkspaceAudit />
 
                     {/* Charts Section */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -170,7 +229,7 @@ const ReportGenerator = () => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                         >
-                            Generate & Auto-File Report
+                            Export Compliance Verification Report
                         </motion.span>
                     )}
                     {status === 'generating' && (
@@ -179,7 +238,7 @@ const ReportGenerator = () => {
                             className="flex items-center justify-center gap-2"
                         >
                             <div className="w-3 h-3 border-2 border-ohs-orange border-t-transparent rounded-full animate-spin" />
-                            <span>Compiling OHS File...</span>
+                            <span>Verifying with Underwriter...</span>
                         </motion.div>
                     )}
                     {status === 'completed' && (
@@ -188,7 +247,7 @@ const ReportGenerator = () => {
                             className="flex items-center justify-center gap-2"
                         >
                             <Check size={14} />
-                            <span>Filed in Digital Dossier</span>
+                            <span>Compliance Verified & Exported</span>
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -199,7 +258,7 @@ const ReportGenerator = () => {
                     animate={{ opacity: 1, height: 'auto' }}
                     className="text-[9px] text-ohs-green font-black uppercase mt-2 text-center tracking-widest"
                 >
-                    Admin-Zero Process Complete: Board Notified 📧
+                    Insurance Reporting Requirements Met 📋
                 </motion.p>
             )}
         </div>
