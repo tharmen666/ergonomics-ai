@@ -157,27 +157,27 @@ export const CognitiveHandshake = () => {
                     animate={{ opacity: 1 }}
                     className="fixed inset-0 z-[99000] flex flex-col items-center justify-center bg-black/95 backdrop-blur-md font-sans text-white p-4"
                 >
-                    <div className="w-full max-w-md flex flex-col items-center text-center">
-                        <BrainCircuit className="text-ohs-orange mb-3" size={40} />
-                        <h2 className="text-2xl font-black mb-1.5 tracking-tight">MANDATORY COGNITIVE HANDSHAKE</h2>
-                        <p className="text-xs text-gray-400 font-medium px-4">Click the targets as quickly as possible to establish your baseline. Lag &gt; 20% will trigger Executive Stewardship protocols.</p>
+                    <div className="w-full max-w-md aspect-square flex flex-col items-center justify-center text-center bg-slate-900/90 border border-slate-800 p-8 rounded-[2rem] shadow-[0_0_50px_rgba(249,168,37,0.15)] relative">
+                        <BrainCircuit className="text-ohs-orange mb-2" size={32} />
+                        <h2 className="text-xl font-black mb-1.5 gradient-heading tracking-tight">COGNITIVE HANDSHAKE</h2>
+                        <p className="text-[11px] text-slate-100 font-bold text-shadow-sm px-4">Click the targets as quickly as possible to calibrate your baseline latency.</p>
 
-                        <div className="mt-4 flex justify-center gap-2">
+                        <div className="mt-3 flex justify-center gap-1.5">
                             {Array.from({ length: TOTAL_TARGETS }).map((_, i) => (
-                                <div key={i} className={`w-2.5 h-2.5 rounded-full ${i < targetsHit ? 'bg-ohs-orange shadow-[0_0_10px_rgba(249,168,37,0.8)]' : 'bg-white/20'}`} />
+                                <div key={i} className={`w-2 h-2 rounded-full transition-all duration-300 ${i < targetsHit ? 'bg-[#2dd4bf] shadow-[0_0_10px_rgba(45,212,191,0.8)]' : 'bg-white/10'}`} />
                             ))}
                         </div>
                         
-                        <div className="w-full aspect-square relative mt-8 border border-white/10 rounded-3xl bg-ohs-navy/30 overflow-hidden shadow-[inset_0_0_60px_rgba(0,0,0,0.8)]">
+                        <div className="w-full flex-1 relative mt-6 border border-slate-800 rounded-2xl bg-black/40 overflow-hidden shadow-[inset_0_0_30px_rgba(0,0,0,0.8)] min-h-[180px]">
                             <motion.button
                                 initial={{ scale: 0 }}
                                 animate={{ scale: [0, 1.2, 1] }}
                                 transition={{ type: "spring", duration: 0.3 }}
                                 onClick={handleTargetClick}
-                                className="absolute flex items-center justify-center w-14 h-14 bg-ohs-orange hover:bg-yellow-400 rounded-full shadow-[0_0_20px_rgba(249,168,37,0.6)] cursor-crosshair transform -translate-x-1/2 -translate-y-1/2"
+                                className="absolute flex items-center justify-center w-12 h-12 bg-ohs-orange hover:bg-yellow-400 rounded-full shadow-[0_0_20px_rgba(249,168,37,0.6)] cursor-crosshair transform -translate-x-1/2 -translate-y-1/2"
                                 style={{ left: `${targetPos.x}%`, top: `${targetPos.y}%` }}
                             >
-                                <Target size={22} className="text-ohs-navy" />
+                                <Target size={20} className="text-ohs-navy" />
                             </motion.button>
                         </div>
                     </div>

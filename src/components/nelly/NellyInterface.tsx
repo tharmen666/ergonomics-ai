@@ -59,17 +59,17 @@ export const NellyInterface = ({
             </div>
 
             {/* Premium Language Preference Selection Bar */}
-            <div className="flex items-center justify-between gap-1 mb-4 bg-white/5 p-1 rounded-xl border border-white/5">
+            <div className="flex items-center justify-between gap-1 mb-4 bg-slate-950 border border-slate-800 p-1.5 rounded-xl">
                 {Object.entries(VOICEOVER_ACCENT_MAP).map(([code, config]) => {
                     const isSelected = activeLang === code;
                     return (
                         <button
                             key={code}
                             onClick={() => setLanguage(code as Language)}
-                            className={`flex-1 text-[9px] font-black py-1.5 px-1 rounded-lg transition-all duration-300 ${
+                            className={`flex-1 text-[10px] font-black py-2 px-1 rounded-lg cursor-pointer transition-all duration-300 ${
                                 isSelected 
-                                    ? 'bg-ohs-orange text-ohs-navy shadow-[0_0_10px_rgba(249,168,37,0.3)]' 
-                                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                                    ? 'bg-gradient-to-r from-teal-400 to-emerald-400 text-slate-950 shadow-[0_0_15px_rgba(45,212,191,0.4)]' 
+                                    : 'bg-slate-900 text-slate-300 hover:text-white hover:bg-slate-800 border border-slate-800/50'
                             }`}
                         >
                             {config.regionalAccent}

@@ -11,7 +11,6 @@ const navItems = [
     { icon: Users, label: "HR Dashboard", id: "hr" },
     { icon: Activity, label: "Ergonomic Training", id: "training" },
     { icon: CheckSquare, label: "Daily Checklist", id: "checklist" },
-    { icon: FileText, label: "Invoice Manager", id: "invoices" },
     { icon: Settings, label: "Settings", id: "settings" },
 ];
 
@@ -49,14 +48,14 @@ export const Sidebar = ({ activeTab, setActiveTab, isCollapsed, setIsCollapsed }
             )}
 
             <div
-                className={`fixed left-0 top-0 h-[100dvh] w-[260px] bg-ohs-navy/95 backdrop-blur-xl border-r border-white/10 p-4 flex flex-col z-[1000] text-white shadow-2xl transition-transform duration-300 ease-in-out md:translate-x-0 ${
+                className={`fixed left-0 top-0 h-[100dvh] w-[260px] bg-ohs-navy/95 backdrop-blur-xl border-r border-white/10 p-4 flex flex-col z-[1000] text-white shadow-2xl transition-transform duration-300 ease-in-out ${
                     isCollapsed ? '-translate-x-full' : 'translate-x-0'
                 }`}
             >
-                {/* Close Button - Mobile Only */}
+                {/* Close Button - Universal */}
                 <button
                     onClick={() => setIsCollapsed(true)}
-                    className="absolute right-4 top-4 p-2 bg-white/5 hover:bg-white/10 transition-colors rounded-lg text-ohs-orange md:hidden"
+                    className="absolute right-4 top-4 p-2 bg-white/5 hover:bg-white/10 transition-colors rounded-lg text-ohs-orange"
                     aria-label="Close Sidebar"
                 >
                     <X size={20} />
