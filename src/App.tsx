@@ -15,7 +15,6 @@ import { HQTechnicalDemo } from './features/demo/HQTechnicalDemo';
 import { ExecutiveBriefing } from './features/dashboard/ExecutiveBriefing';
 import { PrivacyHandshake } from './assets/Privacy-Shield/PrivacyHandshake';
 import { CognitiveHandshake } from './components/AI-Coach/CognitiveHandshake';
-import { InvoicePortal } from './features/invoices/InvoicePortal';
 import { SettingsPage } from './features/settings/SettingsPage';
 import { ReportsPage } from './features/reports/ReportsPage';
 import { TenantLogin } from './components/auth/TenantLogin';
@@ -60,18 +59,17 @@ function App() {
         <main className="flex-1 pb-32 md:pb-10 pt-0 md:pt-4">
           {activeTab === 'dashboard' && <DashboardPage />}
           {activeTab === 'gear' && <GEARDashboardPage />}
-          {activeTab === 'executive' && <ExecutiveBriefing />}
+          {(activeTab === 'nelly' || activeTab === 'assessment') && <SelfAssessmentPage />}
+          {(activeTab === 'kiosk' || activeTab === 'checklist') && <ChecklistPage />}
           {activeTab === 'training' && <TrainingPage />}
-          {activeTab === 'checklist' && <ChecklistPage />}
+          {activeTab === 'settings' && <SettingsPage />}
+          {activeTab === 'executive' && <ExecutiveBriefing />}
           {activeTab === 'risk' && <RiskPage />}
           {activeTab === 'team' && <TeamPage />}
-          {activeTab === 'assessment' && <SelfAssessmentPage />}
           {activeTab === 'risks' && <RiskyBehaviorsPage />}
           {activeTab === 'hr' && <HRDashboard />}
           {activeTab === 'admin' && <AdminPortal />}
-          {activeTab === 'invoices' && <InvoicePortal />}
           {activeTab === 'reports' && <ReportsPage />}
-          {activeTab === 'settings' && <SettingsPage />}
           {activeTab === 'master-admin' && <MasterAdminPortal />}
         </main>
 

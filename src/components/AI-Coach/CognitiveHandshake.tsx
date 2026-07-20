@@ -155,9 +155,9 @@ export const CognitiveHandshake = () => {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="fixed inset-0 z-[99000] flex flex-col items-center justify-center bg-black/95 backdrop-blur-md font-sans text-white p-4"
+                    className="fixed inset-0 z-[99000] flex items-center justify-center bg-black/95 backdrop-blur-md font-sans text-white p-4 overflow-y-auto"
                 >
-                    <div className="w-full max-w-md aspect-square flex flex-col items-center justify-center text-center bg-slate-900/90 border border-slate-800 p-8 rounded-[2rem] shadow-[0_0_50px_rgba(249,168,37,0.15)] relative">
+                    <div className="w-full max-w-md aspect-square max-h-[85vh] m-auto flex flex-col items-center justify-center text-center bg-slate-900/90 border border-slate-800 p-6 sm:p-8 rounded-[2rem] shadow-[0_0_50px_rgba(249,168,37,0.15)] relative">
                         <BrainCircuit className="text-ohs-orange mb-2" size={32} />
                         <h2 className="text-xl font-black mb-1.5 gradient-heading tracking-tight">COGNITIVE HANDSHAKE</h2>
                         <p className="text-[11px] text-slate-100 font-bold text-shadow-sm px-4">Click the targets as quickly as possible to calibrate your baseline latency.</p>
@@ -168,13 +168,13 @@ export const CognitiveHandshake = () => {
                             ))}
                         </div>
                         
-                        <div className="w-full flex-1 relative mt-6 border border-slate-800 rounded-2xl bg-black/40 overflow-hidden shadow-[inset_0_0_30px_rgba(0,0,0,0.8)] min-h-[180px]">
+                        <div className="w-full flex-1 relative mt-4 border border-slate-800 rounded-2xl bg-black/40 overflow-hidden shadow-[inset_0_0_30px_rgba(0,0,0,0.8)] min-h-[160px]">
                             <motion.button
                                 initial={{ scale: 0 }}
                                 animate={{ scale: [0, 1.2, 1] }}
                                 transition={{ type: "spring", duration: 0.3 }}
                                 onClick={handleTargetClick}
-                                className="absolute flex items-center justify-center w-12 h-12 bg-ohs-orange hover:bg-yellow-400 rounded-full shadow-[0_0_20px_rgba(249,168,37,0.6)] cursor-crosshair transform -translate-x-1/2 -translate-y-1/2"
+                                className="absolute flex items-center justify-center w-12 h-12 min-h-[48px] min-w-[48px] bg-ohs-orange hover:bg-yellow-400 rounded-full shadow-[0_0_20px_rgba(249,168,37,0.6)] cursor-crosshair transform -translate-x-1/2 -translate-y-1/2"
                                 style={{ left: `${targetPos.x}%`, top: `${targetPos.y}%` }}
                             >
                                 <Target size={20} className="text-ohs-navy" />

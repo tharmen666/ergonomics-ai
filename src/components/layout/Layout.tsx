@@ -40,67 +40,65 @@ export const Layout = memo(({ children, activeTab, setActiveTab }: LayoutProps) 
             />
 
             {/* Unified Premium Responsive Header Grid */}
-            <header className={`sticky top-0 z-40 bg-ohs-navy/80 backdrop-blur-md flex items-center justify-between gap-0.5 xs:gap-2 px-1 py-2.5 xs:px-4 md:px-8 border-b border-white/5 relative z-50 transition-all duration-300 ease-in-out ${
-                isSidebarCollapsed ? 'md:pl-8' : 'md:pl-[284px]'
+            <header className={`sticky top-0 z-40 bg-ohs-navy/90 backdrop-blur-md flex items-center justify-between gap-2 px-4 py-3 sm:px-6 md:px-8 border-b border-white/10 relative z-50 transition-all duration-300 ease-in-out ${
+                isSidebarCollapsed ? 'md:pl-8' : 'md:pl-[300px]'
             }`}>
                 {/* Left Branding and Navigation Toggle */}
-                <div className="flex items-center gap-1 xs:gap-3 flex-shrink-0">
+                <div className="flex items-center gap-3 flex-shrink-0">
                     <button 
                         onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
-                        className="p-1 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-colors flex items-center justify-center text-ohs-orange shadow-lg flex-shrink-0"
+                        className="p-2.5 min-h-[48px] min-w-[48px] bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center text-ohs-orange shadow-lg flex-shrink-0 cursor-pointer"
                         title="Toggle Sidebar"
                     >
-                        <Menu size={14} className="xs:size-4 md:size-5" />
+                        <Menu size={20} />
                     </button>
-                    <h1 className="text-[9px] xs:text-xs sm:text-lg md:text-3xl font-black text-white tracking-tighter uppercase whitespace-nowrap leading-none flex-shrink-0 ml-1">
+                    <h1 className="text-xs xs:text-sm sm:text-lg md:text-2xl font-black text-white tracking-tighter uppercase whitespace-nowrap leading-none flex-shrink-0">
                         ERGOSAFE <span className="text-ohs-orange">REBORN</span>
                     </h1>
                 </div>
 
                 {/* Right Status, Actions & Glowing NellyAvatar */}
-                <div className="flex items-center gap-0.5 xs:gap-2 md:gap-4 flex-shrink-0">
+                <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
                     {/* Compact, Adaptive System Status Block */}
-                    <div className="bg-white/5 p-0.5 rounded-lg border border-white/10 flex flex-col justify-center min-w-[36px] xs:min-w-[50px] sm:min-w-[65px] md:p-3 md:rounded-xl md:min-w-[80px] flex-shrink-0 text-center">
-                        <p className="text-[4px] xs:text-[6px] md:text-xs text-ohs-orange font-bold uppercase tracking-wider leading-none mb-0.5 md:mb-1">Status</p>
-                        <p className="text-[7px] xs:text-[9px] md:text-sm font-medium leading-none whitespace-nowrap">Nominal</p>
+                    <div className="bg-white/5 px-2.5 py-1.5 rounded-xl border border-white/10 flex flex-col justify-center min-h-[44px] flex-shrink-0 text-center">
+                        <p className="text-[8px] sm:text-[10px] text-ohs-orange font-bold uppercase tracking-wider leading-none mb-1">Status</p>
+                        <p className="text-[10px] sm:text-xs font-bold leading-none whitespace-nowrap text-emerald-400">NOMINAL</p>
                     </div>
                     
                     {/* Action controls row */}
-                    <div className="flex items-center gap-0.5 xs:gap-2 flex-shrink-0">
+                    <div className="flex items-center gap-2 flex-shrink-0">
                         <button
                             onClick={() => setWingmanActive(!isWingmanActive)}
                             className={`inline-flex items-center justify-center text-center ${
                                 isWingmanActive ? 'bg-red-500 hover:bg-red-600' : 'bg-white/10 hover:bg-white/20'
-                            } text-white px-1 py-1 xs:px-2 xs:py-1.5 md:px-4 md:py-2.5 rounded-lg md:rounded-xl font-bold text-[7px] xs:text-[9px] sm:text-xs md:text-sm transition-all shadow-md leading-none`}
+                            } text-white px-3 py-2.5 min-h-[48px] rounded-xl font-bold text-xs transition-all shadow-md leading-none cursor-pointer`}
                         >
                             <span className="xs:hidden">{isWingmanActive ? 'OFF' : 'ON'}</span>
-                            <span className="hidden xs:inline">{isWingmanActive ? 'DISABLE' : 'ACTIVATE'}</span>
+                            <span className="hidden xs:inline">{isWingmanActive ? 'DISABLE' : 'ACTIVATE'} WINGMAN</span>
                         </button>
                         <button
                             onClick={() => setActiveTab('executive')}
-                            className="bg-ohs-orange/20 hover:bg-ohs-orange/30 border border-ohs-orange/50 text-ohs-orange px-1 py-1 xs:px-2 xs:py-1.5 md:px-4 md:py-2.5 rounded-lg md:rounded-xl font-bold text-[7px] xs:text-[9px] sm:text-xs md:text-sm transition-all whitespace-nowrap leading-none"
+                            className="hidden sm:inline-flex items-center justify-center bg-ohs-orange/20 hover:bg-ohs-orange/30 border border-ohs-orange/50 text-ohs-orange px-3 py-2.5 min-h-[48px] rounded-xl font-bold text-xs transition-all whitespace-nowrap leading-none cursor-pointer"
                         >
-                            <span className="xs:hidden">EXEC</span>
-                            <span className="hidden xs:inline"><span className="hidden sm:inline">EXEC </span>BRIEFING</span>
+                            EXEC BRIEFING
                         </button>
                         <button
                             onClick={() => setActiveTab('demo')}
-                            className="bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-1 py-1 xs:px-2 xs:py-1.5 md:px-4 md:py-2.5 rounded-lg md:rounded-xl font-black text-[7px] xs:text-[9px] sm:text-xs md:text-sm transition-all shadow-lg whitespace-nowrap leading-none"
+                            className="bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-3 py-2.5 min-h-[48px] rounded-xl font-black text-xs transition-all shadow-lg whitespace-nowrap leading-none cursor-pointer"
                         >
-                            <span className="xs:hidden">DEMO</span>
-                            <span className="hidden xs:inline"><span className="hidden sm:inline">150s </span>HQ DEMO</span>
+                            HQ DEMO
                         </button>
                     </div>
 
                     {/* Glowing Vector NellyAvatar Component - inline and always visible */}
-                    <div className="w-6 h-6 xs:w-8 xs:h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0 aspect-square">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-11 md:h-11 flex-shrink-0 aspect-square">
                         <NellyAvatar />
                     </div>
                 </div>
             </header>
 
-            <main className={`flex-1 p-4 md:p-8 pb-32 md:pb-16 relative z-10 flex flex-col w-full transition-all duration-300 ease-in-out ${
-                isSidebarCollapsed ? 'md:pl-8' : 'md:pl-[284px]'
+            <main className={`flex-1 px-4 py-6 sm:px-8 sm:py-8 pb-32 md:pb-16 relative z-10 flex flex-col w-full transition-all duration-300 ease-in-out ${
+                isSidebarCollapsed ? 'md:pl-8' : 'md:pl-[300px]'
             }`}>
                 <div className="flex-1 w-full max-w-full overflow-x-hidden">
                     <AnimatePresence mode="wait">

@@ -21,7 +21,7 @@ export const GlowButton = ({ children, variant = 'primary', className = '', ...p
                 filter: 'brightness(1.1)'
             }}
             whileTap={{ scale: 0.98, translateY: 0 }}
-            className={`px-6 py-3 rounded-xl font-bold transition-all relative overflow-hidden group ${variants[variant]} ${className}`}
+            className={`px-6 py-3 min-h-[48px] rounded-xl font-bold transition-all relative overflow-hidden group cursor-pointer ${variants[variant]} ${className}`}
             {...props}
         >
             <span className="relative z-10 flex items-center justify-center gap-2">{children}</span>

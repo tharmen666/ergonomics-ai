@@ -32,32 +32,17 @@ body {
   box-sizing: border-box;
 }
 
-/* Global Mobile Scaling < 600px */
-@media (max-width: 600px) {
+/* Global Mobile Touch Target & Container Constraints */
+@media (max-width: 640px) {
   html {
     font-size: 14px;
   }
 
-  /* Reduce padding globally on mobile */
-  .p-4,
-  .p-6,
-  .p-8 {
-    padding: 0.75rem !important;
-  }
-
-  /* Thumb-friendly buttons for mobile */
+  /* Thumb-friendly buttons and interactive elements for mobile */
   button, 
   .premium-button,
   .glow-button {
-    min-height: 48px !important;
-    padding: 12px 16px !important;
-  }
-
-  /* Executive Hub Card Lock */
-  .glass-ohs, .glass, .card {
-    width: 92vw !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
+    min-height: 48px;
   }
 }
 
