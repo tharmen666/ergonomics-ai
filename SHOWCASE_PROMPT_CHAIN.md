@@ -1,18 +1,22 @@
 # Google Case Study: Human-AI Collaboration & Agent Orchestration
 
-## Executive Summary: Human-in-the-Loop AI Orchestration in Industrial OHS Software
+## Executive Summary: Human-in-the-Loop AI Orchestration in Ergonomics Software
 
-This case study documents the end-to-end design, architectural iteration, context drift resolution, and successful deployment of **ErgoSafe Reborn V3**—a next-generation, industrial-grade Occupational Health and Safety (OHS) platform.
+This case study documents the end-to-end design, architectural iteration, context drift resolution, and successful deployment of **ErgoSafe Reborn V3**—a next-generation, **AI-Powered Ergonomics & Biomechanical Posture Platform**.
 
-Built through a high-velocity pair-programming partnership between a **Human AI Architect** and **Antigravity (Google DeepMind)**, ErgoSafe Reborn V3 combines rigorous regulatory compliance (Section 37 OHS Act 85 of 1993, ISO 45001, G.E.A.R. Compliance Ledger) with cutting-edge real-time AI assistance (Nelly AI Coach, multi-lingual voice synthesis, and local 3D biomechanical posture telemetry).
+> [!IMPORTANT]
+> **Domain Boundary Distinction**:  
+> While general physical safety infrastructure, legal auditing, and safety pack compliance engines are handled by our sister system **OHS Haven**, **ErgoSafe Reborn V3** is dedicated strictly to **Ergonomics AI**, real-time biomechanical posture telemetry, cognitive fatigue diagnostics, and workplace health optimization.
+
+Built through a high-velocity pair-programming partnership between a **Human AI Architect** and **Antigravity (Google DeepMind)**, ErgoSafe Reborn V3 combines ergonomic regulatory compliance (Section 37 OHS Act 85 of 1993, ISO 45001, G.E.A.R. Compliance Ledger) with cutting-edge real-time AI assistance (Nelly AI Coach, multi-lingual voice synthesis, and local 3D biomechanical posture telemetry).
 
 ```mermaid
 graph TD
-    A["Human AI Architect"] -->|"Steering & Prompt Engineering"| B["Antigravity AI Agent"]
+    A["Human AI Architect"] -->|"Domain Boundary Steering"| B["Antigravity AI Agent"]
     B -->|"Code Analysis & Refactoring"| C["ErgoSafe Reborn V3 Core"]
-    C --> D["Sidebar Navigation Controller (6 Modules)"]
+    C --> D["Sidebar Navigation Controller (6 Ergonomics Modules)"]
     C --> E["Responsive Mobile Viewport & Touch Targets"]
-    C --> F["Cognitive Handshake & Nelly AI Engine"]
+    C --> F["Cognitive Handshake & Nelly Ergonomics AI Engine"]
     C --> G["Vite Production Build (2,469 Modules)"]
     B -->|"Build Verification & Git Push"| H["Production Main Branch (Commit 8a47026)"]
 ```
@@ -37,7 +41,7 @@ The application architecture is structured into high-cohesion, low-coupling comp
 ## The 3-Stage Prompt Chain
 
 ### Stage 1: Architectural Calibration Prompt
-*Context: Establishing core OHS system requirements and laying down foundational modules.*
+*Context: Establishing core Ergonomics system requirements and laying down foundational modules.*
 
 > **Human Architect**:  
 > *"We are building ErgoSafe Reborn V3 for enterprise OHS stewardship. Integrate the G.E.A.R. Compliance Ledger, multi-lingual voice synthesis for Nelly, Forecourt Express Kiosk mode, and local 3D biomechanical posture telemetry. Ensure zero raw camera footage is stored to maintain POPI Act privacy compliance."*
@@ -46,13 +50,15 @@ The application architecture is structured into high-cohesion, low-coupling comp
 
 ---
 
-### Stage 2: Context Drift & Fatigue Diagnostic
-*Context: Over extended development across 2,400+ module transformations, accumulated CSS overrides and legacy route fragments led to layout compression on mobile screens and navigation bloat.*
+### Stage 2: Context Drift & Fatigue Diagnostic (Domain Bleed)
+*Context: Over extended development across 2,400+ module transformations, accumulated CSS overrides, legacy route fragments, and Domain Bleed led to layout compression and navigation bloat.*
 
-> **Symptom Analysis**:  
-> - Aggressive CSS `!important` rules in `index.css` compressed mobile padding to `0.75rem` (12px) and forced fixed `92vw` card widths.
-> - Stray, unauthorized navigation entries (e.g. legacy invoice portals) cluttered the sidebar navigation.
-> - The Cognitive Handshake modal container experienced aspect-ratio stretching on ultra-small viewports.
+> **Symptom Analysis & Domain Bleed**:  
+> - **Domain Bleed**: Context fatigue caused the AI agent to blur domain boundaries between OHS Haven (general safety auditing/invoices) and ErgoSafe Reborn V3 (ergonomics & posture platform), inadvertently adding stray navigation entries (e.g. legacy invoice portals).
+> - **CSS Overrides**: Aggressive CSS `!important` rules in `index.css` compressed mobile padding to `0.75rem` (12px) and forced fixed `92vw` card widths.
+> - **Modal Stretching**: The Cognitive Handshake modal container experienced aspect-ratio stretching on ultra-small viewports.
+
+- **Human AI Recovery Action**: Enforced strict domain boundaries, purging stray physical safety auditing routes and locking the sidebar to the 6 core Ergonomics system modules.
 
 ---
 
