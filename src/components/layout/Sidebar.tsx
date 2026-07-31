@@ -1,15 +1,15 @@
 import { useEffect } from 'react';
-import { Home, Activity, BarChart2, Settings, Bot, Monitor, X, ShieldAlert, LogOut } from 'lucide-react';
+import { Users, Award, ClipboardCheck, Bot, Truck, BarChart2, X, ShieldAlert, LogOut } from 'lucide-react';
 import { useNellyStore } from '../../store/nellyStore';
 import { useTenantStore } from '../../store/tenantStore';
 
 const navItems = [
-    { icon: Home, label: "Dashboard / Overview (OHS Command Center)", id: "dashboard" },
-    { icon: BarChart2, label: "G.E.A.R. Compliance Ledger", id: "gear" },
-    { icon: Bot, label: "Nelly AI Assistant & Biomechanical Analysis", id: "nelly" },
-    { icon: Monitor, label: "Forecourt Express Kiosk (Touchscreen Terminal)", id: "kiosk" },
-    { icon: Activity, label: "Training & Hazard Mitigation", id: "training" },
-    { icon: Settings, label: "System Settings & MCP Integration", id: "settings" },
+    { icon: Users, label: "HR & Compliance Dashboard", id: "hr" },
+    { icon: Award, label: "Ergonomics Training & Certification", id: "training" },
+    { icon: ClipboardCheck, label: "Daily Self-Risk Assessment (WFH / Desk)", id: "assessment" },
+    { icon: Bot, label: "Nelly Posture & Hazard Monitoring Engine", id: "nelly" },
+    { icon: Truck, label: "Shandray's Prizm Driver & Shift Fatigue Telemetry", id: "fatigue" },
+    { icon: BarChart2, label: "Analytics & Regulatory Audit Logs", id: "reports" },
 ];
 
 interface SidebarProps {
@@ -77,7 +77,7 @@ export const Sidebar = ({ activeTab, setActiveTab, isCollapsed, setIsCollapsed }
                                 setActiveTab(item.id);
                                 setIsCollapsed(true);
                             }}
-                            className={`w-full flex items-center gap-3 px-3 py-3 min-h-[48px] rounded-xl transition-all text-left cursor-pointer ${activeTab === item.id || (item.id === 'nelly' && activeTab === 'assessment') || (item.id === 'kiosk' && activeTab === 'checklist')
+                            className={`w-full flex items-center gap-3 px-3 py-3 min-h-[48px] rounded-xl transition-all text-left cursor-pointer ${activeTab === item.id
                                 ? "bg-ohs-blue text-white shadow-lg shadow-ohs-blue/20 font-bold"
                                 : "text-gray-300 hover:bg-white/5 hover:text-white"
                                 }`}

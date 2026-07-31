@@ -38,6 +38,8 @@ interface ComplianceState {
         resilience: number;
     };
     addWorkspaceException: (exception: string) => void;
+    logHazardEvent: (type: 'posture' | 'neck_strain' | 'break_interval' | string, description: string, severity?: 'RISK_ALERT' | 'BREACH') => void;
+    logVerifiedBBSIntervention: (type: string, hazardResolved: string, durationSeconds: number) => void;
     triggerBreach: (score: number, threshold: number, timestamp: string, reason?: string) => void;
     resetCompliance: () => void;
     resolveCase: (id: string) => void;
@@ -223,6 +225,83 @@ export const useComplianceStore = create<ComplianceState>((set, get) => {
                     },
                     ...state.logs
                 ]
+            };
+        }),
+
+        logHazardEvent: (type, description, severity = 'RISK_ALERT') => set((state) => {
+            useTenantStore.getState().recordUsage();
+            const newCase: EmployeeCase = {
+                id: `case-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+                companyId: useTenantStore.getState().companyId || 'COMP-001',
+                employeeName: 'Self (Nelly Ergonomic Engine)',
+                dept: 'Workstation Ergonomics',
+                score: severity === 'BREACH' ? 42 : 68,
+                status: severity,
+                managerName: 'Harvey Specter',
+                hazardTrigger: `[Nelly Engine ${type.toUpperCase()}] ${description}`,
+                createdAt: new Date().toISOString(),
+                timeframeHours: 24,
+                escalationState: 'routed_to_manager'
+            };
+
+            const newCases = [newCase, ...state.cases];
+            const newGear = calculateGEARMetrics(newCases);
+            const newLog = {
+                timestamp: new Date().toISOString(),
+                score: severity === 'BREACH' ? 35 : 65,
+                threshold: 80,
+                reason: `[Nelly Hazard ${type.toUpperCase()}] ${description}`
+            };
+
+            fireEvent('NON_COMPLIANCE_TRIGGER', {
+                score: newLog.score,
+                threshold: newLog.threshold,
+                timestamp: newLog.timestamp,
+                reason: newLog.reason
+            });
+
+            return {
+                cases: newCases,
+                gear: newGear,
+                status: severity === 'BREACH' ? 'BREACH' : state.status,
+                requiresEscalation: true,
+                logs: [newLog, ...state.logs]
+            };
+        }),
+
+        logVerifiedBBSIntervention: (type, hazardResolved, durationSeconds) => set((state) => {
+            useTenantStore.getState().recordUsage();
+            const timestamp = new Date().toISOString();
+            const userId = useTenantStore.getState().userId || 'EMP-7749';
+
+            const newCase: EmployeeCase = {
+                id: `bbs-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+                companyId: useTenantStore.getState().companyId || 'COMP-001',
+                employeeName: `Self (${userId})`,
+                dept: 'Behavior-Based Safety (BBS)',
+                score: 98,
+                status: 'COMPLIANT',
+                managerName: 'Harvey Specter',
+                hazardTrigger: `Verified BBS Micro-Intervention: Resolved [${hazardResolved}] via ${durationSeconds}s ${type}`,
+                createdAt: timestamp,
+                timeframeHours: 72,
+                escalationState: 'resolved'
+            };
+
+            const newLog = {
+                timestamp,
+                score: 98,
+                threshold: 80,
+                reason: `Verified BBS Micro-Intervention: Completed ${type} (${durationSeconds}s) for [${hazardResolved}]`
+            };
+
+            const newCases = [newCase, ...state.cases];
+            const newGear = calculateGEARMetrics(newCases);
+
+            return {
+                cases: newCases,
+                gear: newGear,
+                logs: [newLog, ...state.logs]
             };
         }),
 

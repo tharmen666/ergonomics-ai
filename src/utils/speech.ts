@@ -1,151 +1,145 @@
 export interface VoiceConfig {
     displayName: string;
     regionalAccent: string;
-    elevenLabsModel: string;
+    elevenLabsVoiceId: string;
     locale: string;
     audioPathPattern?: string;
 }
 
 export const VOICEOVER_ACCENT_MAP: Record<string, VoiceConfig> = {
     en: {
-        displayName: "English",
+        displayName: "South African English",
         regionalAccent: "en-ZA",
-        elevenLabsModel: "eleven_multilingual_v2",
+        elevenLabsVoiceId: "21m00Tcm4TlvDq8ikWAM", // Rachel / High-fidelity Natural Female
         locale: "en-ZA",
         audioPathPattern: "/assets/audio/en_za/scene{scene}.mp3"
     },
-    xh: {
-        displayName: "isiXhosa",
-        regionalAccent: "XH",
-        elevenLabsModel: "eleven_multilingual_v2",
-        locale: "xh-ZA",
-        audioPathPattern: "/assets/audio/xh/scene{scene}.mp3"
-    },
     zu: {
         displayName: "isiZulu",
-        regionalAccent: "ZU",
-        elevenLabsModel: "eleven_multilingual_v2",
+        regionalAccent: "zu-ZA",
+        elevenLabsVoiceId: "AZnzlk1XvdvUeBnXmlld", // Domi / Natural Warm Accent
         locale: "zu-ZA",
         audioPathPattern: "/assets/audio/zu/scene{scene}.mp3"
     },
+    xh: {
+        displayName: "isiXhosa",
+        regionalAccent: "xh-ZA",
+        elevenLabsVoiceId: "EXAVITQu4vr4xnSDxMaL", // Bella
+        locale: "xh-ZA",
+        audioPathPattern: "/assets/audio/xh/scene{scene}.mp3"
+    },
+    st: {
+        displayName: "Sesotho",
+        regionalAccent: "st-ZA",
+        elevenLabsVoiceId: "EXAVITQu4vr4xnSDxMaL",
+        locale: "st-ZA",
+        audioPathPattern: "/assets/audio/st/scene{scene}.mp3"
+    },
     sw: {
         displayName: "KiSwahili",
-        regionalAccent: "SW",
-        elevenLabsModel: "eleven_multilingual_v2",
+        regionalAccent: "sw-KE",
+        elevenLabsVoiceId: "ErXwobaYiN019PkySvjV", // Antoni / Swahili Natural
         locale: "sw-KE",
         audioPathPattern: "/assets/audio/sw/scene{scene}.mp3"
     },
     zh: {
-        displayName: "Mandarin",
-        regionalAccent: "ZH",
-        elevenLabsModel: "eleven_multilingual_v2",
+        displayName: "Mandarin Chinese",
+        regionalAccent: "zh-CN",
+        elevenLabsVoiceId: "pNInz6obpgDQGcFmaJgB", // Adam / Chinese Multilingual
         locale: "zh-CN",
         audioPathPattern: "/assets/audio/zh/scene{scene}.mp3"
+    },
+    de: {
+        displayName: "German",
+        regionalAccent: "de-DE",
+        elevenLabsVoiceId: "MF3mGyEYCl7XYWbV9V6O", // German Natural Female
+        locale: "de-DE",
+        audioPathPattern: "/assets/audio/de/scene{scene}.mp3"
     }
 };
 
-// Pre-buffered speech queue loop to eliminate speech latency
 let speechQueue: { text: string; lang: string; onEnd?: () => void }[] = [];
 
+/**
+ * High-Fidelity Human Voice Engine for Nelly AI Safety Companion
+ */
 export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => {
     if (!window.speechSynthesis) {
-        console.error("Speech Synthesis not supported");
+        console.warn("SpeechSynthesis not supported on this platform");
         return;
     }
 
     const synth = window.speechSynthesis;
-    
-    // Preempt and clean queue to guarantee instant transitions
     speechQueue = [{ text, lang, onEnd }];
 
     const playNext = () => {
-        if (speechQueue.length === 0) {
-            return;
-        }
+        if (speechQueue.length === 0) return;
 
         const currentItem = speechQueue.shift();
         if (!currentItem) return;
 
-        // Perform clean cancel before speaking next block
         synth.cancel();
 
         const utterance = new SpeechSynthesisUtterance(currentItem.text);
         const voices = synth.getVoices();
-        
-        let selectedVoice;
-        const config = VOICEOVER_ACCENT_MAP[currentItem.lang];
-        
-        // Custom search to enforce young, fluent female South African English voice
-        const findSAYouthFemale = () => {
-            // Priority 1: en-ZA female voice
-            const saFemale = voices.find(v => 
-                v.lang.toLowerCase() === 'en-za' && 
-                (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('zola') || v.name.toLowerCase().includes('nomsa'))
+        const config = VOICEOVER_ACCENT_MAP[currentItem.lang] || VOICEOVER_ACCENT_MAP['en'];
+
+        // Neural Voice Selector algorithm prioritizing warm female human personas
+        const findBestNeuralVoice = () => {
+            const localeTarget = config.locale.toLowerCase();
+            const langPrefix = currentItem.lang.toLowerCase();
+
+            // 1. Try exact locale match with neural/natural keywords
+            const exactNeural = voices.find(v => 
+                v.lang.toLowerCase().replace('_', '-') === localeTarget &&
+                (v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('online') || v.name.toLowerCase().includes('neural'))
             );
-            if (saFemale) return saFemale;
+            if (exactNeural) return exactNeural;
 
-            // Priority 2: any en-ZA voice
-            const saAny = voices.find(v => v.lang.toLowerCase() === 'en-za');
-            if (saAny) return saAny;
+            // 2. Try exact locale match any voice
+            const exactAny = voices.find(v => v.lang.toLowerCase().replace('_', '-') === localeTarget);
+            if (exactAny) return exactAny;
 
-            // Priority 3: high quality female English fallback
+            // 3. South African English fallback for ZA indigenous languages (zu, xh, st)
+            if (['zu', 'xh', 'st', 'en'].includes(langPrefix)) {
+                const saFemale = voices.find(v => 
+                    v.lang.toLowerCase().includes('en-za') && 
+                    (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('nomsa') || v.name.toLowerCase().includes('zola'))
+                );
+                if (saFemale) return saFemale;
+
+                const saAny = voices.find(v => v.lang.toLowerCase().includes('en-za'));
+                if (saAny) return saAny;
+            }
+
+            // 4. High quality English female natural fallback
             return voices.find(v => 
                 v.lang.toLowerCase().startsWith('en') && 
-                (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('salli') || v.name.toLowerCase().includes('joanna')) &&
+                (v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('salli') || v.name.toLowerCase().includes('samantha') || v.name.toLowerCase().includes('karen')) &&
                 !v.name.toLowerCase().includes('zira') &&
-                !v.name.toLowerCase().includes('david') &&
-                !v.name.toLowerCase().includes('hazel')
-            );
-        };
-
-        const findZAAuthenticFemale = (langCode: string) => {
-            const nativeFemale = voices.find(v => 
-                v.lang.toLowerCase() === `${langCode}-za` && 
-                (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google'))
-            );
-            if (nativeFemale) return nativeFemale;
-            
-            const nativeAny = voices.find(v => v.lang.toLowerCase().startsWith(langCode));
-            if (nativeAny) return nativeAny;
-            
-            return findSAYouthFemale();
-        };
-
-        if (currentItem.lang === 'en') {
-            selectedVoice = findSAYouthFemale();
-        } else if (currentItem.lang === 'zu' || currentItem.lang === 'xh') {
-            selectedVoice = findZAAuthenticFemale(currentItem.lang);
-        } else if (config) {
-            // Match regional locale
-            selectedVoice = voices.find(v => v.lang.toLowerCase() === config.locale.toLowerCase());
-        }
-
-        // Broad fallback if still not found
-        if (!selectedVoice) {
-            selectedVoice = voices.find(v => 
-                v.lang.toLowerCase().startsWith('en') && 
-                !v.name.toLowerCase().includes('zira') && 
                 !v.name.toLowerCase().includes('david')
             );
-        }
+        };
 
+        const selectedVoice = findBestNeuralVoice();
         if (selectedVoice) {
             utterance.voice = selectedVoice;
         }
 
-        // Enforce Nelly's voice parameters: natural, happy, vibrant cadence for each language
+        // Apply authentic human pitch, cadence, and warmth per locale
+        utterance.volume = 1.0;
         if (currentItem.lang === 'en') {
-            utterance.pitch = 1.05;
-            utterance.rate = 0.9;
-        } else if (currentItem.lang === 'zu' || currentItem.lang === 'xh') {
+            utterance.pitch = 1.04;
+            utterance.rate = 0.92;
+        } else if (['zu', 'xh', 'st'].includes(currentItem.lang)) {
             utterance.pitch = 1.02;
-            utterance.rate = 0.85; // Warm, natural cadence matching native South African female voiceovers
-        } else if (currentItem.lang === 'zh' || currentItem.lang === 'sw') {
+            utterance.rate = 0.88; // Warm, rhythmic South African female cadence
+        } else if (['zh', 'sw', 'de'].includes(currentItem.lang)) {
             utterance.pitch = 1.0;
-            utterance.rate = 0.9; // Fluent, clear, comfortable pace
+            utterance.rate = 0.90;
         } else {
-            utterance.pitch = 1.05;
-            utterance.rate = 0.9;
+            utterance.pitch = 1.04;
+            utterance.rate = 0.92;
         }
 
         utterance.onend = () => {
@@ -157,7 +151,6 @@ export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => 
             playNext();
         };
 
-        // Brief timeout ensures OS speech engine processes the cancel() cleanly before speak()
         setTimeout(() => {
             synth.speak(utterance);
         }, 30);
@@ -180,14 +173,13 @@ export const stopSpeaking = () => {
     speechQueue = [];
 };
 
-// Interactive root-level touch/click silent audio initialization breakout
+// Root-level interaction breakout to unlock speech engine on browser interaction
 if (typeof window !== 'undefined') {
     const unlockSpeech = () => {
         if (window.speechSynthesis) {
             const u = new SpeechSynthesisUtterance('');
             u.volume = 0;
             window.speechSynthesis.speak(u);
-            console.log("SpeechSynthesis unlocked successfully via interaction breakout.");
         }
         window.removeEventListener('click', unlockSpeech, true);
         window.removeEventListener('touchstart', unlockSpeech, true);

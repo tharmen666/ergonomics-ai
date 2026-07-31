@@ -9,5 +9,9 @@ export default defineConfig({
     reportCompressedSize: false,
     chunkSizeWarningLimit: 1000,
   },
+  server: {
+    port: 3000,
+    host: true
+  }
 });
 

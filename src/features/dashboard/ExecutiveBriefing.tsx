@@ -1,33 +1,318 @@
-import { motion } from 'framer-motion';
-import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp, Play, Volume2, VolumeX, Truck, Activity, Scale, Award, Eye, X } from 'lucide-react';
 import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
 import { LeanPerformanceRail } from '../../components/AI-Coach/LeanPerformanceRail';
-
 import { REASONABLY_PRACTICABLE_2026, RIGHT_TO_DISCONNECT_FRAMEWORK, FINANCIAL_PITCHES } from '../../logic/financePitches';
 import { useNellyStore } from '../../store/nellyStore';
+import { speak, stopSpeaking } from '../../utils/speech';
 
 export const ExecutiveBriefing = () => {
     const { language } = useNellyStore();
+    const [isNarrating, setIsNarrating] = useState(false);
+    const [activeVideoClip, setActiveVideoClip] = useState<string | null>(null);
+    const [activeTimestampLabel, setActiveTimestampLabel] = useState<string | null>(null);
+
+    const videoClips = [
+        {
+            timestamp: "00:15",
+            title: "Executive OHS & POPI Compliance Handshake",
+            desc: "Zero-knowledge encryption layer verifying employee digital identity & workplace pre-qualifications.",
+            tag: "Governance & POPI",
+            color: "text-blue-400",
+            borderColor: "border-blue-500/30",
+            bgGlow: "bg-blue-500/10"
+        },
+        {
+            timestamp: "01:15",
+            title: "Nelly Ergonomic Engine & Biomechanical Posture Alert",
+            desc: "Real-time C1-C7 cervical spine tilt telemetry, trapezius strain checks, and Tier 2 micro-stretch triggers.",
+            tag: "Ergonomics Engine",
+            color: "text-ohs-orange",
+            borderColor: "border-ohs-orange/30",
+            bgGlow: "bg-ohs-orange/10"
+        },
+        {
+            timestamp: "02:40",
+            title: "Shandray's Prizm Driver & Shift Fatigue Handshake",
+            desc: "Continuous driving-hour tracking, reaction drop scoring via /api/v1/fatigue-score, and mandatory rest lockouts.",
+            tag: "Driver Safety",
+            color: "text-amber-400",
+            borderColor: "border-amber-500/30",
+            bgGlow: "bg-amber-500/10"
+        },
+        {
+            timestamp: "04:10",
+            title: "Section 37 / OHS Legal Risk Mitigation & ROI Audit",
+            desc: "Statutory Section 8(1) compliance proof, CCMA constructive dismissal shield, and 142% productivity recovery.",
+            tag: "Legal & ROI",
+            color: "text-emerald-400",
+            borderColor: "border-emerald-500/30",
+            bgGlow: "bg-emerald-500/10"
+        }
+    ];
+
+    const fatigueGapClosures = [
+        {
+            gapTitle: "Driver Shift Fatigue & Micro-Sleep Risks",
+            riskLevel: "CRITICAL HIGHWAY LIABILITY",
+            solution: "Shandray's Prizm Alert Handshake (/api/v1/fatigue-score)",
+            details: "Monitors continuous driving hours (2h, 4.5h, 6.5h, 8h thresholds) and cognitive latency drops. Triggers mandatory 30-minute rest lockouts before micro-sleep incidents occur.",
+            statute: "Section 8(1) OHS Act 85 of 1993",
+            icon: Truck,
+            badgeColor: "bg-red-500/20 text-red-400 border-red-500/30"
+        },
+        {
+            gapTitle: "Neck Strain & C1-C7 Cervical Vertebrae Compression",
+            riskLevel: "CHRONIC MUSCULOSKELETAL INJURY",
+            solution: "Nelly Ergonomic Engine Real-Time Telemetry",
+            details: "Tracks forward neck tilt and shoulder shrugging in remote/WFH environments. Automatically logs posture breaches into the OHS hazard ledger and prompts Tier 2 micro-stretches.",
+            statute: "Ergonomics Regulations (GN R1589)",
+            icon: Activity,
+            badgeColor: "bg-amber-500/20 text-amber-400 border-amber-500/30"
+        },
+        {
+            gapTitle: "Digital Tethering & Psychosocial Exhaustion",
+            riskLevel: "CONSTRUCTIVE DISMISSAL & BURNOUT",
+            solution: "Fatigue-Gate & Right-to-Disconnect Lockouts",
+            details: "Restricts after-hours messaging access for off-duty personnel, defending employers against CCMA overtime claims while complying with global ISO 45003 standards.",
+            statute: "ISO 45003:2021 Psychosocial Health Standard",
+            icon: Scale,
+            badgeColor: "bg-blue-500/20 text-blue-400 border-blue-500/30"
+        }
+    ];
+
+    const toggleNarration = () => {
+        if (isNarrating) {
+            stopSpeaking();
+            setIsNarrating(false);
+        } else {
+            setIsNarrating(true);
+            const script = `Executive Briefing Narration Active. Welcome to ErgoSafe Reborn V3. This executive summary integrates live OHS Act Section 37 compliance telemetry with the Demo Video Feature. Core fatigue gaps, including long-distance driver shift fatigue, micro-sleep risks, and cervical neck strain, are systematically resolved via Shandray's Prizm Alert Handshake and Nelly's Ergonomic Engine. Our platform establishes a legally defensible audit trail under Section 8 clause 1 of the Occupational Health and Safety Act, reducing corporate liability and securing up to 142% return on driver safety investment.`;
+            speak(script, language, () => setIsNarrating(false));
+        }
+    };
+
     return (
-        <div className="p-4 md:p-10 max-w-7xl mx-auto space-y-8 mb-24 overflow-x-hidden">
+        <div className="p-4 md:p-10 max-w-7xl mx-auto space-y-8 mb-24 overflow-x-hidden font-sans">
+            {/* Header */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-gradient-to-r from-ohs-navy via-[#0c1322] to-slate-950 p-6 md:p-8 rounded-[2rem] border border-white/10 shadow-2xl relative overflow-hidden"
             >
-                <div>
-                    <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-white tracking-tighter">BOARDROOM <span className="text-ohs-orange">TRANSPARENCY HUB</span></h2>
-                    <p className="text-gray-400 font-medium mt-2 text-xs sm:text-sm md:text-base">Section 37/38 (OHS Act 85) Live Compliance Telemetry powered by <span className="text-ohs-orange font-bold">Google Gemini</span> & <span className="text-blue-400 font-bold">MongoDB MCP Server</span>.</p>
-                </div>
-                <div className="bg-red-500/10 border border-red-500/30 px-4 py-2 sm:px-6 sm:py-3 rounded-2xl flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
-                    <ShieldAlert className="text-red-500 animate-pulse shrink-0" size={24} />
-                    <div>
-                        <p className="text-[10px] sm:text-xs font-bold text-red-500 uppercase tracking-widest">Active Liability Risk</p>
-                        <p className="text-xs sm:text-sm font-medium text-white">Nominal</p>
+                <div className="space-y-2 max-w-3xl">
+                    <div className="flex items-center gap-2">
+                        <span className="text-[9px] font-black text-ohs-orange uppercase tracking-[0.2em] bg-ohs-orange/10 px-3 py-1 rounded-full border border-ohs-orange/20">
+                            Boardroom Executive Intelligence
+                        </span>
+                        <span className="text-[9px] font-bold text-gray-400 uppercase">Live Telemetry & Video Sync</span>
                     </div>
+                    <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+                        EXECUTIVE BRIEFING <span className="text-ohs-orange">& DEMO SYNC</span>
+                    </h1>
+                    <p className="text-gray-300 font-medium text-xs md:text-sm leading-relaxed">
+                        Section 37 & 38 OHS Act 85 Compliance Telemetry integrated with interactive video walkthroughs and Shandray's Prizm Alert driver fatigue engine.
+                    </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3">
+                    <button
+                        onClick={toggleNarration}
+                        className={`flex items-center gap-2.5 px-5 py-3.5 rounded-2xl font-black text-xs transition-all shadow-lg cursor-pointer ${
+                            isNarrating 
+                                ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' 
+                                : 'bg-ohs-orange hover:bg-yellow-400 text-ohs-navy shadow-ohs-orange/20'
+                        }`}
+                    >
+                        {isNarrating ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                        {isNarrating ? 'STOP AUDIO NARRATION' : 'NARRATE BRIEFING (NELLY VOICE)'}
+                    </button>
                 </div>
             </motion.div>
 
+            {/* DEMO VIDEO FEATURE INTEGRATION CARD */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-gradient-to-br from-slate-900 via-ohs-navy to-black border-2 border-ohs-orange/40 rounded-[2rem] p-6 md:p-8 shadow-2xl space-y-6"
+            >
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-5">
+                    <div>
+                        <div className="flex items-center gap-2 mb-1">
+                            <Play size={16} className="text-ohs-orange fill-ohs-orange animate-pulse" />
+                            <span className="text-xs font-black text-ohs-orange uppercase tracking-widest">
+                                Interactive Executive Demo Video Showcase
+                            </span>
+                        </div>
+                        <h2 className="text-xl md:text-2xl font-black text-white">
+                            Direct Video Clip Walkthrough & Timestamps
+                        </h2>
+                    </div>
+                    <p className="text-xs text-gray-400 max-w-md">
+                        Click any timestamp to view the feature demonstration. Linked directly with executive briefing evidence dossiers.
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {videoClips.map((clip) => (
+                        <button
+                            key={clip.timestamp}
+                            onClick={() => {
+                                setActiveVideoClip(clip.timestamp);
+                                setActiveTimestampLabel(`${clip.timestamp} - ${clip.title}`);
+                            }}
+                            className={`p-5 rounded-2xl border text-left transition-all cursor-pointer group flex flex-col justify-between ${clip.bgGlow} ${clip.borderColor} hover:border-ohs-orange/60 hover:scale-[1.02]`}
+                        >
+                            <div className="space-y-3">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-xs font-mono font-black bg-black/60 px-2.5 py-1 rounded-lg text-ohs-orange border border-ohs-orange/30">
+                                        {clip.timestamp}
+                                    </span>
+                                    <span className={`text-[9px] font-black uppercase tracking-wider ${clip.color}`}>
+                                        {clip.tag}
+                                    </span>
+                                </div>
+                                <h3 className="text-sm font-black text-white group-hover:text-ohs-orange transition-colors leading-tight">
+                                    {clip.title}
+                                </h3>
+                                <p className="text-[11px] text-gray-300 font-medium leading-relaxed">
+                                    {clip.desc}
+                                </p>
+                            </div>
+                            <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-bold text-ohs-orange">
+                                <span>PLAY DEMO CLIP</span>
+                                <Eye size={14} className="group-hover:translate-x-1 transition-transform" />
+                            </div>
+                        </button>
+                    ))}
+                </div>
+            </motion.div>
+
+            {/* DEMO VIDEO MODAL PLAYER */}
+            <AnimatePresence>
+                {activeVideoClip && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[99999] bg-black/90 backdrop-blur-xl flex items-center justify-center p-4"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, y: 20 }}
+                            animate={{ scale: 1, y: 0 }}
+                            exit={{ scale: 0.9, y: 20 }}
+                            className="bg-slate-900 border-2 border-ohs-orange/50 rounded-3xl max-w-4xl w-full p-6 md:p-8 space-y-6 relative shadow-[0_0_80px_rgba(249,168,37,0.3)]"
+                        >
+                            <button
+                                onClick={() => setActiveVideoClip(null)}
+                                className="absolute top-6 right-6 p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white cursor-pointer transition-colors"
+                            >
+                                <X size={20} />
+                            </button>
+
+                            <div className="space-y-1">
+                                <span className="text-[10px] font-black text-ohs-orange uppercase tracking-widest block">
+                                    Executive Video Player Sync
+                                </span>
+                                <h3 className="text-xl md:text-2xl font-black text-white">
+                                    {activeTimestampLabel}
+                                </h3>
+                            </div>
+
+                            <div className="w-full aspect-video bg-black rounded-2xl border border-white/10 overflow-hidden relative flex flex-col items-center justify-center p-6 text-center shadow-inner">
+                                <div className="absolute inset-0 bg-gradient-to-tr from-ohs-navy/80 via-black to-slate-900 opacity-90" />
+                                <div className="relative z-10 space-y-4 max-w-lg">
+                                    <div className="w-16 h-16 rounded-full bg-ohs-orange/20 border border-ohs-orange/50 text-ohs-orange flex items-center justify-center mx-auto animate-pulse">
+                                        <Play size={32} className="fill-ohs-orange ml-1" />
+                                    </div>
+                                    <h4 className="text-lg font-black text-white">
+                                        Playing Clip [{activeVideoClip}] Walkthrough
+                                    </h4>
+                                    <p className="text-xs text-gray-300 font-medium leading-relaxed">
+                                        Simulated high-resolution video stream demonstrating ErgoSafe Reborn V3 compliance telemetry, real-time biomechanical analysis, and Shandray's Prizm driver alert handshake.
+                                    </p>
+                                    <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden border border-white/10">
+                                        <motion.div
+                                            initial={{ width: '0%' }}
+                                            animate={{ width: '100%' }}
+                                            transition={{ duration: 8, ease: 'linear' }}
+                                            className="h-full bg-gradient-to-r from-ohs-orange to-emerald-400"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex justify-between items-center text-xs text-gray-400 pt-2 border-t border-white/10">
+                                <span>Source: HQ Technical Demo Engine</span>
+                                <button
+                                    onClick={() => setActiveVideoClip(null)}
+                                    className="bg-ohs-orange text-ohs-navy font-black px-4 py-2 rounded-xl hover:bg-yellow-400 transition-colors cursor-pointer"
+                                >
+                                    CLOSE VIDEO SYNC
+                                </button>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* FATIGUE GAP CLOSURE & LEGAL COMPLIANCE MATRIX */}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="bg-black/50 border border-white/10 rounded-[2rem] p-6 md:p-8 space-y-6"
+            >
+                <div>
+                    <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest block mb-1">
+                        Regulatory & Liability Protection Matrix
+                    </span>
+                    <h2 className="text-2xl font-black text-white">
+                        Fatigue Gap Closure & Statutory Compliance Highlights
+                    </h2>
+                    <p className="text-xs text-gray-400 mt-1">
+                        Direct mapping of corporate physical and cognitive fatigue risks to legally defensible ErgoSafe automation controls.
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {fatigueGapClosures.map((gap, idx) => (
+                        <div
+                            key={idx}
+                            className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col justify-between space-y-4 relative overflow-hidden group hover:border-ohs-orange/40 transition-all duration-300"
+                        >
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between">
+                                    <div className="p-3 rounded-xl bg-ohs-orange/10 text-ohs-orange border border-ohs-orange/20">
+                                        <gap.icon size={22} />
+                                    </div>
+                                    <span className={`text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border ${gap.badgeColor}`}>
+                                        {gap.riskLevel}
+                                    </span>
+                                </div>
+                                <h3 className="text-base font-black text-white leading-snug">
+                                    {gap.gapTitle}
+                                </h3>
+                                <div className="p-3 rounded-xl bg-black/60 border border-white/10 space-y-1">
+                                    <span className="text-[9px] font-black text-ohs-orange uppercase block">Solution Integration:</span>
+                                    <p className="text-xs font-bold text-white">{gap.solution}</p>
+                                </div>
+                                <p className="text-xs text-gray-300 leading-relaxed font-medium">
+                                    {gap.details}
+                                </p>
+                            </div>
+
+                            <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-bold text-emerald-400">
+                                <span>Statute: {gap.statute}</span>
+                                <Award size={14} />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </motion.div>
+
+            {/* Statutory Compliance Policy Cards */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {GlobalComplianceEngine.fetchUnifiedBriefing(language).map((policy, idx) => (
                     <motion.div
@@ -54,6 +339,7 @@ export const ExecutiveBriefing = () => {
                 ))}
             </div>
 
+            {/* Admin-Zero Status Banner */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -87,42 +373,6 @@ export const ExecutiveBriefing = () => {
                         <p className="text-gray-400 font-medium mt-2 leading-relaxed">
                             via Section 37 Compliance. Our continuous Ergo Stability engine is directly tracking and recuperating lost efficiency by aligning OHS legislation directly with overall human effectiveness metrics.
                         </p>
-                    </div>
-                </div>
-            </motion.div>
-
-            {/* ADK Matrix Layer */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25, duration: 0.3 }}
-                className="bg-black/40 border border-white/5 p-8 rounded-3xl mt-8"
-            >
-                <h3 className="text-xl font-black text-white mb-6">ADK Change Management Matrix</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="bg-white/5 p-6 rounded-2xl border border-white/10 relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 p-2 text-ohs-orange/20 group-hover:text-ohs-orange/40 transition-colors"><ShieldAlert size={48} /></div>
-                        <h4 className="text-ohs-orange font-black mb-2 uppercase tracking-widest text-xs relative z-10">Awareness</h4>
-                        <p className="text-sm text-gray-300 font-medium relative z-10 leading-relaxed mb-4">Semantic Firewall Mapping</p>
-                        <div className="bg-black/50 p-3 rounded-xl border border-ohs-orange/30">
-                            <p className="text-[10px] text-white italic">"Did you know? Under Section 37, 'Reasonable Steps' include the Handshake you just passed."</p>
-                        </div>
-                    </div>
-                    <div className="bg-white/5 p-6 rounded-2xl border border-white/10 relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 p-2 text-[#a2ff00]/20 group-hover:text-[#a2ff00]/40 transition-colors"><TrendingUp size={48} /></div>
-                        <h4 className="text-[#a2ff00] font-black mb-2 uppercase tracking-widest text-xs relative z-10">Desire</h4>
-                        <p className="text-sm text-gray-300 font-medium relative z-10 leading-relaxed mb-4">Kaizen Bonus Gamification</p>
-                        <div className="bg-black/50 p-3 rounded-xl border border-[#a2ff00]/30">
-                            <p className="text-[10px] text-white italic">"When you hit sub-10% latency, the Cyber-Lime celebration locks your productive streak multiplier."</p>
-                        </div>
-                    </div>
-                    <div className="bg-white/5 p-6 rounded-2xl border border-white/10 relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 p-2 text-blue-500/20 group-hover:text-blue-500/40 transition-colors"><FileText size={48} /></div>
-                        <h4 className="text-blue-500 font-black mb-2 uppercase tracking-widest text-xs relative z-10">Knowledge</h4>
-                        <p className="text-sm text-gray-300 font-medium relative z-10 leading-relaxed mb-4">Nelly Multilingual ISO Sync</p>
-                        <div className="bg-black/50 p-3 rounded-xl border border-blue-500/30">
-                            <p className="text-[10px] text-white italic">"Mastery Tip: ISO 45003 maps psychosocial risk—deploy training via isiZulu to cover non-native dynamics."</p>
-                        </div>
                     </div>
                 </div>
             </motion.div>
@@ -236,4 +486,3 @@ export const ExecutiveBriefing = () => {
         </div>
     );
 };
-

@@ -24,17 +24,18 @@ import { useTenantStore } from './store/tenantStore';
 import { TourManager } from './components/agent/TourManager';
 import { GEAROverlay } from './components/ui/GEAROverlay';
 import { GEARDashboardPage } from './features/dashboard/GEARDashboardPage';
+import { BBSCorrectiveActionOverlay } from './components/agent/BBSCorrectiveActionOverlay';
 
 function App() {
   const { companyId, isAdmin } = useTenantStore();
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState('hr');
 
   // Auto-switch tabs when auth role changes
   useEffect(() => {
     if (isAdmin) {
       setActiveTab('master-admin');
     } else if (companyId) {
-      setActiveTab('dashboard');
+      setActiveTab('hr');
     }
   }, [companyId, isAdmin]);
 
@@ -43,7 +44,7 @@ function App() {
   }
 
   if (activeTab === 'demo') {
-    return <HQTechnicalDemo onExit={() => setActiveTab('dashboard')} />;
+    return <HQTechnicalDemo onExit={() => setActiveTab('hr')} />;
   }
 
   return (
@@ -55,21 +56,24 @@ function App() {
 
         <NellyAvatar />
         <GEAROverlay />
+        <BBSCorrectiveActionOverlay />
 
         <main className="flex-1 pb-32 md:pb-10 pt-0 md:pt-4">
-          {activeTab === 'dashboard' && <DashboardPage />}
-          {activeTab === 'gear' && <GEARDashboardPage />}
-          {(activeTab === 'nelly' || activeTab === 'assessment') && <SelfAssessmentPage />}
-          {(activeTab === 'kiosk' || activeTab === 'checklist') && <ChecklistPage />}
+          {activeTab === 'hr' && <HRDashboard />}
           {activeTab === 'training' && <TrainingPage />}
+          {activeTab === 'assessment' && <SelfAssessmentPage />}
+          {activeTab === 'nelly' && <RiskyBehaviorsPage />}
+          {(activeTab === 'fatigue' || activeTab === 'gear') && <GEARDashboardPage />}
+          {activeTab === 'reports' && <ReportsPage />}
+
+          {/* Additional Utility Views */}
+          {activeTab === 'dashboard' && <DashboardPage />}
+          {(activeTab === 'kiosk' || activeTab === 'checklist') && <ChecklistPage />}
           {activeTab === 'settings' && <SettingsPage />}
           {activeTab === 'executive' && <ExecutiveBriefing />}
           {activeTab === 'risk' && <RiskPage />}
           {activeTab === 'team' && <TeamPage />}
-          {activeTab === 'risks' && <RiskyBehaviorsPage />}
-          {activeTab === 'hr' && <HRDashboard />}
           {activeTab === 'admin' && <AdminPortal />}
-          {activeTab === 'reports' && <ReportsPage />}
           {activeTab === 'master-admin' && <MasterAdminPortal />}
         </main>
 

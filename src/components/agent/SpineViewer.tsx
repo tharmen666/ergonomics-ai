@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Box, Cylinder } from '@react-three/drei';
 import * as THREE from 'three';
+import { useComplianceStore } from '../../store/complianceStore';
 
 const Vertebra = ({ position, rotation, color, scale, showDisc }: any) => {
     return (
@@ -143,6 +144,7 @@ const SpineModel = ({
 export const SpineViewer = () => {
     const [postureState, setPostureState] = useState<'good' | 'warning' | 'critical'>('good');
     const [selectedSection, setSelectedSection] = useState<'C1-C7' | 'T1-T12' | 'L1-L5' | null>(null);
+    const [activeScenario, setActiveScenario] = useState<string>('desk');
 
     // Watch for intervention triggers (like Nelly's neck pain notification)
     useEffect(() => {
@@ -156,6 +158,78 @@ export const SpineViewer = () => {
         window.addEventListener('TRIGGER_INTERVENTION', handleIntervention);
         return () => window.removeEventListener('TRIGGER_INTERVENTION', handleIntervention);
     }, []);
+
+    const scenarios = [
+        {
+            id: 'desk',
+            name: 'Ergonomic Desk',
+            state: 'good' as const,
+            desc: 'Neutral S-curve alignment, 90° elbow bend, monitor at eye level.'
+        },
+        {
+            id: 'bed',
+            name: 'Working from Bed',
+            state: 'critical' as const,
+            desc: 'High-risk lumbar collapse, severe forward pelvic tilt (>120°), and cervical overload.',
+            logDesc: 'High Risk Posture Event: Working from Bed (Severe Pelvic Tilt & Lumbar Instability)'
+        },
+        {
+            id: 'couch',
+            name: 'Couch Slouching',
+            state: 'warning' as const,
+            desc: 'Unsupported lumbar spine, forward slouch, thoracic kyphosis.',
+            logDesc: 'High Risk Posture Event: Couch Slouching (Lumbar Spine Unsupported)'
+        },
+        {
+            id: 'techneck',
+            name: 'Tech-Neck Flexion',
+            state: 'critical' as const,
+            desc: 'Cervical spine tilt >30°. Head weight on neck increases from 12 lbs to 60 lbs.',
+            logDesc: 'High Risk Posture Event: Severe Tech-Neck Flexion (>30° Cervical Load)'
+        },
+        {
+            id: 'monitor',
+            name: 'Monitor Mismatch',
+            state: 'warning' as const,
+            desc: 'Display height too low, causing continuous cervical extension strain.',
+            logDesc: 'High Risk Posture Event: Monitor Height Mismatch (Cervical Strain)'
+        }
+    ];
+
+    const applyScenario = (sc: typeof scenarios[0]) => {
+        setActiveScenario(sc.id);
+        setPostureState(sc.state);
+
+        if (sc.id === 'techneck' || sc.id === 'monitor') {
+            setSelectedSection('C1-C7');
+        } else if (sc.id === 'couch') {
+            setSelectedSection('T1-T12');
+        } else if (sc.id === 'bed') {
+            setSelectedSection('L1-L5');
+        } else {
+            setSelectedSection(null);
+        }
+
+        if (sc.state !== 'good' && sc.logDesc) {
+            useComplianceStore.getState().logHazardEvent('posture', sc.logDesc, sc.state === 'critical' ? 'BREACH' : 'RISK_ALERT');
+
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('TRIGGER_BBS_INTERVENTION', {
+                    detail: {
+                        type: 'postural-reset',
+                        duration: 15,
+                        hazard: sc.name,
+                        title: '15-Second Interactive Postural Reset Stretch',
+                        instructions: [
+                            'Stand up or adjust seating so hips rest firmly against backrest at 90 degrees.',
+                            'Tuck chin backward to align C1-C7 cervical spine over shoulders.',
+                            'Squeeze shoulder blades together for 5 seconds and release.'
+                        ]
+                    }
+                }));
+            }
+        }
+    };
 
     // Interactive Selector Calculations
     const sectionDetails = {
@@ -183,37 +257,61 @@ export const SpineViewer = () => {
         <div className="w-full h-full relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-b from-ohs-navy/90 to-black/95 flex flex-col md:flex-row p-4 md:p-6 gap-4">
             
             {/* 3D Canvas */}
-            <div className="flex-1 min-h-[220px] md:min-h-0 relative rounded-2xl bg-black/45 border border-white/5 overflow-hidden">
-                <Canvas camera={{ position: [0, 0, 7.5], fov: 40 }}>
-                    <ambientLight intensity={0.6} />
-                    <directionalLight position={[10, 10, 5]} intensity={1.2} color="#ffffff" />
-                    <directionalLight position={[-10, 0, -5]} intensity={0.6} color="#10b981" />
-                    <pointLight position={[0, 4, 0]} intensity={1.0} color="#f59e0b" />
-                    
-                    <SpineModel postureState={postureState} selectedSection={selectedSection} />
-                    
-                    <OrbitControls 
-                        enablePan={false} 
-                        minPolarAngle={Math.PI / 4} 
-                        maxPolarAngle={Math.PI / 2} 
-                        minDistance={4}
-                        maxDistance={12}
-                    />
-                </Canvas>
+            <div className="flex-1 min-h-[260px] md:min-h-0 relative rounded-2xl bg-black/45 border border-white/5 overflow-hidden flex flex-col justify-between p-3">
+                {/* Scenario Selector Tabs */}
+                <div className="z-10 flex flex-wrap gap-1.5 bg-black/60 backdrop-blur-md p-1.5 rounded-xl border border-white/10">
+                    {scenarios.map((sc) => (
+                        <button
+                            key={sc.id}
+                            onClick={() => applyScenario(sc)}
+                            className={`px-2.5 py-1.5 rounded-lg text-[9px] font-black uppercase transition-all cursor-pointer border ${
+                                activeScenario === sc.id
+                                    ? 'bg-ohs-orange text-ohs-navy border-ohs-orange shadow-md'
+                                    : 'bg-white/5 text-gray-300 border-white/5 hover:bg-white/10 hover:text-white'
+                            }`}
+                        >
+                            {sc.name}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="absolute inset-0">
+                    <Canvas camera={{ position: [0, 0, 7.5], fov: 40 }}>
+                        <ambientLight intensity={0.6} />
+                        <directionalLight position={[10, 10, 5]} intensity={1.2} color="#ffffff" />
+                        <directionalLight position={[-10, 0, -5]} intensity={0.6} color="#10b981" />
+                        <pointLight position={[0, 4, 0]} intensity={1.0} color="#f59e0b" />
+                        
+                        <SpineModel postureState={postureState} selectedSection={selectedSection} />
+                        
+                        <OrbitControls 
+                            enablePan={false} 
+                            minPolarAngle={Math.PI / 4} 
+                            maxPolarAngle={Math.PI / 2} 
+                            minDistance={4}
+                            maxDistance={12}
+                        />
+                    </Canvas>
+                </div>
 
                 {/* Status Indicator overlay */}
-                <div className="absolute top-3 left-3 z-10 pointer-events-none">
-                    <div className="bg-black/60 backdrop-blur-md border border-white/10 px-3.5 py-2 rounded-xl flex items-center gap-2">
-                        <span className={`w-2.5 h-2.5 rounded-full animate-pulse ${
-                            postureState === 'good' ? 'bg-[#10b981] shadow-[0_0_10px_#10b981]' : 
-                            postureState === 'warning' ? 'bg-amber-400 shadow-[0_0_10px_#f59e0b]' : 
-                            'bg-red-500 shadow-[0_0_10px_#ef4444]'
-                        }`} />
-                        <span className="text-[10px] font-black uppercase tracking-wider text-slate-100">
-                            {postureState === 'good' ? 'NEUTRAL S-CURVE' : 
-                             postureState === 'warning' ? 'POSTURAL DEVIATION' : 
-                             'CRITICAL TIER 2 LOAD'}
-                        </span>
+                <div className="z-10 pointer-events-none mt-auto">
+                    <div className="bg-black/70 backdrop-blur-md border border-white/10 p-3 rounded-xl space-y-1 max-w-xs">
+                        <div className="flex items-center gap-2">
+                            <span className={`w-2.5 h-2.5 rounded-full animate-pulse ${
+                                postureState === 'good' ? 'bg-[#10b981] shadow-[0_0_10px_#10b981]' : 
+                                postureState === 'warning' ? 'bg-amber-400 shadow-[0_0_10px_#f59e0b]' : 
+                                'bg-red-500 shadow-[0_0_10px_#ef4444]'
+                            }`} />
+                            <span className="text-[10px] font-black uppercase tracking-wider text-slate-100">
+                                {postureState === 'good' ? 'NEUTRAL S-CURVE' : 
+                                 postureState === 'warning' ? 'POSTURAL DEVIATION' : 
+                                 'HIGH RISK UNSAFE SETUP'}
+                            </span>
+                        </div>
+                        <p className="text-[9px] text-gray-300 font-medium">
+                            {scenarios.find(s => s.id === activeScenario)?.desc}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -223,7 +321,7 @@ export const SpineViewer = () => {
                 
                 {/* Regional Vertebrae Selector Buttons */}
                 <div className="space-y-2">
-                    <h4 className="text-[9px] font-black uppercase text-gray-500 tracking-[0.2em] mb-1">Interactive Selectors</h4>
+                    <h4 className="text-[9px] font-black uppercase text-gray-500 tracking-[0.2em] mb-1">Vertebral Regions</h4>
                     <div className="grid grid-cols-3 md:grid-cols-1 gap-2">
                         {(['C1-C7', 'T1-T12', 'L1-L5'] as const).map((sec) => {
                             const isSelected = selectedSection === sec;
@@ -231,7 +329,7 @@ export const SpineViewer = () => {
                                 <button
                                     key={sec}
                                     onClick={() => setSelectedSection(selectedSection === sec ? null : sec)}
-                                    className={`py-2 px-3 rounded-xl text-left transition-all duration-300 border font-black text-[10px] flex flex-col justify-between ${
+                                    className={`py-2 px-3 rounded-xl text-left transition-all duration-300 border font-black text-[10px] flex flex-col justify-between cursor-pointer ${
                                         isSelected 
                                             ? 'bg-gradient-to-r from-teal-900/60 to-emerald-950/60 border-[#10b981]/50 text-slate-100 shadow-[0_0_15px_rgba(16,185,129,0.15)]'
                                             : 'bg-white/5 border-white/5 text-gray-400 hover:text-white hover:bg-white/10 hover:border-white/10'
@@ -274,21 +372,21 @@ export const SpineViewer = () => {
                         </div>
                     ) : (
                         <div className="text-center py-4">
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Diagnostic State</p>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Biomechanical HUD</p>
                             <p className="text-[9px] text-gray-500 font-medium leading-normal px-2">
-                                Click a vertebrae region selector above to synchronize biomechanical stress calculations and receive corrective posture advice.
+                                Click a vertebrae region selector or posture scenario above to calculate spinal stress and log hazard telemetry.
                             </p>
                         </div>
                     )}
                 </div>
 
-                {/* Posture State Toggle Controls for Demo verification */}
+                {/* Posture State Toggle Controls */}
                 <div className="flex justify-between gap-1 p-1 bg-white/5 rounded-xl border border-white/5">
                     {(['good', 'warning', 'critical'] as const).map((state) => (
                         <button
                             key={state}
                             onClick={() => setPostureState(state)}
-                            className={`flex-1 text-[9px] font-black py-1.5 rounded-lg uppercase transition-all duration-300 ${
+                            className={`flex-1 text-[9px] font-black py-1.5 rounded-lg uppercase transition-all duration-300 cursor-pointer ${
                                 postureState === state
                                     ? state === 'good' ? 'bg-[#10b981] text-ohs-navy shadow-[0_0_10px_rgba(16,185,129,0.3)]'
                                     : state === 'warning' ? 'bg-amber-400 text-ohs-navy shadow-[0_0_10px_rgba(245,158,11,0.3)]'

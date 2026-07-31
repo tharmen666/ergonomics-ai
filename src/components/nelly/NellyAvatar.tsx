@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNellyStore } from '../../store/nellyStore';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
+import { useComplianceStore } from '../../store/complianceStore';
 import { useAgentLog } from '../../store/agentLogStore';
 import { NellyCore } from './NellyCore';
 import { NellyInterface } from './NellyInterface';
@@ -61,6 +62,10 @@ export const NellyAvatar = () => {
         const isFirstAid = firstAidKeywords.some(word => lowCase.includes(word));
         const isSymptom = symptomKeywords.some(word => lowCase.includes(word));
         const isNeckPain = lowCase.includes('neck pain') || lowCase.includes('cervical') || lowCase.includes('neck');
+        const isLowerBack = lowCase.includes('lower back') || lowCase.includes('lumbar') || lowCase.includes('back pain') || lowCase.includes('spine');
+        const isWrist = lowCase.includes('wrist') || lowCase.includes('carpal') || lowCase.includes('hand pain') || lowCase.includes('mouse');
+        const isEye = lowCase.includes('eye') || lowCase.includes('headache') || lowCase.includes('screen') || lowCase.includes('vision');
+        const isOHSQuery = lowCase.includes('ohs') || lowCase.includes('iso') || lowCase.includes('section 37') || lowCase.includes('compliance') || lowCase.includes('legal') || lowCase.includes('act');
 
         if (isEmerg) {
             setIsEmergency(true);
@@ -68,6 +73,7 @@ export const NellyAvatar = () => {
             const response = "EMERGENCY PROTOCOL ACTIVATED. Halted all non-critical processes. Contacting onsite first-aid immediately.";
             setGuidance(response);
             addLog('Nelly', response);
+            useComplianceStore.getState().logHazardEvent('emergency', 'Acute Medical/Injury Emergency Protocol Triggered', 'BREACH');
             speak(response, language);
         } else if (isFirstAid) {
             const currentLang = (language as Language) || 'en';
@@ -82,20 +88,68 @@ export const NellyAvatar = () => {
             const response = "WARNING: Cervical load or neck pain detected. Activating the Cervical Orthopedic Micro-Circuit. Please perform a Tier 2 micro-stretch immediately to reduce vertebrae load.";
             setGuidance(response);
             addLog('Nelly', response);
+            useComplianceStore.getState().logHazardEvent('neck_strain', 'Cervical Load & Vertebrae Strain Warning - Tier 2 Micro-Stretch Triggered', 'RISK_ALERT');
             speak(response, language);
             
-            // Trigger Tier 2 break automatically
             const { fatigueLevel } = useFatigueStore.getState();
             if (fatigueLevel !== 'high') {
-                // Auto trigger micro-stretch via custom window event or direct DOM/state trigger if accessible
                 window.dispatchEvent(new CustomEvent('TRIGGER_INTERVENTION', { detail: 'micro-stretch' }));
             }
             setTimeout(() => setSpeaking(false), 8000);
+        } else if (isLowerBack) {
+            setSpeaking(true);
+            const response = "ERGONOMIC TRIAGE: Lower back / lumbar strain detected. ACTION: Slide your hips fully backward against the seat backrest, ensure lumbar support cushion engages L1-L5 vertebrae, and plant feet flat on the floor at 90 degrees.";
+            setGuidance(response);
+            addLog('Nelly', response);
+            useComplianceStore.getState().logHazardEvent('posture', 'Lower Back / Lumbar Discomfort Reported (L1-L5 Strain Risk)', 'RISK_ALERT');
+            speak(response, language);
+            setTimeout(() => setSpeaking(false), 8000);
+        } else if (isWrist) {
+            setSpeaking(true);
+            const response = "ERGONOMIC TRIAGE: Wrist & forearm fatigue detected. ACTION: Keep forearms parallel to the floor at 90-100 degrees, avoid resting wrists on hard desk edges while typing, and perform 5 wrist extensor stretches.";
+            setGuidance(response);
+            addLog('Nelly', response);
+            useComplianceStore.getState().logHazardEvent('posture', 'Wrist Fatigue & Carpal Compression Risk Reported', 'RISK_ALERT');
+            speak(response, language);
+            setTimeout(() => setSpeaking(false), 8000);
+        } else if (isEye) {
+            setSpeaking(true);
+            const response = "ERGONOMIC TRIAGE: Visual fatigue / digital eye strain reported. ACTION: Apply the 20-20-20 rule. Look at an object 20 feet away for 20 seconds. Ensure monitor distance is arm's length (50-70cm) with zero glare.";
+            setGuidance(response);
+            addLog('Nelly', response);
+            useComplianceStore.getState().logHazardEvent('break_interval', 'Digital Eye Strain & Visual Fatigue Reported', 'RISK_ALERT');
+
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('TRIGGER_BBS_INTERVENTION', {
+                    detail: {
+                        type: 'ocular-cervical-glide',
+                        duration: 20,
+                        hazard: 'Digital Eye Strain & Ocular Exhaustion',
+                        title: '20-Second Ocular & Cervical Glide Reset',
+                        instructions: [
+                            'Look away from display and focus on an object 20 feet away.',
+                            'Blink slowly 5 times to re-lubricate corneal surface.',
+                            'Slowly tilt head toward left shoulder for 5s, then right shoulder for 5s.'
+                        ]
+                    }
+                }));
+            }
+
+            speak(response, language);
+            setTimeout(() => setSpeaking(false), 8000);
+        } else if (isOHSQuery) {
+            setSpeaking(true);
+            const response = "OHS COMPLIANCE ADVISORY: ErgoSafe Reborn enforces South African OHS Act Section 8(1) Duty of Care and Section 37 Liability Protection. Workstation risk assessments, break telemetry, and ISO 45003 psychosocial audits are logged continuously into the zero-knowledge dossier.";
+            setGuidance(response);
+            addLog('Nelly', response);
+            speak(response, language);
+            setTimeout(() => setSpeaking(false), 9000);
         } else if (isSymptom) {
             setSpeaking(true);
             const response = "WARNING: Nerve compression detected. Tingling in the extremities is a high-risk indicator for Carpal Tunnel Syndrome or cervical compression. ACTION: Please stand up, perform 5 shoulder rolls, and avoid repetitive clicking for the next 10 minutes. I am logging this as a Section 37 Liability Risk.";
             setGuidance(response);
             addLog('Nelly', response);
+            useComplianceStore.getState().logHazardEvent('posture', 'Nerve Compression & Extreme Musculoskeletal Strain Risk (Section 37)', 'BREACH');
             speak(response, language);
             setTimeout(() => setSpeaking(false), 8000);
         } else {
@@ -103,12 +157,12 @@ export const NellyAvatar = () => {
             setSpeaking(true);
             addLog('Nelly', "Analyzing telemetry for Stewardship AI response...");
             
-            // 3-second fail-safe timer
             setTimeout(() => {
                 const efficiency = fatigueLevel === 'nominal' ? 100 : (fatigueLevel === 'warning' ? 85 : 75);
                 let response = "";
                 if (efficiency < 85) {
                     response = `Based on your rising Muda % to ${100 - efficiency}% (Context), please perform a 20-20-20 eye reset and posture adjustment immediately (Action) to restore your 100% O.H.E. rating and Section 37 compliance status (Result).`;
+                    useComplianceStore.getState().logHazardEvent('break_interval', `Break Interval Exceeded: Muda ${100 - efficiency}% digital fatigue alert`, 'RISK_ALERT');
                 } else {
                     response = `Stewardship Protocol Active: OHS standards verified for your query. Maintaining continuous compliance telemetry.`;
                 }
