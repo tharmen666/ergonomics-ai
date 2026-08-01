@@ -213,7 +213,7 @@ export const GEARDashboardPage = () => {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-gradient-to-br from-slate-900 via-ohs-navy to-slate-950 border-2 border-ohs-orange/40 rounded-3xl p-4 sm:p-6 shadow-2xl relative overflow-hidden"
+                className="w-full overflow-hidden p-4 min-w-0 bg-gradient-to-br from-slate-900 via-ohs-navy to-slate-950 border-2 border-ohs-orange/40 rounded-3xl sm:p-6 shadow-2xl relative"
             >
                 <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sm:gap-6 mb-6 pb-6 border-b border-white/10">
                     <div className="flex items-center gap-4 max-w-full overflow-hidden">
@@ -227,9 +227,9 @@ export const GEARDashboardPage = () => {
                                 </span>
                                 <span className="text-[9px] font-bold text-gray-400 uppercase truncate">Endpoint: /api/v1/fatigue-score</span>
                             </div>
-                            <h2 className="text-base sm:text-lg lg:text-xl font-black text-white tracking-tight mt-1 truncate">
+                            <h1 className="text-xl sm:text-2xl font-bold truncate max-w-full leading-tight text-white tracking-tight mt-1">
                                 Driver & Shift Cognitive Fatigue Telemetry
-                            </h2>
+                            </h1>
                         </div>
                     </div>
                     

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Layout } from './components/layout/Layout';
 import { NellyAvatar } from './components/nelly/NellyAvatar';
 import { DashboardPage } from './features/dashboard/DashboardPage';
@@ -28,16 +28,7 @@ import { BBSCorrectiveActionOverlay } from './components/agent/BBSCorrectiveActi
 
 function App() {
   const { companyId, isAdmin } = useTenantStore();
-  const [activeTab, setActiveTab] = useState('hr');
-
-  // Auto-switch tabs when auth role changes
-  useEffect(() => {
-    if (isAdmin) {
-      setActiveTab('master-admin');
-    } else if (companyId) {
-      setActiveTab('hr');
-    }
-  }, [companyId, isAdmin]);
+  const [activeTab, setActiveTab] = useState(() => isAdmin ? 'master-admin' : 'hr');
 
   if (!companyId && !isAdmin) {
     return <TenantLogin />;
@@ -76,7 +67,6 @@ function App() {
           {activeTab === 'admin' && <AdminPortal />}
           {activeTab === 'master-admin' && <MasterAdminPortal />}
         </main>
-
       </Layout>
     </div>
   );

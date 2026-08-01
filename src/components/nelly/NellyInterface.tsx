@@ -4,29 +4,39 @@ import { ReasoningLog } from '../agent/ReasoningLog';
 import { translations, Language } from '../../utils/translations';
 import { VOICEOVER_ACCENT_MAP } from '../../utils/speech';
 
+import { useNellyStore } from '../../store/nellyStore';
+
 interface NellyInterfaceProps {
-    language: Language;
-    setLanguage: (lang: Language) => void;
-    onClose: () => void;
-    onTour: () => void;
-    onStewardship: () => void;
-    userInput: string;
-    setUserInput: (input: string) => void;
-    onSend: () => void;
-    isSpeaking: boolean;
+    language?: Language;
+    setLanguage?: (lang: Language) => void;
+    onClose?: () => void;
+    onTour?: () => void;
+    onStewardship?: () => void;
+    userInput?: string;
+    setUserInput?: (input: string) => void;
+    onSend?: () => void;
+    isSpeaking?: boolean;
 }
 
 export const NellyInterface = ({
-    language,
-    setLanguage,
-    onClose,
-    onTour,
-    onStewardship,
-    userInput,
-    setUserInput,
-    onSend,
-    isSpeaking
+    language: propLang,
+    setLanguage: propSetLang,
+    onClose = () => {},
+    onTour = () => {},
+    onStewardship = () => {},
+    userInput: propUserInput,
+    setUserInput: propSetUserInput,
+    onSend: propOnSend,
+    isSpeaking: propIsSpeaking
 }: NellyInterfaceProps) => {
+    const store = useNellyStore();
+    const language = propLang || store.language || 'en';
+    const setLanguage = propSetLang || store.setLanguage;
+    const isSpeaking = propIsSpeaking !== undefined ? propIsSpeaking : store.isSpeaking;
+    const userInput = propUserInput !== undefined ? propUserInput : (store.currentGuidance || '');
+    const setUserInput = propSetUserInput || ((val: string) => store.setGuidance(val));
+    const onSend = propOnSend || (() => {});
+
     const activeLang: Language = (language && translations[language]) ? language : 'en';
 
     return (

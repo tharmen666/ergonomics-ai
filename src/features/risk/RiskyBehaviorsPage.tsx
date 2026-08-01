@@ -4,6 +4,7 @@ import { GlowButton } from '../../components/ui/GlowButton';
 import { AlertTriangle, CheckCircle, Activity } from 'lucide-react';
 import { speak } from '../../utils/speech';
 import { SpineViewer } from '../../components/agent/SpineViewer';
+import { NellyInterface } from '../../components/nelly/NellyInterface';
 
 export const RiskyBehaviorsPage = () => {
     const { setGuidance, setSpeaking, setMood, addRecommendation } = useNellyStore();
@@ -24,7 +25,7 @@ export const RiskyBehaviorsPage = () => {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="space-y-4"
+                className="space-y-6"
             >
                 <div>
                     <span className="text-[10px] font-black text-red-400 uppercase tracking-[0.3em] block mb-1">Biomechanical Hazard Engine</span>
@@ -37,24 +38,30 @@ export const RiskyBehaviorsPage = () => {
                     </p>
                 </div>
 
-                {/* 3D Spine Viewer Integration */}
-                <div className="bg-black/40 border border-white/10 rounded-3xl p-4 sm:p-6 space-y-4">
-                    <div className="flex items-center gap-3">
-                        <div className="p-2.5 bg-red-500/20 rounded-xl text-red-400 border border-red-500/30">
-                            <Activity size={22} />
+                {/* 3D Spine Viewer & Conversational Nelly Interface Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2 bg-black/40 border border-white/10 rounded-3xl p-4 sm:p-6 space-y-4">
+                        <div className="flex items-center gap-3">
+                            <div className="p-2.5 bg-red-500/20 rounded-xl text-red-400 border border-red-500/30">
+                                <Activity size={22} />
+                            </div>
+                            <div>
+                                <h3 className="text-base sm:text-lg font-black text-white">
+                                    Live 3D Spine Alignment & Hazard Telemetry
+                                </h3>
+                                <p className="text-xs text-gray-400 font-medium">
+                                    Test posture scenarios (Bed, Couch, Tech-Neck, Monitor Mismatch) to trigger real-time hazard log alerts.
+                                </p>
+                            </div>
                         </div>
-                        <div>
-                            <h3 className="text-base sm:text-lg font-black text-white">
-                                Live 3D Spine Alignment & Hazard Telemetry
-                            </h3>
-                            <p className="text-xs text-gray-400 font-medium">
-                                Test posture scenarios (Bed, Couch, Tech-Neck, Monitor Mismatch) to trigger real-time hazard log alerts.
-                            </p>
+
+                        <div className="w-full h-[400px] md:h-[450px]">
+                            <SpineViewer />
                         </div>
                     </div>
 
-                    <div className="w-full h-[400px] md:h-[450px]">
-                        <SpineViewer />
+                    <div className="lg:col-span-1 flex flex-col justify-center">
+                        <NellyInterface />
                     </div>
                 </div>
 
