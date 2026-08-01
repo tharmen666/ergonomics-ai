@@ -176,24 +176,24 @@ export const GEARDashboardPage = () => {
 
     return (
         <div className="space-y-6 sm:space-y-8 pb-20 font-sans max-w-full overflow-hidden">
-            {/* Header */}
-            <div>
+            {/* Page Main Header */}
+            <div className="w-full max-w-full overflow-hidden p-4 min-w-0 flex flex-col justify-center bg-black/30 rounded-2xl border border-white/5">
                 <span className="text-[10px] font-black text-ohs-orange uppercase tracking-[0.3em] block mb-1">Enterprise Analytics</span>
-                <h1 className="text-2xl sm:text-3xl md:text-4xl font-black gradient-heading tracking-tight truncate">
+                <h2 className="text-base sm:text-lg md:text-xl font-bold tracking-tight text-white leading-snug break-words max-w-full">
                     G.E.A.R. SYSTEM DASHBOARD
-                </h1>
-                <p className="text-xs sm:text-sm text-slate-100 font-bold text-shadow-sm truncate">
+                </h2>
+                <p className="mt-1 text-xs text-slate-300 block truncate">
                     Continuous Governance, Efficiency, Accountability, and Resilience Telemetry
                 </p>
             </div>
 
             {/* Quick Summary Banner */}
-            <div className="bg-gradient-to-r from-ohs-navy via-ohs-navy to-black border border-white/10 rounded-3xl p-4 sm:p-6 relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-                <div className="space-y-1 min-w-0 flex-1">
-                    <h3 className="text-base sm:text-lg font-black text-slate-100 flex items-center gap-2 truncate">
+            <div className="w-full max-w-full overflow-hidden min-w-0 bg-gradient-to-r from-ohs-navy via-ohs-navy to-black border border-white/10 rounded-3xl p-4 sm:p-6 relative flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div className="space-y-1 min-w-0 flex-1 max-w-full overflow-hidden">
+                    <h3 className="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2 truncate">
                         <CheckCircle2 className="text-emerald-400 shrink-0" size={20} /> Overall Compliance Rating
                     </h3>
-                    <p className="text-xs text-slate-300 font-medium text-shadow-sm">All administrative zero-knowledge audits are up-to-date and registered on-chain.</p>
+                    <p className="mt-1 text-xs text-slate-300 block truncate">All administrative zero-knowledge audits are up-to-date and registered on-chain.</p>
                 </div>
                 <div className="flex gap-4 w-full md:w-auto">
                     <div className="flex-1 md:flex-none bg-white/5 px-4 sm:px-6 py-3 rounded-2xl border border-white/5 text-center">
@@ -213,23 +213,23 @@ export const GEARDashboardPage = () => {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="w-full overflow-hidden p-4 min-w-0 bg-gradient-to-br from-slate-900 via-ohs-navy to-slate-950 border-2 border-ohs-orange/40 rounded-3xl sm:p-6 shadow-2xl relative"
+                className="w-full max-w-full overflow-hidden p-4 min-w-0 flex flex-col justify-center bg-gradient-to-br from-slate-900 via-ohs-navy to-slate-950 border-2 border-ohs-orange/40 rounded-3xl sm:p-6 shadow-2xl relative"
             >
-                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sm:gap-6 mb-6 pb-6 border-b border-white/10">
-                    <div className="flex items-center gap-4 max-w-full overflow-hidden">
+                <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sm:gap-6 mb-6 pb-6 border-b border-white/10 w-full max-w-full overflow-hidden min-w-0">
+                    <div className="flex items-center gap-4 max-w-full overflow-hidden min-w-0 flex-1">
                         <div className="p-3 bg-ohs-orange/15 rounded-2xl border border-ohs-orange/30 text-ohs-orange shrink-0">
                             <Truck size={26} />
                         </div>
-                        <div className="min-w-0 flex-1">
+                        <div className="min-w-0 flex-1 max-w-full overflow-hidden">
                             <div className="flex flex-wrap items-center gap-2">
                                 <span className="text-[9px] font-black text-ohs-orange uppercase tracking-widest bg-ohs-orange/10 px-2 py-0.5 rounded-full border border-ohs-orange/20 truncate">
                                     Shandray's Prizm Alert Handshake
                                 </span>
-                                <span className="text-[9px] font-bold text-gray-400 uppercase truncate">Endpoint: /api/v1/fatigue-score</span>
+                                <span className="mt-1 text-xs text-slate-300 block truncate uppercase font-mono">Endpoint: /api/v1/fatigue-score</span>
                             </div>
-                            <h1 className="text-xl sm:text-2xl font-bold truncate max-w-full leading-tight text-white tracking-tight mt-1">
+                            <h2 className="text-base sm:text-lg md:text-xl font-bold tracking-tight text-white leading-snug break-words max-w-full mt-1">
                                 Driver & Shift Cognitive Fatigue Telemetry
-                            </h1>
+                            </h2>
                         </div>
                     </div>
                     
