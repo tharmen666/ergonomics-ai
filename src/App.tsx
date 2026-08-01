@@ -49,7 +49,7 @@ function App() {
         <GEAROverlay />
         <BBSCorrectiveActionOverlay />
 
-        <main className="flex-1 pb-32 md:pb-10 pt-0 md:pt-4">
+        <div className="w-full min-h-full">
           {activeTab === 'hr' && <HRDashboard />}
           {activeTab === 'training' && <TrainingPage />}
           {activeTab === 'assessment' && <SelfAssessmentPage />}
@@ -66,7 +66,7 @@ function App() {
           {activeTab === 'team' && <TeamPage />}
           {activeTab === 'admin' && <AdminPortal />}
           {activeTab === 'master-admin' && <MasterAdminPortal />}
-        </main>
+        </div>
       </Layout>
     </div>
   );
