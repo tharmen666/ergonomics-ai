@@ -17,9 +17,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'cmd /c "npm run dev"',
+    command: 'cmd /c "npx vite preview --port 5173"',
     url: 'http://localhost:5173',
     reuseExistingServer: true,
-    timeout: 120000,
+    timeout: 30000,
   },
 });
