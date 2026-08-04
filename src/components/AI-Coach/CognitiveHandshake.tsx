@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { BrainCircuit, Target, ShieldAlert } from 'lucide-react';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 import { useNellyStore } from '../../store/nellyStore';
+import { HandshakeCardHeader } from '../common/HandshakeCardHeader';
 
 export const CognitiveHandshake = () => {
     const { cognitiveHandshakePassed, showCognitiveHandshake, setShowCognitiveHandshake, passCognitiveHandshake, failCognitiveHandshake, warnCognitiveHandshake } = useFatigueStore();
@@ -157,10 +158,13 @@ export const CognitiveHandshake = () => {
                     animate={{ opacity: 1 }}
                     className="fixed inset-0 z-[99000] flex items-center justify-center bg-black/95 backdrop-blur-md font-sans text-white p-4 overflow-y-auto"
                 >
-                    <div className="w-full max-w-md aspect-square max-h-[85vh] m-auto flex flex-col items-center justify-center text-center bg-slate-900/90 border border-slate-800 p-6 sm:p-8 rounded-[2rem] shadow-[0_0_50px_rgba(249,168,37,0.15)] relative">
-                        <BrainCircuit className="text-ohs-orange mb-2" size={32} />
-                        <h2 className="text-xl font-black mb-1.5 gradient-heading tracking-tight">COGNITIVE HANDSHAKE</h2>
-                        <p className="text-[11px] text-slate-100 font-bold text-shadow-sm px-4">Click the targets as quickly as possible to calibrate your baseline latency.</p>
+                    <div className="w-full max-w-md aspect-square max-h-[85vh] m-auto flex flex-col items-center justify-center bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-[2rem] shadow-[0_0_50px_rgba(249,168,37,0.15)] relative">
+                        <HandshakeCardHeader
+                            title="COGNITIVE HANDSHAKE"
+                            subtext="Click the targets as quickly as possible to calibrate your baseline latency."
+                            icon={<BrainCircuit size={28} />}
+                            className="p-3 sm:p-4 mb-2"
+                        />
 
                         <div className="mt-3 flex justify-center gap-1.5">
                             {Array.from({ length: TOTAL_TARGETS }).map((_, i) => (

@@ -60,7 +60,7 @@ export const HRDashboard = () => {
     };
 
     return (
-        <div className="p-6 md:p-10 max-w-7xl mx-auto pb-32 relative">
+        <div className="p-4 sm:p-6 max-w-7xl mx-auto pb-32 relative space-y-6 font-sans">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}

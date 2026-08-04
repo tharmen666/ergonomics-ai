@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, Lock, CheckCircle2 } from 'lucide-react';
+import { HandshakeCardHeader } from '../../components/common/HandshakeCardHeader';
 
 export const PrivacyHandshake = () => {
     const [isVisible, setIsVisible] = useState(false);
@@ -31,18 +32,16 @@ export const PrivacyHandshake = () => {
                         initial={{ scale: 0.9, y: 50 }}
                         animate={{ scale: 1, y: 0 }}
                         exit={{ scale: 0.9, y: 50 }}
-                        className="bg-black border border-white/10 p-8 rounded-3xl max-w-xl shadow-[0_0_50px_rgba(249,168,37,0.15)] relative overflow-hidden"
+                        className="bg-black border border-white/10 p-6 sm:p-8 rounded-3xl max-w-xl shadow-[0_0_50px_rgba(249,168,37,0.15)] relative overflow-hidden"
                     >
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-ohs-orange to-yellow-500" />
 
-                        <div className="flex items-center gap-4 mb-6">
-                            <div className="bg-ohs-orange/10 p-4 rounded-2xl">
-                                <ShieldCheck className="text-ohs-orange" size={36} />
-                            </div>
-                            <div>
-                                <h2 className="text-2xl font-black text-white">YOUR DATA IS YOUR SHIELD</h2>
-                                <p className="text-gray-400 font-bold uppercase tracking-widest text-xs mt-1">Privacy-First OHS Architecture</p>
-                            </div>
+                        <div className="mb-6">
+                            <HandshakeCardHeader
+                                title="YOUR DATA IS YOUR SHIELD"
+                                subtext="Privacy-First OHS Architecture & Zero-Knowledge Stewardship Authority"
+                                icon={<ShieldCheck size={32} />}
+                            />
                         </div>
 
                         <div className="space-y-4 mb-8">

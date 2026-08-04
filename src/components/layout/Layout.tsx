@@ -39,9 +39,9 @@ export const Layout = memo(({ children, activeTab, setActiveTab }: LayoutProps) 
                 setIsCollapsed={setSidebarCollapsed}
             />
 
-            {/* Unified Premium Responsive Header Grid */}
-            <header className={`sticky top-0 z-40 bg-ohs-navy/90 backdrop-blur-md flex items-center justify-between gap-2 px-4 py-3 sm:px-6 md:px-8 border-b border-white/10 relative z-50 transition-all duration-300 ease-in-out ${
-                isSidebarCollapsed ? 'md:pl-8' : 'md:pl-[300px]'
+            {/* Unified Sticky Premium Responsive Header Grid */}
+            <header className={`sticky top-0 z-40 bg-ohs-navy/95 backdrop-blur-xl border-b border-white/10 flex items-center justify-between gap-2 px-4 py-3 sm:px-6 md:px-8 transition-all duration-300 ease-in-out ${
+                isSidebarCollapsed ? 'md:ml-0' : 'md:ml-[280px]'
             }`}>
                 {/* Left Branding and Navigation Toggle */}
                 <div className="flex items-center gap-3 flex-shrink-0">
@@ -97,10 +97,10 @@ export const Layout = memo(({ children, activeTab, setActiveTab }: LayoutProps) 
                 </div>
             </header>
 
-            <main className={`flex-1 px-4 py-6 sm:px-8 sm:py-8 pb-32 md:pb-16 relative z-10 flex flex-col w-full transition-all duration-300 ease-in-out ${
-                isSidebarCollapsed ? 'md:pl-8' : 'md:pl-[300px]'
+            <main className={`flex-1 px-4 sm:px-6 md:px-8 pt-6 pb-32 md:pb-16 relative z-10 flex flex-col w-full transition-all duration-300 ease-in-out ${
+                isSidebarCollapsed ? 'md:ml-0' : 'md:ml-[280px]'
             }`}>
-                <div className="flex-1 w-full max-w-full overflow-x-hidden">
+                <div className="flex-1 w-full max-w-7xl mx-auto overflow-x-hidden">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={activeTab}
@@ -108,7 +108,7 @@ export const Layout = memo(({ children, activeTab, setActiveTab }: LayoutProps) 
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ duration: 0.3 }}
-                            className="max-w-7xl mx-auto w-full"
+                            className="w-full"
                         >
                             {children}
                         </motion.div>

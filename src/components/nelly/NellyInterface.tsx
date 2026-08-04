@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { X, Globe, PlayCircle, ShieldCheck, Minimize2 } from 'lucide-react';
 import { ReasoningLog } from '../agent/ReasoningLog';
 import { translations, Language } from '../../utils/translations';
-import { VOICEOVER_ACCENT_MAP } from '../../utils/speech';
+import { VOICEOVER_ACCENT_MAP, speak } from '../../utils/speech';
 
 import { useNellyStore } from '../../store/nellyStore';
 
@@ -72,10 +72,15 @@ export const NellyInterface = ({
             <div className="flex items-center justify-between gap-1 mb-4 bg-slate-950 border border-slate-800 p-1.5 rounded-xl">
                 {Object.entries(VOICEOVER_ACCENT_MAP).map(([code, config]) => {
                     const isSelected = activeLang === code;
+                    const langCode = code as Language;
                     return (
                         <button
                             key={code}
-                            onClick={() => setLanguage(code as Language)}
+                            onClick={() => {
+                                setLanguage(langCode);
+                                const intro = translations[langCode]?.nelly_intro || translations['en'].nelly_intro;
+                                speak(intro, langCode);
+                            }}
                             className={`flex-1 text-[10px] font-black py-2 px-1 rounded-lg cursor-pointer transition-all duration-300 ${
                                 isSelected 
                                     ? 'bg-gradient-to-r from-teal-400 to-emerald-400 text-slate-950 shadow-[0_0_15px_rgba(45,212,191,0.4)]' 

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Users, Award, ClipboardCheck, Bot, Truck, BarChart2, X, ShieldAlert, LogOut } from 'lucide-react';
+import { Users, Award, ClipboardCheck, CheckSquare, Bot, Truck, FileText, BarChart2, X, ShieldAlert, LogOut } from 'lucide-react';
 import { useNellyStore } from '../../store/nellyStore';
 import { useTenantStore } from '../../store/tenantStore';
 
@@ -7,8 +7,10 @@ const navItems = [
     { icon: Users, label: "HR & Compliance Dashboard", id: "hr" },
     { icon: Award, label: "Ergonomics Training & Certification", id: "training" },
     { icon: ClipboardCheck, label: "Daily Self-Risk Assessment (WFH / Desk)", id: "assessment" },
+    { icon: CheckSquare, label: "Daily Workstation Safety Checklist", id: "checklist" },
     { icon: Bot, label: "Nelly Posture & Hazard Monitoring Engine", id: "nelly" },
     { icon: Truck, label: "Shandray's Prizm Driver & Shift Fatigue Telemetry", id: "fatigue" },
+    { icon: FileText, label: "Assessment PDF Invoices & Billing", id: "invoices" },
     { icon: BarChart2, label: "Analytics & Regulatory Audit Logs", id: "reports" },
 ];
 

@@ -84,6 +84,9 @@ export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => 
         const voices = synth.getVoices();
         const config = VOICEOVER_ACCENT_MAP[currentItem.lang] || VOICEOVER_ACCENT_MAP['en'];
 
+        // Set native language locale tag (e.g. 'zu-ZA', 'sw-KE', 'zh-CN', 'de-DE', 'xh-ZA', 'st-ZA', 'en-ZA')
+        utterance.lang = config.locale || config.regionalAccent;
+
         // Neural Voice Selector algorithm prioritizing warm female human personas
         const findBestNeuralVoice = () => {
             const localeTarget = config.locale.toLowerCase();

@@ -26,6 +26,8 @@ import { GEAROverlay } from './components/ui/GEAROverlay';
 import { GEARDashboardPage } from './features/dashboard/GEARDashboardPage';
 import { BBSCorrectiveActionOverlay } from './components/agent/BBSCorrectiveActionOverlay';
 
+import { InvoicePage } from './features/invoices/InvoicePage';
+
 function App() {
   const { companyId, isAdmin } = useTenantStore();
   const [activeTab, setActiveTab] = useState(() => isAdmin ? 'master-admin' : 'hr');
@@ -54,12 +56,13 @@ function App() {
           {activeTab === 'training' && <TrainingPage />}
           {activeTab === 'assessment' && <SelfAssessmentPage />}
           {activeTab === 'nelly' && <RiskyBehaviorsPage />}
-          {(activeTab === 'fatigue' || activeTab === 'gear') && <GEARDashboardPage />}
+          {(activeTab === 'fatigue' || activeTab === 'gear' || activeTab === 'telemetry' || activeTab === 'driver-telemetry') && <GEARDashboardPage />}
+          {(activeTab === 'invoices' || activeTab === 'invoice') && <InvoicePage />}
           {activeTab === 'reports' && <ReportsPage />}
 
           {/* Additional Utility Views */}
           {activeTab === 'dashboard' && <DashboardPage />}
-          {(activeTab === 'kiosk' || activeTab === 'checklist') && <ChecklistPage />}
+          {(activeTab === 'kiosk' || activeTab === 'checklist' || activeTab === 'daily-checklist') && <ChecklistPage />}
           {activeTab === 'settings' && <SettingsPage />}
           {activeTab === 'executive' && <ExecutiveBriefing />}
           {activeTab === 'risk' && <RiskPage />}

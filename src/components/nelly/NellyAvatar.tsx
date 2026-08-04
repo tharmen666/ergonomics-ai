@@ -39,14 +39,13 @@ export const NellyAvatar = () => {
         };
     }, []);
 
-    // Speak intro greeting whenever Nelly is expanded
+    // Speak intro greeting whenever Nelly is expanded or language changes
     useEffect(() => {
         if (isNellyExpanded) {
             const intro = translations[language as Language]?.nelly_intro || translations['en'].nelly_intro;
             speak(intro, language);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isNellyExpanded]);
+    }, [isNellyExpanded, language]);
 
     const handleSend = () => {
         if (!userInput.trim()) return;
