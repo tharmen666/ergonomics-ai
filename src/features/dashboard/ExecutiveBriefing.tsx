@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp, Play, Volume2, VolumeX, Truck, Activity, Scale, Award, Eye, X } from 'lucide-react';
+import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp, Play, Volume2, VolumeX, Truck, Activity, Scale, Award, Eye, X, Download } from 'lucide-react';
 import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
 import { LeanPerformanceRail } from '../../components/AI-Coach/LeanPerformanceRail';
 import { REASONABLY_PRACTICABLE_2026, RIGHT_TO_DISCONNECT_FRAMEWORK, FINANCIAL_PITCHES } from '../../logic/financePitches';
@@ -220,37 +220,43 @@ export const ExecutiveBriefing = () => {
                                 </h3>
                             </div>
 
-                            <div className="w-full aspect-video bg-black rounded-2xl border border-white/10 overflow-hidden relative flex flex-col items-center justify-center p-6 text-center shadow-inner">
-                                <div className="absolute inset-0 bg-gradient-to-tr from-ohs-navy/80 via-black to-slate-900 opacity-90" />
-                                <div className="relative z-10 space-y-4 max-w-lg">
-                                    <div className="w-16 h-16 rounded-full bg-ohs-orange/20 border border-ohs-orange/50 text-ohs-orange flex items-center justify-center mx-auto animate-pulse">
-                                        <Play size={32} className="fill-ohs-orange ml-1" />
-                                    </div>
-                                    <h4 className="text-lg font-black text-white">
-                                        Playing Clip [{activeVideoClip}] Walkthrough
-                                    </h4>
-                                    <p className="text-xs text-gray-300 font-medium leading-relaxed">
-                                        Simulated high-resolution video stream demonstrating ErgoSafe Reborn V3 compliance telemetry, real-time biomechanical analysis, and Shandray's Prizm driver alert handshake.
-                                    </p>
-                                    <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden border border-white/10">
-                                        <motion.div
-                                            initial={{ width: '0%' }}
-                                            animate={{ width: '100%' }}
-                                            transition={{ duration: 8, ease: 'linear' }}
-                                            className="h-full bg-gradient-to-r from-ohs-orange to-emerald-400"
-                                        />
-                                    </div>
-                                </div>
+                            <div className="w-full aspect-video bg-black rounded-2xl border border-white/10 overflow-hidden relative shadow-inner">
+                                <video
+                                    className="w-full h-full object-contain"
+                                    src="/assets/ErgoSafe_Reborn_V3_Demo.mp4"
+                                    controls
+                                    autoPlay
+                                    playsInline
+                                    preload="auto"
+                                    poster="/assets/nelly-steward-final.png"
+                                    title="ErgoSafe Reborn V3 Executive Briefing Video Stream"
+                                />
                             </div>
 
-                            <div className="flex justify-between items-center text-xs text-gray-400 pt-2 border-t border-white/10">
-                                <span>Source: HQ Technical Demo Engine</span>
-                                <button
-                                    onClick={() => setActiveVideoClip(null)}
-                                    className="bg-ohs-orange text-ohs-navy font-black px-4 py-2 rounded-xl hover:bg-yellow-400 transition-colors cursor-pointer"
-                                >
-                                    CLOSE VIDEO SYNC
-                                </button>
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400 pt-2 border-t border-white/10">
+                                <span>Source: HQ Technical Demo Engine (Standalone File: ErgoSafe_Reborn_V3_Demo.mp4)</span>
+                                <div className="flex items-center gap-3 w-full sm:w-auto">
+                                    <button
+                                        onClick={() => {
+                                            const link = document.createElement('a');
+                                            link.href = '/assets/ErgoSafe_Reborn_V3_Demo.mp4';
+                                            link.download = 'ErgoSafe_Reborn_V3_Demo.mp4';
+                                            document.body.appendChild(link);
+                                            link.click();
+                                            document.body.removeChild(link);
+                                        }}
+                                        className="bg-gradient-to-r from-ohs-orange to-yellow-400 text-ohs-navy font-black px-4 py-2 rounded-xl hover:scale-105 transition-all cursor-pointer flex items-center justify-center gap-2"
+                                    >
+                                        <Download size={14} />
+                                        <span>💾 Download MP4 Demo Video</span>
+                                    </button>
+                                    <button
+                                        onClick={() => setActiveVideoClip(null)}
+                                        className="bg-white/10 text-white font-bold px-4 py-2 rounded-xl hover:bg-white/20 transition-colors cursor-pointer"
+                                    >
+                                        CLOSE VIDEO SYNC
+                                    </button>
+                                </div>
                             </div>
                         </motion.div>
                     </motion.div>
