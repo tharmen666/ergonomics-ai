@@ -43,7 +43,7 @@ export const NellyInterface = ({
         <motion.div
             initial={{ x: 50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            className="w-[92vw] max-w-[350px] bg-ohs-navy/95 backdrop-blur-2xl border border-white/10 rounded-2xl p-4 shadow-2xl pointer-events-auto"
+            className="w-[calc(100vw-2rem)] max-w-[340px] sm:max-w-[350px] bg-ohs-navy/95 backdrop-blur-2xl border border-white/10 rounded-2xl p-4 shadow-2xl pointer-events-auto max-h-[80vh] overflow-y-auto"
         >
             {/* Header */}
             <div className="flex items-center justify-between mb-2 border-b border-white/5 pb-2">

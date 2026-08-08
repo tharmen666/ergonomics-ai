@@ -61,13 +61,14 @@ export const DashboardPage = () => {
                 </div>
             </motion.div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2 space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
+                <div className="lg:col-span-2 space-y-6 max-w-full">
                     {/* Handshake Prompt */}
                     {!cognitiveHandshakePassed && (
                         <motion.div 
                             initial={{ scale: 0.95, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
+                            className="w-full relative z-20"
                         >
                             <HandshakeCardHeader
                                 title="Daily Cognitive Sync Required"
@@ -76,7 +77,7 @@ export const DashboardPage = () => {
                                 actionButton={
                                     <button 
                                         onClick={() => setShowCognitiveHandshake(true)} 
-                                        className="premium-button whitespace-nowrap bg-ohs-orange text-ohs-navy px-6 py-3 rounded-xl font-black text-xs sm:text-sm shadow-[0_10px_30px_rgba(249,168,37,0.4)] hover:scale-105 transition-all duration-300 active:scale-95 flex items-center justify-center gap-2"
+                                        className="premium-button w-full sm:w-auto whitespace-nowrap bg-ohs-orange text-ohs-navy px-6 py-3.5 rounded-xl font-black text-xs sm:text-sm shadow-[0_10px_30px_rgba(249,168,37,0.4)] hover:scale-105 transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 cursor-pointer relative z-30 min-h-[48px]"
                                     >
                                         <ShieldCheck size={18} />
                                         INITIATE HANDSHAKE
