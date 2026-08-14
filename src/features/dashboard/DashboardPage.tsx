@@ -1,5 +1,5 @@
 import { ActivityChart, ComplianceRing } from './Charts';
-import { Users, AlertCircle, FileText, Target, Shield, Lock } from 'lucide-react';
+import { Users, AlertCircle, FileText, Target, Shield, Lock, Download, Film } from 'lucide-react';
 import { DailySafetyChecklist } from './DailySafetyChecklist';
 import { WorkspaceAudit } from './WorkspaceAudit';
 import { useState } from 'react';
@@ -9,16 +9,29 @@ import { SafetyStreaks } from '../../components/AI-Coach/SafetyStreaks';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 import { SpineViewer } from '../../components/agent/SpineViewer';
 import { HandshakeCardHeader } from '../../components/common/HandshakeCardHeader';
+import { DemoVideoModal } from '../../components/demo/DemoVideoModal';
 
 export const DashboardPage = () => {
     const { cognitiveHandshakePassed, setShowCognitiveHandshake } = useFatigueStore();
+    const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+
+    const handleDownloadMp4 = () => {
+        const link = document.createElement('a');
+        link.href = '/assets/ErgoSafe_Reborn_V3_Demo.mp4';
+        link.download = 'ErgoSafe_Reborn_V3_Demo.mp4';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
-        <div className="space-y-6 pb-20">
+        <div className="space-y-6 sm:space-y-8 pb-20 font-sans">
+            <DemoVideoModal isOpen={isDemoModalOpen} onClose={() => setIsDemoModalOpen(false)} />
             {/* Executive Stewardship Banner */}
             <motion.div 
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="glass-ohs p-6 rounded-[2rem] border-l-8 border-ohs-orange flex flex-col sm:flex-row sm:items-center justify-between gap-4 overflow-hidden relative"
+                className="glass-ohs p-4 md:p-6 rounded-[2rem] border-l-8 border-ohs-orange flex flex-col sm:flex-row sm:items-center justify-between gap-4 overflow-hidden relative"
             >
                 <div className="absolute top-0 right-0 w-64 h-64 bg-ohs-orange/5 rounded-full blur-3xl -mr-32 -mt-32" />
                 <div className="relative z-10">
@@ -26,10 +39,10 @@ export const DashboardPage = () => {
                         <ShieldCheck size={16} className="text-ohs-orange" />
                         <span className="text-xs font-bold text-ohs-orange tracking-wider uppercase">Stewardship Authority Standard</span>
                     </div>
-                    <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">Enterprise Safety Operations</h1>
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight">Enterprise Safety Operations</h1>
                     <p className="text-gray-400 text-xs sm:text-sm font-medium mt-1">Section 8(1) OHS Act 85 of 1993 & ISO 45001/45003 Real-Time Ergonomic Telemetry</p>
                 </div>
-                <div className="flex gap-4 relative z-10 justify-start sm:justify-end">
+                <div className="flex flex-wrap gap-2 sm:gap-4 relative z-10 justify-start sm:justify-end">
                     <div className="text-left sm:text-right">
                         <p className="text-[9px] font-black text-gray-500 uppercase">Board Compliance</p>
                         <p className="text-lg sm:text-xl font-black text-glow-emerald text-[#10b981]">100%</p>
@@ -61,13 +74,14 @@ export const DashboardPage = () => {
                 </div>
             </motion.div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2 space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
+                <div className="lg:col-span-2 space-y-6 max-w-full">
                     {/* Handshake Prompt */}
                     {!cognitiveHandshakePassed && (
                         <motion.div 
                             initial={{ scale: 0.95, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
+                            className="w-full relative z-20"
                         >
                             <HandshakeCardHeader
                                 title="Daily Cognitive Sync Required"
@@ -76,7 +90,7 @@ export const DashboardPage = () => {
                                 actionButton={
                                     <button 
                                         onClick={() => setShowCognitiveHandshake(true)} 
-                                        className="premium-button whitespace-nowrap bg-ohs-orange text-ohs-navy px-6 py-3 rounded-xl font-black text-xs sm:text-sm shadow-[0_10px_30px_rgba(249,168,37,0.4)] hover:scale-105 transition-all duration-300 active:scale-95 flex items-center justify-center gap-2"
+                                        className="premium-button w-full sm:w-auto whitespace-nowrap bg-ohs-orange text-ohs-navy px-6 py-3.5 rounded-xl font-black text-xs sm:text-sm shadow-[0_10px_30px_rgba(249,168,37,0.4)] hover:scale-105 transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 cursor-pointer relative z-30 min-h-[48px]"
                                     >
                                         <ShieldCheck size={18} />
                                         INITIATE HANDSHAKE
@@ -96,21 +110,46 @@ export const DashboardPage = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="glass-ohs p-6 rounded-[2rem] border border-white/10 relative overflow-hidden"
+                        className="glass-ohs p-6 rounded-[2rem] border border-white/10 relative overflow-hidden space-y-4"
                     >
-                        <h3 className="text-lg font-black text-white tracking-tight uppercase mb-4 flex items-center gap-2">
-                            <div className="w-2 h-2 bg-ohs-orange rounded-full" />
-                            System Walkthrough Demonstration
-                        </h3>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div>
+                                <h3 className="text-lg font-black text-white tracking-tight uppercase flex items-center gap-2">
+                                    <div className="w-2.5 h-2.5 bg-ohs-orange rounded-full animate-pulse" />
+                                    System Walkthrough & Executive Demo
+                                </h3>
+                                <p className="text-xs text-gray-400 font-medium mt-0.5">
+                                    90-Second Walkthrough covering Section 8(1) OHS Act 85, Cognitive Handshake, 3D Posture Telemetry & Section 37 Dossier Automation.
+                                </p>
+                            </div>
+
+                            <div className="flex flex-wrap items-center gap-2 shrink-0">
+                                <button
+                                    onClick={() => setIsDemoModalOpen(true)}
+                                    className="bg-ohs-orange/20 hover:bg-ohs-orange/30 border border-ohs-orange/50 text-ohs-orange px-4 py-2.5 rounded-xl font-black text-xs transition-all flex items-center gap-2 cursor-pointer shadow-md"
+                                >
+                                    <Film size={16} />
+                                    <span>OPEN TELEPROMPTER MODAL</span>
+                                </button>
+                                <button
+                                    onClick={handleDownloadMp4}
+                                    className="bg-gradient-to-r from-ohs-orange to-yellow-400 text-ohs-navy px-4 py-2.5 rounded-xl font-black text-xs transition-all shadow-lg hover:scale-105 active:scale-95 flex items-center gap-2 cursor-pointer"
+                                >
+                                    <Download size={16} />
+                                    <span>💾 Download MP4 Demo Video</span>
+                                </button>
+                            </div>
+                        </div>
+
                         <div className="relative w-full rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(249,168,37,0.15)] border border-white/10 bg-black aspect-video">
                             <video
                                 className="w-full h-full object-contain"
-                                src="/assets/recording.mp4"
+                                src="/assets/ErgoSafe_Reborn_V3_Demo.mp4"
                                 controls
                                 preload="auto"
                                 playsInline
                                 poster="/assets/nelly-steward-final.png"
-                                title="ErgoSafe Reborn Walkthrough"
+                                title="ErgoSafe Reborn V3 Walkthrough"
                             />
                         </div>
                     </motion.div>

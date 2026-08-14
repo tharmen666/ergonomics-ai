@@ -6,7 +6,7 @@ import { useNellyStore } from '../../store/nellyStore';
 import { HandshakeCardHeader } from '../common/HandshakeCardHeader';
 
 export const CognitiveHandshake = () => {
-    const { cognitiveHandshakePassed, showCognitiveHandshake, setShowCognitiveHandshake, passCognitiveHandshake, failCognitiveHandshake, warnCognitiveHandshake } = useFatigueStore();
+    const { cognitiveHandshakePassed, showCognitiveHandshake, setShowCognitiveHandshake, passCognitiveHandshake, failCognitiveHandshake, warnCognitiveHandshake, supervisorOverride } = useFatigueStore();
     const { setGuidance, setSpeaking, setMood } = useNellyStore();
 
     // Game State
@@ -16,7 +16,6 @@ export const CognitiveHandshake = () => {
     const [lastTargetTime, setLastTargetTime] = useState(Date.now());
     const [gameCompleted, setGameCompleted] = useState(false);
     const [showKaizenBonus, setShowKaizenBonus] = useState(false);
-    const [showLiabilityWarning, setShowLiabilityWarning] = useState(false);
 
     const TOTAL_TARGETS = 5;
 
@@ -76,8 +75,7 @@ export const CognitiveHandshake = () => {
             setMood('concerned');
             
             const reason = variancePercentage > 35 ? "High Cognitive Variance" : "Latency Threshold Breach";
-            setGuidance(`PROTOCOL ALERT: ${reason} detected. Handshake failed with ${Math.round(variancePercentage)}% variance. Section 37 Liability Warning activated.`);
-            setShowLiabilityWarning(true);
+            setGuidance(`PROTOCOL ALERT: ${reason} detected. Handshake failed with ${Math.round(variancePercentage)}% variance. Status logged as High Fatigue.`);
         } else if (historicalBaseline && avgReaction < (historicalBaseline * 1.10) && avgReaction < 700) {
             passCognitiveHandshake();
             setShowKaizenBonus(true);
@@ -97,46 +95,10 @@ export const CognitiveHandshake = () => {
         setTimeout(() => setSpeaking(false), 3000);
     };
 
-    if (cognitiveHandshakePassed || (gameCompleted && !showLiabilityWarning)) return null;
+    if (cognitiveHandshakePassed || gameCompleted) return null;
 
     return (
         <AnimatePresence>
-            {showLiabilityWarning && (
-                <motion.div
-                    key="liability-warning"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-red-950/90 backdrop-blur-2xl p-6 text-center"
-                >
-                    <motion.div
-                        initial={{ scale: 0.9, y: 20 }}
-                        animate={{ scale: 1, y: 0 }}
-                        className="max-w-2xl bg-black border-2 border-red-600 p-10 rounded-[3rem] shadow-[0_0_100px_rgba(220,38,38,0.4)]"
-                    >
-                        <ShieldAlert size={80} className="text-red-500 mx-auto mb-6 animate-pulse" />
-                        <h1 className="text-4xl font-black text-white mb-4 tracking-tighter uppercase">Section 37 Liability Warning</h1>
-                        <div className="h-1 w-24 bg-red-600 mx-auto mb-8 rounded-full" />
-                        <p className="text-xl text-gray-300 font-bold mb-8 leading-relaxed">
-                            UNACCEPTABLE COGNITIVE LATENCY DETECTED.
-                            <br />
-                            <span className="text-red-500 mt-2 block italic text-sm">Corporate Risk Protocol: Section 8(1) OHS Act 85 of 1993</span>
-                        </p>
-                        <p className="text-gray-400 text-sm mb-10 leading-relaxed px-4">
-                            Your reaction times have deviated significantly from safe operational baselines. To protect the organization and your personal safety, <strong>DOA Lockout</strong> has been triggered. Please contact your supervisor for a mandatory wellness check.
-                        </p>
-                        <button
-                            onClick={() => {
-                                setShowLiabilityWarning(false);
-                                setGameCompleted(true);
-                            }}
-                            className="bg-red-600 hover:bg-red-700 text-white font-black px-10 py-4 rounded-2xl transition-all hover:scale-105 active:scale-95"
-                        >
-                            ACKNOWLEDGE & DE-ESCALATE
-                        </button>
-                    </motion.div>
-                </motion.div>
-            )}
-
             {showKaizenBonus && (
                 <motion.div
                     initial={{ scale: 0.5, opacity: 0 }}
@@ -156,9 +118,9 @@ export const CognitiveHandshake = () => {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="fixed inset-0 z-[99000] flex items-center justify-center bg-black/95 backdrop-blur-md font-sans text-white p-4 overflow-y-auto"
+                    className="fixed inset-0 z-[99000] flex items-center justify-center bg-black/80 backdrop-blur-md font-sans text-white p-3 sm:p-4 overflow-x-hidden overflow-y-auto"
                 >
-                    <div className="w-full max-w-md aspect-square max-h-[85vh] m-auto flex flex-col items-center justify-center bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-[2rem] shadow-[0_0_50px_rgba(249,168,37,0.15)] relative">
+                    <div className="w-[95vw] max-w-md max-h-[90vh] max-h-[90dvh] m-auto flex flex-col items-center justify-between bg-slate-900/95 border border-slate-800 p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] shadow-[0_0_50px_rgba(249,168,37,0.15)] relative overflow-y-auto z-50">
                         <HandshakeCardHeader
                             title="COGNITIVE HANDSHAKE"
                             subtext="Click the targets as quickly as possible to calibrate your baseline latency."
@@ -184,6 +146,17 @@ export const CognitiveHandshake = () => {
                                 <Target size={20} className="text-ohs-navy" />
                             </motion.button>
                         </div>
+
+                        {/* Instant Supervisor Override Button */}
+                        <button
+                            onClick={() => {
+                                supervisorOverride();
+                                setGameCompleted(true);
+                            }}
+                            className="mt-4 w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black px-4 py-2.5 rounded-xl transition-all text-xs tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-900/40"
+                        >
+                            ⚡ SUPERVISOR OVERRIDE / EMERGENCY RESET
+                        </button>
                     </div>
                 </motion.div>
             )}

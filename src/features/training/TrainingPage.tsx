@@ -30,13 +30,13 @@ export const TrainingPage = () => {
     };
 
     return (
-        <div className="space-y-12 pb-32">
+        <div className="space-y-6 sm:space-y-8 pb-32 font-sans">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-3xl font-black text-white tracking-tight">Professional Curriculum</h2>
-                    <p className="text-gray-400 font-medium">NotebookLM Automated Training Modules</p>
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight">Professional Curriculum</h2>
+                    <p className="text-gray-400 text-xs sm:text-sm font-medium">NotebookLM Automated Training Modules</p>
                 </div>
-                <GlassCard className="py-2 px-6 bg-ohs-green/10 border-ohs-green/30">
+                <GlassCard className="py-2 px-4 sm:px-6 bg-ohs-green/10 border-ohs-green/30">
                     <span className="text-ohs-green font-black uppercase text-xs tracking-widest">
                         Modules Mastered: {completedModules.length}
                     </span>

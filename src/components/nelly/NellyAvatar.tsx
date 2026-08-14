@@ -177,7 +177,7 @@ export const NellyAvatar = () => {
     if (!isWingmanActive) return null;
 
     return (
-        <div className="fixed bottom-4 right-4 z-[9999] flex flex-col items-end pointer-events-none">
+        <div className="fixed bottom-3 right-3 sm:bottom-6 sm:right-6 z-40 flex flex-col items-end pointer-events-none max-w-[calc(100vw-1.5rem)]">
             {/* Reasoning Hub Container */}
             <AnimatePresence mode="wait">
                 {isNellyExpanded && (
@@ -185,7 +185,7 @@ export const NellyAvatar = () => {
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="pointer-events-auto"
+                        className="pointer-events-auto z-50 relative"
                     >
                         {isEmergency ? (
                             <NellyEmergencyUI onDeescalate={() => setIsEmergency(false)} />
@@ -218,8 +218,8 @@ export const NellyAvatar = () => {
 
             {/* Nelly Avatar - Shifts Up When Hub is Open */}
             <div 
-                className={`absolute right-0 transition-all duration-500 ease-in-out z-[10000] ${
-                    isNellyExpanded ? 'bottom-[420px] md:bottom-[450px]' : 'bottom-0'
+                className={`absolute right-0 transition-all duration-500 ease-in-out z-40 ${
+                    isNellyExpanded ? 'bottom-[380px] sm:bottom-[420px] md:bottom-[450px]' : 'bottom-0'
                 }`}
             >
                 <NellyCore onClick={() => setNellyExpanded(!isNellyExpanded)} isSpeaking={isSpeaking} />

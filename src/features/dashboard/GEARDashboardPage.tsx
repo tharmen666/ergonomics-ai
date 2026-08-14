@@ -15,7 +15,8 @@ export const GEARDashboardPage = () => {
         driverFatigueScore, 
         prizmAlertActive, 
         prizmRecommendedAction,
-        evaluateDriverFatigue
+        evaluateDriverFatigue,
+        supervisorOverride
     } = useFatigueStore();
     const { productiveStreak, language } = useNellyStore();
 
@@ -64,7 +65,7 @@ export const GEARDashboardPage = () => {
             evaluateDriverFatigue(drivingHours, reactionDropPct);
             setApiResponse({
                 success: true,
-                handshakeStatus: 'SHANDRAY_PRIZM_LOCAL_FALLBACK',
+                handshakeStatus: 'PRIZM_LOCAL_FALLBACK',
                 fatigueScore: driverFatigueScore,
                 riskLevel: prizmAlertActive ? 'CRITICAL_BREACH' : 'NOMINAL',
                 drivingHours,
@@ -209,7 +210,7 @@ export const GEARDashboardPage = () => {
                 </div>
             </div>
 
-            {/* Shandray's Prizm Alert Handshake & Driver Fatigue Telemetry Module */}
+            {/* Prizm Alert Handshake & Driver Fatigue Telemetry Module */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -223,7 +224,7 @@ export const GEARDashboardPage = () => {
                         <div className="min-w-0 flex-1 max-w-full overflow-hidden">
                             <div className="flex flex-wrap items-center gap-2">
                                 <span className="text-[9px] font-black text-ohs-orange uppercase tracking-widest bg-ohs-orange/10 px-2 py-0.5 rounded-full border border-ohs-orange/20 truncate">
-                                    Shandray's Prizm Alert Handshake
+                                    Prizm Alert Handshake
                                 </span>
                                 <span className="mt-1 text-xs text-slate-300 block truncate uppercase font-mono">Endpoint: /api/v1/fatigue-score</span>
                             </div>
@@ -314,6 +315,12 @@ export const GEARDashboardPage = () => {
                         <p className="text-xs font-bold leading-relaxed">
                             {prizmRecommendedAction}
                         </p>
+                        <button
+                            onClick={() => supervisorOverride()}
+                            className="w-full mt-2 bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                        >
+                            ⚡ SUPERVISOR OVERRIDE / EMERGENCY RESET
+                        </button>
                         {apiResponse && (
                             <div className="pt-2 border-t border-white/10 text-[9px] font-mono text-gray-400 truncate">
                                 Status: {apiResponse.handshakeStatus || 'OK'} | Advisory: {apiResponse.ohsComplianceAdvisory || 'Checked'}
@@ -478,7 +485,7 @@ export const GEARDashboardPage = () => {
                         <span className="text-emerald-400 font-bold uppercase tracking-wider text-[9px] shrink-0">PASSED</span>
                     </div>
                     <div className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
-                        <span className="text-gray-400 truncate max-w-[240px] sm:max-w-none">[08:42:20] Shandray's Prizm Driver Fatigue Telemetry: Active</span>
+                        <span className="text-gray-400 truncate max-w-[240px] sm:max-w-none">[08:42:20] Prizm Driver & Shift Fatigue Telemetry: Active</span>
                         <span className="text-ohs-orange font-bold uppercase tracking-wider text-[9px] shrink-0">ONLINE</span>
                     </div>
                 </div>

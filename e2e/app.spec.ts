@@ -68,7 +68,7 @@ test.describe('ErgoSafe Reborn V3 End-to-End Suite', () => {
       { name: 'Daily Self-Risk Assessment', expectedPattern: /Ergonomic Self-Assessment/i },
       { name: 'Daily Workstation Safety Checklist', expectedPattern: /Daily Safety Check/i },
       { name: 'Nelly Posture & Hazard Monitoring Engine', expectedPattern: /Nelly Posture & Hazard Engine|Nelly Intelligence Grid/i },
-      { name: 'Shandray\'s Prizm Driver & Shift Fatigue Telemetry', expectedPattern: /G\.E\.A\.R\. SYSTEM DASHBOARD|Shandray/i },
+      { name: 'Prizm Driver & Shift Fatigue Telemetry', expectedPattern: /G\.E\.A\.R\. SYSTEM DASHBOARD|Prizm/i },
       { name: 'Assessment PDF Invoices & Billing', expectedPattern: /Ergonomics Assessment Invoicing/i },
       { name: 'Analytics & Regulatory Audit Logs', expectedPattern: /Analytics & Regulatory Audit Logs/i },
     ];

@@ -165,18 +165,18 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-ohs-dark/95 backdrop-blur-xl p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-ohs-dark/95 backdrop-blur-xl p-3 sm:p-4 overflow-x-hidden overflow-y-auto"
         >
             <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="bg-white/5 border border-white/10 rounded-[2rem] w-full max-w-6xl h-[85dvh] flex flex-col md:flex-row overflow-hidden relative shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+                className="bg-ohs-navy border border-white/10 rounded-2xl md:rounded-[2rem] w-[95vw] max-w-6xl max-h-[90vh] max-h-[90dvh] flex flex-col md:flex-row overflow-y-auto md:overflow-hidden relative shadow-[0_0_50px_rgba(0,0,0,0.8)] z-50 p-4 sm:p-6 md:p-0"
             >
                 {/* Close Button */}
                 <button
                     onClick={onClose}
                     aria-label="Close"
-                    className="absolute top-6 right-6 z-20 w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-all"
+                    className="absolute top-4 right-4 sm:top-6 sm:right-6 z-50 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white flex items-center justify-center cursor-pointer transition-all shadow-lg"
                 >
                     <X size={20} />
                 </button>
@@ -192,31 +192,31 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
                         </Canvas>
                     </div>
 
-                    <div className="mt-auto p-8 relative z-10 flex flex-col gap-4">
-                        <div className="flex items-center gap-2">
-                            <div className="bg-ohs-orange/20 border border-ohs-orange/50 text-ohs-orange font-black px-4 py-2 rounded-xl text-xs uppercase tracking-widest backdrop-blur-md">
+                    <div className="mt-auto p-4 sm:p-8 relative z-10 flex flex-col gap-4">
+                        <div className="flex flex-wrap items-center gap-2">
+                            <div className="bg-ohs-orange/20 border border-ohs-orange/50 text-ohs-orange font-black px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-[10px] sm:text-xs uppercase tracking-widest backdrop-blur-md">
                                 {duration} Session
                             </div>
-                            <div className="bg-ohs-green/20 border border-ohs-green/50 text-ohs-green font-black px-4 py-2 rounded-xl text-xs uppercase tracking-widest backdrop-blur-md">
+                            <div className="bg-ohs-green/20 border border-ohs-green/50 text-ohs-green font-black px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-[10px] sm:text-xs uppercase tracking-widest backdrop-blur-md">
                                 OHS ACT SEC 8
                             </div>
                         </div>
                     </div>
 
                     {/* Decorative elements */}
-                    <div className="absolute top-0 left-0 w-full h-full pointer-events-none border-[20px] border-white/5 rounded-[2rem]" />
+                    <div className="absolute top-0 left-0 w-full h-full pointer-events-none border-[12px] sm:border-[20px] border-white/5 rounded-2xl md:rounded-[2rem]" />
                 </div>
 
                 {/* Right: Instructions & Steps */}
-                <div className="flex-1 md:flex-[1.5] p-8 md:p-10 overflow-y-auto bg-ohs-dark/40 backdrop-blur-sm border-l border-white/5 scrollbar-hide flex flex-col justify-between">
-                    <div className="space-y-6">
+                <div className="flex-1 md:flex-[1.5] p-4 sm:p-8 md:p-10 overflow-y-auto bg-ohs-dark/40 backdrop-blur-sm border-l border-white/5 scrollbar-hide flex flex-col justify-between">
+                    <div className="space-y-4 sm:space-y-6">
                         {/* Header with Title and Language Selector */}
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/10 pb-4">
                             <div>
                                 <span className="text-[10px] font-black text-ohs-orange uppercase tracking-widest block mb-1">
                                     {course?.courseId || 'ST-OHS-001'} Statutory Module
                                 </span>
-                                <h2 className="text-2xl font-black text-white tracking-tight leading-none">{title}</h2>
+                                <h2 className="text-lg sm:text-2xl font-black text-white tracking-tight leading-snug">{title}</h2>
                             </div>
                             
                             {/* Multilingual Selector */}
@@ -245,20 +245,20 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -20 }}
-                                className="space-y-4 py-4"
+                                className="space-y-3 sm:space-y-4 py-2 sm:py-4"
                             >
                                 <div className="flex items-center gap-3">
-                                    <div className="h-8 px-4 rounded-xl bg-ohs-orange/20 border border-ohs-orange/40 flex items-center justify-center font-black text-ohs-orange text-xs tracking-wider">
+                                    <div className="h-7 sm:h-8 px-3 sm:px-4 rounded-xl bg-ohs-orange/20 border border-ohs-orange/40 flex items-center justify-center font-black text-ohs-orange text-[10px] sm:text-xs tracking-wider">
                                         STEP {currentStep.step} OF {steps.length}
                                     </div>
                                 </div>
                                 
-                                <h3 className="text-xl font-black text-white tracking-wide uppercase text-glow-orange">
+                                <h3 className="text-base sm:text-xl font-black text-white tracking-wide uppercase text-glow-orange leading-snug">
                                     {currentStep.title}
                                 </h3>
 
-                                <div className="p-6 rounded-2xl bg-white/5 border border-white/10 shadow-inner">
-                                    <p className="text-gray-300 text-lg leading-relaxed font-medium italic break-words whitespace-normal">
+                                <div className="p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 shadow-inner">
+                                    <p className="text-gray-300 text-sm sm:text-lg leading-relaxed font-medium italic break-words whitespace-normal">
                                         "{currentStep[language] || currentStep['en']}"
                                     </p>
                                 </div>
@@ -285,62 +285,64 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
                     </div>
 
                     {/* Controls Footer */}
-                    <div className="border-t border-white/10 pt-6 mt-8 space-y-4">
+                    <div className="border-t border-white/10 pt-4 sm:pt-6 mt-6 sm:mt-8 space-y-4">
                         {/* Audio Guidance Feedback */}
-                        <div className="flex items-center justify-between bg-white/5 p-4 rounded-2xl border border-white/5">
-                            <div className="flex items-center gap-3">
-                                {voiceEnabled ? <Volume2 className="text-ohs-green" /> : <VolumeX className="text-gray-500" />}
-                                <div>
-                                    <span className="font-bold text-white text-sm block">Nelly Active TTS Guidance</span>
-                                    <span className="text-[10px] text-gray-400 font-medium">Automatic voice playback for localized pipelines</span>
+                        <div className="flex items-center justify-between bg-white/5 p-3 sm:p-4 rounded-2xl border border-white/5 gap-2">
+                            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                                {voiceEnabled ? <Volume2 className="text-ohs-green shrink-0" /> : <VolumeX className="text-gray-500 shrink-0" />}
+                                <div className="min-w-0">
+                                    <span className="font-bold text-white text-xs sm:text-sm block truncate">Nelly Active TTS Guidance</span>
+                                    <span className="text-[9px] sm:text-[10px] text-gray-400 font-medium block truncate">Automatic voice playback for localized pipelines</span>
                                 </div>
                             </div>
                             <button
                                 aria-label="Toggle Voice Guidance"
                                 onClick={() => setVoiceEnabled(!voiceEnabled)}
-                                className={`w-14 h-8 rounded-full relative transition-colors ${voiceEnabled ? 'bg-ohs-green' : 'bg-white/10'}`}
+                                className={`w-12 h-6 rounded-full relative flex items-center transition-all p-0.5 shrink-0 ${voiceEnabled ? 'bg-ohs-green justify-end' : 'bg-white/20 justify-start'}`}
                             >
-                                <div className={`absolute top-1 w-6 h-6 rounded-full bg-white transition-all shadow-md ${voiceEnabled ? 'left-7' : 'left-1'}`} />
+                                <div className="w-5 h-5 rounded-full bg-white shadow-md transition-all" />
                             </button>
                         </div>
 
                         {/* Navigation Actions */}
-                        <div className="flex gap-4">
-                            <button
-                                aria-label="Previous Step"
-                                onClick={handlePrev}
-                                disabled={currentStepIdx === 0}
-                                className={`px-4 py-3 rounded-2xl border border-white/10 flex items-center justify-center transition-all ${
-                                    currentStepIdx === 0 
-                                        ? 'opacity-40 cursor-not-allowed bg-transparent text-gray-500' 
-                                        : 'bg-white/5 text-white hover:bg-white/10'
-                                }`}
-                            >
-                                <ChevronLeft size={20} />
-                            </button>
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full">
+                            <div className="flex gap-2 w-full sm:w-auto">
+                                <button
+                                    aria-label="Previous Step"
+                                    onClick={handlePrev}
+                                    disabled={currentStepIdx === 0}
+                                    className={`px-4 py-3 rounded-2xl border border-white/10 flex items-center justify-center transition-all flex-1 sm:flex-none ${
+                                        currentStepIdx === 0 
+                                            ? 'opacity-40 cursor-not-allowed bg-transparent text-gray-500' 
+                                            : 'bg-white/5 text-white hover:bg-white/10'
+                                    }`}
+                                >
+                                    <ChevronLeft size={20} />
+                                </button>
 
-                            <GlowButton
-                                onClick={handleTogglePlay}
-                                className={`flex-[1.5] text-sm py-3.5 flex items-center justify-center gap-2 ${
-                                    isPlaying ? 'bg-red-500 hover:bg-red-600 shadow-red-500/20' : 'bg-ohs-orange text-ohs-navy'
-                                }`}
-                            >
-                                {isPlaying ? (
-                                    <>
-                                        <Square size={16} fill="currentColor" />
-                                        STOP GUIDANCE
-                                    </>
-                                ) : (
-                                    <>
-                                        <Play size={16} fill="currentColor" />
-                                        VOICE INSTRUCTION
-                                    </>
-                                )}
-                            </GlowButton>
+                                <GlowButton
+                                    onClick={handleTogglePlay}
+                                    className={`flex-1 sm:flex-[1.5] text-xs sm:text-sm py-3.5 flex items-center justify-center gap-2 ${
+                                        isPlaying ? 'bg-red-500 hover:bg-red-600 shadow-red-500/20' : 'bg-ohs-orange text-ohs-navy'
+                                    }`}
+                                >
+                                    {isPlaying ? (
+                                        <>
+                                            <Square size={16} fill="currentColor" />
+                                            STOP GUIDANCE
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Play size={16} fill="currentColor" />
+                                            VOICE INSTRUCTION
+                                        </>
+                                    )}
+                                </GlowButton>
+                            </div>
 
                             <GlowButton
                                 onClick={handleNext}
-                                className="flex-[2] text-sm py-3.5 flex items-center justify-center gap-2 bg-ohs-green text-ohs-navy hover:bg-green-400 shadow-ohs-green/20"
+                                className="w-full sm:flex-[2] text-xs sm:text-sm py-3.5 flex items-center justify-center gap-2 bg-ohs-green text-ohs-navy hover:bg-green-400 shadow-ohs-green/20"
                             >
                                 {currentStepIdx === steps.length - 1 ? (
                                     <>

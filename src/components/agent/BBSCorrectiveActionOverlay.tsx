@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, Activity, Truck, Eye, CheckCircle2, X, RefreshCw } from 'lucide-react';
 import { useComplianceStore } from '../../store/complianceStore';
 import { useNellyStore } from '../../store/nellyStore';
+import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 import { speak, stopSpeaking } from '../../utils/speech';
 
 export interface BBSInterventionPayload {
@@ -15,6 +16,7 @@ export interface BBSInterventionPayload {
 
 export const BBSCorrectiveActionOverlay = () => {
     const { language } = useNellyStore();
+    const { supervisorOverride } = useFatigueStore();
     const [activeIntervention, setActiveIntervention] = useState<BBSInterventionPayload | null>(null);
     const [timeLeft, setTimeLeft] = useState<number>(15);
     const [isCompleted, setIsCompleted] = useState<boolean>(false);
@@ -93,20 +95,20 @@ export const BBSCorrectiveActionOverlay = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[999999] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-4 font-sans text-white"
+                className="fixed inset-0 z-[999999] bg-black/90 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-4 font-sans text-white overflow-x-hidden overflow-y-auto"
             >
                 <motion.div
                     initial={{ scale: 0.9, y: 20 }}
                     animate={{ scale: 1, y: 0 }}
                     exit={{ scale: 0.9, y: 20 }}
-                    className="max-w-lg w-full bg-slate-900 border-2 border-ohs-orange rounded-[2.5rem] p-6 md:p-8 space-y-6 shadow-[0_0_100px_rgba(249,168,37,0.3)] relative overflow-hidden"
+                    className="w-[95vw] max-w-lg bg-slate-900 border-2 border-ohs-orange rounded-2xl md:rounded-[2.5rem] p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6 shadow-[0_0_100px_rgba(249,168,37,0.3)] relative overflow-hidden max-h-[90vh] max-h-[90dvh] overflow-y-auto z-50"
                 >
                     <button
                         onClick={() => {
                             stopSpeaking();
                             setActiveIntervention(null);
                         }}
-                        className="absolute top-6 right-6 p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white cursor-pointer transition-colors"
+                        className="absolute top-4 right-4 sm:top-6 sm:right-6 z-50 p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white cursor-pointer transition-colors"
                     >
                         <X size={18} />
                     </button>
@@ -163,18 +165,30 @@ export const BBSCorrectiveActionOverlay = () => {
                         </span>
                     </div>
 
-                    {/* Completion Action */}
-                    <button
-                        onClick={handleVerifyCompletion}
-                        className={`w-full py-4 rounded-2xl font-black text-xs transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer ${
-                            isCompleted 
-                                ? 'bg-emerald-500 text-white shadow-emerald-500/30' 
-                                : 'bg-ohs-orange hover:bg-yellow-400 text-ohs-navy shadow-ohs-orange/30'
-                        }`}
-                    >
-                        {isCompleted ? <CheckCircle2 size={18} /> : <ShieldCheck size={18} />}
-                        {isCompleted ? 'VERIFIED & LOGGED IN OHS LEDGER' : 'COMPLETE & VERIFY INTERVENTION'}
-                    </button>
+                    {/* Completion & Override Actions */}
+                    <div className="space-y-3">
+                        <button
+                            onClick={handleVerifyCompletion}
+                            className={`w-full py-4 rounded-2xl font-black text-xs transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer ${
+                                isCompleted 
+                                    ? 'bg-emerald-500 text-white shadow-emerald-500/30' 
+                                    : 'bg-ohs-orange hover:bg-yellow-400 text-ohs-navy shadow-ohs-orange/30'
+                            }`}
+                        >
+                            {isCompleted ? <CheckCircle2 size={18} /> : <ShieldCheck size={18} />}
+                            {isCompleted ? 'VERIFIED & LOGGED IN OHS LEDGER' : 'COMPLETE & VERIFY INTERVENTION'}
+                        </button>
+                        <button
+                            onClick={() => {
+                                stopSpeaking();
+                                supervisorOverride();
+                                setActiveIntervention(null);
+                            }}
+                            className="w-full py-3 rounded-2xl font-black text-xs bg-emerald-600 hover:bg-emerald-500 text-white transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer uppercase tracking-wider"
+                        >
+                            ⚡ SUPERVISOR OVERRIDE / EMERGENCY RESET
+                        </button>
+                    </div>
                 </motion.div>
             </motion.div>
         </AnimatePresence>

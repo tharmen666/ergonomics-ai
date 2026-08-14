@@ -9,7 +9,7 @@ const navItems = [
     { icon: ClipboardCheck, label: "Daily Self-Risk Assessment (WFH / Desk)", id: "assessment" },
     { icon: CheckSquare, label: "Daily Workstation Safety Checklist", id: "checklist" },
     { icon: Bot, label: "Nelly Posture & Hazard Monitoring Engine", id: "nelly" },
-    { icon: Truck, label: "Shandray's Prizm Driver & Shift Fatigue Telemetry", id: "fatigue" },
+    { icon: Truck, label: "Prizm Driver & Shift Fatigue Telemetry", id: "fatigue" },
     { icon: FileText, label: "Assessment PDF Invoices & Billing", id: "invoices" },
     { icon: BarChart2, label: "Analytics & Regulatory Audit Logs", id: "reports" },
 ];

@@ -60,31 +60,31 @@ export const HRDashboard = () => {
     };
 
     return (
-        <div className="p-4 sm:p-6 max-w-7xl mx-auto pb-32 relative space-y-6 font-sans">
+        <div className="p-3 sm:p-6 max-w-7xl mx-auto pb-32 relative space-y-6 font-sans">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="space-y-8"
+                className="space-y-6 sm:space-y-8"
             >
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/10 pb-6">
                     <div>
-                        <h2 className="text-3xl font-black text-white tracking-tight uppercase">
+                        <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight uppercase">
                             OHS Compliance & Escalation Audit Trail
                         </h2>
-                        <p className="text-gray-400 font-medium">
+                        <p className="text-xs sm:text-sm text-gray-400 font-medium">
                             Monitoring Line Manager resolution windows, statutory duties, and HR escalations.
                         </p>
                     </div>
                     
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                         <button
                             onClick={resetCompliance}
-                            className="bg-white/5 hover:bg-white/10 text-white border border-white/10 px-4 py-2 rounded-xl text-xs font-bold uppercase transition-all cursor-pointer"
+                            className="bg-white/5 hover:bg-white/10 text-white border border-white/10 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-[10px] sm:text-xs font-bold uppercase transition-all cursor-pointer"
                         >
                             Reset All Cases
                         </button>
-                        <div className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest flex items-center gap-2 ${
+                        <div className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-widest flex items-center gap-2 ${
                             status === 'COMPLIANT' 
                                 ? 'bg-ohs-green/20 border border-ohs-green/50 text-ohs-green' 
                                 : 'bg-red-500/20 border border-red-500/50 text-red-500 animate-pulse'
@@ -96,12 +96,12 @@ export const HRDashboard = () => {
                 </div>
 
                 {/* Main Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
                     {/* Left: OHS Employee Audit Grid */}
                     <div className="lg:col-span-2 space-y-6">
-                        <div className="bg-white/5 border border-white/10 rounded-3xl overflow-hidden shadow-xl">
-                            <div className="p-6 border-b border-white/10 bg-white/5">
-                                <h3 className="text-xl font-black text-white uppercase tracking-tight">Active Employee Incident Tracker</h3>
+                        <div className="bg-white/5 border border-white/10 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl">
+                            <div className="p-4 md:p-6 border-b border-white/10 bg-white/5">
+                                <h3 className="text-lg sm:text-xl font-black text-white uppercase tracking-tight">Active Employee Incident Tracker</h3>
                                 <p className="text-gray-400 text-xs mt-1">Select an employee profile to view full OHS escalation audit details.</p>
                             </div>
                             
@@ -112,7 +112,7 @@ export const HRDashboard = () => {
                                         <div
                                             key={c.id}
                                             onClick={() => setSelectedCase(c)}
-                                            className={`p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:bg-white/5 transition-all cursor-pointer group ${
+                                            className={`p-4 md:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:bg-white/5 transition-all cursor-pointer group ${
                                                 activeCase?.id === c.id ? 'bg-ohs-blue/10 border-l-4 border-ohs-orange' : ''
                                             }`}
                                         >

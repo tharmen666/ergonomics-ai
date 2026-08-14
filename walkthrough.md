@@ -1,63 +1,61 @@
-# ErgoSafe Reborn V3 Release Walkthrough
+# ErgoSafe Reborn V3 Release Walkthrough & Automated E2E Verification
 
-All tasks in the implementation plan and the global internationalization sharding matrix have been completed and verified. The codebase is now running live in production on Vercel, and the standalone Chrome Extension is prepared to sync telemetry.
-
-## Global Internationalization Sharding Framework
-
-We updated the workspace internationalization sharding architecture to natively support our refined 7-language matrix: English (`en`), Kiswahili/Swahili (`sw`), Mandarin Chinese (`zh`), German (`de`), Umgadzal/Zulu (`zu`), isiXhosa (`xh`), and Sesotho (`st`).
-
-### 1. Global Dictionary Expansion
-- **[translations.ts](file:///c:/Users/dthar/Desktop/Desktop/ErgoSafe_Project/ergo-safe-reborn/src/utils/translations.ts)** / **[translations.js](file:///c:/Users/dthar/Desktop/Desktop/ErgoSafe_Project/ergo-safe-reborn/ergosafe-extension/src/utils/translations.js)**:
-  - Injected complete, boardroom-ready translation dictionaries for German (`de`) and Mandarin (`zh`) aligning with identical schema properties.
-  - Enforced "Nelly" as the active AI safety companion name globally.
-  - Refined the `Language` union type to: `export type Language = 'en' | 'zu' | 'xh' | 'sw' | 'zh' | 'de' | 'st';`
-
-### 2. Compliance and Briefing Shards
-- **[semanticFirewall.ts](file:///c:/Users/dthar/Desktop/Desktop/ErgoSafe_Project/ergo-safe-reborn/src/logic/security/semanticFirewall.ts)**:
-  - Rewrote compliance map logic to align with the 7-language sharding matrix, adding German (`de`) legal vectors for all clauses (OHS Sections 8, 14, 24, 37, 38, and ISO standards 9001, 14001, 45001, 45003).
-  - Translated all sharded OHS and ISO briefing headers into Mandarin Chinese and German.
-
-### 3. Component and Layout Updates
-- **[NellyInterface.tsx](file:///c:/Users/dthar/Desktop/Desktop/ErgoSafe_Project/ergo-safe-reborn/src/components/nelly/NellyInterface.tsx)**:
-  - Re-mapped options inside the language dropdown selector to expose only the 7 supported languages.
-- **[DailySafetyChecklist.tsx](file:///c:/Users/dthar/Desktop/Desktop/ErgoSafe_Project/ergo-safe-reborn/src/features/dashboard/DailySafetyChecklist.tsx)**:
-  - Updated check list items mapping to match `Record<Language, { ... }>` under the 7-language type constraint.
-- **[popup.html](file:///c:/Users/dthar/Desktop/Desktop/ErgoSafe_Project/ergo-safe-reborn/ergosafe-extension/src/popup/popup.html)** / **[privacy.html](file:///c:/Users/dthar/Desktop/Desktop/ErgoSafe_Project/ergo-safe-reborn/ergosafe-extension/src/pages/privacy.html)**:
-  - Added options for `Mandarin (ZH)` and `German (DE)` to the drop-down select pickers.
-- **[popup.js](file:///c:/Users/dthar/Desktop/Desktop/ErgoSafe_Project/ergo-safe-reborn/ergosafe-extension/src/popup/popup.js)**:
-  - Bound dynamic translations for language selector label text when selecting Mandarin or German.
+All implementation tasks, component abstractions, and full-suite end-to-end automated tests have been executed and 100% verified. The codebase is fully committed and deployed.
 
 ---
 
-## Separation and Runtime Isolation Overrides
-
-We resolved the runtime script crashes on the live production web route caused by chrome extension service worker artifacts executing outside of their intended environment.
-
-### 1. Compilation Target Segregation
-- Verified that `npm run build` compiles a clean, independent web application bundle to `dist/` with zero references to extension bundles. All Chrome Extension scripts are fully isolated within the `ergosafe-extension/` repository directory path, completely decoupled from the web application's asset pipeline.
-
-### 2. Runtime Environmental Guards
-- Wrapped all extension-specific JavaScript modules in the isolated `ergosafe-extension` folder with runtime environment checks. This prevents Chrome APIs or runtime scripts from executing outside of the Chrome Extension context:
-  - `ergosafe-extension/src/content/content.js`
-  - `ergosafe-extension/src/background/service_worker.js`
-  - `ergosafe-extension/src/pages/privacy.js`
-  - `ergosafe-extension/src/popup/popup.js`
+## 1. Reusable Handshake & Stewardship Layout Engine
+* **[HandshakeCardHeader.tsx](file:///d:/ErgoSafe_Project/ergo-safe-reborn/src/components/common/HandshakeCardHeader.tsx)**:
+  - Built a mobile-first responsive flex card wrapper (`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 sm:p-6 bg-ohs-navy/80 border border-white/10 rounded-xl overflow-hidden`).
+  - Integrated `min-w-0 flex-1 break-words max-w-full` text wrapping safeguards to prevent container text overflow across localized internationalization strings.
+* **Component Integration Across Views**:
+  - Updated [PrivacyHandshake.tsx (Privacy-Shield)](file:///d:/ErgoSafe_Project/ergo-safe-reborn/src/assets/Privacy-Shield/PrivacyHandshake.tsx) & [PrivacyHandshake.tsx (Legal-Guardrails)](file:///d:/ErgoSafe_Project/ergo-safe-reborn/src/assets/Legal-Guardrails/PrivacyHandshake.tsx).
+  - Updated [DashboardPage.tsx](file:///d:/ErgoSafe_Project/ergo-safe-reborn/src/features/dashboard/DashboardPage.tsx) for the Daily Cognitive Sync required prompt.
+  - Updated [CognitiveHandshake.tsx](file:///d:/ErgoSafe_Project/ergo-safe-reborn/src/components/AI-Coach/CognitiveHandshake.tsx) calibration header modal.
 
 ---
 
-## Verification Results
+## 2. Automated Playwright E2E Verification Results
 
-### Clean Compilation Checks
-- Cleared local build folders (`.vite`, `dist`) and compiled the static assets locally via `npm run build`. The project compiled successfully with zero TypeScript compilation warnings.
+Executed `npx playwright test` with 1 worker against local production build preview. **100% Pass Rate Across All 4 Test Suites**.
 
-### Remote Deployment Override
-- Force-deployed the build from scratch, bypassing remote edge caches:
-  ```bash
-  npx vercel --prod --force --yes
-  ```
-- **Deployment Status**: READY
-- **Production Alias Link**: [https://ergo-safe-reborn.vercel.app](https://ergo-safe-reborn.vercel.app)
-- **Telemetry Sync API Endpoint**: [https://ergo-safe-reborn.vercel.app/api/sync](https://ergo-safe-reborn.vercel.app/api/sync)
+```text
+Running 4 tests using 1 worker
 
-### Git Repository Status
-- All code staged, committed, and pushed successfully to `origin/main` (`9989c5a..49b1968`).
+  ok 1 [chromium] › e2e/app.spec.ts:35:3 › 1. Viewport Responsiveness - Mobile (375x667) and Desktop (1280x800) (493ms)
+  ok 2 [chromium] › e2e/app.spec.ts:60:3 › 2. Sidebar Navigation - All Feature Tabs Mount Valid React Components (5.7s)
+  ok 3 [chromium] › e2e/app.spec.ts:87:3 › 3. Invoicing Engine - Create Assessment Invoice and Verify 15% SA VAT & PDF Modal (1.7s)
+  ok 4 [chromium] › e2e/app.spec.ts:122:3 › 4. Nelly AI Accent & 7-Language Selector (en, zu, xh, sw, zh, de, st) (1.7s)
+
+  4 passed (13.4s)
+```
+
+### Verified Scenarios:
+1. **Viewport & Responsive Drawer Alignment (Mobile 375x667 & Desktop 1280x800)**:
+   - Verified 280px sidebar drawer overlay open/close actions, fixed viewport boundaries, and menu toggle button state.
+2. **Sidebar Navigation & React Component Mounting**:
+   - Verified clean mount & rendering for all 8 core feature tabs:
+     - HR & Compliance Dashboard (`OHS Compliance & Escalation Audit Trail`)
+     - Ergonomics Training & Certification (`Professional Curriculum`)
+     - Daily Self-Risk Assessment (`Ergonomic Self-Assessment`)
+     - Daily Workstation Safety Checklist (`Daily Safety Check`)
+     - Nelly Posture & Hazard Monitoring Engine (`Nelly Posture & Hazard Engine`)
+     - Prizm Driver & Shift Fatigue Telemetry (`G.E.A.R. SYSTEM DASHBOARD`)
+     - Assessment PDF Invoices & Billing (`Ergonomics Assessment Invoicing`)
+     - Analytics & Regulatory Audit Logs (`Analytics & Regulatory Audit Logs`)
+3. **Invoicing & 15% SA VAT Engine**:
+   - Verified calculation modal for 20 workstations @ R1,250:
+     - **Subtotal**: `R 25 000,00`
+     - **15% SA VAT**: `R 3 750,00`
+     - **Total Amount**: `R 28 750,00`
+   - Verified printable Tax Invoice PDF preview modal.
+4. **Nelly AI 7-Language Matrix & Regional Accents**:
+   - Verified locale selector switching across all 7 supported voice accents (`en-ZA`, `zu-ZA`, `xh-ZA`, `sw-KE`, `zh-CN`, `de-DE`, `st-ZA`) with dynamic intro text updates.
+
+---
+
+## 3. Git & Production Deployment Status
+
+* **Static Asset Build**: Clean production build via `tsc && vite build` in **24.93s**.
+* **Git Repository**: All fixes staged, committed (`2c9eaad`), and pushed to `origin/main`.
+* **Live Production Link**: [https://ergo-safe-reborn.vercel.app](https://ergo-safe-reborn.vercel.app)

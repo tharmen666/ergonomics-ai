@@ -64,12 +64,18 @@ let speechQueue: { text: string; lang: string; onEnd?: () => void }[] = [];
  * High-Fidelity Human Voice Engine for Nelly AI Safety Companion
  */
 export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => {
-    if (!window.speechSynthesis) {
+    if (typeof window === 'undefined' || !window.speechSynthesis) {
         console.warn("SpeechSynthesis not supported on this platform");
         return;
     }
 
     const synth = window.speechSynthesis;
+
+    // Mobile browser resume unlock
+    if (synth.paused) {
+        synth.resume();
+    }
+
     speechQueue = [{ text, lang, onEnd }];
 
     const playNext = () => {
@@ -78,7 +84,11 @@ export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => 
         const currentItem = speechQueue.shift();
         if (!currentItem) return;
 
-        synth.cancel();
+        try {
+            synth.cancel();
+        } catch (e) {
+            console.warn("Error cancelling speech synth:", e);
+        }
 
         const utterance = new SpeechSynthesisUtterance(currentItem.text);
         const voices = synth.getVoices();
@@ -89,6 +99,7 @@ export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => 
 
         // Neural Voice Selector algorithm prioritizing warm female human personas
         const findBestNeuralVoice = () => {
+            if (!voices || voices.length === 0) return null;
             const localeTarget = config.locale.toLowerCase();
             const langPrefix = currentItem.lang.toLowerCase();
 
@@ -150,28 +161,39 @@ export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => 
             playNext();
         };
 
-        utterance.onerror = () => {
+        utterance.onerror = (err) => {
+            console.warn("Speech Synthesis Error:", err);
             playNext();
         };
 
-        setTimeout(() => {
+        // Explicit synchronous speak call for iOS Safari / Android Chrome compatibility
+        try {
             synth.speak(utterance);
-        }, 30);
+        } catch (e) {
+            console.warn("Direct synth speak failed:", e);
+        }
     };
 
     if (synth.getVoices().length > 0) {
         playNext();
     } else {
-        synth.onvoiceschanged = () => {
+        const handleVoices = () => {
             playNext();
             synth.onvoiceschanged = null;
         };
+        synth.onvoiceschanged = handleVoices;
+        // Fallback for browsers where onvoiceschanged fires slowly
+        setTimeout(playNext, 100);
     }
 };
 
 export const stopSpeaking = () => {
-    if (window.speechSynthesis) {
-        window.speechSynthesis.cancel();
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+        try {
+            window.speechSynthesis.cancel();
+        } catch (e) {
+            console.warn("Error stopping speech synth:", e);
+        }
     }
     speechQueue = [];
 };
@@ -180,13 +202,22 @@ export const stopSpeaking = () => {
 if (typeof window !== 'undefined') {
     const unlockSpeech = () => {
         if (window.speechSynthesis) {
-            const u = new SpeechSynthesisUtterance('');
-            u.volume = 0;
-            window.speechSynthesis.speak(u);
+            try {
+                const u = new SpeechSynthesisUtterance('');
+                u.volume = 0;
+                window.speechSynthesis.speak(u);
+                if (window.speechSynthesis.paused) {
+                    window.speechSynthesis.resume();
+                }
+            } catch (e) {
+                console.warn("Unlock speech failed:", e);
+            }
         }
         window.removeEventListener('click', unlockSpeech, true);
         window.removeEventListener('touchstart', unlockSpeech, true);
+        window.removeEventListener('touchend', unlockSpeech, true);
     };
     window.addEventListener('click', unlockSpeech, true);
     window.addEventListener('touchstart', unlockSpeech, true);
+    window.addEventListener('touchend', unlockSpeech, true);
 }

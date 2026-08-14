@@ -10,7 +10,7 @@ const extTranslations = {
         guardrail_3: "Section 37/38 Act 85 Compliant.",
         accept_btn: "ACKNOWLEDGE & INITIATE WINGMAN",
         
-        logo: "ErgoSafe <span class=\"accent\">WINGMAN</span>",
+        logo: "ErgoSafe <span class=\"accent\">REBORN V3</span>",
         streak_label: "SAFETY STREAK",
         fatigue_label: "FATIGUE INDEX",
         nominal: "Nominal",
@@ -40,7 +40,7 @@ const extTranslations = {
         guardrail_3: "Inafuata Kifungu cha 37/38 cha Act 85.",
         accept_btn: "KUBALI & ANZISHA MSAIDIZI WA KIDIJIJITALI",
         
-        logo: "ErgoSafe <span class=\"accent\">WINGMAN</span>",
+        logo: "ErgoSafe <span class=\"accent\">REBORN V3</span>",
         streak_label: "MFULULIZO WA USALAMA",
         fatigue_label: "Kielezo cha Uchovu",
         nominal: "Kawaida",
@@ -70,7 +70,7 @@ const extTranslations = {
         guardrail_3: "Iyahambisana neSigaba 37/38 Act 85.",
         accept_btn: "VUMA & QALA UMNGANE WEDIJITHALI",
         
-        logo: "ErgoSafe <span class=\"accent\">WINGMAN</span>",
+        logo: "ErgoSafe <span class=\"accent\">REBORN V3</span>",
         streak_label: "UMFULA WOKUPHEPHA",
         fatigue_label: "INDLELA YOMKHATHALA",
         nominal: "Kawaida",
@@ -100,7 +100,7 @@ const extTranslations = {
         guardrail_3: "Iyahambelana neCandelo 37/38 loMthetho 85.",
         accept_btn: "AMKELA KWAYE UQALISE UMHLOBO WEDIJITHALI",
         
-        logo: "ErgoSafe <span class=\"accent\">WINGMAN</span>",
+        logo: "ErgoSafe <span class=\"accent\">REBORN V3</span>",
         streak_label: "UTHOTHO LWOKHUSELEKO",
         fatigue_label: "UTHOTHO LWOKUDINWA",
         nominal: "Kawaida",
@@ -130,7 +130,7 @@ const extTranslations = {
         guardrail_3: "符合第 37/38 条 Act 85 规定。",
         accept_btn: "确认并启动数字伴侣",
         
-        logo: "ErgoSafe <span class=\"accent\">数字伴侣</span>",
+        logo: "ErgoSafe <span class=\"accent\">REBORN V3</span>",
         streak_label: "安全周期",
         fatigue_label: "疲劳指数",
         nominal: "正常",
@@ -160,7 +160,7 @@ const extTranslations = {
         guardrail_3: "Konform mit Abschnitt 37/38 Act 85.",
         accept_btn: "BESTÄTIGEN & BEGLEITER INITIEREEN",
         
-        logo: "ErgoSafe <span class=\"accent\">BEGLEITER</span>",
+        logo: "ErgoSafe <span class=\"accent\">REBORN V3</span>",
         streak_label: "SICHERHEITSSERIE",
         fatigue_label: "MÜDIGKEITSINDEX",
         nominal: "Nominal",
@@ -190,7 +190,7 @@ const extTranslations = {
         guardrail_3: "E lumellana le Karolo ea 37/38 Act 85.",
         accept_btn: "AMOHELA U BE U QALE MOTLATSI OA DIJITHALE",
         
-        logo: "ErgoSafe <span class=\"accent\">WINGMAN</span>",
+        logo: "ErgoSafe <span class=\"accent\">REBORN V3</span>",
         streak_label: "KATLEHO EA TŠIRELETSOHO",
         fatigue_label: "KIELEZO SA MOKHATHALA",
         nominal: "Tloaelehileng",

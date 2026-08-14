@@ -26,13 +26,13 @@ export const PrivacyHandshake = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 z-[99999] flex items-center justify-center bg-ohs-navy/80 backdrop-blur-sm p-4"
+                    className="fixed inset-0 z-[99999] flex items-center justify-center bg-ohs-navy/80 backdrop-blur-sm p-3 sm:p-4 overflow-x-hidden overflow-y-auto"
                 >
                     <motion.div
                         initial={{ scale: 0.9, y: 50 }}
                         animate={{ scale: 1, y: 0 }}
                         exit={{ scale: 0.9, y: 50 }}
-                        className="bg-black border border-white/10 p-6 sm:p-8 rounded-3xl max-w-xl shadow-[0_0_50px_rgba(249,168,37,0.15)] relative overflow-hidden"
+                        className="bg-black border border-white/10 p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl w-[95vw] max-w-xl shadow-[0_0_50px_rgba(249,168,37,0.15)] relative overflow-y-auto max-h-[90vh] max-h-[90dvh] z-50"
                     >
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-ohs-orange to-yellow-500" />
 
