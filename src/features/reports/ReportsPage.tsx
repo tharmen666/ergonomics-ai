@@ -62,7 +62,7 @@ export const ReportsPage: React.FC = () => {
                             <FileText className="text-ohs-orange" size={20} />
                             Behavior-Based Safety (BBS) & Incident Ledger
                         </h3>
-                        <p className="text-xs text-gray-400 mt-1">Real-time telemetry stream from 3D spine hazard alerts, Shandray driver fatigue checks, and micro-stretches.</p>
+                        <p className="text-xs text-gray-400 mt-1">Real-time telemetry stream from 3D spine hazard alerts, Prizm driver fatigue checks, and micro-stretches.</p>
                     </div>
                     <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 w-max">
                         ZERO-KNOWLEDGE POPIA ENCRYPTED

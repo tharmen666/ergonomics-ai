@@ -28,7 +28,7 @@ export const HRDashboard = () => {
         resetCompliance 
     } = useComplianceStore();
 
-    const filteredCases = cases.filter(c => c.companyId === currentCompanyId);
+    const filteredCases = cases.filter(c => !currentCompanyId || c.companyId === currentCompanyId);
 
     const [selectedCase, setSelectedCase] = useState<EmployeeCase | null>(null);
 

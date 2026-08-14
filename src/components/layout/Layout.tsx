@@ -3,7 +3,7 @@ import { Sidebar } from './Sidebar';
 import { Footer } from './Footer';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNellyStore } from '../../store/nellyStore';
-import { Menu } from 'lucide-react';
+import { Menu, Settings } from 'lucide-react';
 
 interface LayoutProps {
     children: ReactNode;
@@ -88,6 +88,13 @@ export const Layout = memo(({ children, activeTab, setActiveTab }: LayoutProps) 
                         >
                             HQ DEMO
                         </button>
+                        <button
+                            onClick={() => setActiveTab('fatigue')}
+                            className="p-2.5 min-h-[48px] min-w-[48px] bg-white/10 hover:bg-white/20 border border-white/10 text-ohs-orange rounded-xl font-bold transition-all shadow-md flex items-center justify-center cursor-pointer"
+                            title="G.E.A.R. System Dashboard & Telemetry Settings"
+                        >
+                            <Settings size={20} />
+                        </button>
                     </div>
 
                     {/* Glowing Vector NellyAvatar Component - inline and always visible */}
@@ -108,7 +115,7 @@ export const Layout = memo(({ children, activeTab, setActiveTab }: LayoutProps) 
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ duration: 0.3 }}
-                            className="w-full"
+                            className="w-full min-h-screen flex flex-col flex-1"
                         >
                             {children}
                         </motion.div>

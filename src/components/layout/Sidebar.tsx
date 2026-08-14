@@ -1,15 +1,21 @@
 import { useEffect } from 'react';
-import { Users, Award, ClipboardCheck, CheckSquare, Bot, Truck, FileText, BarChart2, X, ShieldAlert, LogOut } from 'lucide-react';
+import { Users, Award, ClipboardCheck, CheckSquare, Bot, Truck, FileText, BarChart2, X, ShieldAlert, LogOut, HeartHandshake, Timer, Sparkles, Activity, ShieldCheck, BrainCircuit } from 'lucide-react';
 import { useNellyStore } from '../../store/nellyStore';
 import { useTenantStore } from '../../store/tenantStore';
 
 const navItems = [
     { icon: Users, label: "HR & Compliance Dashboard", id: "hr" },
+    { icon: HeartHandshake, label: "Ground-Zero Human Co-Pilot Companion", id: "companion-hub" },
+    { icon: Timer, label: "Smart Break & Mobility Engine", id: "smart-breaks" },
+    { icon: Sparkles, label: "Organic SOP & ISO 45001 Generator", id: "sop-generator" },
     { icon: Award, label: "Ergonomics Training & Certification", id: "training" },
     { icon: ClipboardCheck, label: "Daily Self-Risk Assessment (WFH / Desk)", id: "assessment" },
     { icon: CheckSquare, label: "Daily Workstation Safety Checklist", id: "checklist" },
-    { icon: Bot, label: "Nelly Posture & Hazard Monitoring Engine", id: "nelly" },
-    { icon: Truck, label: "Shandray's Prizm Driver & Shift Fatigue Telemetry", id: "fatigue" },
+    { icon: Bot, label: "Nelly Posture & Hazard Monitoring Engine (3D Spine)", id: "nelly" },
+    { icon: Truck, label: "Prizm Driver & Shift Fatigue Telemetry", id: "fatigue" },
+    { icon: BrainCircuit, label: "Ergonomics Cognitive Handshake", id: "cognitive-handshake" },
+    { icon: Activity, label: "Risky Behaviours Monitoring", id: "risks" },
+    { icon: ShieldCheck, label: "Stewardship Overview", id: "executive" },
     { icon: FileText, label: "Assessment PDF Invoices & Billing", id: "invoices" },
     { icon: BarChart2, label: "Analytics & Regulatory Audit Logs", id: "reports" },
 ];

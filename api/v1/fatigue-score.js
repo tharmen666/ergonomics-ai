@@ -15,7 +15,7 @@ export default function handler(req, res) {
 
   if (req.method === 'GET') {
     res.status(200).json({
-      service: "Shandray's Prizm Alert Handshake Engine",
+      service: "Prizm Driver Fatigue Handshake Engine",
       endpoint: "/api/v1/fatigue-score",
       status: "OPERATIONAL",
       version: "v3.0.0",
@@ -43,7 +43,7 @@ export default function handler(req, res) {
         }
       }
 
-      // Calculate Shandray's Prizm Driver Fatigue Score (0 - 100)
+      // Calculate Prizm Driver Fatigue Score (0 - 100)
       let hourPenalty = 0;
       if (drivingHours > 8) hourPenalty = 60;
       else if (drivingHours > 6) hourPenalty = 45;
@@ -85,7 +85,7 @@ export default function handler(req, res) {
         prizmAlertTriggered,
         recommendedAction,
         ohsComplianceAdvisory,
-        handshakeStatus: 'SHANDRAY_PRIZM_ACKNOWLEDGED',
+        handshakeStatus: 'PRIZM_ACKNOWLEDGED',
         timestamp: new Date().toISOString()
       });
     } catch (err) {

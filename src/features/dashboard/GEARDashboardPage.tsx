@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Zap, FileCheck, Brain, TrendingUp, CheckCircle2, Truck, AlertTriangle, RefreshCw, Timer, HardHat, Gauge } from 'lucide-react';
+import { Shield, Zap, FileCheck, Brain, TrendingUp, CheckCircle2, Truck, AlertTriangle, RefreshCw, Timer, HardHat, Gauge, Target, ShieldCheck } from 'lucide-react';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 import { useNellyStore } from '../../store/nellyStore';
 import { useComplianceStore } from '../../store/complianceStore';
@@ -34,6 +34,8 @@ export const GEARDashboardPage = () => {
         ppe: false
     });
 
+    const [industryMode, setIndustryMode] = useState<'logistics' | 'mining' | 'office'>('logistics');
+
     const governance = 100;
     let efficiency = 100;
     if (fatigueLevel === 'warning') efficiency = 85;
@@ -64,7 +66,7 @@ export const GEARDashboardPage = () => {
             evaluateDriverFatigue(drivingHours, reactionDropPct);
             setApiResponse({
                 success: true,
-                handshakeStatus: 'SHANDRAY_PRIZM_LOCAL_FALLBACK',
+                handshakeStatus: 'PRIZM_LOCAL_FALLBACK',
                 fatigueScore: driverFatigueScore,
                 riskLevel: prizmAlertActive ? 'CRITICAL_BREACH' : 'NOMINAL',
                 drivingHours,
@@ -209,7 +211,61 @@ export const GEARDashboardPage = () => {
                 </div>
             </div>
 
-            {/* Shandray's Prizm Alert Handshake & Driver Fatigue Telemetry Module */}
+            {/* Industry Telemetry Mode Selector */}
+            <div className="bg-slate-900/90 border border-white/10 p-4 rounded-3xl space-y-3">
+                <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-black text-ohs-orange uppercase tracking-[0.2em]">Select Industry Telemetry Mode</span>
+                    <span className="text-xs font-mono text-gray-400">Active Mode: <strong className="text-white uppercase font-bold">{industryMode}</strong></span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <button
+                        onClick={() => setIndustryMode('logistics')}
+                        className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
+                            industryMode === 'logistics'
+                                ? 'bg-ohs-orange/20 border-ohs-orange text-white shadow-lg'
+                                : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'
+                        }`}
+                    >
+                        <Truck className="text-ohs-orange shrink-0" size={22} />
+                        <div>
+                            <h4 className="text-xs font-black uppercase">Logistics & Long-Haul</h4>
+                            <p className="text-[10px] text-gray-400">Shift hours, wheel time, micro-sleep alerts</p>
+                        </div>
+                    </button>
+
+                    <button
+                        onClick={() => setIndustryMode('mining')}
+                        className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
+                            industryMode === 'mining'
+                                ? 'bg-amber-500/20 border-amber-500 text-white shadow-lg'
+                                : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'
+                        }`}
+                    >
+                        <HardHat className="text-amber-400 shrink-0" size={22} />
+                        <div>
+                            <h4 className="text-xs font-black uppercase">Mining & Heavy Plant</h4>
+                            <p className="text-[10px] text-gray-400">Surface/underground vibration & rotation</p>
+                        </div>
+                    </button>
+
+                    <button
+                        onClick={() => setIndustryMode('office')}
+                        className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center gap-3 ${
+                            industryMode === 'office'
+                                ? 'bg-cyan-500/20 border-cyan-500 text-white shadow-lg'
+                                : 'bg-white/5 border-white/10 text-gray-400 hover:bg-white/10'
+                        }`}
+                    >
+                        <Gauge className="text-cyan-400 shrink-0" size={22} />
+                        <div>
+                            <h4 className="text-xs font-black uppercase">Office & Admin Desk</h4>
+                            <p className="text-[10px] text-gray-400">Screen glare, tech-neck, posture strain</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            {/* Prizm Driver Fatigue Handshake & Driver Fatigue Telemetry Module */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -223,7 +279,7 @@ export const GEARDashboardPage = () => {
                         <div className="min-w-0 flex-1 max-w-full overflow-hidden">
                             <div className="flex flex-wrap items-center gap-2">
                                 <span className="text-[9px] font-black text-ohs-orange uppercase tracking-widest bg-ohs-orange/10 px-2 py-0.5 rounded-full border border-ohs-orange/20 truncate">
-                                    Shandray's Prizm Alert Handshake
+                                    Prizm Driver Fatigue Handshake
                                 </span>
                                 <span className="mt-1 text-xs text-slate-300 block truncate uppercase font-mono">Endpoint: /api/v1/fatigue-score</span>
                             </div>
@@ -233,14 +289,25 @@ export const GEARDashboardPage = () => {
                         </div>
                     </div>
                     
-                    <button
-                        onClick={handleSyncPrizmApi}
-                        disabled={isSyncingApi}
-                        className="w-full lg:w-auto flex items-center justify-center gap-2 bg-ohs-orange hover:bg-yellow-400 text-ohs-navy px-5 py-3 rounded-2xl font-black text-xs transition-all shadow-lg shadow-ohs-orange/20 cursor-pointer disabled:opacity-50 shrink-0"
-                    >
-                        <RefreshCw size={16} className={isSyncingApi ? 'animate-spin' : ''} />
-                        {isSyncingApi ? 'HANDSHAKING API...' : 'SYNC PRIZM API'}
-                    </button>
+                    <div className="flex flex-col sm:flex-row gap-2 w-full lg:w-auto shrink-0">
+                        <button
+                            onClick={() => {
+                                useFatigueStore.getState().resetToNominal();
+                                useComplianceStore.getState().resetCompliance();
+                            }}
+                            className="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-3 rounded-2xl font-black text-xs transition-all shadow-lg cursor-pointer"
+                        >
+                            <ShieldCheck size={16} /> SUPERVISOR OVERRIDE
+                        </button>
+                        <button
+                            onClick={handleSyncPrizmApi}
+                            disabled={isSyncingApi}
+                            className="flex items-center justify-center gap-2 bg-ohs-orange hover:bg-yellow-400 text-ohs-navy px-5 py-3 rounded-2xl font-black text-xs transition-all shadow-lg shadow-ohs-orange/20 cursor-pointer disabled:opacity-50"
+                        >
+                            <RefreshCw size={16} className={isSyncingApi ? 'animate-spin' : ''} />
+                            {isSyncingApi ? 'HANDSHAKING API...' : 'SYNC PRIZM API'}
+                        </button>
+                    </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -297,6 +364,13 @@ export const GEARDashboardPage = () => {
                                 {driverFatigueScore} / 100
                             </span>
                         </div>
+                        <button
+                            onClick={() => useFatigueStore.getState().setShowCognitiveHandshake(true)}
+                            className="w-full bg-ohs-orange/20 hover:bg-ohs-orange/30 border border-ohs-orange/40 text-ohs-orange py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-2"
+                        >
+                            <Target size={14} />
+                            LAUNCH DOT-CLICK LATENCY TEST
+                        </button>
                     </div>
 
                     {/* Prizm Real-Time Alert Banner */}
@@ -478,7 +552,7 @@ export const GEARDashboardPage = () => {
                         <span className="text-emerald-400 font-bold uppercase tracking-wider text-[9px] shrink-0">PASSED</span>
                     </div>
                     <div className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
-                        <span className="text-gray-400 truncate max-w-[240px] sm:max-w-none">[08:42:20] Shandray's Prizm Driver Fatigue Telemetry: Active</span>
+                        <span className="text-gray-400 truncate max-w-[240px] sm:max-w-none">[08:42:20] Prizm Driver Fatigue Telemetry: Active</span>
                         <span className="text-ohs-orange font-bold uppercase tracking-wider text-[9px] shrink-0">ONLINE</span>
                     </div>
                 </div>

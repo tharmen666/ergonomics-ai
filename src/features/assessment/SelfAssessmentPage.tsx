@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { SelfAssessment } from '../training/SelfAssessment';
 import { SpineViewer } from '../../components/agent/SpineViewer';
+import { HomeOfficeSetupGuide } from './HomeOfficeSetupGuide';
 import { Activity } from 'lucide-react';
 
 export const SelfAssessmentPage = () => {
@@ -18,9 +19,12 @@ export const SelfAssessmentPage = () => {
                     Ergonomic Self-Assessment
                 </h1>
                 <p className="text-slate-300 text-sm md:text-base max-w-2xl font-medium">
-                    Optimize your WFH / desk workspace in 5 minutes with real-time 3D spinal alignment telemetry.
+                    Optimize your WFH / desk workspace in 5 minutes with real-time 3D spinal alignment telemetry and visual home office setup guides.
                 </p>
             </motion.div>
+
+            {/* Dedicated Home Office Ergonomic Setup Guide */}
+            <HomeOfficeSetupGuide />
 
             {/* 3D Spine Telemetry Canvas */}
             <motion.div

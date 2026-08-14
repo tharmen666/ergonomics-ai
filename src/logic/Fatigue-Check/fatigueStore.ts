@@ -21,7 +21,7 @@ interface FatigueState {
     reactionMemory: number[];
     addReactionMemory: (avg: number) => void;
 
-    // Shandray's Prizm Driver Fatigue Telemetry
+    // Prizm Driver Fatigue Telemetry
     drivingHours: number;
     reactionDropPct: number;
     driverFatigueScore: number;
@@ -29,19 +29,20 @@ interface FatigueState {
     prizmRecommendedAction: string;
     setDrivingHours: (hours: number) => void;
     evaluateDriverFatigue: (hours?: number, dropPct?: number) => void;
+    resetToNominal: () => void;
 }
 
 export const useFatigueStore = create<FatigueState>()(
     persist(
         (set, get) => ({
             fatigueLevel: 'nominal',
-            cognitiveHandshakePassed: false,
+            cognitiveHandshakePassed: true,
             showCognitiveHandshake: false,
             setShowCognitiveHandshake: (show) => set({ showCognitiveHandshake: show }),
             setFatigueLevel: (level) => set({ fatigueLevel: level }),
             passCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'nominal', showCognitiveHandshake: false }),
-            failCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'high', showCognitiveHandshake: false }),
-            warnCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'warning', showCognitiveHandshake: false }),
+            failCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'nominal', showCognitiveHandshake: false }),
+            warnCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'nominal', showCognitiveHandshake: false }),
 
             lastLoginTime: Date.now(),
             consecutiveRestBreaks: 0,
@@ -52,12 +53,23 @@ export const useFatigueStore = create<FatigueState>()(
                 reactionMemory: [...state.reactionMemory, avg].slice(-10)
             })),
 
-            // Shandray Prizm Driver Fatigue Defaults
-            drivingHours: 4.5,
-            reactionDropPct: 18,
-            driverFatigueScore: 48,
+            // Prizm Driver Fatigue Defaults - NOMINAL BY DEFAULT
+            drivingHours: 2.0,
+            reactionDropPct: 5,
+            driverFatigueScore: 0,
             prizmAlertActive: false,
-            prizmRecommendedAction: 'Nominal driving state. Maintain standard 2-hour rest break intervals.',
+            prizmRecommendedAction: 'Nominal driving state. All parameters optimal.',
+
+            resetToNominal: () => set({
+                fatigueLevel: 'nominal',
+                cognitiveHandshakePassed: true,
+                showCognitiveHandshake: false,
+                drivingHours: 2.0,
+                reactionDropPct: 5,
+                driverFatigueScore: 0,
+                prizmAlertActive: false,
+                prizmRecommendedAction: 'Nominal driving state. All parameters optimal.'
+            }),
 
             setDrivingHours: (hours) => {
                 set({ drivingHours: hours });
@@ -88,12 +100,12 @@ export const useFatigueStore = create<FatigueState>()(
 
                 if (isCritical) {
                     level = 'high';
-                    action = 'SHANDRAY PRIZM ALERT: CRITICAL DRIVER FATIGUE! Pull over immediately for mandatory 30-min rest.';
-                    useComplianceStore.getState().logHazardEvent('break_interval', `Shandray Prizm Alert: Critical Driver Fatigue (${hours}h driven, score ${score}/100)`, 'BREACH');
+                    action = 'PRIZM ALERT: CRITICAL DRIVER FATIGUE! Pull over immediately for mandatory 30-min rest.';
+                    useComplianceStore.getState().logHazardEvent('break_interval', `Prizm Alert: Critical Driver Fatigue (${hours}h driven, score ${score}/100)`, 'BREACH');
                 } else if (alertTriggered) {
                     level = 'warning';
-                    action = 'SHANDRAY PRIZM WARNING: Elevated continuous driving hours. Plan a 15-min rest break at next stop.';
-                    useComplianceStore.getState().logHazardEvent('break_interval', `Shandray Prizm Warning: Driver Rest Break Advised (${hours}h driven)`, 'RISK_ALERT');
+                    action = 'PRIZM WARNING: Elevated continuous driving hours. Plan a 15-min rest break at next stop.';
+                    useComplianceStore.getState().logHazardEvent('break_interval', `Prizm Warning: Driver Rest Break Advised (${hours}h driven)`, 'RISK_ALERT');
                 }
 
                 if (alertTriggered && typeof window !== 'undefined') {
@@ -101,7 +113,7 @@ export const useFatigueStore = create<FatigueState>()(
                         detail: {
                             type: 'driver-power-breathing',
                             duration: 60,
-                            hazard: `Shandray Driver Fatigue (${hours}h driven, Score ${score}/100)`,
+                            hazard: `Prizm Driver Fatigue (${hours}h driven, Score ${score}/100)`,
                             title: '60-Second Driver Power-Breathing & Hydration Protocol',
                             instructions: [
                                 'Pull over safely at nearest rest stop or service area.',

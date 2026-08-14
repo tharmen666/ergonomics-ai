@@ -34,7 +34,7 @@ export const ExecutiveBriefing = () => {
         },
         {
             timestamp: "02:40",
-            title: "Shandray's Prizm Driver & Shift Fatigue Handshake",
+            title: "Prizm Driver & Shift Fatigue Telemetry",
             desc: "Continuous driving-hour tracking, reaction drop scoring via /api/v1/fatigue-score, and mandatory rest lockouts.",
             tag: "Driver Safety",
             color: "text-amber-400",
@@ -56,7 +56,7 @@ export const ExecutiveBriefing = () => {
         {
             gapTitle: "Driver Shift Fatigue & Micro-Sleep Risks",
             riskLevel: "CRITICAL HIGHWAY LIABILITY",
-            solution: "Shandray's Prizm Alert Handshake (/api/v1/fatigue-score)",
+            solution: "Prizm Driver Fatigue Handshake (/api/v1/fatigue-score)",
             details: "Monitors continuous driving hours (2h, 4.5h, 6.5h, 8h thresholds) and cognitive latency drops. Triggers mandatory 30-minute rest lockouts before micro-sleep incidents occur.",
             statute: "Section 8(1) OHS Act 85 of 1993",
             icon: Truck,
@@ -88,7 +88,7 @@ export const ExecutiveBriefing = () => {
             setIsNarrating(false);
         } else {
             setIsNarrating(true);
-            const script = `Executive Briefing Narration Active. Welcome to ErgoSafe Reborn V3. This executive summary integrates live OHS Act Section 37 compliance telemetry with the Demo Video Feature. Core fatigue gaps, including long-distance driver shift fatigue, micro-sleep risks, and cervical neck strain, are systematically resolved via Shandray's Prizm Alert Handshake and Nelly's Ergonomic Engine. Our platform establishes a legally defensible audit trail under Section 8 clause 1 of the Occupational Health and Safety Act, reducing corporate liability and securing up to 142% return on driver safety investment.`;
+            const script = `Executive Briefing Narration Active. Welcome to ErgoSafe Reborn V3. This executive summary integrates live OHS Act Section 37 compliance telemetry with the Demo Video Feature. Core fatigue gaps, including long-distance driver shift fatigue, micro-sleep risks, and cervical neck strain, are systematically resolved via Prizm Driver Fatigue Handshake and Nelly's Ergonomic Engine. Our platform establishes a legally defensible audit trail under Section 8 clause 1 of the Occupational Health and Safety Act, reducing corporate liability and securing up to 142% return on driver safety investment.`;
             speak(script, language, () => setIsNarrating(false));
         }
     };
@@ -112,7 +112,7 @@ export const ExecutiveBriefing = () => {
                         EXECUTIVE BRIEFING <span className="text-ohs-orange">& DEMO SYNC</span>
                     </h1>
                     <p className="text-gray-300 font-medium text-xs md:text-sm leading-relaxed">
-                        Section 37 & 38 OHS Act 85 Compliance Telemetry integrated with interactive video walkthroughs and Shandray's Prizm Alert driver fatigue engine.
+                        Section 37 & 38 OHS Act 85 Compliance Telemetry integrated with interactive video walkthroughs and Prizm Driver Fatigue engine.
                     </p>
                 </div>
 

@@ -60,7 +60,7 @@ const INITIAL_INVOICES: Invoice[] = [
         invoiceNumber: 'INV-2026-002',
         clientName: 'Noted Stone Holdings',
         clientVat: 'ZA4192049182',
-        assessmentType: 'Shandray Prizm Driver Shift Fatigue Audit',
+        assessmentType: 'Prizm Driver Shift Fatigue Audit',
         workstationsCount: 28,
         unitPrice: 1500,
         subtotal: 42000,
@@ -380,7 +380,7 @@ export const InvoicePage = () => {
                                         className="w-full bg-black/40 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-ohs-orange"
                                     >
                                         <option value="ISO 45003 Workstation Ergonomics Audit">ISO 45003 Workstation Ergonomics Audit</option>
-                                        <option value="Shandray Prizm Driver Shift Fatigue Audit">Shandray Prizm Driver Shift Fatigue Audit</option>
+                                        <option value="Prizm Driver Shift Fatigue Audit">Prizm Driver Shift Fatigue Audit</option>
                                         <option value="Remote WFH Desk & Posture Telemetry Certification">Remote WFH Desk & Posture Telemetry Certification</option>
                                         <option value="Executive OHS Act Compliance Dossier Assessment">Executive OHS Act Compliance Dossier Assessment</option>
                                     </select>

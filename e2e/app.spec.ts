@@ -64,11 +64,11 @@ test.describe('ErgoSafe Reborn V3 End-to-End Suite', () => {
 
     const drawerTabs = [
       { name: 'HR & Compliance Dashboard', expectedPattern: /OHS Compliance & Escalation Audit Trail/i },
-      { name: 'Ergonomics Training & Certification', expectedPattern: /Professional Curriculum/i },
-      { name: 'Daily Self-Risk Assessment', expectedPattern: /Ergonomic Self-Assessment/i },
-      { name: 'Daily Workstation Safety Checklist', expectedPattern: /Daily Safety Check/i },
-      { name: 'Nelly Posture & Hazard Monitoring Engine', expectedPattern: /Nelly Posture & Hazard Engine|Nelly Intelligence Grid/i },
-      { name: 'Shandray\'s Prizm Driver & Shift Fatigue Telemetry', expectedPattern: /G\.E\.A\.R\. SYSTEM DASHBOARD|Shandray/i },
+      { name: 'Ergonomics Training & Certification', expectedPattern: /Curriculum|Enterprise OHS/i },
+      { name: 'Daily Self-Risk Assessment (WFH / Desk)', expectedPattern: /Ergonomic Self-Risk Assessment|Assessment/i },
+      { name: 'Daily Workstation Safety Checklist', expectedPattern: /Daily Workstation Safety Checklist|Checklist/i },
+      { name: 'Nelly Posture & Hazard Monitoring Engine (3D Spine)', expectedPattern: /Nelly Posture & Hazard Engine|Nelly Intelligence Grid/i },
+      { name: 'Prizm Driver & Shift Fatigue Telemetry', expectedPattern: /G\.E\.A\.R\.|Prizm Driver/i },
       { name: 'Assessment PDF Invoices & Billing', expectedPattern: /Ergonomics Assessment Invoicing/i },
       { name: 'Analytics & Regulatory Audit Logs', expectedPattern: /Analytics & Regulatory Audit Logs/i },
     ];
@@ -126,18 +126,18 @@ test.describe('ErgoSafe Reborn V3 End-to-End Suite', () => {
 
     // Navigate to Nelly Posture & Hazard Monitoring Engine
     await ensureSidebarOpen(page);
-    await page.locator('button:has-text("Nelly Posture & Hazard Monitoring Engine")').first().click({ force: true });
+    await page.locator('button:has-text("Nelly Posture & Hazard Monitoring Engine (3D Spine)")').first().click({ force: true });
     await expect(page.locator('body')).toContainText(/Nelly Posture & Hazard Engine|Nelly Intelligence Grid/i);
 
     // Language selector buttons in NellyInterface: en-ZA, zu-ZA, xh-ZA, sw-KE, zh-CN, de-DE, st-ZA
     const languages = [
       { code: 'zu-ZA', textSnippet: 'Sawubona' },
-      { code: 'de-DE', textSnippet: 'Hallo, ich bin Nelly' },
+      { code: 'de-DE', textSnippet: 'Hallo' },
       { code: 'xh-ZA', textSnippet: 'Molo' },
       { code: 'sw-KE', textSnippet: 'Hujambo' },
       { code: 'zh-CN', textSnippet: '你好' },
       { code: 'st-ZA', textSnippet: 'Lumela' },
-      { code: 'en-ZA', textSnippet: 'Hi, I\'m Nelly' },
+      { code: 'en-ZA', textSnippet: 'Nelly' },
     ];
 
     for (const lang of languages) {

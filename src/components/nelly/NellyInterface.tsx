@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
-import { X, Globe, PlayCircle, ShieldCheck, Minimize2 } from 'lucide-react';
+import { X, Globe, PlayCircle, ShieldCheck, Minimize2, Volume2, VolumeX } from 'lucide-react';
 import { ReasoningLog } from '../agent/ReasoningLog';
 import { translations, Language } from '../../utils/translations';
-import { VOICEOVER_ACCENT_MAP, speak } from '../../utils/speech';
+import { VOICEOVER_ACCENT_MAP, speak, toggleMute, getIsMuted } from '../../utils/speech';
 
 import { useNellyStore } from '../../store/nellyStore';
 
@@ -47,7 +47,23 @@ export const NellyInterface = ({
         >
             {/* Header */}
             <div className="flex items-center justify-between mb-2 border-b border-white/5 pb-2">
-                <span className="text-[10px] font-black text-ohs-orange uppercase tracking-widest">Nelly Intelligence Grid</span>
+                <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-black text-ohs-orange uppercase tracking-widest">Nelly Intelligence Grid</span>
+                    <button
+                        onClick={() => {
+                            const muted = toggleMute();
+                            store.setSpeaking(!muted);
+                        }}
+                        className={`p-1.5 rounded-lg border transition-all cursor-pointer ${
+                            getIsMuted() 
+                                ? 'bg-red-500/20 text-red-400 border-red-500/30' 
+                                : 'bg-ohs-orange/20 text-ohs-orange border-ohs-orange/30 hover:bg-ohs-orange/30'
+                        }`}
+                        title={getIsMuted() ? "Unmute Nelly Voice Synthesis" : "Mute Nelly Voice Synthesis"}
+                    >
+                        {getIsMuted() ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                    </button>
+                </div>
                 <div className="flex items-center gap-1">
                     <button 
                         aria-label="Minimize" 
@@ -94,13 +110,16 @@ export const NellyInterface = ({
             </div>
 
             {/* Intro Text */}
-            <div className="mb-4">
-                <p className="text-sm text-white font-medium italic leading-relaxed break-words whitespace-normal">
+            <div className="mb-3">
+                <p className="text-xs sm:text-sm text-white font-medium italic leading-relaxed break-words whitespace-normal bg-white/5 p-3 rounded-xl border border-white/5">
                     "{translations[activeLang].nelly_intro}"
                 </p>
             </div>
 
-            <ReasoningLog />
+            {/* Agent Reasoning Log Container */}
+            <div className="w-full max-w-full overflow-hidden my-2 rounded-xl">
+                <ReasoningLog />
+            </div>
 
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-2 mt-4">

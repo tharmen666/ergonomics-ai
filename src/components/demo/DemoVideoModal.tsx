@@ -25,9 +25,9 @@ export const DEMO_VIDEO_SCRIPT = [
   {
     time: "0:45 - 1:10",
     seconds: 45,
-    title: "3. Shandray’s Section & 3D Interactive AI Coach",
+    title: "3. 3D Spine Telemetry & Interactive AI Coach",
     badge: "3D Spine Telemetry & Prizm Engine",
-    text: "Powered by Three.js biomechanical posture mapping, Nelly—our Google Cloud Agent Builder digital wingman—monitors C1-C7 cervical tilt and L1-L5 lumbar strain in real time. Deeply integrated with Shandray’s Prizm Alert shift fatigue score (/api/v1/fatigue-score), workers receive automated Tier-2 micro-stretch interventions before fatigue turns into acute injury."
+    text: "Powered by Three.js biomechanical posture mapping, Nelly—our Google Cloud Agent Builder digital wingman—monitors C1-C7 cervical tilt and L1-L5 lumbar strain in real time. Deeply integrated with Prizm Driver Fatigue score (/api/v1/fatigue-score), workers receive automated Tier-2 micro-stretch interventions before fatigue turns into acute injury."
   },
   {
     time: "1:10 - 1:30",

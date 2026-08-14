@@ -59,11 +59,23 @@ export const VOICEOVER_ACCENT_MAP: Record<string, VoiceConfig> = {
 };
 
 let speechQueue: { text: string; lang: string; onEnd?: () => void }[] = [];
+let isAudioMuted = false;
+
+export const toggleMute = (): boolean => {
+    isAudioMuted = !isAudioMuted;
+    if (isAudioMuted) {
+        stopSpeaking();
+    }
+    return isAudioMuted;
+};
+
+export const getIsMuted = (): boolean => isAudioMuted;
 
 /**
  * High-Fidelity Human Voice Engine for Nelly AI Safety Companion
  */
 export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => {
+    if (isAudioMuted) return;
     if (!window.speechSynthesis) {
         console.warn("SpeechSynthesis not supported on this platform");
         return;

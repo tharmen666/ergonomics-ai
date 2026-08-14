@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "ErgoSafe: AI Safety Layer",
-  "version": "1.0",
-  "description": "AI-driven OHS Stewardship and Fatigue-Gate for Remote Professionals.",
+  "name": "ErgoSafe Reborn V3: AI Safety Layer",
+  "version": "3.0.0",
+  "description": "AI-driven OHS Stewardship & Cognitive Fatigue Protection for Remote Professionals — ErgoSafe Reborn V3 Suite.",
   "icons": {
     "16": "icons/icon128.png",
     "48": "icons/icon128.png",
