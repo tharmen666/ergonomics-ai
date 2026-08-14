@@ -94,21 +94,21 @@ export const ExecutiveBriefing = () => {
     };
 
     return (
-        <div className="p-4 md:p-10 max-w-7xl mx-auto space-y-8 mb-24 overflow-x-hidden font-sans">
+        <div className="p-3 sm:p-6 md:p-8 max-w-7xl mx-auto space-y-6 sm:space-y-8 mb-24 overflow-x-hidden font-sans">
             {/* Header */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-gradient-to-r from-ohs-navy via-[#0c1322] to-slate-950 p-6 md:p-8 rounded-[2rem] border border-white/10 shadow-2xl relative overflow-hidden"
+                className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-gradient-to-r from-ohs-navy via-[#0c1322] to-slate-950 p-4 md:p-6 lg:p-8 rounded-[2rem] border border-white/10 shadow-2xl relative overflow-hidden"
             >
                 <div className="space-y-2 max-w-3xl">
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                         <span className="text-[9px] font-black text-ohs-orange uppercase tracking-[0.2em] bg-ohs-orange/10 px-3 py-1 rounded-full border border-ohs-orange/20">
                             Boardroom Executive Intelligence
                         </span>
                         <span className="text-[9px] font-bold text-gray-400 uppercase">Live Telemetry & Video Sync</span>
                     </div>
-                    <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight">
+                    <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-black text-white tracking-tight">
                         EXECUTIVE BRIEFING <span className="text-ohs-orange">& DEMO SYNC</span>
                     </h1>
                     <p className="text-gray-300 font-medium text-xs md:text-sm leading-relaxed">

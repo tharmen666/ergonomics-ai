@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNellyStore } from '../../store/nellyStore';
 import { Menu, Settings } from 'lucide-react';
 
+import { Navbar } from './Navbar';
+
 interface LayoutProps {
     children: ReactNode;
     activeTab: string;
@@ -15,8 +17,6 @@ export const Layout = memo(({ children, activeTab, setActiveTab }: LayoutProps) 
     const { 
         isSidebarCollapsed, 
         setSidebarCollapsed, 
-        isWingmanActive, 
-        setWingmanActive 
     } = useNellyStore();
 
     // Force sidebar to be closed on initial load to prevent overlay blocking
@@ -39,8 +39,9 @@ export const Layout = memo(({ children, activeTab, setActiveTab }: LayoutProps) 
                 setIsCollapsed={setSidebarCollapsed}
             />
 
-            {/* Unified Sticky Premium Responsive Header Grid */}
-            <header className={`sticky top-0 z-40 bg-ohs-navy/95 backdrop-blur-xl border-b border-white/10 flex items-center justify-between gap-2 px-4 py-3 sm:px-6 md:px-8 transition-all duration-300 ease-in-out ${
+            <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
+
+            <main className={`flex-1 px-3 sm:px-6 md:px-8 pt-4 sm:pt-6 pb-36 sm:pb-40 md:pb-28 relative z-10 flex flex-col w-full transition-all duration-300 ease-in-out ${
                 isSidebarCollapsed ? 'md:ml-0' : 'md:ml-[280px]'
             }`}>
                 {/* Left Branding and Navigation Toggle */}

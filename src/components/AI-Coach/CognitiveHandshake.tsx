@@ -20,7 +20,6 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
     const [lastTargetTime, setLastTargetTime] = useState(Date.now());
     const [gameCompleted, setGameCompleted] = useState(false);
     const [showKaizenBonus, setShowKaizenBonus] = useState(false);
-    const [showLiabilityWarning, setShowLiabilityWarning] = useState(false);
 
     const TOTAL_TARGETS = 5;
 
@@ -92,8 +91,7 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
             setMood('concerned');
             
             const reason = variancePercentage > 35 ? "High Cognitive Variance" : "Latency Threshold Breach";
-            setGuidance(`PROTOCOL ALERT: ${reason} detected. Handshake failed with ${Math.round(variancePercentage)}% variance. Section 37 Liability Warning activated.`);
-            setShowLiabilityWarning(true);
+            setGuidance(`PROTOCOL ALERT: ${reason} detected. Handshake failed with ${Math.round(variancePercentage)}% variance. Status logged as High Fatigue.`);
         } else if (historicalBaseline && avgReaction < (historicalBaseline * 1.10) && avgReaction < 700) {
             passCognitiveHandshake();
             setShowKaizenBonus(true);
@@ -269,9 +267,9 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="fixed inset-0 z-[99000] flex items-center justify-center bg-black/95 backdrop-blur-md font-sans text-white p-4 overflow-y-auto"
+                    className="fixed inset-0 z-[99000] flex items-center justify-center bg-black/80 backdrop-blur-md font-sans text-white p-3 sm:p-4 overflow-x-hidden overflow-y-auto"
                 >
-                    <div className="w-full max-w-md aspect-square max-h-[85vh] m-auto flex flex-col items-center justify-center bg-slate-900/90 border border-slate-800 p-4 sm:p-6 rounded-[2rem] shadow-[0_0_50px_rgba(249,168,37,0.15)] relative">
+                    <div className="w-[95vw] max-w-md max-h-[90vh] max-h-[90dvh] m-auto flex flex-col items-center justify-between bg-slate-900/95 border border-slate-800 p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] shadow-[0_0_50px_rgba(249,168,37,0.15)] relative overflow-y-auto z-50">
                         <HandshakeCardHeader
                             title="COGNITIVE HANDSHAKE"
                             subtext="Click the targets as quickly as possible to calibrate your baseline latency."
@@ -297,6 +295,17 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
                                 <Target size={20} className="text-ohs-navy" />
                             </motion.button>
                         </div>
+
+                        {/* Instant Supervisor Override Button */}
+                        <button
+                            onClick={() => {
+                                supervisorOverride();
+                                setGameCompleted(true);
+                            }}
+                            className="mt-4 w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black px-4 py-2.5 rounded-xl transition-all text-xs tracking-wider uppercase flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-900/40"
+                        >
+                            ⚡ SUPERVISOR OVERRIDE / EMERGENCY RESET
+                        </button>
                     </div>
                 </motion.div>
             )}

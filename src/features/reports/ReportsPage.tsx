@@ -11,43 +11,43 @@ export const ReportsPage: React.FC = () => {
     const verifiedBBSCount = cases.filter(c => c.hazardTrigger.includes('Verified BBS')).length;
 
     return (
-        <div className="p-4 sm:p-6 md:p-10 max-w-6xl mx-auto space-y-8 pb-32 font-sans">
+        <div className="p-3 sm:p-6 md:p-8 max-w-6xl mx-auto space-y-6 sm:space-y-8 pb-32 font-sans">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-4 border-b border-white/10 pb-6"
+                className="flex items-center gap-3 sm:gap-4 border-b border-white/10 pb-6"
             >
-                <div className="p-3 bg-ohs-orange/20 rounded-2xl text-ohs-orange border border-ohs-orange/30 shrink-0">
-                    <BarChart3 size={32} />
+                <div className="p-2.5 sm:p-3 bg-ohs-orange/20 rounded-2xl text-ohs-orange border border-ohs-orange/30 shrink-0">
+                    <BarChart3 className="w-7 h-7 sm:w-8 sm:h-8" />
                 </div>
                 <div>
                     <span className="text-[10px] font-black text-ohs-orange uppercase tracking-[0.3em] block">Regulatory & Analytics Engine</span>
-                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight uppercase">Analytics & Regulatory Audit Logs</h1>
+                    <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight uppercase">Analytics & Regulatory Audit Logs</h1>
                     <p className="text-gray-400 text-xs sm:text-sm font-medium">Evaluate postural risk trends, BBS hazard logs, and historical OHS Section 37 dossiers.</p>
                 </div>
             </motion.div>
 
             {/* KPI Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <GlassCard className="p-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                <GlassCard className="p-4 md:p-6">
                     <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Average Posture Score</p>
-                    <p className="text-3xl font-black text-emerald-400 mt-1">94.8%</p>
+                    <p className="text-2xl sm:text-3xl font-black text-emerald-400 mt-1">94.8%</p>
                     <span className="text-[10px] text-gray-400 font-medium flex items-center gap-1 mt-2">
                         <TrendingUp size={12} className="text-emerald-400" /> +1.2% this week
                     </span>
                 </GlassCard>
 
-                <GlassCard className="p-6">
+                <GlassCard className="p-4 md:p-6">
                     <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Verified BBS Interventions</p>
-                    <p className="text-3xl font-black text-teal-400 mt-1">{verifiedBBSCount}</p>
+                    <p className="text-2xl sm:text-3xl font-black text-teal-400 mt-1">{verifiedBBSCount}</p>
                     <span className="text-[10px] text-gray-400 font-medium flex items-center gap-1 mt-2">
                         <ShieldCheck size={12} className="text-teal-400" /> Completed & verified
                     </span>
                 </GlassCard>
 
-                <GlassCard className="p-6">
+                <GlassCard className="p-4 md:p-6">
                     <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Active High-Risk Breaches</p>
-                    <p className={`text-3xl font-black mt-1 ${breachCount > 0 ? 'text-red-500 animate-pulse' : 'text-emerald-400'}`}>{breachCount}</p>
+                    <p className={`text-2xl sm:text-3xl font-black mt-1 ${breachCount > 0 ? 'text-red-500 animate-pulse' : 'text-emerald-400'}`}>{breachCount}</p>
                     <span className="text-[10px] text-gray-400 font-medium flex items-center gap-1 mt-2">
                         <ShieldAlert size={12} className={breachCount > 0 ? 'text-red-400' : 'text-emerald-400'} /> {breachCount > 0 ? 'Action required' : 'Critical standard nominal'}
                     </span>
@@ -55,7 +55,7 @@ export const ReportsPage: React.FC = () => {
             </div>
 
             {/* Live BBS Hazard & Incident Audit Table */}
-            <GlassCard className="p-6 sm:p-8 space-y-6">
+            <GlassCard className="p-4 md:p-6 sm:p-8 space-y-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
                     <div>
                         <h3 className="text-lg font-black text-white flex items-center gap-2">

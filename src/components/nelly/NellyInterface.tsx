@@ -85,7 +85,7 @@ export const NellyInterface = ({
             </div>
 
             {/* Premium Language Preference Selection Bar */}
-            <div className="flex items-center justify-between gap-1 mb-4 bg-slate-950 border border-slate-800 p-1.5 rounded-xl">
+            <div className="grid grid-cols-4 sm:grid-cols-7 gap-1 mb-4 bg-slate-950 border border-slate-800 p-1.5 rounded-xl">
                 {Object.entries(VOICEOVER_ACCENT_MAP).map(([code, config]) => {
                     const isSelected = activeLang === code;
                     const langCode = code as Language;

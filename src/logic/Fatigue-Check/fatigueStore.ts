@@ -1,8 +1,12 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { useComplianceStore } from '../../store/complianceStore';
+import { useTenantStore } from '../../store/tenantStore';
 
 interface FatigueState {
+    status: 'NOMINAL' | 'WARNING' | 'HIGH';
+    fatigueScore: number;
+    locked: boolean;
     fatigueLevel: 'nominal' | 'warning' | 'high';
     cognitiveHandshakePassed: boolean;
     setFatigueLevel: (level: 'nominal' | 'warning' | 'high') => void;
@@ -11,6 +15,7 @@ interface FatigueState {
     passCognitiveHandshake: () => void;
     failCognitiveHandshake: () => void;
     warnCognitiveHandshake: () => void;
+    supervisorOverride: () => void;
 
     // Routine Audit
     lastLoginTime: number | null;
@@ -35,6 +40,9 @@ interface FatigueState {
 export const useFatigueStore = create<FatigueState>()(
     persist(
         (set, get) => ({
+            status: 'NOMINAL',
+            fatigueScore: 0,
+            locked: false,
             fatigueLevel: 'nominal',
             cognitiveHandshakePassed: true,
             showCognitiveHandshake: false,
@@ -125,6 +133,9 @@ export const useFatigueStore = create<FatigueState>()(
                 }
 
                 set({
+                    status: isCritical ? 'HIGH' : (alertTriggered ? 'WARNING' : 'NOMINAL'),
+                    fatigueScore: score,
+                    locked: false, // Ensure full lockout is disabled
                     fatigueLevel: level,
                     driverFatigueScore: score,
                     reactionDropPct: dropPct,

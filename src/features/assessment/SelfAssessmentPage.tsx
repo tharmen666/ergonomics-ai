@@ -6,16 +6,16 @@ import { Activity } from 'lucide-react';
 
 export const SelfAssessmentPage = () => {
     return (
-        <div className="p-4 sm:p-6 md:p-10 max-w-6xl mx-auto pb-32 space-y-8 font-sans">
+        <div className="p-3 sm:p-6 md:p-8 max-w-6xl mx-auto pb-32 space-y-6 sm:space-y-8 font-sans">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="space-y-4 text-center md:text-left"
+                className="space-y-3 sm:space-y-4 text-center md:text-left"
             >
                 <span className="text-[10px] font-black text-ohs-orange uppercase tracking-[0.3em] block">
                     Daily Ergonomics & Biomechanical Audit
                 </span>
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-ohs-orange to-yellow-400">
+                <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-ohs-orange to-yellow-400">
                     Ergonomic Self-Assessment
                 </h1>
                 <p className="text-slate-300 text-sm md:text-base max-w-2xl font-medium">
@@ -30,7 +30,7 @@ export const SelfAssessmentPage = () => {
             <motion.div
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-black/40 border border-white/10 rounded-3xl p-4 sm:p-6 space-y-4"
+                className="bg-black/40 border border-white/10 rounded-2xl sm:rounded-3xl p-4 md:p-6 space-y-4"
             >
                 <div className="flex items-center gap-3">
                     <div className="p-2.5 bg-ohs-orange/20 rounded-xl text-ohs-orange border border-ohs-orange/30">

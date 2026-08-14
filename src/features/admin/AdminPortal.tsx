@@ -8,7 +8,7 @@ import { FINANCIAL_PITCHES } from '../../logic/financePitches';
 import { useTenantStore } from '../../store/tenantStore';
 
 export const AdminPortal = () => {
-    const { fatigueLevel, cognitiveHandshakePassed } = useFatigueStore();
+    const { fatigueLevel, cognitiveHandshakePassed, supervisorOverride } = useFatigueStore();
     const currentCompanyId = useTenantStore(state => state.companyId);
 
     const allEmployees: Record<string, { name: string; dept: string; score: string; status: string; trend: string; escalation?: string }[]> = {
@@ -53,32 +53,34 @@ export const AdminPortal = () => {
     ];
 
     return (
-        <div className="space-y-10 pb-32">
+        <div className="space-y-6 sm:space-y-10 pb-32 font-sans">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h2 className="text-4xl font-black text-white tracking-tight flex items-center gap-3">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight flex flex-wrap items-center gap-2 sm:gap-3">
                         Stewardship Intelligence
                         <span className="bg-ohs-orange/20 text-ohs-orange text-[10px] px-2 py-1 rounded-full border border-ohs-orange/30">CEO VIEW</span>
                     </h2>
-                    <p className="text-gray-400 font-medium">Monitoring organizational OHS adherence & cascading accountability.</p>
+                    <p className="text-gray-400 text-xs sm:text-sm font-medium mt-1">Monitoring organizational OHS adherence & cascading accountability.</p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-2 sm:gap-3">
                     {fatigueLevel === 'high' || !cognitiveHandshakePassed ? (
-                        <div className="flex flex-col items-end gap-1">
-                            <div className="flex gap-3">
-                                <GlowButton variant="secondary" className="px-5 py-2.5 text-sm opacity-50 cursor-not-allowed">
-                                    <Lock size={16} className="mr-2" />
-                                    DOA Lockout
-                                </GlowButton>
+                        <div className="flex flex-col items-start sm:items-end gap-1 w-full sm:w-auto">
+                            <div className="flex gap-3 w-full sm:w-auto">
+                                <button
+                                    onClick={() => supervisorOverride()}
+                                    className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white font-black px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl text-[10px] sm:text-xs uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                                >
+                                    ⚡ SUPERVISOR OVERRIDE / EMERGENCY RESET
+                                </button>
                             </div>
-                            <p className="text-[10px] text-red-400 font-bold uppercase tracking-widest animate-pulse">Critical Sign-off Disabled</p>
+                            <p className="text-[10px] text-amber-400 font-bold uppercase tracking-widest">Supervisor Override Available</p>
                         </div>
                     ) : (
                         <>
-                            <GlowButton variant="secondary" className="px-5 py-2.5 text-sm">
+                            <GlowButton variant="secondary" className="px-3 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm">
                                 Refresh Node
                             </GlowButton>
-                            <GlowButton className="px-5 py-2.5 text-sm">
+                            <GlowButton className="px-3 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm">
                                 <Download size={16} className="mr-2" />
                                 Export Audit
                             </GlowButton>
@@ -88,7 +90,7 @@ export const AdminPortal = () => {
             </div>
 
             {/* CEO Safety Pulse Dial */}
-            <GlassCard className="p-8 border-ohs-orange/30 bg-gradient-to-br from-ohs-navy to-ohs-orange/5">
+            <GlassCard className="p-4 md:p-6 lg:p-8 border-ohs-orange/30 bg-gradient-to-br from-ohs-navy to-ohs-orange/5">
                 <div className="flex flex-col md:flex-row items-center gap-10">
                     <div className="relative w-48 h-48 flex items-center justify-center">
                         <svg className="w-full h-full transform -rotate-90">

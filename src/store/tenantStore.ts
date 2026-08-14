@@ -20,6 +20,9 @@ export interface TenantBillingInfo {
 }
 
 interface TenantState {
+    status: 'NOMINAL' | 'WARNING' | 'HIGH';
+    fatigueScore: number;
+    locked: boolean;
     companyId: string | null;
     userId: string | null;
     isAdmin: boolean;
@@ -29,6 +32,7 @@ interface TenantState {
     login: (companyId: string, userId: string, isAdmin: boolean) => void;
     logout: () => void;
     recordUsage: (companyId?: string) => void;
+    supervisorOverride: () => void;
 }
 
 const DEFAULT_COMPANIES: CompanyTenant[] = [
@@ -56,6 +60,12 @@ export const useTenantStore = create<TenantState>()(
                 { id: 'log-3', timestamp: '2026-07-07T11:45:00Z', companyId: 'COMP-003', userId: 'usr-apex-admin' },
             ],
             usage: DEFAULT_USAGE,
+
+            supervisorOverride: () => set({
+                status: 'NOMINAL',
+                fatigueScore: 0,
+                locked: false,
+            }),
 
             login: (companyId, userId, isAdmin) => set((state) => {
                 const timestamp = new Date().toISOString();

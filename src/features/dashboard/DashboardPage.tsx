@@ -31,7 +31,7 @@ export const DashboardPage = () => {
             <motion.div 
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="glass-ohs p-6 rounded-[2rem] border-l-8 border-ohs-orange flex flex-col sm:flex-row sm:items-center justify-between gap-4 overflow-hidden relative"
+                className="glass-ohs p-4 md:p-6 rounded-[2rem] border-l-8 border-ohs-orange flex flex-col sm:flex-row sm:items-center justify-between gap-4 overflow-hidden relative"
             >
                 <div className="absolute top-0 right-0 w-64 h-64 bg-ohs-orange/5 rounded-full blur-3xl -mr-32 -mt-32" />
                 <div className="relative z-10">
@@ -39,10 +39,10 @@ export const DashboardPage = () => {
                         <ShieldCheck size={16} className="text-ohs-orange" />
                         <span className="text-xs font-bold text-ohs-orange tracking-wider uppercase">Stewardship Authority Standard</span>
                     </div>
-                    <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">Enterprise Safety Operations</h1>
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight">Enterprise Safety Operations</h1>
                     <p className="text-gray-400 text-xs sm:text-sm font-medium mt-1">Section 8(1) OHS Act 85 of 1993 & ISO 45001/45003 Real-Time Ergonomic Telemetry</p>
                 </div>
-                <div className="flex gap-4 relative z-10 justify-start sm:justify-end">
+                <div className="flex flex-wrap gap-2 sm:gap-4 relative z-10 justify-start sm:justify-end">
                     <div className="text-left sm:text-right">
                         <p className="text-[9px] font-black text-gray-500 uppercase">Board Compliance</p>
                         <p className="text-lg sm:text-xl font-black text-glow-emerald text-[#10b981]">100%</p>

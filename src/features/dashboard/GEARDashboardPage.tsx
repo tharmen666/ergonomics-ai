@@ -15,7 +15,8 @@ export const GEARDashboardPage = () => {
         driverFatigueScore, 
         prizmAlertActive, 
         prizmRecommendedAction,
-        evaluateDriverFatigue
+        evaluateDriverFatigue,
+        supervisorOverride
     } = useFatigueStore();
     const { productiveStreak, language } = useNellyStore();
 
@@ -388,6 +389,12 @@ export const GEARDashboardPage = () => {
                         <p className="text-xs font-bold leading-relaxed">
                             {prizmRecommendedAction}
                         </p>
+                        <button
+                            onClick={() => supervisorOverride()}
+                            className="w-full mt-2 bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 px-4 rounded-xl text-xs uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                        >
+                            ⚡ SUPERVISOR OVERRIDE / EMERGENCY RESET
+                        </button>
                         {apiResponse && (
                             <div className="pt-2 border-t border-white/10 text-[9px] font-mono text-gray-400 truncate">
                                 Status: {apiResponse.handshakeStatus || 'OK'} | Advisory: {apiResponse.ohsComplianceAdvisory || 'Checked'}
