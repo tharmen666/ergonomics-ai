@@ -6,8 +6,10 @@ import { Shield, Key, Building2, UserCircle } from 'lucide-react';
 
 export const TenantLogin: React.FC = () => {
     const { companies, login } = useTenantStore();
-    const [selectedCompanyId, setSelectedCompanyId] = useState(companies[0]?.id || '');
-    const [userId, setUserId] = useState('');
+    const [mode, setMode] = useState<'demo' | 'sso'>('demo');
+    const [selectedCompanyId, setSelectedCompanyId] = useState(companies[0]?.id || 'COMP-001');
+    const [userId, setUserId] = useState(mode === 'demo' ? 'usr-sarah' : '');
+    const [ssoDomain, setSsoDomain] = useState('');
     const [role, setRole] = useState<'employee' | 'admin'>('employee');
     const [error, setError] = useState('');
 
@@ -15,8 +17,13 @@ export const TenantLogin: React.FC = () => {
         e.preventDefault();
         setError('');
 
+        if (mode === 'demo') {
+            login('COMP-001', 'usr-sarah', false);
+            return;
+        }
+
         if (!userId.trim()) {
-            setError('Please enter a valid User ID.');
+            setError('Please enter a valid User ID or Enterprise SSO Identity.');
             return;
         }
 
@@ -52,27 +59,62 @@ export const TenantLogin: React.FC = () => {
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
-                        {/* Role selection tabs */}
-                        <div className="grid grid-cols-2 gap-2 bg-white/5 p-1 rounded-xl border border-white/5">
+                        {/* Explicit Entry Toggle (P0 Audit Fix) */}
+                        <div className="grid grid-cols-2 gap-2 bg-[#050B14] p-1.5 rounded-2xl border border-ohs-orange/40 shadow-inner">
                             <button
                                 type="button"
-                                onClick={() => { setRole('employee'); setError(''); }}
-                                className={`py-2.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${
-                                    role === 'employee' ? 'bg-ohs-orange text-ohs-navy' : 'text-gray-400 hover:text-white'
+                                onClick={() => { setMode('demo'); setError(''); }}
+                                className={`py-3 px-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all cursor-pointer ${
+                                    mode === 'demo'
+                                        ? 'bg-gradient-to-r from-ohs-orange to-yellow-400 text-ohs-navy shadow-lg shadow-ohs-orange/20'
+                                        : 'text-gray-400 hover:text-white'
                                 }`}
                             >
-                                Tenant Client
+                                🚀 Explore Demo Workspace
                             </button>
                             <button
                                 type="button"
-                                onClick={() => { setRole('admin'); setError(''); }}
-                                className={`py-2.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${
-                                    role === 'admin' ? 'bg-ohs-blue text-white' : 'text-gray-400 hover:text-white'
+                                onClick={() => { setMode('sso'); setError(''); }}
+                                className={`py-3 px-2 rounded-xl text-[11px] font-black uppercase tracking-wider transition-all cursor-pointer ${
+                                    mode === 'sso'
+                                        ? 'bg-ohs-blue text-white shadow-lg shadow-ohs-blue/20'
+                                        : 'text-gray-400 hover:text-white'
                                 }`}
                             >
-                                Master Admin
+                                🔐 Enterprise SSO Login
                             </button>
                         </div>
+
+                        {mode === 'demo' ? (
+                            <div className="p-5 rounded-2xl bg-ohs-orange/10 border border-ohs-orange/30 space-y-3">
+                                <span className="text-[10px] font-black text-ohs-orange uppercase tracking-widest block">Instant Demo Access</span>
+                                <p className="text-xs text-slate-200 font-medium leading-relaxed">
+                                    Pre-configured Sovereign Health Ltd workspace (`COMP-001`) initialized with active 3D spine telemetry, Prizm fatigue checks, and full OHS audit ledger access.
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                {/* Role selection tabs */}
+                                <div className="grid grid-cols-2 gap-2 bg-white/5 p-1 rounded-xl border border-white/5">
+                                    <button
+                                        type="button"
+                                        onClick={() => { setRole('employee'); setError(''); }}
+                                        className={`py-2 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${
+                                            role === 'employee' ? 'bg-ohs-orange text-ohs-navy' : 'text-gray-400 hover:text-white'
+                                        }`}
+                                    >
+                                        Tenant Client
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => { setRole('admin'); setError(''); }}
+                                        className={`py-2 rounded-lg text-xs font-black uppercase tracking-wider transition-all ${
+                                            role === 'admin' ? 'bg-ohs-blue text-white' : 'text-gray-400 hover:text-white'
+                                        }`}
+                                    >
+                                        Master Admin
+                                    </button>
+                                </div>
 
                         {role === 'employee' ? (
                             <div className="space-y-2">
@@ -98,21 +140,23 @@ export const TenantLogin: React.FC = () => {
                             </div>
                         )}
 
-                        <div className="space-y-2">
-                            <label className="text-xs font-black text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                                <UserCircle size={14} className={role === 'admin' ? 'text-ohs-blue' : 'text-ohs-orange'} /> User ID
-                            </label>
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    value={userId}
-                                    onChange={(e) => setUserId(e.target.value)}
-                                    placeholder={role === 'admin' ? 'Enter "admin"' : 'e.g. mike_ross, sarah_j'}
-                                    className="w-full bg-white/5 border border-white/10 text-white rounded-xl pl-11 pr-4 py-3 text-sm font-semibold placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-ohs-orange transition-all"
-                                />
-                                <Key className="absolute left-4 top-3.5 text-gray-500" size={16} />
+                                <div className="space-y-2">
+                                    <label className="text-xs font-black text-gray-400 uppercase tracking-wider flex items-center gap-2">
+                                        <UserCircle size={14} className={role === 'admin' ? 'text-ohs-blue' : 'text-ohs-orange'} /> User ID / Enterprise SSO Identity
+                                    </label>
+                                    <div className="relative">
+                                        <input
+                                            type="text"
+                                            value={userId}
+                                            onChange={(e) => setUserId(e.target.value)}
+                                            placeholder={role === 'admin' ? 'Enter "admin"' : 'e.g. mike_ross, sarah_j, user@company.com'}
+                                            className="w-full bg-white/5 border border-white/10 text-white rounded-xl pl-11 pr-4 py-3 text-sm font-semibold placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-ohs-orange transition-all"
+                                        />
+                                        <Key className="absolute left-4 top-3.5 text-gray-500" size={16} />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         {error && (
                             <motion.p
@@ -126,13 +170,13 @@ export const TenantLogin: React.FC = () => {
 
                         <button
                             type="submit"
-                            className={`w-full py-4 rounded-xl font-black text-sm uppercase tracking-wider transition-all transform hover:scale-[1.02] shadow-lg ${
-                                role === 'admin' 
-                                    ? 'bg-ohs-blue hover:bg-ohs-blue/90 text-white shadow-ohs-blue/20' 
-                                    : 'bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy shadow-ohs-orange/20'
+                            className={`w-full py-4 rounded-xl font-black text-sm uppercase tracking-wider transition-all transform hover:scale-[1.02] shadow-lg cursor-pointer ${
+                                mode === 'demo'
+                                    ? 'bg-gradient-to-r from-ohs-orange to-yellow-400 text-ohs-navy shadow-ohs-orange/30'
+                                    : (role === 'admin' ? 'bg-ohs-blue hover:bg-ohs-blue/90 text-white shadow-ohs-blue/20' : 'bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy shadow-ohs-orange/20')
                             }`}
                         >
-                            Establish Authentication Connection
+                            {mode === 'demo' ? '🚀 Launch Demo Workspace (COMP-001)' : 'Establish Enterprise SSO Connection'}
                         </button>
                     </form>
                 </GlassCard>

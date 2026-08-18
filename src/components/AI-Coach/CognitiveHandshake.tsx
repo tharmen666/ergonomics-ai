@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BrainCircuit, Target, ShieldAlert, ShieldCheck } from 'lucide-react';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
@@ -21,6 +21,17 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
     const [gameCompleted, setGameCompleted] = useState(false);
     const [showKaizenBonus, setShowKaizenBonus] = useState(false);
     const [showLiabilityWarning, setShowLiabilityWarning] = useState(false);
+
+    // Single-trigger deterministic consent check
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const hasVerified = localStorage.getItem('ergo_privacy_consent_verified');
+            if (hasVerified === 'true') {
+                passCognitiveHandshake();
+                setShowCognitiveHandshake(false);
+            }
+        }
+    }, [passCognitiveHandshake, setShowCognitiveHandshake]);
 
     const TOTAL_TARGETS = 5;
 
@@ -85,6 +96,10 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
         // Sync with Prizm Driver Shift Fatigue score
         const dropPct = Math.round(Math.min(50, Math.max(0, (variancePercentage / 2))));
         evaluateDriverFatigue(drivingHours, dropPct);
+
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('ergo_privacy_consent_verified', 'true');
+        }
 
         setSpeaking(true);
         if (isFatigued) {

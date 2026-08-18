@@ -73,13 +73,13 @@ export const ReportsPage: React.FC = () => {
                     {cases.length > 0 ? (
                         cases.slice(0, 10).map((c) => (
                             <div key={c.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-white/5 border border-white/5 rounded-xl gap-2">
-                                <div className="flex items-center gap-3 min-w-0">
-                                    <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase shrink-0 ${
+                                <div className="flex flex-col sm:flex-row sm:items-center gap-3 min-w-0">
+                                    <span className={`px-2.5 py-1 rounded text-[9px] font-black uppercase shrink-0 ${
                                         c.status === 'COMPLIANT' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' :
                                         c.status === 'RISK_ALERT' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
                                         'bg-red-500/20 text-red-300 border border-red-500/30'
                                     }`}>
-                                        [{c.status}]
+                                        Status: {c.status === 'BREACH' ? 'CEO Escalated' : c.status} | Triggered: {new Date(c.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} {new Date(c.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} | Owner: {c.managerName || 'OHS Manager'} | SLA: {c.timeframeHours || 24}h Remaining
                                     </span>
                                     <div className="min-w-0">
                                         <p className="text-slate-100 font-medium truncate">{c.hazardTrigger}</p>
@@ -93,9 +93,11 @@ export const ReportsPage: React.FC = () => {
                         ))
                     ) : (
                         logs.slice(0, 5).map((l, idx) => (
-                            <div key={idx} className="flex justify-between items-center p-3 bg-white/5 border border-white/5 rounded-xl">
+                            <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-white/5 border border-white/5 rounded-xl gap-2">
+                                <span className="px-2 py-0.5 rounded text-[9px] font-black uppercase bg-blue-500/20 text-blue-300 border border-blue-500/30 shrink-0">
+                                    Status: Logged | Triggered: {new Date(l.timestamp).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })} {new Date(l.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} | Owner: HSEQ Lead | SLA: Nominal
+                                </span>
                                 <span className="text-gray-300 truncate">{l.reason}</span>
-                                <span className="text-gray-500 text-[10px]">{new Date(l.timestamp).toLocaleTimeString()}</span>
                             </div>
                         ))
                     )}

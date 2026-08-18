@@ -54,8 +54,8 @@ export const DemoVideoModal: React.FC<DemoVideoModalProps> = ({ isOpen, onClose 
 
   const handleDownloadMp4 = () => {
     const link = document.createElement('a');
-    link.href = '/assets/ErgoSafe_Reborn_V3_Demo.mp4';
-    link.download = 'ErgoSafe_Reborn_V3_Demo.mp4';
+    link.href = '/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo updated.mp4';
+    link.download = 'ErgoSafe_Reborn_30s_1080p_Narrated_Demo updated.mp4';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -115,12 +115,14 @@ export const DemoVideoModal: React.FC<DemoVideoModalProps> = ({ isOpen, onClose 
             <video
               ref={videoRef}
               className="w-full h-full object-contain"
-              src="/assets/ErgoSafe_Reborn_V3_Demo.mp4"
+              src="/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo updated.mp4"
               controls
+              autoPlay
+              muted
               preload="auto"
               playsInline
               poster="/assets/nelly-steward-final.png"
-              title="ErgoSafe Reborn V3 Marketing Demo"
+              title="ErgoSafe Reborn 30s 1080p Narrated Demo"
             />
           </div>
 

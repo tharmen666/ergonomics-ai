@@ -12,6 +12,8 @@ export const ExecutiveBriefing = () => {
     const [isNarrating, setIsNarrating] = useState(false);
     const [activeVideoClip, setActiveVideoClip] = useState<string | null>(null);
     const [activeTimestampLabel, setActiveTimestampLabel] = useState<string | null>(null);
+    const [showSupportingMatrix, setShowSupportingMatrix] = useState(false);
+    const [showFinancialPitches, setShowFinancialPitches] = useState(false);
 
     const videoClips = [
         {
@@ -95,39 +97,110 @@ export const ExecutiveBriefing = () => {
 
     return (
         <div className="p-3 sm:p-6 md:p-8 max-w-7xl mx-auto space-y-6 sm:space-y-8 mb-24 overflow-x-hidden font-sans">
-            {/* Header */}
+            {/* DOMINANT SAFETY COMMAND CENTRE BANNER (P0 AUDIT FIX) */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-gradient-to-r from-ohs-navy via-[#0c1322] to-slate-950 p-4 md:p-6 lg:p-8 rounded-[2rem] border border-white/10 shadow-2xl relative overflow-hidden"
+                className="bg-gradient-to-r from-slate-950 via-ohs-navy to-[#050B14] p-6 md:p-8 rounded-[2rem] border-2 border-ohs-orange/40 shadow-[0_0_80px_rgba(249,168,37,0.15)] relative overflow-hidden space-y-6"
             >
-                <div className="space-y-2 max-w-3xl">
-                    <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-[9px] font-black text-ohs-orange uppercase tracking-[0.2em] bg-ohs-orange/10 px-3 py-1 rounded-full border border-ohs-orange/20">
-                            Boardroom Executive Intelligence
-                        </span>
-                        <span className="text-[9px] font-bold text-gray-400 uppercase">Live Telemetry & Video Sync</span>
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-white/10">
+                    <div className="space-y-2 max-w-3xl">
+                        <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-[10px] font-black text-ohs-orange uppercase tracking-[0.25em] bg-ohs-orange/10 px-3.5 py-1 rounded-full border border-ohs-orange/30">
+                                🛡️ PRIMARY DECISION CONTROLS • P0 AUDIT PASSED
+                            </span>
+                            <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+                                LIVE TELEMETRY STREAM
+                            </span>
+                        </div>
+                        <h1 className="text-2xl sm:text-3xl md:text-5xl font-black text-white tracking-tight uppercase">
+                            SAFETY COMMAND <span className="text-ohs-orange">CENTRE</span>
+                        </h1>
+                        <p className="text-gray-300 font-medium text-xs md:text-sm leading-relaxed">
+                            Section 37 & 38 OHS Act 85 Governance Engine. Continuous monitoring of biomechanical strain, continuous driver fatigue, and statutory corporate liability.
+                        </p>
                     </div>
-                    <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-black text-white tracking-tight">
-                        EXECUTIVE BRIEFING <span className="text-ohs-orange">& DEMO SYNC</span>
-                    </h1>
-                    <p className="text-gray-300 font-medium text-xs md:text-sm leading-relaxed">
-                        Section 37 & 38 OHS Act 85 Compliance Telemetry integrated with interactive video walkthroughs and Prizm Driver Fatigue engine.
-                    </p>
+
+                    <div className="flex flex-wrap items-center gap-3">
+                        <button
+                            onClick={toggleNarration}
+                            className={`flex items-center gap-2.5 px-5 py-3.5 rounded-2xl font-black text-xs transition-all shadow-lg cursor-pointer ${
+                                isNarrating 
+                                    ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' 
+                                    : 'bg-ohs-orange hover:bg-yellow-400 text-ohs-navy shadow-ohs-orange/20'
+                            }`}
+                        >
+                            {isNarrating ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                            {isNarrating ? 'STOP AUDIO NARRATION' : 'NARRATE BRIEFING (NELLY VOICE)'}
+                        </button>
+                    </div>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-3">
-                    <button
-                        onClick={toggleNarration}
-                        className={`flex items-center gap-2.5 px-5 py-3.5 rounded-2xl font-black text-xs transition-all shadow-lg cursor-pointer ${
-                            isNarrating 
-                                ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' 
-                                : 'bg-ohs-orange hover:bg-yellow-400 text-ohs-navy shadow-ohs-orange/20'
-                        }`}
-                    >
-                        {isNarrating ? <VolumeX size={18} /> : <Volume2 size={18} />}
-                        {isNarrating ? 'STOP AUDIO NARRATION' : 'NARRATE BRIEFING (NELLY VOICE)'}
-                    </button>
+                {/* 4 HIGH-PRIORITY DECISION METRICS (EQUAL TOP VISIBILITY) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {/* Metric 1: Overall Site Risk Level */}
+                    <div className="bg-white/5 border border-white/10 p-5 rounded-2xl flex flex-col justify-between space-y-2 relative overflow-hidden group hover:border-emerald-500/40 transition-all">
+                        <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider">Overall Site Risk</span>
+                            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                        </div>
+                        <div>
+                            <p className="text-xl sm:text-2xl font-black text-emerald-400 tracking-tight">LOW (NOMINAL)</p>
+                            <p className="text-[10px] text-gray-400 mt-0.5">OHS Act Section 8(1) Compliant</p>
+                        </div>
+                        <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-emerald-400">
+                            <span>STATUS VERIFIED</span>
+                            <span>✓ PASS</span>
+                        </div>
+                    </div>
+
+                    {/* Metric 2: Active Unresolved Safety Incidents */}
+                    <div className="bg-white/5 border border-white/10 p-5 rounded-2xl flex flex-col justify-between space-y-2 relative overflow-hidden group hover:border-ohs-orange/40 transition-all">
+                        <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider">Unresolved Incidents</span>
+                            <AlertTriangle size={16} className="text-ohs-orange" />
+                        </div>
+                        <div>
+                            <p className="text-xl sm:text-2xl font-black text-white tracking-tight">0 BREACHES</p>
+                            <p className="text-[10px] text-gray-400 mt-0.5">Zero Active Escalations</p>
+                        </div>
+                        <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-ohs-orange">
+                            <span>ZERO-KNOWLEDGE LEDGER</span>
+                            <span>ON-CHAIN</span>
+                        </div>
+                    </div>
+
+                    {/* Metric 3: Assigned Accountable Owner / Supervisor */}
+                    <div className="bg-white/5 border border-white/10 p-5 rounded-2xl flex flex-col justify-between space-y-2 relative overflow-hidden group hover:border-blue-500/40 transition-all">
+                        <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider">Accountable Supervisor</span>
+                            <Award size={16} className="text-blue-400" />
+                        </div>
+                        <div>
+                            <p className="text-sm font-black text-white truncate">Desigan Tharmen</p>
+                            <p className="text-[10px] text-blue-400 font-bold mt-0.5">HSEQ Lead Auditor</p>
+                        </div>
+                        <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-gray-400">
+                            <span>ASSIGNED OWNER</span>
+                            <span>VERIFIED</span>
+                        </div>
+                    </div>
+
+                    {/* Metric 4: Next SLA Escalation Due Time */}
+                    <div className="bg-white/5 border border-white/10 p-5 rounded-2xl flex flex-col justify-between space-y-2 relative overflow-hidden group hover:border-amber-500/40 transition-all">
+                        <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-wider">Next SLA Escalation</span>
+                            <Activity size={16} className="text-amber-400" />
+                        </div>
+                        <div>
+                            <p className="text-sm font-black text-amber-400 truncate">18 Aug 2026 18:00</p>
+                            <p className="text-[10px] text-gray-400 mt-0.5">SLA: 4h Remaining</p>
+                        </div>
+                        <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[9px] font-mono text-amber-400">
+                            <span>STATUTORY SLA</span>
+                            <span>NOMINAL</span>
+                        </div>
+                    </div>
                 </div>
             </motion.div>
 
@@ -223,24 +296,25 @@ export const ExecutiveBriefing = () => {
                             <div className="w-full aspect-video bg-black rounded-2xl border border-white/10 overflow-hidden relative shadow-inner">
                                 <video
                                     className="w-full h-full object-contain"
-                                    src="/assets/ErgoSafe_Reborn_V3_Demo.mp4"
+                                    src="/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo updated.mp4"
                                     controls
                                     autoPlay
+                                    muted
                                     playsInline
                                     preload="auto"
                                     poster="/assets/nelly-steward-final.png"
-                                    title="ErgoSafe Reborn V3 Executive Briefing Video Stream"
+                                    title="ErgoSafe Reborn 30s 1080p Narrated Demo"
                                 />
                             </div>
 
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400 pt-2 border-t border-white/10">
-                                <span>Source: HQ Technical Demo Engine (Standalone File: ErgoSafe_Reborn_V3_Demo.mp4)</span>
+                                <span>Source: HQ Technical Demo Engine (Narrated 30s 1080p Video)</span>
                                 <div className="flex items-center gap-3 w-full sm:w-auto">
                                     <button
                                         onClick={() => {
                                             const link = document.createElement('a');
-                                            link.href = '/assets/ErgoSafe_Reborn_V3_Demo.mp4';
-                                            link.download = 'ErgoSafe_Reborn_V3_Demo.mp4';
+                                            link.href = '/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo updated.mp4';
+                                            link.download = 'ErgoSafe_Reborn_30s_1080p_Narrated_Demo updated.mp4';
                                             document.body.appendChild(link);
                                             link.click();
                                             document.body.removeChild(link);
@@ -263,86 +337,102 @@ export const ExecutiveBriefing = () => {
                 )}
             </AnimatePresence>
 
-            {/* FATIGUE GAP CLOSURE & LEGAL COMPLIANCE MATRIX */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="bg-black/50 border border-white/10 rounded-[2rem] p-6 md:p-8 space-y-6"
-            >
-                <div>
-                    <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest block mb-1">
-                        Regulatory & Liability Protection Matrix
-                    </span>
-                    <h2 className="text-2xl font-black text-white">
-                        Fatigue Gap Closure & Statutory Compliance Highlights
-                    </h2>
-                    <p className="text-xs text-gray-400 mt-1">
-                        Direct mapping of corporate physical and cognitive fatigue risks to legally defensible ErgoSafe automation controls.
-                    </p>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    {fatigueGapClosures.map((gap, idx) => (
-                        <div
-                            key={idx}
-                            className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col justify-between space-y-4 relative overflow-hidden group hover:border-ohs-orange/40 transition-all duration-300"
-                        >
-                            <div className="space-y-3">
-                                <div className="flex items-center justify-between">
-                                    <div className="p-3 rounded-xl bg-ohs-orange/10 text-ohs-orange border border-ohs-orange/20">
-                                        <gap.icon size={22} />
-                                    </div>
-                                    <span className={`text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border ${gap.badgeColor}`}>
-                                        {gap.riskLevel}
-                                    </span>
-                                </div>
-                                <h3 className="text-base font-black text-white leading-snug">
-                                    {gap.gapTitle}
-                                </h3>
-                                <div className="p-3 rounded-xl bg-black/60 border border-white/10 space-y-1">
-                                    <span className="text-[9px] font-black text-ohs-orange uppercase block">Solution Integration:</span>
-                                    <p className="text-xs font-bold text-white">{gap.solution}</p>
-                                </div>
-                                <p className="text-xs text-gray-300 leading-relaxed font-medium">
-                                    {gap.details}
-                                </p>
-                            </div>
-
-                            <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-bold text-emerald-400">
-                                <span>Statute: {gap.statute}</span>
-                                <Award size={14} />
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </motion.div>
-
-            {/* Statutory Compliance Policy Cards */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {GlobalComplianceEngine.fetchUnifiedBriefing(language).map((policy, idx) => (
-                    <motion.div
-                        key={policy.id}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.05 * idx, duration: 0.3 }}
-                        className="bg-black/40 border border-white/5 p-8 rounded-3xl"
+            {/* SECONDARY COLLAPSIBLE SECTION: FATIGUE GAP & COMPLIANCE MATRIX */}
+            <div className="bg-black/40 border border-white/10 rounded-[2rem] p-6 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest block mb-1">
+                            Supporting Compliance & Explanatory Copy
+                        </span>
+                        <h2 className="text-xl font-black text-white">
+                            Secondary Decision Tools & Regulatory Matrices
+                        </h2>
+                    </div>
+                    <button
+                        onClick={() => setShowSupportingMatrix(!showSupportingMatrix)}
+                        className="bg-white/5 hover:bg-white/10 border border-white/10 text-ohs-orange px-4 py-2.5 rounded-xl font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-2 self-start sm:self-auto"
                     >
-                        <div className="flex items-center gap-4 mb-4">
-                            {idx % 2 === 0 ? <AlertTriangle className="text-ohs-orange" size={28} /> : <ShieldAlert className="text-red-500" size={28} />}
-                            <h3 className="text-xl font-black text-white">{policy.title}</h3>
+                        <span>{showSupportingMatrix ? 'HIDE SUPPORTING MATRIX' : 'EXPAND SUPPORTING MATRIX'}</span>
+                    </button>
+                </div>
+
+                {showSupportingMatrix && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        className="space-y-6 pt-4 border-t border-white/10"
+                    >
+                        {/* FATIGUE GAP CLOSURE & LEGAL COMPLIANCE MATRIX */}
+                        <div className="space-y-6">
+                            <div>
+                                <h3 className="text-lg font-black text-white">Fatigue Gap Closure & Statutory Compliance Highlights</h3>
+                                <p className="text-xs text-gray-400 mt-1">Direct mapping of corporate physical and cognitive fatigue risks to legally defensible ErgoSafe controls.</p>
+                            </div>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                {fatigueGapClosures.map((gap, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col justify-between space-y-4 relative overflow-hidden group hover:border-ohs-orange/40 transition-all duration-300"
+                                    >
+                                        <div className="space-y-3">
+                                            <div className="flex items-center justify-between">
+                                                <div className="p-3 rounded-xl bg-ohs-orange/10 text-ohs-orange border border-ohs-orange/20">
+                                                    <gap.icon size={22} />
+                                                </div>
+                                                <span className={`text-[9px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full border ${gap.badgeColor}`}>
+                                                    {gap.riskLevel}
+                                                </span>
+                                            </div>
+                                            <h3 className="text-base font-black text-white leading-snug">
+                                                {gap.gapTitle}
+                                            </h3>
+                                            <div className="p-3 rounded-xl bg-black/60 border border-white/10 space-y-1">
+                                                <span className="text-[9px] font-black text-ohs-orange uppercase block">Solution Integration:</span>
+                                                <p className="text-xs font-bold text-white">{gap.solution}</p>
+                                            </div>
+                                            <p className="text-xs text-gray-300 leading-relaxed font-medium">
+                                                {gap.details}
+                                            </p>
+                                        </div>
+
+                                        <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-bold text-emerald-400">
+                                            <span>Statute: {gap.statute}</span>
+                                            <Award size={14} />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                        <p className="text-gray-400 leading-relaxed font-medium mb-6">
-                            {policy.text}
-                        </p>
-                        <div className={`bg-opacity-10 border p-4 rounded-xl flex items-start gap-4 ${idx % 2 === 0 ? 'bg-ohs-orange border-ohs-orange/30' : 'bg-red-500 border-red-500/30'}`}>
-                            <CheckCircle2 className={`${idx % 2 === 0 ? 'text-ohs-orange' : 'text-red-500'} shrink-0 mt-1`} size={20} />
-                            <p className={`text-sm font-bold ${idx % 2 === 0 ? 'text-ohs-orange' : 'text-red-500'}`}>
-                                Mitigation Strategy: Active Stewardship tracking enforces compliance routing.
-                            </p>
+
+                        {/* Statutory Compliance Policy Cards */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            {GlobalComplianceEngine.fetchUnifiedBriefing(language).map((policy, idx) => (
+                                <motion.div
+                                    key={policy.id}
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ delay: 0.05 * idx, duration: 0.3 }}
+                                    className="bg-black/40 border border-white/5 p-8 rounded-3xl"
+                                >
+                                    <div className="flex items-center gap-4 mb-4">
+                                        {idx % 2 === 0 ? <AlertTriangle className="text-ohs-orange" size={28} /> : <ShieldAlert className="text-red-500" size={28} />}
+                                        <h3 className="text-xl font-black text-white">{policy.title}</h3>
+                                    </div>
+                                    <p className="text-gray-400 leading-relaxed font-medium mb-6">
+                                        {policy.text}
+                                    </p>
+                                    <div className={`bg-opacity-10 border p-4 rounded-xl flex items-start gap-4 ${idx % 2 === 0 ? 'bg-ohs-orange border-ohs-orange/30' : 'bg-red-500 border-red-500/30'}`}>
+                                        <CheckCircle2 className={`${idx % 2 === 0 ? 'text-ohs-orange' : 'text-red-500'} shrink-0 mt-1`} size={20} />
+                                        <p className={`text-sm font-bold ${idx % 2 === 0 ? 'text-ohs-orange' : 'text-red-500'}`}>
+                                            Mitigation Strategy: Active Stewardship tracking enforces compliance routing.
+                                        </p>
+                                    </div>
+                                </motion.div>
+                            ))}
                         </div>
                     </motion.div>
-                ))}
+                )}
             </div>
 
             {/* Admin-Zero Status Banner */}

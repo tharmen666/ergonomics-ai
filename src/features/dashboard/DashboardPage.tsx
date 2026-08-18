@@ -17,8 +17,8 @@ export const DashboardPage = () => {
 
     const handleDownloadMp4 = () => {
         const link = document.createElement('a');
-        link.href = '/assets/ErgoSafe_Reborn_V3_Demo.mp4';
-        link.download = 'ErgoSafe_Reborn_V3_Demo.mp4';
+        link.href = '/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo updated.mp4';
+        link.download = 'ErgoSafe_Reborn_30s_1080p_Narrated_Demo updated.mp4';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -144,12 +144,14 @@ export const DashboardPage = () => {
                         <div className="relative w-full rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(249,168,37,0.15)] border border-white/10 bg-black aspect-video">
                             <video
                                 className="w-full h-full object-contain"
-                                src="/assets/ErgoSafe_Reborn_V3_Demo.mp4"
+                                src="/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo updated.mp4"
                                 controls
+                                autoPlay
+                                muted
                                 preload="auto"
                                 playsInline
                                 poster="/assets/nelly-steward-final.png"
-                                title="ErgoSafe Reborn V3 Walkthrough"
+                                title="ErgoSafe Reborn 30s 1080p Narrated Demo"
                             />
                         </div>
                     </motion.div>

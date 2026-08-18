@@ -304,12 +304,12 @@ export const HRDashboard = () => {
                                     <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest block">Audit Trail Timeline</span>
                                     
                                     <div className="relative border-l-2 border-white/5 pl-4 ml-2 space-y-6 text-xs">
-                                        {/* Hazard Triggered */}
+                                         {/* Hazard Triggered */}
                                         <div className="relative">
                                             <span className="absolute -left-[21px] top-0.5 w-2 h-2 rounded-full bg-ohs-orange" />
                                             <div className="space-y-1">
                                                 <p className="font-bold text-white">Hazard Trigger / Incident Logged</p>
-                                                <p className="text-gray-400 text-[10px]">{new Date(activeCase.createdAt).toLocaleString()}</p>
+                                                <p className="text-gray-400 text-[10px]">Status: Logged | Triggered: {new Date(activeCase.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} {new Date(activeCase.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} | Owner: {activeCase.employeeName} | SLA: Initiated</p>
                                                 <p className="text-gray-400 italic">"{activeCase.hazardTrigger}"</p>
                                             </div>
                                         </div>
@@ -321,8 +321,7 @@ export const HRDashboard = () => {
                                             }`} />
                                             <div className="space-y-1">
                                                 <p className="font-bold text-white">Escalated to Line Manager</p>
-                                                <p className="text-gray-400 text-[10px]">Manager: <span className="text-white font-bold">{activeCase.managerName}</span></p>
-                                                <p className="text-gray-400 text-[10px]">Resolution Window: <span className="text-ohs-orange font-bold">{activeCase.timeframeHours} Hours (Simulated Seconds)</span></p>
+                                                <p className="text-gray-400 text-[10px]">Status: Line Manager Assigned | Triggered: {new Date(activeCase.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} | Owner: {activeCase.managerName} | SLA: {activeCase.timeframeHours}h Remaining</p>
                                             </div>
                                         </div>
 
@@ -335,8 +334,8 @@ export const HRDashboard = () => {
                                                 <p className="font-bold text-white">Level 2 Escalation (CEO & HR head)</p>
                                                 <p className="text-gray-400 text-[10px]">
                                                     {activeCase.escalationState === 'escalated_level_2' 
-                                                        ? 'Active: Corporate statutory liability triggered.' 
-                                                        : 'Status: Standby pending resolution window.'}
+                                                        ? `Status: CEO Escalated | Triggered: ${new Date(activeCase.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} ${new Date(activeCase.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} | Owner: CEO & OHS Executive | SLA: Critical Breach Active` 
+                                                        : `Status: Standby | Triggered: ${new Date(activeCase.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} | Owner: Line Manager | SLA: ${activeCase.timeframeHours}h Remaining`}
                                                 </p>
                                             </div>
                                         </div>

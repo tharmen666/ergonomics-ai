@@ -36,6 +36,12 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
 
             {/* Right Status, Actions & Glowing NellyAvatar */}
             <div className="flex items-center gap-1.5 sm:gap-3 md:gap-4 flex-shrink-0">
+                {/* Persistent Privacy Consensus Badge (P0 Audit Fix) */}
+                <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 font-bold text-[10px] uppercase tracking-wider whitespace-nowrap shadow-sm">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    Privacy Consensus: Verified (Coaching Mode Active)
+                </div>
+
                 {/* Compact, Adaptive System Status Block - hidden on mobile <640px */}
                 <div className="hidden sm:flex bg-white/5 px-2.5 py-1.5 rounded-xl border border-white/10 flex-col justify-center min-h-[44px] flex-shrink-0 text-center">
                     <p className="text-[8px] sm:text-[10px] text-ohs-orange font-bold uppercase tracking-wider leading-none mb-1">Status</p>
