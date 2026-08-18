@@ -57,5 +57,5 @@ Running 4 tests using 1 worker
 ## 3. Git & Production Deployment Status
 
 * **Static Asset Build**: Clean production build via `tsc && vite build` in **24.93s**.
-* **Git Repository**: All fixes staged, committed (`2c9eaad`), and pushed to `origin/main`.
+* **Git Repository**: All fixes staged, committed (`918163d`), and pushed to `origin/main`.
 * **Live Production Link**: [https://ergo-safe-reborn.vercel.app](https://ergo-safe-reborn.vercel.app)
