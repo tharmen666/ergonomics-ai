@@ -1,6 +1,7 @@
 import React from 'react';
 import { Menu } from 'lucide-react';
 import { useNellyStore } from '../../store/nellyStore';
+import { useTenantStore } from '../../store/tenantStore';
 import { NellyAvatar } from './Layout';
 
 interface NavbarProps {
@@ -74,6 +75,16 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
                         className="bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-2.5 py-1.5 sm:px-3 sm:py-2.5 min-h-[36px] sm:min-h-[48px] rounded-xl font-black text-[10px] sm:text-xs transition-all shadow-lg whitespace-nowrap leading-none cursor-pointer"
                     >
                         HQ DEMO
+                    </button>
+                    <button
+                        onClick={() => {
+                            useTenantStore.getState().logout();
+                            setActiveTab('tenant-portal');
+                        }}
+                        className="bg-red-500/20 hover:bg-red-500/30 border border-red-500/40 text-red-400 px-2.5 py-1.5 sm:px-3 sm:py-2.5 min-h-[36px] sm:min-h-[48px] rounded-xl font-bold text-[10px] sm:text-xs transition-all whitespace-nowrap leading-none cursor-pointer"
+                        title="Disconnect session and return to Auth Portal"
+                    >
+                        DISCONNECT
                     </button>
                 </div>
 

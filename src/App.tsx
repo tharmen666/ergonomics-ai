@@ -98,6 +98,10 @@ function App() {
     return <TenantLogin />;
   }
 
+  if (activeTab === 'tenant-portal') {
+    return <TenantLogin />;
+  }
+
   if (activeTab === 'demo') {
     return <HQTechnicalDemo onExit={() => setActiveTab('executive')} />;
   }

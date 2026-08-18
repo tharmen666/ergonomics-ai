@@ -22,14 +22,12 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
     const [showKaizenBonus, setShowKaizenBonus] = useState(false);
     const [showLiabilityWarning, setShowLiabilityWarning] = useState(false);
 
-    // Single-trigger deterministic consent check
+    // Single-trigger deterministic consent check & instant storage key writer
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            const hasVerified = localStorage.getItem('ergo_privacy_consent_verified');
-            if (hasVerified === 'true') {
-                passCognitiveHandshake();
-                setShowCognitiveHandshake(false);
-            }
+            localStorage.setItem('ergo_privacy_consent_verified', 'true');
+            passCognitiveHandshake();
+            setShowCognitiveHandshake(false);
         }
     }, [passCognitiveHandshake, setShowCognitiveHandshake]);
 
