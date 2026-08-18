@@ -29,9 +29,14 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
                 >
                     <Menu size={18} className="sm:w-5 sm:h-5" />
                 </button>
-                <h1 className="text-sm sm:text-base md:text-xl lg:text-2xl font-black text-white tracking-tighter uppercase whitespace-nowrap leading-none flex-shrink-0">
-                    ERGOSAFE <span className="text-ohs-orange">REBORN</span>
-                </h1>
+                <div className="flex flex-col">
+                    <h1 className="text-sm sm:text-base md:text-xl lg:text-2xl font-black text-white tracking-tighter uppercase whitespace-nowrap leading-none flex-shrink-0">
+                        ERGOSAFE <span className="text-ohs-orange">REBORN</span>
+                    </h1>
+                    <span className="text-[9px] font-mono text-ohs-orange/90 bg-ohs-orange/10 px-1.5 py-0.5 rounded border border-ohs-orange/30 w-max mt-1">
+                        Build: a9407fe | Live Production
+                    </span>
+                </div>
             </div>
 
             {/* Right Status, Actions & Glowing NellyAvatar */}
