@@ -53,8 +53,7 @@ test.describe('ErgoSafe Reborn V3 End-to-End Suite', () => {
     await expect(page.locator('span:has-text("ErgoSafe Reborn")')).toBeVisible();
 
     // Close sidebar
-    const closeSidebarButton = page.locator('button[aria-label="Close Sidebar"]');
-    await closeSidebarButton.click({ force: true });
+    await page.keyboard.press('Escape');
   });
 
   test('2. Sidebar Navigation - All Feature Tabs Mount Valid React Components', async ({ page }) => {

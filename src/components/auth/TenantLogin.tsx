@@ -4,7 +4,11 @@ import { useTenantStore } from '../../store/tenantStore';
 import { GlassCard } from '../ui/GlassCard';
 import { Shield, Key, Building2, UserCircle } from 'lucide-react';
 
-export const TenantLogin: React.FC = () => {
+interface TenantLoginProps {
+    onSuccess?: () => void;
+}
+
+export const TenantLogin: React.FC<TenantLoginProps> = ({ onSuccess }) => {
     const { companies, login } = useTenantStore();
     const [mode, setMode] = useState<'demo' | 'sso'>('demo');
     const [selectedCompanyId, setSelectedCompanyId] = useState(companies[0]?.id || 'COMP-001');
@@ -19,6 +23,7 @@ export const TenantLogin: React.FC = () => {
 
         if (mode === 'demo') {
             login('COMP-001', 'usr-sarah', false);
+            onSuccess?.();
             return;
         }
 
@@ -30,11 +35,13 @@ export const TenantLogin: React.FC = () => {
         if (role === 'admin') {
             if (userId === 'admin' || userId === 'owner') {
                 login('', userId, true);
+                onSuccess?.();
             } else {
                 setError('Invalid Master Admin credentials. Hint: use "admin" or "owner".');
             }
         } else {
             login(selectedCompanyId, userId, false);
+            onSuccess?.();
         }
     };
 

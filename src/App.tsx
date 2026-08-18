@@ -95,11 +95,11 @@ function App() {
   const [activeTab, setActiveTab] = useState('executive');
 
   if (!companyId && !isAdmin) {
-    return <TenantLogin />;
+    return <TenantLogin onSuccess={() => setActiveTab('executive')} />;
   }
 
   if (activeTab === 'tenant-portal') {
-    return <TenantLogin />;
+    return <TenantLogin onSuccess={() => setActiveTab('executive')} />;
   }
 
   if (activeTab === 'demo') {
