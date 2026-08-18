@@ -54,8 +54,8 @@ export const DemoVideoModal: React.FC<DemoVideoModalProps> = ({ isOpen, onClose 
 
   const handleDownloadMp4 = () => {
     const link = document.createElement('a');
-    link.href = '/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo updated.mp4';
-    link.download = 'ErgoSafe_Reborn_30s_1080p_Narrated_Demo updated.mp4';
+    link.href = '/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo.mp4';
+    link.download = 'ErgoSafe_Reborn_30s_1080p_Narrated_Demo.mp4';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -115,7 +115,7 @@ export const DemoVideoModal: React.FC<DemoVideoModalProps> = ({ isOpen, onClose 
             <video
               ref={videoRef}
               className="w-full h-full object-contain"
-              src="/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo updated.mp4"
+              src="/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo.mp4"
               controls
               autoPlay
               muted

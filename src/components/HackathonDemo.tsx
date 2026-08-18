@@ -4,8 +4,8 @@ import { Download, Film } from 'lucide-react';
 export const HackathonDemo = () => {
     const handleDownloadMp4 = () => {
         const link = document.createElement('a');
-        link.href = '/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo updated.mp4';
-        link.download = 'ErgoSafe_Reborn_30s_1080p_Narrated_Demo updated.mp4';
+        link.href = '/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo.mp4';
+        link.download = 'ErgoSafe_Reborn_30s_1080p_Narrated_Demo.mp4';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -40,7 +40,7 @@ export const HackathonDemo = () => {
             <div className="relative w-full rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(249,168,37,0.2)] border-2 border-ohs-orange/40 bg-black aspect-video">
                 <video
                     className="w-full h-full object-contain"
-                    src="/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo updated.mp4"
+                    src="/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo.mp4"
                     controls
                     autoPlay
                     muted
