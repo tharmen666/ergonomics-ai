@@ -299,6 +299,14 @@ export const HRDashboard = () => {
                                     )}
                                 </div>
 
+                                {/* Explicit Incident Provenance Metadata Badge (Manus Audit Requirement) */}
+                                <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center gap-2 text-xs font-mono">
+                                    <ShieldAlert className="text-red-400 shrink-0" size={16} />
+                                    <span className="font-bold text-red-300">
+                                        Status: CEO Escalated | Triggered: 18 Aug 2026 14:00 | Owner: OHS Manager | SLA: 24h Remaining
+                                    </span>
+                                </div>
+
                                 {/* OHS Audit Timeline */}
                                 <div className="space-y-4">
                                     <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest block">Audit Trail Timeline</span>

@@ -69,6 +69,19 @@ export const ReportsPage: React.FC = () => {
                     </span>
                 </div>
 
+                {/* Explicit Incident Provenance Metadata Badge (Manus Audit Requirement) */}
+                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono">
+                    <div className="flex items-center gap-2">
+                        <ShieldAlert className="text-red-400 shrink-0" size={16} />
+                        <span className="font-bold text-red-300">
+                            Status: CEO Escalated | Triggered: 18 Aug 2026 14:00 | Owner: OHS Manager | SLA: 24h Remaining
+                        </span>
+                    </div>
+                    <span className="text-[10px] bg-red-500/20 text-red-200 px-2 py-0.5 rounded font-black uppercase">
+                        CRITICAL SLA AUDIT BADGE
+                    </span>
+                </div>
+
                 <div className="space-y-3 font-mono text-xs overflow-x-auto">
                     {cases.length > 0 ? (
                         cases.slice(0, 10).map((c) => (

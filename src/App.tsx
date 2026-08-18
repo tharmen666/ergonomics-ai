@@ -50,6 +50,9 @@ function renderTabContent(activeTab: string) {
     case 'posture':
       return <RiskyBehaviorsPage />;
     case 'hr':
+    case 'hr-dashboard':
+    case 'hr-compliance':
+    case 'compliance':
       return <HRDashboard />;
     case 'companion-hub':
     case 'ground-zero':
@@ -74,6 +77,9 @@ function renderTabContent(activeTab: string) {
     case 'invoice':
       return <InvoicePage />;
     case 'reports':
+    case 'analytics':
+    case 'audit-logs':
+    case 'regulatory-logs':
       return <ReportsPage />;
     case 'dashboard':
       return <DashboardPage />;
