@@ -51,6 +51,7 @@ export const useFatigueStore = create<FatigueState>()(
             passCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'nominal', showCognitiveHandshake: false }),
             failCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'nominal', showCognitiveHandshake: false }),
             warnCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'nominal', showCognitiveHandshake: false }),
+            supervisorOverride: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'nominal', showCognitiveHandshake: false, status: 'NOMINAL', locked: false }),
 
             lastLoginTime: Date.now(),
             consecutiveRestBreaks: 0,

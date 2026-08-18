@@ -50,6 +50,9 @@ const DEFAULT_USAGE: Record<string, TenantBillingInfo> = {
 export const useTenantStore = create<TenantState>()(
     persist(
         (set, get) => ({
+            status: 'NOMINAL',
+            fatigueScore: 0,
+            locked: false,
             companyId: 'COMP-001',
             userId: 'usr-sarah',
             isAdmin: false,

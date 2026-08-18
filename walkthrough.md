@@ -40,7 +40,7 @@ Running 4 tests using 1 worker
      - Daily Self-Risk Assessment (`Ergonomic Self-Assessment`)
      - Daily Workstation Safety Checklist (`Daily Safety Check`)
      - Nelly Posture & Hazard Monitoring Engine (`Nelly Posture & Hazard Engine`)
-     - Shandray's Prizm Driver & Shift Fatigue Telemetry (`G.E.A.R. SYSTEM DASHBOARD`)
+     - Prizm Driver & Shift Fatigue Telemetry (`G.E.A.R. SYSTEM DASHBOARD`)
      - Assessment PDF Invoices & Billing (`Ergonomics Assessment Invoicing`)
      - Analytics & Regulatory Audit Logs (`Analytics & Regulatory Audit Logs`)
 3. **Invoicing & 15% SA VAT Engine**:

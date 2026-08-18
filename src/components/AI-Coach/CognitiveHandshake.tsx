@@ -10,7 +10,7 @@ interface CognitiveHandshakeProps {
 }
 
 export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeProps) => {
-    const { cognitiveHandshakePassed, showCognitiveHandshake, setShowCognitiveHandshake, passCognitiveHandshake, failCognitiveHandshake, warnCognitiveHandshake } = useFatigueStore();
+    const { cognitiveHandshakePassed, showCognitiveHandshake, setShowCognitiveHandshake, passCognitiveHandshake, failCognitiveHandshake, warnCognitiveHandshake, supervisorOverride } = useFatigueStore();
     const { setGuidance, setSpeaking, setMood } = useNellyStore();
 
     // Game State
@@ -20,6 +20,7 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
     const [lastTargetTime, setLastTargetTime] = useState(Date.now());
     const [gameCompleted, setGameCompleted] = useState(false);
     const [showKaizenBonus, setShowKaizenBonus] = useState(false);
+    const [showLiabilityWarning, setShowLiabilityWarning] = useState(false);
 
     const TOTAL_TARGETS = 5;
 
