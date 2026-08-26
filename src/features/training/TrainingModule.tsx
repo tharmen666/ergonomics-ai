@@ -124,30 +124,35 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
     const steps = course ? course.steps : [];
     const currentStep = steps[currentStepIdx];
 
-    // Trigger voice synthesis on step navigation, play toggle or language changes
-    useEffect(() => {
-        if (isPlaying && voiceEnabled && currentStep) {
-            const stepText = currentStep[language] || currentStep['en'];
-            const speechText = `Step ${currentStep.step}: ${currentStep.title}. ${stepText}`;
-            
-            // Callback-free call to speak completely eliminates stale closures and race conditions
-            speak(speechText);
-        } else {
-            stopSpeaking();
-        }
+    const speakCurrentInstruction = (step = currentStep) => {
+        if (!step) return;
+        const stepText = step[language] || step['en'];
+        speak(`Step ${step.step}: ${step.title}. ${stepText}`, language);
+    };
 
+    useEffect(() => {
         return () => {
             stopSpeaking();
         };
-    }, [isPlaying, voiceEnabled, currentStepIdx, language, id]);
+    }, [id]);
 
     const handleTogglePlay = () => {
-        setIsPlaying(!isPlaying);
+        const nextIsPlaying = !isPlaying;
+        setIsPlaying(nextIsPlaying);
+        if (nextIsPlaying && voiceEnabled) {
+            speakCurrentInstruction();
+        } else if (!nextIsPlaying) {
+            stopSpeaking();
+        }
     };
 
     const handleNext = () => {
         if (currentStepIdx < steps.length - 1) {
-            setCurrentStepIdx(currentStepIdx + 1);
+            const nextStepIdx = currentStepIdx + 1;
+            setCurrentStepIdx(nextStepIdx);
+            if (voiceEnabled) {
+                speakCurrentInstruction(steps[nextStepIdx]);
+            }
         } else {
             completeModule(id);
             onClose();
@@ -297,7 +302,15 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
                             </div>
                             <button
                                 aria-label="Toggle Voice Guidance"
-                                onClick={() => setVoiceEnabled(!voiceEnabled)}
+                                onClick={() => {
+                                    const nextVoiceEnabled = !voiceEnabled;
+                                    setVoiceEnabled(nextVoiceEnabled);
+                                    if (nextVoiceEnabled) {
+                                        speakCurrentInstruction();
+                                    } else {
+                                        stopSpeaking();
+                                    }
+                                }}
                                 className={`w-12 h-6 rounded-full relative flex items-center transition-all p-0.5 shrink-0 ${voiceEnabled ? 'bg-ohs-green justify-end' : 'bg-white/20 justify-start'}`}
                             >
                                 <div className="w-5 h-5 rounded-full bg-white shadow-md transition-all" />

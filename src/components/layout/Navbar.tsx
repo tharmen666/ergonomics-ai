@@ -2,7 +2,6 @@ import React from 'react';
 import { Menu } from 'lucide-react';
 import { useNellyStore } from '../../store/nellyStore';
 import { useTenantStore } from '../../store/tenantStore';
-import { NellyAvatar } from './Layout';
 
 interface NavbarProps {
     activeTab: string;
@@ -18,8 +17,8 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
     } = useNellyStore();
 
     return (
-        <header className={`sticky top-0 z-40 bg-ohs-navy/95 backdrop-blur-xl border-b border-white/10 flex items-center justify-between gap-2 px-3 py-2 sm:px-6 md:px-8 transition-all duration-300 ease-in-out w-full max-w-full overflow-x-hidden ${
-            isSidebarCollapsed ? 'md:ml-0' : 'md:ml-[280px]'
+        <header className={`sticky top-0 z-40 box-border bg-ohs-navy/95 backdrop-blur-xl border-b border-white/10 flex items-center justify-between gap-2 px-3 py-2 sm:px-6 md:px-8 transition-all duration-300 ease-in-out w-full max-w-full overflow-x-hidden ${
+            isSidebarCollapsed ? 'md:ml-0 md:w-full' : 'md:ml-[280px] md:w-[calc(100%-280px)]'
         }`}>
             {/* Left Branding and Navigation Toggle */}
             <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0 min-w-0">
@@ -41,7 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
             </div>
 
             {/* Right Status, Actions & Glowing NellyAvatar */}
-            <div className="flex items-center gap-1.5 sm:gap-3 md:gap-4 flex-shrink-0">
+            <div className="flex items-center gap-1.5 sm:gap-3 md:gap-4 flex-shrink min-w-0">
                 {/* Persistent Privacy Consensus Badge (P0 Audit Fix) */}
                 <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-emerald-400 font-bold text-[10px] uppercase tracking-wider whitespace-nowrap shadow-sm">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -65,12 +64,6 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
                         <span>{isWingmanActive ? 'DISABLE' : 'ACTIVATE'} WINGMAN</span>
                     </button>
                     <button
-                        onClick={() => setActiveTab('executive')}
-                        className="hidden md:inline-flex items-center justify-center bg-ohs-orange/20 hover:bg-ohs-orange/30 border border-ohs-orange/50 text-ohs-orange px-2.5 py-1.5 sm:px-3 sm:py-2.5 min-h-[36px] sm:min-h-[48px] rounded-xl font-bold text-[10px] sm:text-xs transition-all whitespace-nowrap leading-none cursor-pointer"
-                    >
-                        EXEC BRIEFING
-                    </button>
-                    <button
                         onClick={() => setActiveTab('demo')}
                         className="bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-2.5 py-1.5 sm:px-3 sm:py-2.5 min-h-[36px] sm:min-h-[48px] rounded-xl font-black text-[10px] sm:text-xs transition-all shadow-lg whitespace-nowrap leading-none cursor-pointer"
                     >
@@ -88,10 +81,6 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
                     </button>
                 </div>
 
-                {/* Glowing Vector NellyAvatar Component */}
-                <div className="w-7 h-7 sm:w-10 sm:h-10 md:w-11 md:h-11 flex-shrink-0 aspect-square">
-                    <NellyAvatar />
-                </div>
             </div>
         </header>
     );

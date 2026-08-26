@@ -23,6 +23,8 @@ export const NellyAvatar = () => {
         language, 
         setLanguage, 
         setGuidance,
+        hasIntroduced,
+        markIntroduced,
         isNellyExpanded,
         setNellyExpanded 
     } = useNellyStore();
@@ -39,13 +41,14 @@ export const NellyAvatar = () => {
         };
     }, []);
 
-    // Speak intro greeting whenever Nelly is expanded or language changes
+    // Introduce Nelly only after Wingman activation, once per browser session.
     useEffect(() => {
-        if (isNellyExpanded) {
+        if (isWingmanActive && !hasIntroduced) {
             const intro = translations[language as Language]?.nelly_intro || translations['en'].nelly_intro;
+            markIntroduced();
             speak(intro, language);
         }
-    }, [isNellyExpanded, language]);
+    }, [isWingmanActive, hasIntroduced, language, markIntroduced]);
 
     const handleSend = () => {
         if (!userInput.trim()) return;

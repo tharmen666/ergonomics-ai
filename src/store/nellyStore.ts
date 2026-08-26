@@ -14,6 +14,8 @@ interface NellyState {
     setTourActive: (active: boolean) => void;
     isWingmanActive: boolean;
     setWingmanActive: (active: boolean) => void;
+    hasIntroduced: boolean;
+    markIntroduced: () => void;
     isNellyExpanded: boolean;
     setNellyExpanded: (expanded: boolean) => void;
     isSidebarCollapsed: boolean;
@@ -38,6 +40,7 @@ export const useNellyStore = create<NellyState>()(
             mood: 'neutral',
             isTourActive: false,
             isWingmanActive: false,
+            hasIntroduced: false,
             isNellyExpanded: false,
             isSidebarCollapsed: false,
             language: 'en',
@@ -49,6 +52,7 @@ export const useNellyStore = create<NellyState>()(
             toggleAvatar: () => set((state) => ({ showAvatar: !state.showAvatar })),
             setTourActive: (isTourActive) => set({ isTourActive }),
             setWingmanActive: (isWingmanActive) => set({ isWingmanActive }),
+            markIntroduced: () => set({ hasIntroduced: true }),
             setNellyExpanded: (isNellyExpanded) => set({ isNellyExpanded }),
             setSidebarCollapsed: (isSidebarCollapsed) => set({ isSidebarCollapsed }),
             setLanguage: (language) => set({ language }),
@@ -69,7 +73,12 @@ export const useNellyStore = create<NellyState>()(
                 if (!merged.language || !translations[merged.language as Language]) {
                     merged.language = 'en';
                 }
+                merged.hasIntroduced = false;
                 return merged;
+            },
+            partialize: (state) => {
+                const { hasIntroduced: _hasIntroduced, ...persistedState } = state;
+                return persistedState;
             }
         }
     )

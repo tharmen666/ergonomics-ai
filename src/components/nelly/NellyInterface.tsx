@@ -33,6 +33,7 @@ export const NellyInterface = ({
     const language = propLang || store.language || 'en';
     const setLanguage = propSetLang || store.setLanguage;
     const isSpeaking = propIsSpeaking !== undefined ? propIsSpeaking : store.isSpeaking;
+    const { hasIntroduced, markIntroduced } = store;
     const userInput = propUserInput !== undefined ? propUserInput : (store.currentGuidance || '');
     const setUserInput = propSetUserInput || ((val: string) => store.setGuidance(val));
     const onSend = propOnSend || (() => {});
@@ -94,8 +95,11 @@ export const NellyInterface = ({
                             key={code}
                             onClick={() => {
                                 setLanguage(langCode);
-                                const intro = translations[langCode]?.nelly_intro || translations['en'].nelly_intro;
-                                speak(intro, langCode);
+                                if (!hasIntroduced) {
+                                    const intro = translations[langCode]?.nelly_intro || translations['en'].nelly_intro;
+                                    markIntroduced();
+                                    speak(intro, langCode);
+                                }
                             }}
                             className={`flex-1 text-[10px] font-black py-2 px-1 rounded-lg cursor-pointer transition-all duration-300 ${
                                 isSelected 

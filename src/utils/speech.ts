@@ -2,6 +2,7 @@ export interface VoiceConfig {
     displayName: string;
     regionalAccent: string;
     elevenLabsVoiceId: string;
+    persona: 'female';
     locale: string;
     audioPathPattern?: string;
 }
@@ -11,41 +12,47 @@ export const VOICEOVER_ACCENT_MAP: Record<string, VoiceConfig> = {
         displayName: "South African English",
         regionalAccent: "en-ZA",
         elevenLabsVoiceId: "21m00Tcm4TlvDq8ikWAM", // Rachel / High-fidelity Natural Female
+        persona: 'female',
         locale: "en-ZA",
         audioPathPattern: "/assets/audio/en_za/scene{scene}.mp3"
     },
     zu: {
         displayName: "isiZulu",
         regionalAccent: "zu-ZA",
-        elevenLabsVoiceId: "AZnzlk1XvdvUeBnXmlld", // Domi / Natural Warm Accent
+        elevenLabsVoiceId: "AZnzlk1XvdvUeBnXmlld", // Domi / Natural Warm Female Accent
+        persona: 'female',
         locale: "zu-ZA",
         audioPathPattern: "/assets/audio/zu/scene{scene}.mp3"
     },
     xh: {
         displayName: "isiXhosa",
         regionalAccent: "xh-ZA",
-        elevenLabsVoiceId: "EXAVITQu4vr4xnSDxMaL", // Bella
+        elevenLabsVoiceId: "EXAVITQu4vr4xnSDxMaL", // Bella / Natural Female
+        persona: 'female',
         locale: "xh-ZA",
         audioPathPattern: "/assets/audio/xh/scene{scene}.mp3"
     },
     st: {
         displayName: "Sesotho",
         regionalAccent: "st-ZA",
-        elevenLabsVoiceId: "EXAVITQu4vr4xnSDxMaL",
+        elevenLabsVoiceId: "EXAVITQu4vr4xnSDxMaL", // Bella / Natural Female
+        persona: 'female',
         locale: "st-ZA",
         audioPathPattern: "/assets/audio/st/scene{scene}.mp3"
     },
     sw: {
         displayName: "KiSwahili",
         regionalAccent: "sw-KE",
-        elevenLabsVoiceId: "ErXwobaYiN019PkySvjV", // Antoni / Swahili Natural
+        elevenLabsVoiceId: "EXAVITQu4vr4xnSDxMaL", // Bella / Female multilingual fallback
+        persona: 'female',
         locale: "sw-KE",
         audioPathPattern: "/assets/audio/sw/scene{scene}.mp3"
     },
     zh: {
         displayName: "Mandarin Chinese",
         regionalAccent: "zh-CN",
-        elevenLabsVoiceId: "pNInz6obpgDQGcFmaJgB", // Adam / Chinese Multilingual
+        elevenLabsVoiceId: "EXAVITQu4vr4xnSDxMaL", // Bella / Female multilingual fallback
+        persona: 'female',
         locale: "zh-CN",
         audioPathPattern: "/assets/audio/zh/scene{scene}.mp3"
     },
@@ -53,8 +60,17 @@ export const VOICEOVER_ACCENT_MAP: Record<string, VoiceConfig> = {
         displayName: "German",
         regionalAccent: "de-DE",
         elevenLabsVoiceId: "MF3mGyEYCl7XYWbV9V6O", // German Natural Female
+        persona: 'female',
         locale: "de-DE",
         audioPathPattern: "/assets/audio/de/scene{scene}.mp3"
+    },
+    af: {
+        displayName: "Afrikaans",
+        regionalAccent: "af-ZA",
+        elevenLabsVoiceId: "EXAVITQu4vr4xnSDxMaL", // Bella / Female multilingual fallback
+        persona: 'female',
+        locale: "af-ZA",
+        audioPathPattern: "/assets/audio/af/scene{scene}.mp3"
     }
 };
 
@@ -109,41 +125,45 @@ export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => 
         // Set native language locale tag (e.g. 'zu-ZA', 'sw-KE', 'zh-CN', 'de-DE', 'xh-ZA', 'st-ZA', 'en-ZA')
         utterance.lang = config.locale || config.regionalAccent;
 
-        // Neural Voice Selector algorithm prioritizing warm female human personas
+        // Native voice catalogs do not expose a portable gender field. Reject
+        // known male voices and only select explicit or well-known female voices.
         const findBestNeuralVoice = () => {
             if (!voices || voices.length === 0) return null;
             const localeTarget = config.locale.toLowerCase();
             const langPrefix = currentItem.lang.toLowerCase();
+            const maleVoiceNames = ['adam', 'alex', 'antoni', 'daniel', 'david', 'fred', 'guy', 'james', 'jorge', 'mark', 'microsoft mark', 'rishi', 'tom'];
+            const femaleVoiceNames = ['female', 'bella', 'karen', 'kathy', 'kyoko', 'luciana', 'moira', 'nomsa', 'samantha', 'salli', 'susan', 'tessa', 'zira', 'zola'];
+            const isFemaleVoice = (voice: SpeechSynthesisVoice) => {
+                const name = voice.name.toLowerCase();
+                return !maleVoiceNames.some(marker => name.includes(marker)) && femaleVoiceNames.some(marker => name.includes(marker));
+            };
 
             // 1. Try exact locale match with neural/natural keywords
             const exactNeural = voices.find(v => 
                 v.lang.toLowerCase().replace('_', '-') === localeTarget &&
+                isFemaleVoice(v) &&
                 (v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('online') || v.name.toLowerCase().includes('neural'))
             );
             if (exactNeural) return exactNeural;
 
-            // 2. Try exact locale match any voice
-            const exactAny = voices.find(v => v.lang.toLowerCase().replace('_', '-') === localeTarget);
+            // 2. Try exact locale match, female voices only
+            const exactAny = voices.find(v => v.lang.toLowerCase().replace('_', '-') === localeTarget && isFemaleVoice(v));
             if (exactAny) return exactAny;
 
             // 3. South African English fallback for ZA indigenous languages (zu, xh, st)
             if (['zu', 'xh', 'st', 'en'].includes(langPrefix)) {
                 const saFemale = voices.find(v => 
                     v.lang.toLowerCase().includes('en-za') && 
-                    (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('nomsa') || v.name.toLowerCase().includes('zola'))
+                    isFemaleVoice(v)
                 );
                 if (saFemale) return saFemale;
-
-                const saAny = voices.find(v => v.lang.toLowerCase().includes('en-za'));
-                if (saAny) return saAny;
             }
 
             // 4. High quality English female natural fallback
             return voices.find(v => 
                 v.lang.toLowerCase().startsWith('en') && 
-                (v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('salli') || v.name.toLowerCase().includes('samantha') || v.name.toLowerCase().includes('karen')) &&
-                !v.name.toLowerCase().includes('zira') &&
-                !v.name.toLowerCase().includes('david')
+                isFemaleVoice(v) &&
+                (v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('salli') || v.name.toLowerCase().includes('samantha') || v.name.toLowerCase().includes('karen'))
             );
         };
 

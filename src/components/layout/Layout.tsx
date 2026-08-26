@@ -43,8 +43,8 @@ export const Layout = memo(({ children, activeTab, setActiveTab }: LayoutProps) 
 
             <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-            <main className={`flex-1 px-4 sm:px-6 md:px-8 pt-6 pb-40 md:pb-28 relative z-10 flex flex-col w-full transition-all duration-300 ease-in-out ${
-                isSidebarCollapsed ? 'md:ml-0' : 'md:ml-[280px]'
+            <main className={`box-border flex-1 px-4 sm:px-6 md:px-8 pt-6 pb-40 md:pb-28 relative z-10 flex flex-col w-full transition-all duration-300 ease-in-out ${
+                isSidebarCollapsed ? 'md:ml-0 md:w-full' : 'md:ml-[280px] md:w-[calc(100%-280px)]'
             }`}>
                 <div className="flex-1 w-full max-w-7xl mx-auto overflow-x-hidden pr-0 lg:pr-2">
                     <AnimatePresence mode="wait">

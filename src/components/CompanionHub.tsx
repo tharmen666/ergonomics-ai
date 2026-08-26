@@ -4,6 +4,7 @@ import {
   Bot, MessageSquare, Volume2, Sparkles, Shield, User, Heart, Zap, Globe, 
   Send, RefreshCw, Award, Play, CheckCircle2, AlertTriangle, Lightbulb 
 } from 'lucide-react';
+import { speak } from '../utils/speech';
 
 type LanguageCode = 'en' | 'zu' | 'af' | 'st';
 
@@ -173,27 +174,8 @@ export const CompanionHub: React.FC = () => {
   };
 
   const speakText = (text: string) => {
-    if (!('speechSynthesis' in window)) {
-      alert("Speech synthesis is not supported in this browser.");
-      return;
-    }
-
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 1.0;
-    utterance.pitch = 1.0;
-    
-    // Attempt language matching
-    if (config.language === 'af') utterance.lang = 'af-ZA';
-    else if (config.language === 'zu') utterance.lang = 'zu-ZA';
-    else if (config.language === 'st') utterance.lang = 'st-ZA';
-    else utterance.lang = 'en-US';
-
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-
-    window.speechSynthesis.speak(utterance);
+    setIsSpeaking(true);
+    speak(text, config.language, () => setIsSpeaking(false));
   };
 
   const selectedAvatarObj = AVATAR_OPTIONS.find(a => a.id === config.avatar) || AVATAR_OPTIONS[0];
