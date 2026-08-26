@@ -49,6 +49,56 @@ npm run build
 
 The master production branch automatically deploys to Vercel upon push, ensuring maximum uptime and zero-configuration CI/CD.
 
+## Reproducible Testing & Local Setup
+
+Use the following steps to reproduce a local validation run from a clean checkout.
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/tharmen666/ergonomics-ai.git
+cd ergonomics-ai
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Run the local development server
+
+```bash
+npm run dev -- --host 127.0.0.1 --port 5173
+```
+
+Open `http://127.0.0.1:5173` in a browser. The default Vite port is `5173`; choose another unused port if it is already occupied.
+
+### 4. Test the live audio and HQ demo assets
+
+With the development server running, verify that the HQ video and an English Nelly scene track load:
+
+```text
+http://127.0.0.1:5173/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo.mp4
+http://127.0.0.1:5173/assets/rachel_narrative.mp3
+```
+
+The `HQ DEMO` button opens the standalone `HQTechnicalDemo` experience. Start the showcase, confirm the scene advances, and use the language selector to check the available voiceover routes. The demo falls back to browser speech synthesis when a scene-specific audio file is unavailable. The MP4 should report 1920x1080 resolution and a 30-second duration in the browser media controls.
+
+### 5. Run automated browser checks
+
+```bash
+npx playwright test
+```
+
+### 6. Run build verification
+
+```bash
+npm run build
+```
+
+The build must complete successfully with both TypeScript checking and the Vite production build.
+
 ---
 
 *ErgoSafe Reborn: Empowering remote teams safely, ethically, and responsibly.*
