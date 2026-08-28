@@ -36,36 +36,36 @@ export const TrainingPage = () => {
     };
 
     return (
-        <div className="space-y-8 pb-32 font-sans">
+        <div className="space-y-8 pb-32 font-sans w-full max-w-full overflow-x-hidden box-border">
             {/* Header Banner */}
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6">
-                <div>
-                    <span className="text-[10px] font-black text-ohs-orange uppercase tracking-[0.3em] block mb-1">
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6 w-full max-w-full">
+                <div className="min-w-0">
+                    <span className="text-[10px] font-black text-ohs-orange uppercase tracking-[0.3em] block mb-1 truncate">
                         SA OHS Act & ISO 45001 Accredited Curriculum
                     </span>
-                    <h1 className="text-3xl sm:text-4xl font-black text-white flex items-center gap-3">
+                    <h1 className="text-3xl sm:text-4xl font-black text-white flex items-center gap-3 break-words">
                         <Award size={36} className="text-ohs-orange shrink-0" />
                         Enterprise OHS Ergonomics Curriculum
                     </h1>
-                    <p className="text-gray-300 text-sm mt-1">
+                    <p className="text-gray-300 text-sm mt-1 break-words">
                         Multi-module biomechanics, fleet driving ergonomics, manual material handling, and industrial safety compliance.
                     </p>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 shrink-0">
                     <GlassCard className="py-2.5 px-5 bg-emerald-500/10 border-emerald-500/30">
                         <span className="text-emerald-400 font-black uppercase text-xs tracking-wider flex items-center gap-2">
-                            <CheckCircle size={16} /> Progress: {progressPct}% ({completedModules.length}/{totalModules} Completed)
+                            <CheckCircle size={16} className="shrink-0" /> Progress: {progressPct}% ({completedModules.length}/{totalModules} Completed)
                         </span>
                     </GlassCard>
                 </div>
             </div>
 
             {/* Overall Progress Bar */}
-            <div className="w-full bg-slate-900 border border-white/10 rounded-2xl p-4 space-y-2">
+            <div className="w-full max-w-full bg-slate-900 border border-white/10 rounded-2xl p-4 space-y-2">
                 <div className="flex justify-between text-xs font-bold text-gray-300">
-                    <span>Enterprise Certification Compliance Score</span>
-                    <span className="text-ohs-orange font-mono font-black">{progressPct}% Complete</span>
+                    <span className="break-words">Enterprise Certification Compliance Score</span>
+                    <span className="text-ohs-orange font-mono font-black shrink-0">{progressPct}% Complete</span>
                 </div>
                 <div className="w-full h-3 bg-slate-800 rounded-full overflow-hidden border border-white/5">
                     <div 
@@ -79,15 +79,15 @@ export const TrainingPage = () => {
                 <motion.div 
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-6 rounded-2xl border bg-ohs-orange/20 border-ohs-orange/50"
+                    className="p-4 sm:p-6 rounded-2xl border bg-ohs-orange/20 border-ohs-orange/50 w-full max-w-full"
                 >
                     <div className="flex items-center gap-4">
-                        <ShieldAlert className="text-ohs-orange animate-bounce" size={32} />
-                        <div>
-                            <h3 className="text-xl font-black text-ohs-orange">
+                        <ShieldAlert className="text-ohs-orange animate-bounce shrink-0" size={32} />
+                        <div className="min-w-0">
+                            <h3 className="text-xl font-black text-ohs-orange break-words">
                                 H&S OFFICER ASSIGNED CORRECTIVE TRAINING
                             </h3>
-                            <p className="text-gray-300 font-medium">
+                            <p className="text-gray-300 font-medium text-xs sm:text-sm break-words">
                                 A Health & Safety Officer has flagged a recent LPS incident for corrective action. Please complete a relevant module.
                             </p>
                         </div>
@@ -96,7 +96,7 @@ export const TrainingPage = () => {
             )}
 
             {/* Course Cards Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full max-w-full min-w-0">
                 {NOTEBOOK_LM_LIBRARIES.map((lib, i) => {
                     const isCompleted = completedModules.includes(lib.id);
                     const isRecommended = recommendations.includes(lib.id) || (hasAssignedTraining && !isCompleted);
@@ -108,10 +108,10 @@ export const TrainingPage = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.1 }}
-                            className={`relative group rounded-2xl p-1 transition-all duration-300 ${isRecommended ? 'bg-gradient-to-br from-ohs-orange to-red-500 shadow-[0_0_20px_rgba(249,168,37,0.3)]' : 'bg-transparent'
+                            className={`relative group rounded-2xl p-1 transition-all duration-300 w-full max-w-full ${isRecommended ? 'bg-gradient-to-br from-ohs-orange to-red-500 shadow-[0_0_20px_rgba(249,168,37,0.3)]' : 'bg-transparent'
                                 }`}
                         >
-                            <GlassCard className="h-full hover:bg-white/5 transition-colors relative overflow-hidden flex flex-col justify-between p-6">
+                            <GlassCard className="h-full hover:bg-white/5 transition-colors relative overflow-hidden flex flex-col justify-between p-4 sm:p-6 w-full max-w-full">
                                 {isRecommended && (
                                     <div className="absolute top-0 right-0 bg-ohs-orange text-ohs-navy text-[9px] font-black px-2.5 py-1 rounded-bl-lg uppercase tracking-widest z-10">
                                         Required Module
@@ -124,14 +124,14 @@ export const TrainingPage = () => {
                                             }`}>
                                             {isCompleted ? <CheckCircle size={24} /> : <Play size={24} fill="currentColor" />}
                                         </div>
-                                        <span className="text-xs font-mono font-bold text-ohs-orange bg-ohs-orange/10 px-3 py-1 rounded-full border border-ohs-orange/20">{lib.duration}</span>
+                                        <span className="text-xs font-mono font-bold text-ohs-orange bg-ohs-orange/10 px-3 py-1 rounded-full border border-ohs-orange/20 shrink-0">{lib.duration}</span>
                                     </div>
 
                                     <div>
-                                        <span className="text-[10px] uppercase font-black tracking-widest text-ohs-orange block mb-1">
+                                        <span className="text-[10px] uppercase font-black tracking-widest text-ohs-orange block mb-1 truncate">
                                             OHS Category: {lib.category.toUpperCase()}
                                         </span>
-                                        <h4 className="text-xl font-black text-white leading-tight">{lib.title}</h4>
+                                        <h4 className="text-xl font-black text-white leading-tight break-words">{lib.title}</h4>
                                     </div>
 
                                     <p className="text-sm text-gray-300 leading-relaxed flex-1">{lib.description}</p>

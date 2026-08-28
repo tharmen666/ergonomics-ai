@@ -173,16 +173,16 @@ export const SmartBreakTimer: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full sm:w-auto mt-2 sm:mt-0">
             <button
               onClick={() => startBreak('90min')}
-              className="bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-lg cursor-pointer flex items-center gap-2"
+              className="bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-3 py-2.5 rounded-xl font-bold text-[11px] sm:text-xs transition-all shadow-lg cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap"
             >
               <Activity size={16} /> Simulate 90-Min Nudge
             </button>
             <button
               onClick={() => startBreak('4hr')}
-              className="bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-4 py-2.5 rounded-xl font-bold text-xs transition-all shadow-lg cursor-pointer flex items-center gap-2"
+              className="bg-cyan-500 hover:bg-cyan-400 text-slate-950 px-3 py-2.5 rounded-xl font-bold text-[11px] sm:text-xs transition-all shadow-lg cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap"
             >
               <Footprints size={16} /> Simulate 4-Hr Walk
             </button>

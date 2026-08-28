@@ -18,16 +18,16 @@ export const GEAROverlay = () => {
     ];
 
     return (
-        <div className="fixed top-14 right-2 sm:top-20 sm:right-4 md:top-24 md:right-8 z-40">
+        <div className="fixed top-16 right-3 sm:top-20 sm:right-6 z-40">
             <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-ohs-orange border-2 border-yellow-300 shadow-[0_0_15px_rgba(249,168,37,0.5)] flex items-center justify-center text-ohs-dark"
+                className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-ohs-orange border-2 border-yellow-300 shadow-[0_0_15px_rgba(249,168,37,0.5)] flex items-center justify-center text-ohs-dark"
                 title="Toggle GEAR System"
                 aria-label="Toggle GEAR System"
             >
-                <Settings className={`w-5 h-5 md:w-6 md:h-6 transition-transform duration-500 ${isOpen ? 'rotate-180' : ''}`} />
+                <Settings className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 transition-transform duration-500 ${isOpen ? 'rotate-180' : ''}`} />
             </motion.button>
 
             <AnimatePresence>
@@ -36,7 +36,7 @@ export const GEAROverlay = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 20 }}
-                        className="fixed inset-x-4 top-20 sm:top-24 md:absolute md:inset-auto md:top-16 md:right-0 max-w-sm md:w-72 bg-ohs-navy/95 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-[0_0_30px_rgba(0,0,0,0.8)] z-50 pointer-events-auto mx-auto"
+                        className="fixed inset-x-4 top-28 sm:top-32 md:absolute md:inset-auto md:top-14 md:right-0 max-w-sm md:w-72 bg-ohs-navy/95 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-[0_0_30px_rgba(0,0,0,0.8)] z-50 pointer-events-auto mx-auto"
                     >
                         <h3 className="text-ohs-orange font-black uppercase text-xs tracking-widest mb-4 flex items-center gap-2">
                             <Settings size={14} /> G.E.A.R System

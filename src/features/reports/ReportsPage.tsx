@@ -11,73 +11,73 @@ export const ReportsPage: React.FC = () => {
     const verifiedBBSCount = cases.filter(c => c.hazardTrigger.includes('Verified BBS')).length;
 
     return (
-        <div className="p-3 sm:p-6 md:p-8 max-w-6xl mx-auto space-y-6 sm:space-y-8 pb-32 font-sans">
+        <div className="p-3 sm:p-6 md:p-8 w-full max-w-6xl mx-auto space-y-6 sm:space-y-8 pb-32 font-sans box-border overflow-x-hidden">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-3 sm:gap-4 border-b border-white/10 pb-6"
+                className="flex items-center gap-3 sm:gap-4 border-b border-white/10 pb-6 w-full max-w-full"
             >
                 <div className="p-2.5 sm:p-3 bg-ohs-orange/20 rounded-2xl text-ohs-orange border border-ohs-orange/30 shrink-0">
                     <BarChart3 className="w-7 h-7 sm:w-8 sm:h-8" />
                 </div>
-                <div>
-                    <span className="text-[10px] font-black text-ohs-orange uppercase tracking-[0.3em] block">Regulatory & Analytics Engine</span>
-                    <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight uppercase">Analytics & Regulatory Audit Logs</h1>
-                    <p className="text-gray-400 text-xs sm:text-sm font-medium">Evaluate postural risk trends, BBS hazard logs, and historical OHS Section 37 dossiers.</p>
+                <div className="min-w-0">
+                    <span className="text-[10px] font-black text-ohs-orange uppercase tracking-[0.3em] block truncate">Regulatory & Analytics Engine</span>
+                    <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight uppercase break-words">Analytics & Regulatory Audit Logs</h1>
+                    <p className="text-gray-400 text-xs sm:text-sm font-medium break-words">Evaluate postural risk trends, BBS hazard logs, and historical OHS Section 37 dossiers.</p>
                 </div>
             </motion.div>
 
             {/* KPI Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-                <GlassCard className="p-4 md:p-6">
-                    <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Average Posture Score</p>
-                    <p className="text-2xl sm:text-3xl font-black text-emerald-400 mt-1">94.8%</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full max-w-full min-w-0">
+                <GlassCard className="p-4 sm:p-6 w-full max-w-full">
+                    <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest truncate">Average Posture Score</p>
+                    <p className="text-2xl sm:text-3xl font-black text-emerald-400 mt-1 break-words">94.8%</p>
                     <span className="text-[10px] text-gray-400 font-medium flex items-center gap-1 mt-2">
-                        <TrendingUp size={12} className="text-emerald-400" /> +1.2% this week
+                        <TrendingUp size={12} className="text-emerald-400 shrink-0" /> +1.2% this week
                     </span>
                 </GlassCard>
 
-                <GlassCard className="p-4 md:p-6">
-                    <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Verified BBS Interventions</p>
-                    <p className="text-2xl sm:text-3xl font-black text-teal-400 mt-1">{verifiedBBSCount}</p>
+                <GlassCard className="p-4 sm:p-6 w-full max-w-full">
+                    <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest truncate">Verified BBS Interventions</p>
+                    <p className="text-2xl sm:text-3xl font-black text-teal-400 mt-1 break-words">{verifiedBBSCount}</p>
                     <span className="text-[10px] text-gray-400 font-medium flex items-center gap-1 mt-2">
-                        <ShieldCheck size={12} className="text-teal-400" /> Completed & verified
+                        <ShieldCheck size={12} className="text-teal-400 shrink-0" /> Completed & verified
                     </span>
                 </GlassCard>
 
-                <GlassCard className="p-4 md:p-6">
-                    <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest">Active High-Risk Breaches</p>
-                    <p className={`text-2xl sm:text-3xl font-black mt-1 ${breachCount > 0 ? 'text-red-500 animate-pulse' : 'text-emerald-400'}`}>{breachCount}</p>
+                <GlassCard className="p-4 sm:p-6 w-full max-w-full">
+                    <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest truncate">Active High-Risk Breaches</p>
+                    <p className={`text-2xl sm:text-3xl font-black mt-1 break-words ${breachCount > 0 ? 'text-red-500 animate-pulse' : 'text-emerald-400'}`}>{breachCount}</p>
                     <span className="text-[10px] text-gray-400 font-medium flex items-center gap-1 mt-2">
-                        <ShieldAlert size={12} className={breachCount > 0 ? 'text-red-400' : 'text-emerald-400'} /> {breachCount > 0 ? 'Action required' : 'Critical standard nominal'}
+                        <ShieldAlert size={12} className={breachCount > 0 ? 'text-red-400 shrink-0' : 'text-emerald-400 shrink-0'} /> {breachCount > 0 ? 'Action required' : 'Critical standard nominal'}
                     </span>
                 </GlassCard>
             </div>
 
             {/* Live BBS Hazard & Incident Audit Table */}
-            <GlassCard className="p-4 md:p-6 sm:p-8 space-y-6">
+            <GlassCard className="p-4 sm:p-6 space-y-6 w-full max-w-full overflow-hidden">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
-                    <div>
-                        <h3 className="text-lg font-black text-white flex items-center gap-2">
-                            <FileText className="text-ohs-orange" size={20} />
+                    <div className="min-w-0">
+                        <h3 className="text-lg font-black text-white flex items-center gap-2 break-words">
+                            <FileText className="text-ohs-orange shrink-0" size={20} />
                             Behavior-Based Safety (BBS) & Incident Ledger
                         </h3>
-                        <p className="text-xs text-gray-400 mt-1">Real-time telemetry stream from 3D spine hazard alerts, Prizm driver fatigue checks, and micro-stretches.</p>
+                        <p className="text-xs text-gray-400 mt-1 break-words">Real-time telemetry stream from 3D spine hazard alerts, Prizm driver fatigue checks, and micro-stretches.</p>
                     </div>
-                    <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 w-max">
+                    <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 w-max shrink-0">
                         ZERO-KNOWLEDGE POPIA ENCRYPTED
                     </span>
                 </div>
 
                 {/* Explicit Incident Provenance Metadata Badge (Manus Audit Requirement) */}
-                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono">
-                    <div className="flex items-center gap-2">
+                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono w-full max-w-full">
+                    <div className="flex items-center gap-2 min-w-0">
                         <ShieldAlert className="text-red-400 shrink-0" size={16} />
-                        <span className="font-bold text-red-300">
+                        <span className="font-bold text-red-300 break-words">
                             Status: CEO Escalated | Triggered: 18 Aug 2026 14:00 | Owner: OHS Manager | SLA: 24h Remaining
                         </span>
                     </div>
-                    <span className="text-[10px] bg-red-500/20 text-red-200 px-2 py-0.5 rounded font-black uppercase">
+                    <span className="text-[10px] bg-red-500/20 text-red-200 px-2 py-0.5 rounded font-black uppercase shrink-0">
                         CRITICAL SLA AUDIT BADGE
                     </span>
                 </div>

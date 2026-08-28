@@ -113,7 +113,7 @@ function App() {
   }
 
   return (
-    <div className="w-full min-h-screen overflow-x-hidden bg-ohs-navy text-white font-sans flex flex-col">
+    <div className="w-full max-w-full min-h-screen overflow-x-hidden bg-ohs-navy text-white font-sans flex flex-col box-border">
       <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
         <PrivacyHandshake />
         <CognitiveHandshake />
@@ -123,7 +123,7 @@ function App() {
         <GEAROverlay />
         <BBSCorrectiveActionOverlay />
 
-        <div className="w-full min-h-screen flex flex-col flex-1">
+        <div className="w-full max-w-full min-h-screen flex flex-col flex-1 overflow-x-hidden">
           {renderTabContent(activeTab)}
         </div>
       </Layout>

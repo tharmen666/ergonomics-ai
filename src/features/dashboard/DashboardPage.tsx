@@ -25,24 +25,24 @@ export const DashboardPage = () => {
     };
 
     return (
-        <div className="space-y-6 pb-20">
+        <div className="space-y-6 pb-20 w-full max-w-full overflow-x-hidden font-sans box-border">
             <DemoVideoModal isOpen={isDemoModalOpen} onClose={() => setIsDemoModalOpen(false)} />
             {/* Executive Stewardship Banner */}
             <motion.div 
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="glass-ohs p-4 md:p-6 rounded-[2rem] border-l-8 border-ohs-orange flex flex-col sm:flex-row sm:items-center justify-between gap-4 overflow-hidden relative"
+                className="glass-ohs p-4 sm:p-6 rounded-[2rem] border-l-8 border-ohs-orange flex flex-col sm:flex-row sm:items-center justify-between gap-4 overflow-hidden relative w-full max-w-full"
             >
                 <div className="absolute top-0 right-0 w-64 h-64 bg-ohs-orange/5 rounded-full blur-3xl -mr-32 -mt-32" />
-                <div className="relative z-10">
+                <div className="relative z-10 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                        <ShieldCheck size={16} className="text-ohs-orange" />
-                        <span className="text-xs font-bold text-ohs-orange tracking-wider uppercase">Stewardship Authority Standard</span>
+                        <ShieldCheck size={16} className="text-ohs-orange shrink-0" />
+                        <span className="text-xs font-bold text-ohs-orange tracking-wider uppercase truncate">Stewardship Authority Standard</span>
                     </div>
-                    <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight">Enterprise Safety Operations</h1>
-                    <p className="text-gray-400 text-xs sm:text-sm font-medium mt-1">Section 8(1) OHS Act 85 of 1993 & ISO 45001/45003 Real-Time Ergonomic Telemetry</p>
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight break-words">Enterprise Safety Operations</h1>
+                    <p className="text-gray-400 text-xs sm:text-sm font-medium mt-1 break-words">Section 8(1) OHS Act 85 of 1993 & ISO 45001/45003 Real-Time Ergonomic Telemetry</p>
                 </div>
-                <div className="flex flex-wrap gap-2 sm:gap-4 relative z-10 justify-start sm:justify-end">
+                <div className="flex flex-wrap gap-2 sm:gap-4 relative z-10 justify-start sm:justify-end shrink-0">
                     <div className="text-left sm:text-right">
                         <p className="text-[9px] font-black text-gray-500 uppercase">Board Compliance</p>
                         <p className="text-lg sm:text-xl font-black text-glow-emerald text-[#10b981]">100%</p>
@@ -60,28 +60,28 @@ export const DashboardPage = () => {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="bg-ohs-navy border border-white/10 p-4 rounded-xl flex items-center gap-4 shadow-lg relative overflow-hidden"
+                className="bg-ohs-navy border border-white/10 p-4 rounded-xl flex items-center gap-4 shadow-lg relative overflow-hidden w-full max-w-full"
             >
                 <div className="absolute inset-0 bg-gradient-to-r from-ohs-blue/10 to-transparent pointer-events-none" />
-                <div className="p-2 bg-ohs-blue/20 rounded-lg relative z-10">
+                <div className="p-2 bg-ohs-blue/20 rounded-lg relative z-10 shrink-0">
                     <Lock className="text-ohs-blue" size={20} />
                 </div>
-                <div className="relative z-10">
-                    <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2">
+                <div className="relative z-10 min-w-0">
+                    <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2 break-words">
                         Privacy-First Telemetry
                     </h3>
-                    <p className="text-xs text-gray-400 font-medium">Zero raw camera data is stored. All skeletal telemetry is processed locally and discarded instantly.</p>
+                    <p className="text-xs text-gray-400 font-medium break-words">Zero raw camera data is stored. All skeletal telemetry is processed locally and discarded instantly.</p>
                 </div>
             </motion.div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
-                <div className="lg:col-span-2 space-y-6 max-w-full">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10 w-full max-w-full min-w-0">
+                <div className="lg:col-span-2 space-y-6 w-full max-w-full min-w-0">
                     {/* Handshake Prompt */}
                     {!cognitiveHandshakePassed && (
                         <motion.div 
                             initial={{ scale: 0.95, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
-                            className="w-full relative z-20"
+                            className="w-full max-w-full relative z-20"
                         >
                             <HandshakeCardHeader
                                 title="Daily Cognitive Sync Required"
@@ -101,7 +101,7 @@ export const DashboardPage = () => {
                     )}
 
                     {/* 3D Spine Viewer - Primary Interactive Element */}
-                    <div className="h-[400px]">
+                    <div className="h-[400px] w-full max-w-full overflow-hidden">
                         <SpineViewer />
                     </div>
 
@@ -110,15 +110,15 @@ export const DashboardPage = () => {
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="glass-ohs p-6 rounded-[2rem] border border-white/10 relative overflow-hidden space-y-4"
+                        className="glass-ohs p-4 sm:p-6 rounded-[2rem] border border-white/10 relative overflow-hidden space-y-4 w-full max-w-full"
                     >
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                            <div>
-                                <h3 className="text-lg font-black text-white tracking-tight uppercase flex items-center gap-2">
-                                    <div className="w-2.5 h-2.5 bg-ohs-orange rounded-full animate-pulse" />
+                            <div className="min-w-0">
+                                <h3 className="text-lg font-black text-white tracking-tight uppercase flex items-center gap-2 break-words">
+                                    <div className="w-2.5 h-2.5 bg-ohs-orange rounded-full animate-pulse shrink-0" />
                                     System Walkthrough & Executive Demo
                                 </h3>
-                                <p className="text-xs text-gray-400 font-medium mt-0.5">
+                                <p className="text-xs text-gray-400 font-medium mt-0.5 break-words">
                                     90-Second Walkthrough covering Section 8(1) OHS Act 85, Cognitive Handshake, 3D Posture Telemetry & Section 37 Dossier Automation.
                                 </p>
                             </div>
@@ -141,7 +141,7 @@ export const DashboardPage = () => {
                             </div>
                         </div>
 
-                        <div className="relative w-full rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(249,168,37,0.15)] border border-white/10 bg-black aspect-video">
+                        <div className="relative w-full rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(249,168,37,0.15)] border border-white/10 bg-black aspect-video max-w-full">
                             <video
                                 className="w-full h-full object-contain"
                                 src="/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo.mp4"
@@ -157,43 +157,43 @@ export const DashboardPage = () => {
                     </motion.div>
 
                     {/* Top Stats */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="glass-ohs p-6 rounded-[2rem]">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full max-w-full min-w-0">
+                        <div className="glass-ohs p-4 sm:p-6 rounded-[2rem]">
                             <div className="flex items-center gap-4">
-                                <div className="p-4 bg-ohs-blue/10 rounded-2xl text-ohs-blue border border-ohs-blue/20">
+                                <div className="p-4 bg-ohs-blue/10 rounded-2xl text-ohs-blue border border-ohs-blue/20 shrink-0">
                                     <Users size={28} />
                                 </div>
-                                <div>
-                                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Total Workforce</p>
-                                    <h3 className="text-3xl font-black text-white">1,248</h3>
+                                <div className="min-w-0">
+                                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest truncate">Total Workforce</p>
+                                    <h3 className="text-3xl font-black text-white break-words">1,248</h3>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="glass-ohs p-6 rounded-[2rem]">
+                        <div className="glass-ohs p-4 sm:p-6 rounded-[2rem]">
                             <div className="flex items-center gap-4">
-                                <div className="p-4 bg-red-500/10 rounded-2xl text-red-500 border border-red-500/20">
+                                <div className="p-4 bg-red-500/10 rounded-2xl text-red-500 border border-red-500/20 shrink-0">
                                     <AlertCircle size={28} className="animate-pulse" />
                                 </div>
-                                <div>
-                                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Critical Risks</p>
-                                    <h3 className="text-3xl font-black text-red-500 text-glow-red">3</h3>
+                                <div className="min-w-0">
+                                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest truncate">Critical Risks</p>
+                                    <h3 className="text-3xl font-black text-red-500 text-glow-red break-words">3</h3>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="glass-ohs p-6 rounded-[2rem] relative overflow-hidden group flex flex-col justify-between">
+                        <div className="glass-ohs p-4 sm:p-6 rounded-[2rem] relative overflow-hidden group flex flex-col justify-between">
                             <div className="absolute right-0 top-0 opacity-10 transform translate-x-4 -translate-y-4">
                                 <Target size={80} />
                             </div>
                             <div className="flex flex-col gap-4 relative z-10">
                                 <div className="flex items-center gap-4">
-                                    <div className="p-4 bg-ohs-green/10 rounded-2xl text-ohs-green border border-ohs-green/20">
+                                    <div className="p-4 bg-ohs-green/10 rounded-2xl text-ohs-green border border-ohs-green/20 shrink-0">
                                         <Target size={28} />
                                     </div>
-                                    <div>
-                                        <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest leading-tight">Baseline Target</p>
-                                        <h3 className="text-2xl font-black text-white">35%</h3>
+                                    <div className="min-w-0">
+                                        <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest leading-tight truncate">Baseline Target</p>
+                                        <h3 className="text-2xl font-black text-white break-words">35%</h3>
                                     </div>
                                 </div>
                                 <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
@@ -210,32 +210,32 @@ export const DashboardPage = () => {
                     <WorkspaceAudit />
 
                     {/* Charts Section */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <div className="glass-ohs p-8 rounded-[2.5rem]">
-                            <h3 className="text-xl font-black mb-8 tracking-tight text-white flex items-center gap-2">
-                                <div className="w-2 h-2 bg-ohs-blue rounded-full" />
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 w-full max-w-full min-w-0">
+                        <div className="glass-ohs p-4 sm:p-6 md:p-8 rounded-[2.5rem] w-full max-w-full overflow-hidden">
+                            <h3 className="text-xl font-black mb-8 tracking-tight text-white flex items-center gap-2 break-words">
+                                <div className="w-2 h-2 bg-ohs-blue rounded-full shrink-0" />
                                 Engagement Activity
                             </h3>
                             <ActivityChart />
                         </div>
 
-                        <div className="glass-ohs p-8 rounded-[2.5rem] flex flex-col items-center justify-center">
-                            <h3 className="text-xl font-black mb-8 self-start tracking-tight text-white flex items-center gap-2">
-                                <div className="w-2 h-2 bg-ohs-green rounded-full" />
+                        <div className="glass-ohs p-4 sm:p-6 md:p-8 rounded-[2.5rem] flex flex-col items-center justify-center w-full max-w-full overflow-hidden">
+                            <h3 className="text-xl font-black mb-8 self-start tracking-tight text-white flex items-center gap-2 break-words">
+                                <div className="w-2 h-2 bg-ohs-green rounded-full shrink-0" />
                                 Compliance Velocity
                             </h3>
                             <ComplianceRing percentage={92} />
-                            <p className="mt-8 text-center text-sm text-gray-400 font-medium">92% Compliance achieved through Admin-Zero automated workflows.</p>
+                            <p className="mt-8 text-center text-sm text-gray-400 font-medium break-words">92% Compliance achieved through Admin-Zero automated workflows.</p>
                         </div>
                     </div>
 
                     {/* Stewardship Authority Streaks */}
-                    <div className="h-[280px]">
+                    <div className="h-[280px] w-full max-w-full overflow-hidden">
                         <SafetyStreaks />
                     </div>
                 </div>
 
-                <div className="lg:col-span-1">
+                <div className="lg:col-span-1 w-full max-w-full min-w-0">
                     <DailySafetyChecklist />
                 </div>
             </div>

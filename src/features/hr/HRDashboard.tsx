@@ -96,13 +96,13 @@ export const HRDashboard = () => {
                 </div>
 
                 {/* Main Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8 w-full max-w-full min-w-0">
                     {/* Left: OHS Employee Audit Grid */}
-                    <div className="lg:col-span-2 space-y-6">
-                        <div className="bg-white/5 border border-white/10 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl">
-                            <div className="p-4 md:p-6 border-b border-white/10 bg-white/5">
-                                <h3 className="text-lg sm:text-xl font-black text-white uppercase tracking-tight">Active Employee Incident Tracker</h3>
-                                <p className="text-gray-400 text-xs mt-1">Select an employee profile to view full OHS escalation audit details.</p>
+                    <div className="lg:col-span-2 space-y-6 w-full max-w-full min-w-0">
+                        <div className="bg-white/5 border border-white/10 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl w-full max-w-full">
+                            <div className="p-4 sm:p-6 border-b border-white/10 bg-white/5">
+                                <h3 className="text-lg sm:text-xl font-black text-white uppercase tracking-tight break-words">Active Employee Incident Tracker</h3>
+                                <p className="text-gray-400 text-xs mt-1 break-words">Select an employee profile to view full OHS escalation audit details.</p>
                             </div>
                             
                             <div className="divide-y divide-white/5">
@@ -112,11 +112,11 @@ export const HRDashboard = () => {
                                         <div
                                             key={c.id}
                                             onClick={() => setSelectedCase(c)}
-                                            className={`p-4 md:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:bg-white/5 transition-all cursor-pointer group ${
+                                            className={`p-4 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 hover:bg-white/5 transition-all cursor-pointer group ${
                                                 activeCase?.id === c.id ? 'bg-ohs-blue/10 border-l-4 border-ohs-orange' : ''
                                             }`}
                                         >
-                                            <div className="flex items-center gap-4">
+                                            <div className="flex items-center gap-4 min-w-0 flex-1">
                                                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black transition-all flex-shrink-0 aspect-square ${
                                                     c.status === 'BREACH' 
                                                         ? 'bg-red-500/20 text-red-500' 
@@ -126,14 +126,14 @@ export const HRDashboard = () => {
                                                 }`}>
                                                     {c.employeeName.charAt(0)}
                                                 </div>
-                                                <div>
-                                                    <div className="flex items-center gap-2">
-                                                        <h4 className="font-bold text-white text-lg leading-tight group-hover:text-ohs-orange transition-colors">
+                                                <div className="min-w-0 flex-1">
+                                                    <div className="flex flex-wrap items-center gap-2">
+                                                        <h4 className="font-bold text-white text-base sm:text-lg leading-tight group-hover:text-ohs-orange transition-colors break-words">
                                                             {c.employeeName}
                                                         </h4>
-                                                        <span className="text-[10px] text-gray-500 bg-white/5 px-2 py-0.5 rounded uppercase font-semibold">{c.dept}</span>
+                                                        <span className="text-[10px] text-gray-500 bg-white/5 px-2 py-0.5 rounded uppercase font-semibold shrink-0">{c.dept}</span>
                                                     </div>
-                                                    <p className="text-xs text-gray-400 mt-1 line-clamp-1">{c.hazardTrigger}</p>
+                                                    <p className="text-xs text-gray-400 mt-1 truncate">{c.hazardTrigger}</p>
                                                 </div>
                                             </div>
 
