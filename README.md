@@ -1,38 +1,46 @@
-# ErgoSafe Reborn: Stewardship & Fatigue Engine
+# ErgoSafe Reborn | Autonomous Multi-Agent Industrial Safety Sentinel
 
-Welcome to **ErgoSafe Reborn**, the pinnacle of Privacy-First OHS Architecture.
+> **Google Cloud & NVIDIA AI Hackathon Submission**  
+> An agentic proof-of-concept demonstrating real-time ergonomics analysis, high-frequency environmental telemetry, and supervisory audit workflows powered by Google Cloud Agent Builder, Gemini, and NVIDIA-accelerated data processing.
 
-This repository houses a state-of-the-art "Digital Wingman" application designed specifically to protect remote workforces from ergonomic deterioration, cognitive fatigue, and the chronic "Bed-Working" rot that plagues modern distributed teams.
+---
 
-## 🏆 Google Cloud Rapid Agent Hackathon Submission
+## 🎯 The Vision & Problem Space
+Industrial workplace compliance (anchored by frameworks like the South African OHS Act 85 of 1993, NIHL Regulations, and Ergonomics Regulations 2019) often suffers from manual data silos, delayed incident escalation, and static paper registers. 
 
-This project is submitted to the Google Cloud Rapid Agent Hackathon.
+**ErgoSafe** demonstrates how autonomous agentic workflows can transform static compliance checklists into proactive, real-time safety interventions.
 
-- **Powered by Gemini & Google Cloud Agent Builder**: "Nelly" is a fully functional AI agent orchestrated by Google Cloud Agent Builder and powered by the Gemini model to provide real-time, context-aware safety coaching and interventions.
-- **Partner Integration (MongoDB)**: We deeply integrate the **MongoDB MCP Server** to handle our live safety telemetry and Section 37/38 compliance ledgers. Every daily safety scan, ergonomic check, and compliance handshake is embedded into MongoDB. Nelly utilizes the MCP server to autonomously query this database, dynamically alerting management to compliance gaps in real-time.
+---
 
-## 🛡️ The Philosophy: "Human-in-the-Loop"
+## ⚙️ Architectural Core & Stack
 
-ErgoSafe Reborn is fundamentally **a performance tool, not a spy tool**. Our core philosophy revolves around the "Human-in-the-Loop" guarantee:
+* **Agent Orchestration & Intelligence:** Orchestrated with Gemini models via Google Cloud Agent Builder, enabling natural language safety advisory and procedural multi-lingual voice coaching ("Nelly").
+* **Telemetry & State Machines:** Deterministic calculation engines evaluating noise dosimeter thresholds (85 dBA 3dB exchange rate), WBGT thermal stress indicators, and ergonomic strain factors.
+* **Integrity & Auditability:** Client-side tamper-evident event logging utilizing the **Web Crypto API (SHA-256)**, creating an immutable verification chain for inspection preparation.
+* **Human-in-the-Loop (HITL) Governance:** Pre-shift assessments highlight fatigue and strain risk indicators, routing alerts to shift supervisors rather than imposing unverified black-box decisions.
+* **Database & Partner Ledger:** MongoDB MCP Server integration for live safety telemetry, posture scans, and Section 37/38 legal compliance logs.
+* **Frontend & Edge Delivery:** High-performance React 18, Vite, and Tailwind CSS deployed on global edge infrastructure with sub-second responsive interaction.
 
-- We track posture and interaction data locally and securely.
-- We do not use this data to punish or penalize employees.
-- Instead, the AI agent (Nelly) acts as an ethical coach, issuing **nudges** and suggesting **Professional Resets** instead of cold, punitive warnings.
-- *Your Data is Your Shield.* All compliance reports and behavioral audits are end-to-end encrypted and filed securely into zero-knowledge dossiers.
+---
 
 ## ⚖️ Legal Guardrails: Sections 37 & 38
 
-Designed with the **Occupational Health and Safety Act 85 of 1993** at its core, ErgoSafe Reborn explicitly addresses the strict liability factors that modern CEOs and managers face:
+Designed with the **Occupational Health and Safety Act 85 of 1993** at its core, ErgoSafe Reborn explicitly addresses the strict liability factors that modern workplace leadership faces:
 
-- **Section 37 (Acts or Omissions by Employees):** Remote work creates an environment where an employer can be explicitly held liable for injuries sustained due to poor workspace setups (e.g., working from a bed). ErgoSafe Reborn actively tracks and mitigates these risks, logging a verifiable digital trail of safety interventions to protect corporate leadership from claims of negligence.
-- **Section 38 (Offences):** Non-compliance with safety provisions can result in severe fines or imprisonment. ErgoSafe features a **DOA Lockout** mechanism that disables critical sign-offs for employees flagged with High-Fatigue, preventing them from making high-risk decisions while impaired and keeping the organization legally compliant.
+- **Section 37 (Acts or Omissions by Employees):** Tracks and mitigates ergonomic and environmental risks, logging a verifiable digital trail of safety interventions to protect corporate leadership from claims of negligence.
+- **Section 38 (Offences):** Non-compliance with safety provisions can result in severe fines or penalties. ErgoSafe features a **DOA Lockout** mechanism that temporarily disables high-risk operational sign-offs for employees flagged with acute fatigue or strain.
 
-## 🧠 Core Features
+---
 
-1. **Pre-Login Cognitive Handshake:** A mandatory 30-second interaction test establishing a cognitive baseline. Latency > 20% triggers specialized Digital Wingman protocols and fatigue mitigation.
-2. **Safety Streaks (Gamification):** Transitioning safety culture from "box-ticking" to high-performance achievement by awarding streaks and badges for sustained postural excellence.
-3. **DOA Lockouts:** Administrative functions temporarily disabled if acute impairment or fatigue is algorithmically detected.
-4. **Automated Dossier Filing:** "Admin-Zero" workflow compiling biometric and postural risk factors securely to the blockchain ledger for indisputable legal auditing.
+## 🧠 Key Features & Workflows
+
+1. **Pre-Shift & Pre-Login Cognitive Handshake:** A mandatory interaction test establishing a cognitive baseline. Reaction drops > 20% trigger specialized fatigue mitigation protocols.
+2. **Nelly Multilingual Voice Coach:** Real-time conversational triage and audio coaching across 7 regional languages (en-ZA, zu-ZA, xh-ZA, st-ZA, sw-KE, zh-CN, de-DE).
+3. **3D Biomechanical Spine Viewer:** Real-time posture hazard monitoring (Tech-neck, Working from bed, Couch slouching) dispatching automated compliance ledger events.
+4. **Shandray's Prizm Driver Fatigue Telemetry:** Continuous driving-hour tracking and reaction drop scoring with automated rest advisories.
+5. **Zero-Knowledge Audit Dossiers:** Client-side Web Crypto API (SHA-256) tamper-evident event logging producing ISO 45001/45003 compliance audit records.
+
+---
 
 ## 🚀 Running the App
 
@@ -47,9 +55,11 @@ npm run dev
 npm run build
 ```
 
-The master production branch automatically deploys to Vercel upon push, ensuring maximum uptime and zero-configuration CI/CD.
+The master production branch automatically deploys to Vercel upon push: [https://ergo-safe-reborn.vercel.app](https://ergo-safe-reborn.vercel.app)
 
-## Reproducible Testing & Local Setup
+---
+
+## 🧪 Reproducible Testing & Local Setup
 
 Use the following steps to reproduce a local validation run from a clean checkout.
 
@@ -72,18 +82,16 @@ npm install
 npm run dev -- --host 127.0.0.1 --port 5173
 ```
 
-Open `http://127.0.0.1:5173` in a browser. The default Vite port is `5173`; choose another unused port if it is already occupied.
+Open `http://127.0.0.1:5173` in a browser.
 
 ### 4. Test the live audio and HQ demo assets
 
-With the development server running, verify that the HQ video and an English Nelly scene track load:
+With the development server running, verify that the HQ video and audio tracks load:
 
 ```text
 http://127.0.0.1:5173/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo.mp4
 http://127.0.0.1:5173/assets/rachel_narrative.mp3
 ```
-
-The `HQ DEMO` button opens the standalone `HQTechnicalDemo` experience. Start the showcase, confirm the scene advances, and use the language selector to check the available voiceover routes. The demo falls back to browser speech synthesis when a scene-specific audio file is unavailable. The MP4 should report 1920x1080 resolution and a 30-second duration in the browser media controls.
 
 ### 5. Run automated browser checks
 
@@ -97,10 +105,12 @@ npx playwright test
 npm run build
 ```
 
-The build must complete successfully with both TypeScript checking and the Vite production build.
+---
+
+## 🔒 Scope & Compliance Disclaimer
+*ErgoSafe is an architectural prototype developed for hackathon demonstration and exploratory purposes. Audit logging and supervisory sign-off workflows demonstrate technical integrity and UI/UX patterns for statutory record-keeping, and do not constitute formal legal counsel or statutory certification under Section 16/37 of the South African OHS Act.*
 
 ---
 
-*ErgoSafe Reborn: Empowering remote teams safely, ethically, and responsibly.*
+*ErgoSafe Reborn: Autonomous Multi-Agent Industrial Safety Sentinel.*
 
-<!-- FORCE VERCEL REDEPLOY: Build a9407fe SAFETY COMMAND CENTRE (2026-08-18T15:18:00+02:00) -->

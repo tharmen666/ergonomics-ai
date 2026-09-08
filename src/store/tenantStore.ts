@@ -36,12 +36,14 @@ interface TenantState {
 }
 
 const DEFAULT_COMPANIES: CompanyTenant[] = [
+    { id: 'COMP-ODX-01', name: 'Oredax (Pty) Ltd', activeSeats: 11 },
     { id: 'COMP-001', name: 'Sovereign Health Ltd', activeSeats: 12 },
     { id: 'COMP-002', name: 'Vanguard Logistics', activeSeats: 45 },
     { id: 'COMP-003', name: 'Apex Financials', activeSeats: 8 },
 ];
 
 const DEFAULT_USAGE: Record<string, TenantBillingInfo> = {
+    'COMP-ODX-01': { total_usage_count: 240, login_count: 36 },
     'COMP-001': { total_usage_count: 142, login_count: 24 },
     'COMP-002': { total_usage_count: 512, login_count: 88 },
     'COMP-003': { total_usage_count: 86, login_count: 14 },

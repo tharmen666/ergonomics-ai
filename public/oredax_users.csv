@@ -1,0 +1,12 @@
+User_ID,Full_Name_or_Alias,Role,Station_ID,Shift_Type,Micro_Break_Interval_Mins,Acoustic_Alert_Threshold_dBA
+ODX-SUP-01,Operations Supervisor,Supervisor,Control-Desk-01,Full Day,120,65
+ODX-AGT-01,Agent 01,Operator,Station-01,Morning (08:00-16:30),60,65
+ODX-AGT-02,Agent 02,Operator,Station-02,Morning (08:00-16:30),60,65
+ODX-AGT-03,Agent 03,Operator,Station-03,Morning (08:00-16:30),60,65
+ODX-AGT-04,Agent 04,Operator,Station-04,Morning (08:00-16:30),60,65
+ODX-AGT-05,Agent 05,Operator,Station-05,Morning (08:00-16:30),60,65
+ODX-AGT-06,Agent 06,Operator,Station-06,Rotational (09:00-17:30),60,65
+ODX-AGT-07,Agent 07,Operator,Station-07,Rotational (09:00-17:30),60,65
+ODX-AGT-08,Agent 08,Operator,Station-08,Rotational (09:00-17:30),60,65
+ODX-AGT-09,Agent 09,Operator,Station-09,Rotational (09:00-17:30),60,65
+ODX-AGT-10,Agent 10,Operator,Station-10,Rotational (09:00-17:30),60,65

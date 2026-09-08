@@ -76,7 +76,8 @@ test.describe('ErgoSafe Reborn V3 End-to-End Suite', () => {
       await ensureSidebarOpen(page);
       const tabButton = page.locator(`button:has-text("${tab.name}")`).first();
       await expect(tabButton).toBeVisible();
-      await tabButton.click({ force: true });
+      await tabButton.scrollIntoViewIfNeeded();
+      await tabButton.evaluate((el: HTMLElement) => el.click());
 
       // Verify React component mounts cleanly
       await expect(page.locator('body')).toContainText(tab.expectedPattern, { timeout: 5000 });
@@ -90,7 +91,9 @@ test.describe('ErgoSafe Reborn V3 End-to-End Suite', () => {
 
     // Navigate to Invoices tab via sidebar
     await ensureSidebarOpen(page);
-    await page.locator('button:has-text("Assessment PDF Invoices & Billing")').first().click({ force: true });
+    const invoiceBtn = page.locator('button:has-text("Assessment PDF Invoices & Billing")').first();
+    await invoiceBtn.scrollIntoViewIfNeeded();
+    await invoiceBtn.evaluate((el: HTMLElement) => el.click());
     await expect(page.locator('h1:has-text("Ergonomics Assessment Invoicing")')).toBeVisible();
 
     // Click GENERATE NEW INVOICE

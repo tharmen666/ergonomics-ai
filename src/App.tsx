@@ -30,6 +30,7 @@ import { InvoicePage } from './features/invoices/InvoicePage';
 import { CompanionHub } from './components/CompanionHub';
 import { SmartBreakTimer } from './components/SmartBreakTimer';
 import { SOPGenerator } from './components/SOPGenerator';
+import { ErgoMicroPrompt } from './components/callcenter/ErgoMicroPrompt';
 
 function renderTabContent(activeTab: string) {
   switch (activeTab) {
@@ -122,6 +123,7 @@ function App() {
         <NellyAvatar />
         <GEAROverlay />
         <BBSCorrectiveActionOverlay />
+        <ErgoMicroPrompt currentUser="ODX-AGT-01" />
 
         <div className="w-full max-w-full min-h-screen flex flex-col flex-1 overflow-x-hidden">
           {renderTabContent(activeTab)}
