@@ -1,3 +1,5 @@
+import { useNellyStore } from '../store/nellyStore';
+
 export interface VoiceConfig {
     displayName: string;
     regionalAccent: string;
@@ -74,7 +76,6 @@ export const VOICEOVER_ACCENT_MAP: Record<string, VoiceConfig> = {
     }
 };
 
-let speechQueue: { text: string; lang: string; onEnd?: () => void }[] = [];
 let isAudioMuted = false;
 
 export const toggleMute = (): boolean => {
@@ -88,152 +89,204 @@ export const toggleMute = (): boolean => {
 export const getIsMuted = (): boolean => isAudioMuted;
 
 /**
- * High-Fidelity Human Voice Engine for Nelly AI Safety Companion
+ * Finds the best female neural voice matching target locale/language
  */
-export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => {
-    if (isAudioMuted) return;
-    if (!window.speechSynthesis) {
-        console.warn("SpeechSynthesis not supported on this platform");
+const findBestNeuralVoice = (targetLang: string, targetLocale: string): SpeechSynthesisVoice | null => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return null;
+    const voices = window.speechSynthesis.getVoices();
+    if (!voices || voices.length === 0) return null;
+
+    const locTarget = targetLocale.toLowerCase().replace('_', '-');
+    const langPrefix = targetLang.split('-')[0].toLowerCase();
+    
+    const maleVoiceNames = ['adam', 'alex', 'antoni', 'daniel', 'david', 'fred', 'guy', 'james', 'jorge', 'mark', 'microsoft mark', 'rishi', 'tom'];
+    const femaleVoiceNames = ['female', 'bella', 'karen', 'kathy', 'kyoko', 'luciana', 'moira', 'nomsa', 'samantha', 'salli', 'susan', 'tessa', 'zira', 'zola', 'rachel', 'victoria'];
+    
+    const isFemaleVoice = (voice: SpeechSynthesisVoice) => {
+        const name = voice.name.toLowerCase();
+        return !maleVoiceNames.some(marker => name.includes(marker)) && femaleVoiceNames.some(marker => name.includes(marker));
+    };
+
+    // 1. Try exact locale match with neural/natural female keywords
+    const exactNeural = voices.find(v => 
+        v.lang.toLowerCase().replace('_', '-') === locTarget &&
+        isFemaleVoice(v) &&
+        (v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('online') || v.name.toLowerCase().includes('neural'))
+    );
+    if (exactNeural) return exactNeural;
+
+    // 2. Try exact locale match, any female voice
+    const exactAny = voices.find(v => v.lang.toLowerCase().replace('_', '-').startsWith(locTarget) && isFemaleVoice(v));
+    if (exactAny) return exactAny;
+
+    // 3. South African English fallback for ZA indigenous languages (zu, xh, st, af)
+    if (['zu', 'xh', 'st', 'af', 'en'].includes(langPrefix)) {
+        const saFemale = voices.find(v => 
+            v.lang.toLowerCase().includes('en-za') && 
+            isFemaleVoice(v)
+        );
+        if (saFemale) return saFemale;
+    }
+
+    // 4. High quality English female natural fallback
+    return voices.find(v => 
+        v.lang.toLowerCase().startsWith('en') && 
+        isFemaleVoice(v) &&
+        (v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('salli') || v.name.toLowerCase().includes('samantha') || v.name.toLowerCase().includes('karen'))
+    ) || voices.find(v => v.lang.toLowerCase().startsWith('en')) || null;
+};
+
+/**
+ * High-Fidelity Multilingual Speech Engine for Nelly AI Companion
+ */
+export const speakNellyGuidance = (
+    text: string, 
+    lang: string = 'en-US', 
+    onStart?: () => void, 
+    onEnd?: () => void
+) => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+        console.warn('Web Speech API is not supported in this browser.');
+        if (onEnd) onEnd();
+        return;
+    }
+
+    if (isAudioMuted) {
+        if (onEnd) onEnd();
         return;
     }
 
     const synth = window.speechSynthesis;
 
-    // Mobile browser resume unlock
+    // Resume synth if paused
     if (synth.paused) {
-        synth.resume();
+        try {
+            synth.resume();
+        } catch (e) {
+            console.warn('Error resuming speech synth:', e);
+        }
     }
 
-    speechQueue = [{ text, lang, onEnd }];
+    // Cancel any ongoing speech loops
+    try {
+        synth.cancel();
+    } catch (e) {
+        console.warn('Error cancelling speech synth:', e);
+    }
 
-    const playNext = () => {
-        if (speechQueue.length === 0) return;
+    const cleanText = text.trim();
+    if (!cleanText) {
+        if (onEnd) onEnd();
+        return;
+    }
 
-        const currentItem = speechQueue.shift();
-        if (!currentItem) return;
+    const langKey = lang.split('-')[0].toLowerCase();
+    const config = VOICEOVER_ACCENT_MAP[langKey] || VOICEOVER_ACCENT_MAP[lang] || VOICEOVER_ACCENT_MAP['en'];
+    const targetLocale = config ? config.locale : lang;
 
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = targetLocale;
+    utterance.rate = 0.95; // Natural conversational tempo
+    utterance.pitch = 1.0;
+
+    const voice = findBestNeuralVoice(langKey, targetLocale);
+    if (voice) {
+        utterance.voice = voice;
+    }
+
+    utterance.onstart = () => {
         try {
-            synth.cancel();
+            useNellyStore.getState().setSpeaking(true);
         } catch (e) {
-            console.warn("Error cancelling speech synth:", e);
+            // ignore store errors if uninitialized
         }
+        if (onStart) onStart();
+    };
 
-        const utterance = new SpeechSynthesisUtterance(currentItem.text);
-        const voices = synth.getVoices();
-        const config = VOICEOVER_ACCENT_MAP[currentItem.lang] || VOICEOVER_ACCENT_MAP['en'];
-
-        // Set native language locale tag (e.g. 'zu-ZA', 'sw-KE', 'zh-CN', 'de-DE', 'xh-ZA', 'st-ZA', 'en-ZA')
-        utterance.lang = config.locale || config.regionalAccent;
-
-        // Native voice catalogs do not expose a portable gender field. Reject
-        // known male voices and only select explicit or well-known female voices.
-        const findBestNeuralVoice = () => {
-            if (!voices || voices.length === 0) return null;
-            const localeTarget = config.locale.toLowerCase();
-            const langPrefix = currentItem.lang.toLowerCase();
-            const maleVoiceNames = ['adam', 'alex', 'antoni', 'daniel', 'david', 'fred', 'guy', 'james', 'jorge', 'mark', 'microsoft mark', 'rishi', 'tom'];
-            const femaleVoiceNames = ['female', 'bella', 'karen', 'kathy', 'kyoko', 'luciana', 'moira', 'nomsa', 'samantha', 'salli', 'susan', 'tessa', 'zira', 'zola'];
-            const isFemaleVoice = (voice: SpeechSynthesisVoice) => {
-                const name = voice.name.toLowerCase();
-                return !maleVoiceNames.some(marker => name.includes(marker)) && femaleVoiceNames.some(marker => name.includes(marker));
-            };
-
-            // 1. Try exact locale match with neural/natural keywords
-            const exactNeural = voices.find(v => 
-                v.lang.toLowerCase().replace('_', '-') === localeTarget &&
-                isFemaleVoice(v) &&
-                (v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('online') || v.name.toLowerCase().includes('neural'))
-            );
-            if (exactNeural) return exactNeural;
-
-            // 2. Try exact locale match, female voices only
-            const exactAny = voices.find(v => v.lang.toLowerCase().replace('_', '-') === localeTarget && isFemaleVoice(v));
-            if (exactAny) return exactAny;
-
-            // 3. South African English fallback for ZA indigenous languages (zu, xh, st)
-            if (['zu', 'xh', 'st', 'en'].includes(langPrefix)) {
-                const saFemale = voices.find(v => 
-                    v.lang.toLowerCase().includes('en-za') && 
-                    isFemaleVoice(v)
-                );
-                if (saFemale) return saFemale;
-            }
-
-            // 4. High quality English female natural fallback
-            return voices.find(v => 
-                v.lang.toLowerCase().startsWith('en') && 
-                isFemaleVoice(v) &&
-                (v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('salli') || v.name.toLowerCase().includes('samantha') || v.name.toLowerCase().includes('karen'))
-            );
-        };
-
-        const selectedVoice = findBestNeuralVoice();
-        if (selectedVoice) {
-            utterance.voice = selectedVoice;
-        }
-
-        // Apply authentic human pitch, cadence, and warmth per locale
-        utterance.volume = 1.0;
-        if (currentItem.lang === 'en') {
-            utterance.pitch = 1.04;
-            utterance.rate = 0.92;
-        } else if (['zu', 'xh', 'st'].includes(currentItem.lang)) {
-            utterance.pitch = 1.02;
-            utterance.rate = 0.88; // Warm, rhythmic South African female cadence
-        } else if (['zh', 'sw', 'de'].includes(currentItem.lang)) {
-            utterance.pitch = 1.0;
-            utterance.rate = 0.90;
-        } else {
-            utterance.pitch = 1.04;
-            utterance.rate = 0.92;
-        }
-
-        utterance.onend = () => {
-            if (currentItem.onEnd) currentItem.onEnd();
-            playNext();
-        };
-
-        utterance.onerror = (err) => {
-            console.warn("Speech Synthesis Error:", err);
-            playNext();
-        };
-
-        // Explicit synchronous speak call for iOS Safari / Android Chrome compatibility
+    utterance.onend = () => {
         try {
+            useNellyStore.getState().setSpeaking(false);
+        } catch (e) {
+            // ignore store errors if uninitialized
+        }
+        if (onEnd) onEnd();
+    };
+
+    utterance.onerror = (e) => {
+        console.error('Nelly Speech Error:', e);
+        try {
+            useNellyStore.getState().setSpeaking(false);
+        } catch (err) {
+            // ignore store errors if uninitialized
+        }
+        if (onEnd) onEnd();
+    };
+
+    const doSpeak = () => {
+        try {
+            const recheckVoice = findBestNeuralVoice(langKey, targetLocale);
+            if (recheckVoice) {
+                utterance.voice = recheckVoice;
+            }
             synth.speak(utterance);
         } catch (e) {
-            console.warn("Direct synth speak failed:", e);
+            console.error('Failed to trigger speech synthesis:', e);
+            try {
+                useNellyStore.getState().setSpeaking(false);
+            } catch (err) {
+                // ignore
+            }
+            if (onEnd) onEnd();
         }
     };
 
     if (synth.getVoices().length > 0) {
-        playNext();
+        doSpeak();
     } else {
+        let fired = false;
         const handleVoices = () => {
-            playNext();
+            if (fired) return;
+            fired = true;
             synth.onvoiceschanged = null;
+            doSpeak();
         };
         synth.onvoiceschanged = handleVoices;
-        // Fallback for browsers where onvoiceschanged fires slowly
-        setTimeout(playNext, 100);
+        setTimeout(() => {
+            if (!fired) {
+                fired = true;
+                synth.onvoiceschanged = null;
+                doSpeak();
+            }
+        }, 100);
     }
 };
 
+/**
+ * Convenience export for backward compatibility
+ */
+export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => {
+    speakNellyGuidance(text, lang, undefined, onEnd);
+};
+
 export const stopSpeaking = () => {
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
         try {
             window.speechSynthesis.cancel();
         } catch (e) {
-            console.warn("Error stopping speech synth:", e);
+            console.warn('Error stopping speech synth:', e);
         }
     }
-    speechQueue = [];
+    try {
+        useNellyStore.getState().setSpeaking(false);
+    } catch (e) {
+        // ignore
+    }
 };
 
 // Root-level interaction breakout to unlock speech engine on browser interaction
 if (typeof window !== 'undefined') {
     const unlockSpeech = () => {
-        if (window.speechSynthesis) {
+        if ('speechSynthesis' in window) {
             try {
                 const u = new SpeechSynthesisUtterance('');
                 u.volume = 0;
@@ -242,7 +295,7 @@ if (typeof window !== 'undefined') {
                     window.speechSynthesis.resume();
                 }
             } catch (e) {
-                console.warn("Unlock speech failed:", e);
+                console.warn('Unlock speech failed:', e);
             }
         }
         window.removeEventListener('click', unlockSpeech, true);
