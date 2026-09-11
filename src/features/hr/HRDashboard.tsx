@@ -11,13 +11,17 @@ import {
     X, 
     CheckCircle, 
     UserCheck,
-    ArrowRight
+    ArrowRight,
+    Sparkles,
+    FileCheck
 } from 'lucide-react';
 import { useComplianceStore, EmployeeCase, EscalationState } from '../../store/complianceStore';
 import { useTenantStore } from '../../store/tenantStore';
+import { StatutoryDocModal } from '../../components/compliance/StatutoryDocModal';
 
 export const HRDashboard = () => {
     const currentCompanyId = useTenantStore(state => state.companyId);
+    const [isStatutoryModalOpen, setIsStatutoryModalOpen] = useState(false);
     const { 
         status, 
         requiresEscalation, 
@@ -79,6 +83,13 @@ export const HRDashboard = () => {
                     
                     <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                         <button
+                            onClick={() => setIsStatutoryModalOpen(true)}
+                            className="bg-ohs-orange hover:bg-amber-400 text-ohs-navy px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-[10px] sm:text-xs font-black uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer shadow-lg shadow-ohs-orange/20"
+                        >
+                            <Sparkles size={14} />
+                            Generate Statutory Doc
+                        </button>
+                        <button
                             onClick={resetCompliance}
                             className="bg-white/5 hover:bg-white/10 text-white border border-white/10 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-[10px] sm:text-xs font-bold uppercase transition-all cursor-pointer"
                         >
@@ -94,6 +105,11 @@ export const HRDashboard = () => {
                         </div>
                     </div>
                 </div>
+
+                <StatutoryDocModal
+                    isOpen={isStatutoryModalOpen}
+                    onClose={() => setIsStatutoryModalOpen(false)}
+                />
 
                 {/* Main Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8 w-full max-w-full min-w-0">

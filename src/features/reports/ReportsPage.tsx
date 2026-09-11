@@ -1,30 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { GlassCard } from '../../components/ui/GlassCard';
-import { BarChart3, TrendingUp, ShieldAlert, FileText, CheckCircle2, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { BarChart3, TrendingUp, ShieldAlert, FileText, CheckCircle2, AlertTriangle, ShieldCheck, Sparkles } from 'lucide-react';
 import { useComplianceStore } from '../../store/complianceStore';
+import { StatutoryDocModal } from '../../components/compliance/StatutoryDocModal';
 
 export const ReportsPage: React.FC = () => {
     const { cases, logs } = useComplianceStore();
+    const [isStatutoryModalOpen, setIsStatutoryModalOpen] = useState(false);
 
     const breachCount = cases.filter(c => c.status === 'BREACH' || c.status === 'RISK_ALERT').length;
     const verifiedBBSCount = cases.filter(c => c.hazardTrigger.includes('Verified BBS')).length;
 
     return (
         <div className="p-3 sm:p-6 md:p-8 w-full max-w-6xl mx-auto space-y-6 sm:space-y-8 pb-32 font-sans box-border overflow-x-hidden">
+            <StatutoryDocModal 
+                isOpen={isStatutoryModalOpen} 
+                onClose={() => setIsStatutoryModalOpen(false)} 
+            />
+
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex items-center gap-3 sm:gap-4 border-b border-white/10 pb-6 w-full max-w-full"
+                className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6 w-full max-w-full"
             >
-                <div className="p-2.5 sm:p-3 bg-ohs-orange/20 rounded-2xl text-ohs-orange border border-ohs-orange/30 shrink-0">
-                    <BarChart3 className="w-7 h-7 sm:w-8 sm:h-8" />
+                <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+                    <div className="p-2.5 sm:p-3 bg-ohs-orange/20 rounded-2xl text-ohs-orange border border-ohs-orange/30 shrink-0">
+                        <BarChart3 className="w-7 h-7 sm:w-8 sm:h-8" />
+                    </div>
+                    <div className="min-w-0">
+                        <span className="text-[10px] font-black text-ohs-orange uppercase tracking-[0.3em] block truncate">Regulatory & Analytics Engine</span>
+                        <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight uppercase break-words">Analytics & Regulatory Audit Logs</h1>
+                        <p className="text-gray-400 text-xs sm:text-sm font-medium break-words">Evaluate postural risk trends, BBS hazard logs, and historical OHS Section 37 dossiers.</p>
+                    </div>
                 </div>
-                <div className="min-w-0">
-                    <span className="text-[10px] font-black text-ohs-orange uppercase tracking-[0.3em] block truncate">Regulatory & Analytics Engine</span>
-                    <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black text-white tracking-tight uppercase break-words">Analytics & Regulatory Audit Logs</h1>
-                    <p className="text-gray-400 text-xs sm:text-sm font-medium break-words">Evaluate postural risk trends, BBS hazard logs, and historical OHS Section 37 dossiers.</p>
-                </div>
+
+                <button
+                    onClick={() => setIsStatutoryModalOpen(true)}
+                    className="bg-ohs-orange hover:bg-amber-400 text-ohs-navy px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer shadow-lg shadow-ohs-orange/20 shrink-0 self-start sm:self-center min-h-[44px]"
+                >
+                    <Sparkles size={16} />
+                    Generate Statutory Doc
+                </button>
             </motion.div>
 
             {/* KPI Cards */}

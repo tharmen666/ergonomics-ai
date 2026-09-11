@@ -40,6 +40,7 @@ interface ComplianceState {
     addWorkspaceException: (exception: string) => void;
     logHazardEvent: (type: 'posture' | 'neck_strain' | 'break_interval' | string, description: string, severity?: 'RISK_ALERT' | 'BREACH') => void;
     logVerifiedBBSIntervention: (type: string, hazardResolved: string, durationSeconds: number) => void;
+    exportStatutoryDocToAuditLog: (docType: string, siteContext: string, previewText: string) => void;
     triggerBreach: (score: number, threshold: number, timestamp: string, reason?: string) => void;
     resetCompliance: () => void;
     resolveCase: (id: string) => void;
@@ -297,6 +298,41 @@ export const useComplianceStore = create<ComplianceState>((set, get) => {
 
             const newCases = [newCase, ...state.cases];
             const newGear = calculateGEARMetrics(newCases);
+
+            return {
+                cases: newCases,
+                gear: newGear,
+                logs: [newLog, ...state.logs]
+            };
+        }),
+
+        exportStatutoryDocToAuditLog: (docType, siteContext, previewText) => set((state) => {
+            useTenantStore.getState().recordUsage();
+            const timestamp = new Date().toISOString();
+            const companyId = useTenantStore.getState().companyId || 'COMP-001';
+
+            const newCase: EmployeeCase = {
+                id: `doc-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+                companyId,
+                employeeName: 'OHS Statutory Engine',
+                dept: 'OHS Governance & Legal Compliance',
+                score: 100,
+                status: 'COMPLIANT',
+                managerName: 'Section 16(2) Appointee',
+                hazardTrigger: `[STATUTORY ${docType.toUpperCase()}] Site: ${siteContext}`,
+                createdAt: timestamp,
+                timeframeHours: 72,
+                escalationState: 'resolved'
+            };
+
+            const newCases = [newCase, ...state.cases];
+            const newGear = calculateGEARMetrics(newCases);
+            const newLog = {
+                timestamp,
+                score: 100,
+                threshold: 100,
+                reason: `Statutory OHS Document Generated (${docType}): ${siteContext}`
+            };
 
             return {
                 cases: newCases,
