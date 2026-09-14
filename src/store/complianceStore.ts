@@ -40,7 +40,7 @@ interface ComplianceState {
     addWorkspaceException: (exception: string) => void;
     logHazardEvent: (type: 'posture' | 'neck_strain' | 'break_interval' | string, description: string, severity?: 'RISK_ALERT' | 'BREACH') => void;
     logVerifiedBBSIntervention: (type: string, hazardResolved: string, durationSeconds: number) => void;
-    exportStatutoryDocToAuditLog: (docType: string, siteContext: string, previewText: string) => void;
+    exportStatutoryDocToAuditLog: (docType: string, siteContext: string, previewText: string, reviewerName?: string, reviewerRole?: string) => void;
     triggerBreach: (score: number, threshold: number, timestamp: string, reason?: string) => void;
     resetCompliance: () => void;
     resolveCase: (id: string) => void;
@@ -306,20 +306,21 @@ export const useComplianceStore = create<ComplianceState>((set, get) => {
             };
         }),
 
-        exportStatutoryDocToAuditLog: (docType, siteContext, previewText) => set((state) => {
+        exportStatutoryDocToAuditLog: (docType, siteContext, previewText, reviewerName, reviewerRole) => set((state) => {
             useTenantStore.getState().recordUsage();
             const timestamp = new Date().toISOString();
             const companyId = useTenantStore.getState().companyId || 'COMP-001';
+            const reviewerStr = reviewerName && reviewerRole ? ` [Sign-off: ${reviewerName} (${reviewerRole})]` : '';
 
             const newCase: EmployeeCase = {
                 id: `doc-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
                 companyId,
-                employeeName: 'OHS Statutory Engine',
-                dept: 'OHS Governance & Legal Compliance',
+                employeeName: reviewerName || 'OHS Competent Person',
+                dept: reviewerRole || 'OHS Governance & Legal Compliance',
                 score: 100,
                 status: 'COMPLIANT',
                 managerName: 'Section 16(2) Appointee',
-                hazardTrigger: `[STATUTORY ${docType.toUpperCase()}] Site: ${siteContext}`,
+                hazardTrigger: `[STATUTORY ${docType.toUpperCase()}] Site: ${siteContext}${reviewerStr}`,
                 createdAt: timestamp,
                 timeframeHours: 72,
                 escalationState: 'resolved'
@@ -331,7 +332,7 @@ export const useComplianceStore = create<ComplianceState>((set, get) => {
                 timestamp,
                 score: 100,
                 threshold: 100,
-                reason: `Statutory OHS Document Generated (${docType}): ${siteContext}`
+                reason: `Statutory OHS Document Generated (${docType}): ${siteContext}${reviewerStr}`
             };
 
             return {

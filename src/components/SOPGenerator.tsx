@@ -222,7 +222,7 @@ ${generatedSOP.section37Agreement}`;
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-gray-300 max-w-2xl">
-              Talk through or describe your daily worker routines in casual everyday language. Our real-time engine auto-formats it into an audit-ready ISO 45001 & OHS Act 85 Standard Operating Procedure!
+              Talk through or describe your daily worker routines in casual everyday language. Our real-time engine auto-formats it into an audit-ready Standard Operating Procedure grounded in mandatory South African OHS Act 85 statutory law and ISO 45001 voluntary best-practices!
             </p>
           </div>
 

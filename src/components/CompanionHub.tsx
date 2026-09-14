@@ -81,7 +81,7 @@ const RESPONSE_KNOWLEDGE: Record<LanguageCode, (topic: string, name: string, ton
     if (topic.includes('fatigue') || topic.includes('tired') || topic.includes('overwhelmed')) {
       return `${name} (${tone}): High cognitive load detected. Please stand up, drink 250ml of water, and perform 5 deep diaphragmatic breaths. I am scheduling a 10-minute dynamic walk break for you.`;
     }
-    return `${name} (${tone}): Perfect work routine update! Your workstation is registered under ISO 45001 compliance standards. Keep up the high safety score!`;
+    return `${name} (${tone}): Perfect work routine update! Your workstation is aligned with ISO 45001 voluntary best-practice framework standards. Keep up the high safety score!`;
   },
   zu: (topic, name, tone) => {
     if (topic.includes('buhlungu') || topic.includes('qolo') || topic.includes('hlombe')) {
@@ -90,7 +90,7 @@ const RESPONSE_KNOWLEDGE: Record<LanguageCode, (topic: string, name: string, ton
     if (topic.includes('khathala') || topic.includes('edinga')) {
       return `${name} (${tone}): Uhlelo lwethu lubona ukukhathala kakhulu. Siza uphakame, uphuze amanzi ahlanzekile, uhathe imizuzu engu-5 ukhululeke.`;
     }
-    return `${name} (${tone}): Ngiyabonga ngokusho konke ngokuphepha! Isikhungo sakho sokusebenzela siphephile futhi silandela i-ISO 45001.`;
+    return `${name} (${tone}): Ngiyabonga ngokusho konke ngokuphepha! Isikhungo sakho sokusebenzela siphephile futhi silandela i-ISO 45001 voluntary framework.`;
   },
   af: (topic, name, tone) => {
     if (topic.includes('styf') || topic.includes('nek') || topic.includes('skouers')) {

@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { useComplianceStore, EmployeeCase, EscalationState } from '../../store/complianceStore';
 import { useTenantStore } from '../../store/tenantStore';
-import { StatutoryDocModal } from '../../components/compliance/StatutoryDocModal';
+import { StatutoryDocGeneratorModal as StatutoryDocModal } from '../../components/StatutoryDocGeneratorModal';
 
 export const HRDashboard = () => {
     const currentCompanyId = useTenantStore(state => state.companyId);

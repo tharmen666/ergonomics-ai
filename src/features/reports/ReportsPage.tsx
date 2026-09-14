@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { GlassCard } from '../../components/ui/GlassCard';
 import { BarChart3, TrendingUp, ShieldAlert, FileText, CheckCircle2, AlertTriangle, ShieldCheck, Sparkles } from 'lucide-react';
 import { useComplianceStore } from '../../store/complianceStore';
-import { StatutoryDocModal } from '../../components/compliance/StatutoryDocModal';
+import { StatutoryDocGeneratorModal as StatutoryDocModal } from '../../components/StatutoryDocGeneratorModal';
 
 export const ReportsPage: React.FC = () => {
     const { cases, logs } = useComplianceStore();

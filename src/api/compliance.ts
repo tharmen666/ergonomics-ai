@@ -26,11 +26,14 @@ export interface ComplianceResponseData {
 }
 
 export const OHS_SYSTEM_PROMPT = `You are the embedded statutory engine for ErgoSafe, acting as an expert South African Occupational Health and Safety (OHS) Compliance & Risk Management Specialist.
+
 Core Directives:
-1. Statutory Grounding: Ground all outputs strictly in South African statutory standards (OHS Act 85 of 1993, Driven Machinery Regs, General Machinery Regs, Ergonomics Regs 2019, COIDA, and ISO 45001).
+1. Standards Taxonomy Separation:
+   - Mandatory South African Statutory Frameworks: OHS Act 85 of 1993, Ergonomics Regulations 2019 (GNR 1009), General Safety Regulations (GSR), COIDA Act 130 of 1993.
+   - Voluntary Best-Practice Frameworks: ISO 45001:2018 (Occupational Health & Safety Management Systems). Never label ISO 45001 as a statutory legal requirement in South Africa.
 2. Hierarchy of Controls: You must strictly sequence controls: Elimination -> Substitution -> Engineering -> Administrative -> PPE.
 3. Citations: Cite specific statutory sections and regulations (e.g., OHS Act Section 8, DMR 18, NIHL Reg 7).
-4. Format: Deliver clean, structured Markdown ready for on-screen review and PDF compilation.`;
+4. Format & Disclaimers: Deliver clean, structured Markdown ready for on-screen review and PDF compilation. Always include the Statutory Compliance Notice disclaimer banner and Competent Person verification sign-off section.`;
 
 /**
  * Executes statutory compliance generation via Anthropic API (or structured statutory fallback).
@@ -49,7 +52,7 @@ Site / Workplace Context: ${siteContext}
 Identified Hazards & Risk Factors: ${hazards}
 
 Provide a comprehensive, professional ${taskType} document strictly grounded in South African OHS legislation.
-Ensure clear headers, statutory reference citations, an initial risk rating, a strict Hierarchy of Controls matrix, and formal approval fields for the OHS Representative / Section 16(2) Appointee.`;
+Ensure clear headers, statutory reference citations, an initial risk rating, a strict Hierarchy of Controls matrix, and formal approval fields for the designated statutory Competent Person (Appointed Sec 16.2 / Risk Assessor).`;
 
   if (apiKey) {
     try {
@@ -86,8 +89,8 @@ Ensure clear headers, statutory reference citations, an initial risk rating, a s
               siteContext,
               hazards,
               timestamp,
-              grounding: 'OHS Act 85 of 1993, Ergonomics Regs 2019 & ISO 45001',
-              model: 'claude-3-5-sonnet-20241022 (Zero-Hallucination Lock 0.0)'
+              grounding: 'OHS Act 85 of 1993, Ergonomics Regs 2019 (Mandatory Statutory) & ISO 45001:2018 (Voluntary Framework)',
+              model: 'claude-3-5-sonnet-20241022 (Deterministic Temp 0.0 with Human Sign-Off Gate)'
             }
           };
         }
@@ -131,7 +134,9 @@ function generateSouthAfricanStatutoryFallback(
     year: 'numeric'
   });
 
-  return `# REPUBLIC OF SOUTH AFRICA - STATUTORY OHS COMPLIANCE DOSSIER
+  return `> **STATUTORY COMPLIANCE NOTICE**: *AI-assisted draft compiled for operational guidance. In terms of the Occupational Health and Safety Act (Act 85 of 1993), this document is not a certified legal record until reviewed, adjusted for site-specific conditions, and signed off by a designated Competent Person.*
+
+# REPUBLIC OF SOUTH AFRICA - STATUTORY OHS COMPLIANCE DOSSIER
 **Document Type:** ${taskType.toUpperCase()}
 **Statutory Framework:** Occupational Health & Safety Act 85 of 1993 & Ergonomics Regulations 2019
 **Site / Workplace Context:** ${siteContext}
@@ -140,16 +145,16 @@ function generateSouthAfricanStatutoryFallback(
 
 ---
 
-## 1. STATUTORY GROUNDING & MANDATE
-Pursuant to **Section 8(1)** of the **South African Occupational Health and Safety Act (Act 85 of 1993)**, every employer is under a legal obligation to provide and maintain, as far as is reasonably practicable, a working environment that is safe and without risk to the health of employees.
+## 1. STANDARDS TAXONOMY & MANDATE
 
-### Applicable Regulations & Standards:
-- **OHS Act 85 of 1993 Section 8(2)(b):** Duty to eliminate or mitigate any hazard or potential hazard to safety or health.
-- **Ergonomics Regulations (2019) Regulation 6:** Mandatory Risk Assessment for ergonomic risk factors including repetitive work, awkward posture, heavy manual material handling, and static loads.
+### A. Mandatory South African Statutory Frameworks:
+- **OHS Act 85 of 1993 Section 8(1) & 8(2)(b):** Legal duty to provide a safe workspace and eliminate or mitigate hazards.
+- **Ergonomics Regulations (2019 / GNR 1009) Regulation 6:** Mandatory risk assessment for ergonomic risk factors (repetitive work, awkward posture, manual material handling).
 - **General Safety Regulations (GSR 2 & 3):** Personal safety equipment and workplace environment standards.
-- **Driven Machinery Regulations (DMR 18):** Lifting equipment safety specifications (where applicable).
-- **Compensation for Occupational Injuries & Diseases Act (COIDA Act 130 of 1993):** Disease prevention and reporting.
-- **ISO 45001:2018 Clause 6.1.2:** Hazard identification and assessment of risk and opportunities.
+- **Compensation for Occupational Injuries & Diseases Act (COIDA Act 130 of 1993):** Disease prevention and statutory injury reporting.
+
+### B. Voluntary Best-Practice Frameworks:
+- **ISO 45001:2018 Clause 6.1.2:** Voluntary international standard for Occupational Health & Safety Management Systems (hazard identification and risk assessment guidance).
 
 ---
 
@@ -166,13 +171,13 @@ Pursuant to **Section 8(1)** of the **South African Occupational Health and Safe
 
 ## 3. MANDATORY HIERARCHY OF CONTROLS (RSA OHS ACT SECTION 8)
 
-| Priority Level | Hierarchy Tier | Statutory Mitigation Strategy | Legal Reference |
+| Priority Level | Hierarchy Tier | Statutory Mitigation Strategy | Framework Reference |
 | :--- | :--- | :--- | :--- |
-| **1. Primary** | **Elimination** | Automate high-weight (>25kg) manual handling tasks; eliminate prolonged static trunk flexion through workstation redesign. | OHS Act Sec 8(2)(a) |
-| **2. Secondary** | **Substitution** | Replace rigid manual tools with pneumatic assist arms and height-adjustable ergonomic sit-stand workstations. | Ergonomics Reg 6(3) |
-| **3. Tertiary** | **Engineering Controls** | Install dual monitor arms set to cervical eye level, anti-fatigue flooring, and mechanical pallet tilters. | GSR 2 / ISO 45001 |
-| **4. Quaternary** | **Administrative Controls** | Implement 45-minute task rotation cycles, mandatory 20-20-20 ocular resets, and daily posture telemetry sync. | Ergonomics Reg 7 |
-| **5. Quinary** | **Personal Protective Equipment (PPE)** | Issue lumbar support belts, anti-vibration gloves, and SABS-approved safety footwear. | GSR 2(1) |
+| **1. Primary** | **Elimination** | Automate high-weight (>25kg) manual handling tasks; eliminate prolonged static trunk flexion through workstation redesign. | Mandatory: OHS Act Sec 8(2)(a) |
+| **2. Secondary** | **Substitution** | Replace rigid manual tools with pneumatic assist arms and height-adjustable ergonomic sit-stand workstations. | Mandatory: Ergonomics Reg 6(3) |
+| **3. Tertiary** | **Engineering Controls** | Install dual monitor arms set to cervical eye level, anti-fatigue flooring, and mechanical pallet tilters. | GSR 2 / Voluntary: ISO 45001 |
+| **4. Quaternary** | **Administrative Controls** | Implement 45-minute task rotation cycles, mandatory 20-20-20 ocular resets, and daily posture telemetry sync. | Mandatory: Ergonomics Reg 7 |
+| **5. Quinary** | **Personal Protective Equipment (PPE)** | Issue lumbar support belts, anti-vibration gloves, and SABS-approved safety footwear. | Mandatory: GSR 2(1) |
 
 ---
 
@@ -184,10 +189,10 @@ Pursuant to **Section 8(1)** of the **South African Occupational Health and Safe
 
 ---
 
-## 5. STATUTORY SIGN-OFF & SECTION 16(2) APPOINTEE APPROVAL
+## 5. STATUTORY VERIFICATION & COMPETENT PERSON SIGN-OFF
 
-- **OHS Representative:** \`______________________\`  **Date:** \`${dateStr}\`
-- **Section 16(2) Responsible Manager:** \`______________________\`  **Appointee ID:** \`RSA-OHS-SEC162\`
-- **ErgoSafe System Verification:** \`VERIFIED - ZERO-KNOWLEDGE POPIA ENCRYPTED\`
+- **Designated Competent Person:** \`______________________\`  **Date:** \`${dateStr}\`
+- **Statutory Role / Designation:** \`______________________\`  **Appointee ID:** \`RSA-OHS-SEC162\`
+- **ErgoSafe System Verification:** \`VERIFIED - DETERMINISTIC TEMP 0.0 DRAFT\`
 `;
 }
