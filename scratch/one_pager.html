@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ErgoSafe Reborn V3 - Executive & Technical Overview</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    body {
+      margin: 0;
+      padding: 10mm 12mm;
+      width: 210mm;
+      height: 297mm;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #090D16;
+      color: #F1F5F9;
+      font-size: 8.5pt;
+      line-height: 1.35;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Top Accent Line */
+    .top-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #2563EB 0%, #3B82F6 50%, #10B981 100%);
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #1E293B;
+      margin-bottom: 10px;
+    }
+    .brand-title {
+      font-size: 18pt;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 50%, #34D399 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin: 0;
+    }
+    .brand-subtitle {
+      font-size: 8.5pt;
+      color: #94A3B8;
+      font-weight: 500;
+      margin-top: 2px;
+    }
+    .header-badges {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .badge {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid #334155;
+      color: #38BDF8;
+      font-size: 7pt;
+      font-weight: 600;
+      padding: 3px 7px;
+      border-radius: 4px;
+      letter-spacing: 0.2px;
+    }
+    .badge-green {
+      color: #34D399;
+      border-color: #064E3B;
+      background: rgba(6, 78, 59, 0.3);
+    }
+
+    /* Section Styles */
+    .section-title {
+      font-size: 10.5pt;
+      font-weight: 700;
+      color: #60A5FA;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 6px 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 12px;
+      background: #3B82F6;
+      border-radius: 2px;
+    }
+
+    .intro-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid #1E293B;
+      border-left: 3px solid #3B82F6;
+      padding: 7px 10px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      color: #CBD5E1;
+      font-size: 8.2pt;
+    }
+
+    /* Grid layout for features */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .feature-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid #1E293B;
+      border-radius: 5px;
+      padding: 6px 8px;
+    }
+    .feature-card-full {
+      grid-column: span 2;
+    }
+    .feature-head {
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: #F8FAFC;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .feature-icon {
+      color: #38BDF8;
+      font-weight: bold;
+    }
+    .feature-desc {
+      font-size: 7.8pt;
+      color: #94A3B8;
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #1E293B 20%, #1E293B 80%, transparent);
+      margin: 8px 0;
+    }
+
+    /* Tech Stack Table */
+    .tech-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 8px;
+      font-size: 7.8pt;
+    }
+    .tech-table th {
+      background: #1E293B;
+      color: #94A3B8;
+      text-align: left;
+      padding: 4px 6px;
+      font-weight: 600;
+      font-size: 7.2pt;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      border-bottom: 1px solid #334155;
+    }
+    .tech-table td {
+      padding: 4px 6px;
+      border-bottom: 1px solid #1E293B;
+      color: #CBD5E1;
+      vertical-align: top;
+    }
+    .tech-table tr:nth-child(even) td {
+      background: rgba(15, 23, 42, 0.4);
+    }
+    .tech-label {
+      font-weight: 700;
+      color: #60A5FA;
+      white-space: nowrap;
+    }
+    .tech-pills {
+      color: #38BDF8;
+      font-weight: 600;
+    }
+
+    /* Modules list grid */
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      margin-top: 4px;
+    }
+    .module-item {
+      background: rgba(30, 41, 59, 0.4);
+      border: 1px solid #1E293B;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 7.5pt;
+    }
+    .module-num {
+      color: #34D399;
+      font-weight: 700;
+    }
+    .module-name {
+      font-weight: 600;
+      color: #F1F5F9;
+    }
+    .module-sub {
+      color: #64748B;
+      font-size: 7pt;
+      margin-top: 1px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid #1E293B;
+      padding-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 7.2pt;
+      color: #64748B;
+    }
+    .footer-left {
+      display: flex;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar"></div>
+
+  <div>
+    <!-- Header -->
+    <header>
+      <div>
+        <h1 class="brand-title">ErgoSafe Reborn V3</h1>
+        <div class="brand-subtitle">Executive & Technical System Overview — Smart Workplace Health & Compliance</div>
+      </div>
+      <div class="header-badges">
+        <span class="badge badge-green">ISO 45001 / 45003</span>
+        <span class="badge">OHS Act Section 37</span>
+        <span class="badge">POPI Act Compliant</span>
+        <span class="badge">v3.0.0 Production</span>
+      </div>
+    </header>
+
+    <!-- SECTION 1: SIMPLE EXPLANATION -->
+    <div class="section-title">1. Executive Simple Explanation — What Does This App Do?</div>
+    
+    <div class="intro-box">
+      <strong>ErgoSafe Reborn V3</strong> is an AI-powered <strong>Workplace Ergonomics, Driver Fatigue Telemetry, and OHS Regulatory Compliance Platform</strong>. Built to act as an active digital safety officer, it monitors worker posture in office/hybrid setups, detects long-haul driver shift exhaustion in real time, and maintains zero-knowledge audit trails that insulate corporate directors from statutory legal liability under South African occupational safety laws.
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-head"><span class="feature-icon">⚡</span> 3D Biomechanical Posture Telemetry</div>
+        <p class="feature-desc">Using spatial vision & 3D spine models (Nelly Engine), it tracks cervical/lumbar spine alignment. Detects tech-neck flexion (cervical load jumping from 12 lbs to 60 lbs), slouching, and couch/bed risk states.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-head"><span class="feature-icon">🚛</span> Shandray's Prizm Driver Fatigue Engine</div>
+        <p class="feature-desc">Monitors continuous driving hours and reaction time drops. Automatically computes fatigue risk scores and issues mandatory rest alerts before transport fatigue incidents occur.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-head"><span class="feature-icon">⚖️</span> Section 37 OHS Legal & Audit Ledger</div>
+        <p class="feature-desc">Automatically logs posture breaches, unverified hazards, and driver alerts into an administrative compliance dossier, fulfilling strict Section 37 requirements of the OHS Act 85 of 1993.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-head"><span class="feature-icon">🗣️</span> Multilingual Nelly Voice Assistant</div>
+        <p class="feature-desc">Provides real-time voice triage and postural coaching across 7 regional languages (isiZulu, isiXhosa, Sesotho, English, German, Mandarin, KiSwahili) with localized speech accents.</p>
+      </div>
+
+      <div class="feature-card feature-card-full">
+        <div class="feature-head"><span class="feature-icon">🛡️</span> Behavior-Based Safety (BBS) Micro-Interventions</div>
+        <p class="feature-desc">When hazards trigger, the app instantly delivers interactive corrective overlays: 15-second postural reset stretches, 60-second driver power-breathing breaks, and 20-20-20 ocular glides. Completion is verified and logged.</p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- SECTION 2: TECHNICAL EXPLANATION -->
+    <div class="section-title">2. Technical Architecture & Implementation Breakdown</div>
+
+    <table class="tech-table">
+      <thead>
+        <tr>
+          <th style="width: 22%;">Architectural Layer</th>
+          <th style="width: 32%;">Technologies & Libraries</th>
+          <th style="width: 46%;">Core Implementation Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="tech-label">Frontend Framework</td>
+          <td class="tech-pills">React 18 • TypeScript • Vite • Tailwind CSS</td>
+          <td>Single Page Application (SPA) architecture with fast HMR build pipelines, glassmorphism design tokens, and Lucide icons.</td>
+        </tr>
+        <tr>
+          <td class="tech-label">3D Biomechanics Engine</td>
+          <td class="tech-pills">Three.js • @react-three/fiber • @react-three/drei</td>
+          <td>Real-time 3D spinal column renderer (<code>SpineViewer.tsx</code>) visualising posture angles, cervical strain, and ergonomic loads.</td>
+        </tr>
+        <tr>
+          <td class="tech-label">State & Audit Store</td>
+          <td class="tech-pills">Zustand Global Store (useComplianceStore)</td>
+          <td>Reactive state ledger managing global navigation, active hazard event logging, intervention verification, and audit dossiers.</td>
+        </tr>
+        <tr>
+          <td class="tech-label">Driver Telemetry Handshake</td>
+          <td class="tech-pills">REST Handshake API (/api/v1/fatigue-score)</td>
+          <td><code>POST</code> endpoint processing driver payload (hours, reaction drops) returning Prizm critical alert status & advisory JSON.</td>
+        </tr>
+        <tr>
+          <td class="tech-label">Voice Triage Engine</td>
+          <td class="tech-pills">Web Speech API (src/utils/speech.ts)</td>
+          <td>Bi-directional speech synthesis & recognition with pitch/rate modulation and multi-locale speech routing.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div style="font-weight: 700; color: #CBD5E1; font-size: 8pt; margin-top: 4px; margin-bottom: 4px;">
+      Primary 6-Module Architecture Standard (Sidebar & Routing):
+    </div>
+
+    <div class="modules-grid">
+      <div class="module-item">
+        <div><span class="module-num">01.</span> <span class="module-name">HR Dashboard</span></div>
+        <div class="module-sub">Section 37 legal risk tracking & manager escalation</div>
+      </div>
+      <div class="module-item">
+        <div><span class="module-num">02.</span> <span class="module-name">Training & Certs</span></div>
+        <div class="module-sub">Posture modules & OHS certification progress</div>
+      </div>
+      <div class="module-item">
+        <div><span class="module-num">03.</span> <span class="module-name">Self-Assessment</span></div>
+        <div class="module-sub">Ergonomic checklists & spatial vision input</div>
+      </div>
+      <div class="module-item">
+        <div><span class="module-num">04.</span> <span class="module-name">Nelly Posture Engine</span></div>
+        <div class="module-sub">Tech-neck & biomechanical hazard dispatcher</div>
+      </div>
+      <div class="module-item">
+        <div><span class="module-num">05.</span> <span class="module-name">Driver Fatigue Telemetry</span></div>
+        <div class="module-sub">Shandray Prizm reaction drop scoring & alert UI</div>
+      </div>
+      <div class="module-item">
+        <div><span class="module-num">06.</span> <span class="module-name">Regulatory Audit Logs</span></div>
+        <div class="module-sub">Zero-knowledge compliance dossiers & ISO logs</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-left">
+      <span><strong>ErgoSafe Reborn V3</strong> — Proprietary Workplace Safety System</span>
+      <span>Date: September 14, 2026</span>
+    </div>
+    <div>Page 1 of 1</div>
+  </footer>
+</body>
+</html>
