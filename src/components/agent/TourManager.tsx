@@ -39,7 +39,8 @@ export const TourManager = ({ setActiveTab }: TourManagerProps) => {
         },
         {
             tab: 'dashboard',
-            text: "That corresponds to a 200% increase in workforce efficiency. Request a full integration today to secure your team's future.",
+            // TODO(legal-verify): removed fabricated '200% increase in workforce efficiency'
+            text: "Proactive ergonomic management fosters a healthier, safer workplace. Request an enterprise walkthrough to support your team.",
             mood: 'happy' as const,
         }
     ];

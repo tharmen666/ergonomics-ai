@@ -46,7 +46,7 @@ const questions = [
 ];
 
 export const RiskPage = () => {
-    const { triggerBreach } = useComplianceStore();
+    const { logHazardEvent } = useComplianceStore();
     const [step, setStep] = useState(0);
     const [answers, setAnswers] = useState<string[]>([]);
     const [completed, setCompleted] = useState(false);
@@ -72,12 +72,11 @@ export const RiskPage = () => {
             setFinalScore(totalScore);
 
             if (totalScore >= 15) {
-                // Trigger compliance breach
-                triggerBreach(
-                    totalScore,
-                    15,
-                    new Date().toISOString(),
-                    `Manual Risk Assessment: Unsafe ergonomic setup flagged (Score: ${totalScore}).`
+                // An unsafe ergonomic setup is a RISK to act on, not a legal breach
+                logHazardEvent(
+                    'posture',
+                    `Manual Risk Assessment: Unsafe ergonomic setup flagged (Score: ${totalScore}).`,
+                    'RISK_ALERT'
                 );
             }
             setCompleted(true);
@@ -118,7 +117,7 @@ export const RiskPage = () => {
 
                         {finalScore >= 15 ? (
                             <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl text-xs text-red-300 font-medium max-w-md mx-auto">
-                                <strong>OHS Breach Registered:</strong> Your answers indicate high-risk ergonomic positioning. A compliance breach has been flagged in your HR records.
+                                <strong>Ergonomic Risk Logged:</strong> Your answers indicate high-risk ergonomic positioning. A risk alert has been routed to your line manager for corrective action.
                             </div>
                         ) : (
                             <div className="bg-ohs-green/10 border border-ohs-green/20 p-4 rounded-xl text-xs text-ohs-green max-w-md mx-auto">

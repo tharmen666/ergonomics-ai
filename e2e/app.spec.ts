@@ -107,10 +107,10 @@ test.describe('ErgoSafe Reborn V3 End-to-End Suite', () => {
     const workstationsInput = page.locator('input[type="number"]').first();
     await workstationsInput.fill('20');
 
-    // Verify calculated amounts in form modal (20 * 1250 = 25000 subtotal, VAT 15% = 3750, Total = 28750)
-    await expect(page.locator('body')).toContainText(/25[\s\u00a0]*000/);
-    await expect(page.locator('body')).toContainText(/3[\s\u00a0]*750/);
-    await expect(page.locator('body')).toContainText(/28[\s\u00a0]*750/);
+    // Verify calculated amounts in form modal (accepts "25 000" (en-ZA) and "25,000" (en-US) grouping) (20 * 1250 = 25000 subtotal, VAT 15% = 3750, Total = 28750)
+    await expect(page.locator('body')).toContainText(/25[\s\u00a0,]*000/);
+    await expect(page.locator('body')).toContainText(/3[\s\u00a0,]*750/);
+    await expect(page.locator('body')).toContainText(/28[\s\u00a0,]*750/);
 
     // Submit invoice
     await page.click('button:has-text("CREATE & PREVIEW TAX INVOICE")');

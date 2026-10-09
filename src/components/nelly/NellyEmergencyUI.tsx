@@ -1,10 +1,19 @@
 import { motion } from 'framer-motion';
+import { useTenantStore, SA_PUBLIC_EMERGENCY_CONTACTS } from '../../store/tenantStore';
+import { Phone, MapPin, AlertTriangle } from 'lucide-react';
 
 interface NellyEmergencyUIProps {
     onDeescalate: () => void;
 }
 
 export const NellyEmergencyUI = ({ onDeescalate }: NellyEmergencyUIProps) => {
+    const currentTenant = useTenantStore((state) => state.getCurrentTenant());
+    const emergencyContacts = currentTenant?.emergencyContacts?.length 
+        ? currentTenant.emergencyContacts 
+        : SA_PUBLIC_EMERGENCY_CONTACTS;
+    const statutoryEmergencyDialer = currentTenant?.emergencyContactNumber || '112';
+    const assemblyPoint = currentTenant?.assemblyPoint || 'Follow your site evacuation plan';
+
     return (
         <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -16,21 +25,49 @@ export const NellyEmergencyUI = ({ onDeescalate }: NellyEmergencyUIProps) => {
                 Critical Escalation Active
             </h4>
             <p className="text-[10px] text-white font-bold mb-3 leading-tight">
-                High-risk event detected. Immediate evacuation or medical assistance required.
+                High-risk event detected. Immediate evacuation or emergency medical assistance required.
             </p>
-            <div className="bg-white/10 p-2 rounded-lg border border-white/20 mb-3">
-                <p className="text-[9px] text-white opacity-80 uppercase font-black">Assembly Point</p>
-                <p className="text-[11px] text-white font-bold">Main Gate - Sector A</p>
+
+            {/* Statutory Emergency Dispatcher Link */}
+            <div className="mb-3">
+                <a
+                    href={`tel:${statutoryEmergencyDialer}`}
+                    className="w-full flex items-center justify-between px-3.5 py-2.5 bg-white text-red-700 rounded-lg font-black text-xs hover:bg-gray-100 transition-all shadow-md border-2 border-red-700"
+                >
+                    <span className="flex items-center gap-2">
+                        <AlertTriangle size={15} className="text-red-600 animate-pulse" />
+                        <span>DISPATCH STATUTORY EMS:</span>
+                    </span>
+                    <span className="font-mono text-sm tracking-wider">{statutoryEmergencyDialer}</span>
+                </a>
             </div>
-            <a
-                href="tel:+27622655708"
-                className="w-full flex items-center justify-center gap-2 bg-white text-red-600 py-3 rounded-xl font-black text-sm hover:bg-gray-100 transition-all"
-            >
-                CALL EMERGENCY: +27 62 265 5708
-            </a>
+
+            <div className="bg-white/10 p-2.5 rounded-lg border border-white/20 mb-3">
+                <p className="text-[9px] text-white opacity-80 uppercase font-black flex items-center gap-1">
+                    <MapPin size={12} /> Assembly Point
+                </p>
+                <p className="text-[11px] text-white font-bold mt-0.5">{assemblyPoint}</p>
+            </div>
+            
+            <div className="space-y-1.5 mb-2">
+                {emergencyContacts.map((contact) => (
+                    <a
+                        key={contact.number}
+                        href={`tel:${contact.number}`}
+                        className="w-full flex items-center justify-between px-3 py-2 bg-white/90 text-red-600 rounded-lg font-bold text-xs hover:bg-white transition-all shadow-sm"
+                    >
+                        <span className="flex items-center gap-1.5">
+                            <Phone size={13} />
+                            <span>{contact.label}</span>
+                        </span>
+                        <span className="font-mono text-xs">{contact.number}</span>
+                    </a>
+                ))}
+            </div>
+
             <button
                 onClick={onDeescalate}
-                className="w-full text-[9px] text-white/60 font-black uppercase mt-2 hover:text-white"
+                className="w-full text-[9px] text-white/70 font-black uppercase mt-2 hover:text-white transition-colors cursor-pointer"
             >
                 De-escalate
             </button>

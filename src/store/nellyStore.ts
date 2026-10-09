@@ -1,6 +1,37 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { translations, Language } from '../utils/translations';
+
+const safeStorage = {
+    getItem: (name: string): string | null => {
+        try {
+            if (typeof window !== 'undefined' && window.localStorage) {
+                return window.localStorage.getItem(name);
+            }
+        } catch {
+            return null;
+        }
+        return null;
+    },
+    setItem: (name: string, value: string): void => {
+        try {
+            if (typeof window !== 'undefined' && window.localStorage) {
+                window.localStorage.setItem(name, value);
+            }
+        } catch {
+            // Safe fallback
+        }
+    },
+    removeItem: (name: string): void => {
+        try {
+            if (typeof window !== 'undefined' && window.localStorage) {
+                window.localStorage.removeItem(name);
+            }
+        } catch {
+            // Safe fallback
+        }
+    }
+};
 
 interface NellyState {
     isSpeaking: boolean;
@@ -68,6 +99,7 @@ export const useNellyStore = create<NellyState>()(
         }),
         {
             name: 'nelly-storage',
+            storage: createJSONStorage(() => safeStorage),
             merge: (persistedState: any, currentState) => {
                 const merged = { ...currentState, ...persistedState };
                 if (!merged.language || !translations[merged.language as Language]) {
@@ -76,8 +108,9 @@ export const useNellyStore = create<NellyState>()(
                 merged.hasIntroduced = false;
                 return merged;
             },
+            // Exclude productiveStreak from persistence per task 4.3
             partialize: (state) => {
-                const { hasIntroduced: _hasIntroduced, ...persistedState } = state;
+                const { hasIntroduced: _hasIntroduced, productiveStreak: _productiveStreak, ...persistedState } = state;
                 return persistedState;
             }
         }

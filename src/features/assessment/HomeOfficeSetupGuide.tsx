@@ -71,11 +71,12 @@ export const HomeOfficeSetupGuide: React.FC = () => {
   const getScoreGrade = (score: number) => {
     if (score >= 90) {
       return {
-        label: 'Discovery Gold Standard',
+        // TODO(legal-verify): removed third-party brand reference 'Discovery Gold Standard'
+        label: 'Optimal Ergonomic Standard',
         status: 'Optimal Low Risk',
         color: 'text-emerald-400',
         bg: 'bg-emerald-500/10 border-emerald-500/30',
-        desc: 'Your home office matches ISO 45001 & Section 8 ergonomic guidelines.'
+        desc: 'Your home office matches ergonomic best-practice and voluntary ISO 45001:2018 guidelines.'
       };
     } else if (score >= 60) {
       return {
@@ -83,15 +84,16 @@ export const HomeOfficeSetupGuide: React.FC = () => {
         status: 'Action Recommended',
         color: 'text-amber-400',
         bg: 'bg-amber-500/10 border-amber-500/30',
-        desc: 'Minor adjustments needed to prevent lower back and cervical spine fatigue.'
+        desc: 'Minor adjustments recommended to reduce lower back and cervical spine fatigue.'
       };
     } else {
       return {
         label: 'High Strain Hazard',
-        status: 'Section 37 Breach Vector',
+        // TODO(legal-verify): removed false Section 37 breach vector label
+        status: 'High Ergonomic Risk',
         color: 'text-red-400',
         bg: 'bg-red-500/10 border-red-500/30',
-        desc: 'Suboptimal setup detected. Engage guided break & posture adjustment immediately.'
+        desc: 'Suboptimal setup detected. Engage guided break & posture adjustment.'
       };
     }
   };
@@ -105,8 +107,9 @@ export const HomeOfficeSetupGuide: React.FC = () => {
         <div className="absolute right-0 bottom-0 w-64 h-64 bg-ohs-orange/10 rounded-full blur-3xl pointer-events-none" />
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 relative z-10">
           <div>
+            {/* TODO(legal-verify): removed third-party brand reference 'Discovery' */}
             <span className="text-[10px] font-black text-ohs-orange uppercase tracking-widest block mb-1">
-              Discovery OHS Corporate Wellness Guide
+              ErgoSafe Ergonomic Wellness Guide
             </span>
             <h2 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight flex items-center gap-3">
               Home Office <span className="text-ohs-orange">Ergonomic Setup & Scoring</span>
@@ -334,20 +337,21 @@ export const HomeOfficeSetupGuide: React.FC = () => {
           })}
         </div>
 
-        {/* Discovery Action Footer */}
+        {/* Verification Action Footer */}
         <div className="bg-slate-950/80 border border-white/10 p-5 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <span className="p-2.5 bg-emerald-500/20 text-emerald-400 rounded-xl border border-emerald-500/30">
               <HeartPulse size={20} />
             </span>
             <div>
-              <p className="text-xs font-bold text-white">Discovery Vitality Ergonomic Verification</p>
+              {/* TODO(legal-verify): removed third-party brand reference 'Discovery Vitality' */}
+              <p className="text-xs font-bold text-white">ErgoSafe Biomechanical Workstation Verification</p>
               <p className="text-[11px] text-gray-400">{grade.desc}</p>
             </div>
           </div>
 
           <div className="inline-flex items-center gap-2 text-xs font-bold text-ohs-orange">
-            <span>Section 8 Compliance Handshake Validated</span>
+            <span>Workstation Posture Assessment Recorded</span>
             <Sparkles size={16} />
           </div>
         </div>

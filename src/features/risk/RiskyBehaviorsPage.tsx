@@ -1,10 +1,12 @@
+import React, { lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { useNellyStore } from '../../store/nellyStore';
 import { GlowButton } from '../../components/ui/GlowButton';
-import { AlertTriangle, CheckCircle, Activity } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Activity, Loader2 } from 'lucide-react';
 import { speak } from '../../utils/speech';
-import { SpineViewer } from '../../components/agent/SpineViewer';
 import { NellyInterface } from '../../components/nelly/NellyInterface';
+
+const SpineViewer = lazy(() => import('../../components/agent/SpineViewer').then(m => ({ default: m.SpineViewer })));
 
 export const RiskyBehaviorsPage = () => {
     const { setGuidance, setSpeaking, setMood, addRecommendation } = useNellyStore();
@@ -56,7 +58,14 @@ export const RiskyBehaviorsPage = () => {
                         </div>
 
                         <div className="w-full h-[400px] md:h-[450px]">
-                            <SpineViewer />
+                            <Suspense fallback={
+                                <div className="w-full h-full flex flex-col items-center justify-center bg-black/40 rounded-2xl border border-white/10 text-gray-400 gap-3">
+                                    <Loader2 className="w-8 h-8 animate-spin text-emerald-400" />
+                                    <span className="text-xs uppercase tracking-widest font-mono text-emerald-300">Initializing 3D Biomechanical Spine Model...</span>
+                                </div>
+                            }>
+                                <SpineViewer />
+                            </Suspense>
                         </div>
                     </div>
 

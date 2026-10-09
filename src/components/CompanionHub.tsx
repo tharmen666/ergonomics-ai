@@ -76,39 +76,41 @@ const PROMPT_PRESETS: Record<LanguageCode, string[]> = {
 const RESPONSE_KNOWLEDGE: Record<LanguageCode, (topic: string, name: string, tone: string) => string> = {
   en: (topic, name, tone) => {
     if (topic.includes('back') || topic.includes('shoulder') || topic.includes('ache') || topic.includes('nek')) {
-      return `${name} (${tone}): I hear you! Continuous static posture increases spinal load by 40%. Let us do a quick 90-second shoulder roll and chin tuck now. Remember OHS Act Section 8 mandates taking ergonomic breaks.`;
+      // TODO(legal-verify): removed claim that 'OHS Act Section 8 mandates taking ergonomic breaks'
+      return `${name} (${tone}): I hear you! Continuous static posture increases spinal load. Let us do a quick 90-second shoulder roll and chin tuck now. Regular ergonomic micro-breaks support musculoskeletal wellness.`;
     }
     if (topic.includes('fatigue') || topic.includes('tired') || topic.includes('overwhelmed')) {
-      return `${name} (${tone}): High cognitive load detected. Please stand up, drink 250ml of water, and perform 5 deep diaphragmatic breaths. I am scheduling a 10-minute dynamic walk break for you.`;
+      return `${name} (${tone}): High cognitive load detected. Please stand up, drink 250ml of water, and perform 5 deep diaphragmatic breaths. Taking a short dynamic walk break is recommended.`;
     }
-    return `${name} (${tone}): Perfect work routine update! Your workstation is aligned with ISO 45001 voluntary best-practice framework standards. Keep up the high safety score!`;
+    // TODO(legal-verify): removed claim that workstation 'is aligned with ISO 45001'
+    return `${name} (${tone}): Routine safety update recorded! Regular posture awareness and movement resets help protect musculoskeletal health.`;
   },
   zu: (topic, name, tone) => {
     if (topic.includes('buhlungu') || topic.includes('qolo') || topic.includes('hlombe')) {
-      return `${name} (${tone}): Yebo, ngiyezwa! Ukuhlala isikhathi eside kunezela ingcindezi emhlane ngama-40%. Ake senze ukwelula amahlombe nesifuba imasekhondi angu-90 manje ngaphansi kwe-OHS Act Section 8.`;
+      return `${name} (${tone}): Yebo, ngiyezwa! Ukuhlala isikhathi eside kunezela ingcindezi emhlane. Ake senze ukwelula amahlombe nesifuba imasekhondi angu-90 manje ukuze ukhululeke.`;
     }
     if (topic.includes('khathala') || topic.includes('edinga')) {
-      return `${name} (${tone}): Uhlelo lwethu lubona ukukhathala kakhulu. Siza uphakame, uphuze amanzi ahlanzekile, uhathe imizuzu engu-5 ukhululeke.`;
+      return `${name} (${tone}): Uhlelo lwethu lubona ukukhathala kakhulu. Siza uphakame, uphuze amanzi ahlanzekile, uthathe imizuzu engu-5 ukhululeke.`;
     }
-    return `${name} (${tone}): Ngiyabonga ngokusho konke ngokuphepha! Isikhungo sakho sokusebenzela siphephile futhi silandela i-ISO 45001 voluntary framework.`;
+    return `${name} (${tone}): Ngiyabonga ngokusho konke ngokuphepha! Isikhungo sakho sokusebenzela sihlolwe kahle.`;
   },
   af: (topic, name, tone) => {
     if (topic.includes('styf') || topic.includes('nek') || topic.includes('skouers')) {
-      return `${name} (${tone}): Ek verstaan heeltemal! Langdurige sitting verhoog rugstringspanning met 40%. Kom ons doen nou 'n 90-sekonde skouer-oefening volgens OHS Wet Artikel 8.`;
+      return `${name} (${tone}): Ek verstaan heeltemal! Langdurige sitting verhoog rugstringspanning. Kom ons doen nou 'n 90-sekonde skouer-oefening ter ondersteuning van jou liggaamshouding.`;
     }
     if (topic.includes('moeg') || topic.includes('rustyd')) {
-      return `${name} (${tone}): Hoë uitputting bespeur. Staan asseblief op, drink 'n glas water, en neem 5 diep asemtrekke. Ek het 'n 10-minute dinamiese pouse geskeduleer.`;
+      return `${name} (${tone}): Hoë uitputting bespeur. Staan asseblief op, drink 'n glas water, en neem 5 diep asemtrekke. 'n Kort dinamiese pouse word aanbeveel.`;
     }
-    return `${name} (${tone}): Baie goed gedoen! Jou werksplek voldoen aan alle ISO 45001 en veiligheidstandaarde.`;
+    return `${name} (${tone}): Baie goed gedoen! Roetine opgedateer en gesonde ergonomiese gewoontes word gehandhaaf.`;
   },
   st: (topic, name, tone) => {
     if (topic.includes('bohloko') || topic.includes('mala') || topic.includes('mahetla')) {
-      return `${name} (${tone}): Ke a utlwisisa! Ho dula fatshe nako e telele ho eketsa khatello mokokotlong ka 40%. A re etseng boikoetliso ba metsotswana e 90 jwale tlasa OHS Act Section 8.`;
+      return `${name} (${tone}): Ke a utlwisisa! Ho dula fatshe nako e telele ho eketsa khatello mokokotlong. A re etseng boikoetliso ba metsotswana e 90 jwale.`;
     }
     if (topic.includes('kgathetse') || topic.includes('utlwa')) {
-      return `${name} (${tone}): Re lemohile mofufutso le mosebetsi o boima. Kopa ho ema naha, u nwe metsi a phepa, mme u nkeng metsotso e 5 ho iketla.`;
+      return `${name} (${tone}): Re lemohile mofufutso le mosebetsi o boima. Kopa ho ema, u nwe metsi a phepa, mme u nkeng metsotso e 5 ho iketla.`;
     }
-    return `${name} (${tone}): Re leboha tsebiso ena ya polokeho! Setsha sa gago sa mosebetsi se ikobela melao ya ISO 45001.`;
+    return `${name} (${tone}): Re leboha tsebiso ena ya polokeho! Mokgwa wa gago wa mosebetsi o bolokilwe hantle.`;
   }
 };
 

@@ -177,32 +177,34 @@ export const NOTEBOOK_LM_LIBRARIES: OperationalLibrary[] = [
         id: 'LIB-EXEC-01',
         category: 'executive',
         title: 'Master Framework: Executive Accountability',
-        description: 'High-level risk management, compliance standards, and regulatory accountability for corporate leaders under SA OHS Act & ISO 45001.',
+        description: 'High-level risk management, compliance standards, and regulatory accountability for corporate leaders under the SA OHS Act & voluntary ISO 45001:2018 standard.',
         duration: '12 min',
         sections: [
             {
                 format: 'technical',
-                title: 'Section 37 & 38 OHS Act Liability',
-                content: 'Corporate directors are directly liable for systemic OHS failures. A robust risk-mitigation framework requires active stewardship and continuous telemetry across the enterprise. Negligence carries severe statutory penalties.',
+                title: 'Section 37 & 38 OHS Act Statutory Governance',
+                content: 'Under Section 38 of the Occupational Health and Safety Act 85 of 1993, non-compliance carries statutory penalties, while Section 37 governs liability for acts or omissions of employees and mandataries. A robust risk-mitigation framework requires active stewardship and continuous evaluation across the enterprise.',
             },
             {
                 format: 'case-based',
-                title: 'Landmark Case: Remote Ergonomics',
-                content: 'In 2025, a Tier-1 Bank was fined $2.5M when remote workers suffered repetitive strain injuries without employer-provided ergonomic assessments. The precedent establishes WFH Duty of Care parity.',
+                title: 'Workplace Ergonomic Risk Governance',
+                // TODO(legal-verify): removed fabricated claim of '2025 Tier-1 Bank fined $2.5M'
+                content: 'The Ergonomics Regulations, 2019 (GN R1589) require employers to ensure that ergonomic risk assessments are conducted where ergonomic risks exist, reinforcing the employer’s general duty of care under Section 8 of the OHS Act.',
             },
             {
                 format: 'fun',
-                title: 'The Legal Immunity Shield',
-                content: 'Active Stewardship is your ultimate shield! By proving you actively monitored and remediated risks, you turn liability into legal immunity. Safe employees = Safe executives!',
+                title: 'Proactive Health & Safety Culture',
+                // TODO(legal-verify): removed 'The Legal Immunity Shield' and claim to 'turn liability into legal immunity'
+                content: 'Active stewardship and structured ergonomic assessments create a resilient safety culture. Ensuring safe workstations safeguards employee health and aligns workplace practices with statutory requirements.',
             }
         ],
         quiz: [
             {
                 id: 1,
-                question: 'Under Section 37 of the SA OHS Act, who bears statutory liability for unmitigated workplace hazards?',
-                options: ['Only junior staff', 'Corporate employers & directors', 'Equipment suppliers', 'No one'],
+                question: 'Under Section 8 of the SA OHS Act, who bears the general duty to ensure a safe working environment?',
+                options: ['Only junior staff', 'The employer and executive management', 'Equipment suppliers', 'No one'],
                 correctIndex: 1,
-                explanation: 'Section 37 places explicit duty of care and statutory accountability on employers and directors.'
+                explanation: 'Section 8 places the general duty on every employer to provide and maintain a working environment that is safe and without risk to health.'
             }
         ]
     }

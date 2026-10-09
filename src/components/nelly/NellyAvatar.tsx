@@ -141,17 +141,19 @@ export const NellyAvatar = () => {
             setTimeout(() => setSpeaking(false), 8000);
         } else if (isOHSQuery) {
             setSpeaking(true);
-            const response = "OHS COMPLIANCE ADVISORY: ErgoSafe Reborn enforces South African OHS Act Section 8(1) Duty of Care and Section 37 Liability Protection. Workstation risk assessments, break telemetry, and ISO 45003 psychosocial audits are logged continuously into the zero-knowledge dossier.";
+            // TODO(legal-verify): removed claim that Section 37 provides automatic liability protection and zero-knowledge claim
+            // TODO(privacy): implement encryption + POPIA s26 special-information handling before production
+            const response = "OHS COMPLIANCE ADVISORY: ErgoSafe Reborn assists with South African OHS Act Section 8(1) general duties of employers and Section 37 provisions. Workstation risk assessments, break intervals, and voluntary ISO 45003 guidance are recorded in the local compliance log.";
             setGuidance(response);
             addLog('Nelly', response);
             speak(response, language);
             setTimeout(() => setSpeaking(false), 9000);
         } else if (isSymptom) {
             setSpeaking(true);
-            const response = "WARNING: Nerve compression detected. Tingling in the extremities is a high-risk indicator for Carpal Tunnel Syndrome or cervical compression. ACTION: Please stand up, perform 5 shoulder rolls, and avoid repetitive clicking for the next 10 minutes. I am logging this as a Section 37 Liability Risk.";
+            const response = "WARNING: Nerve compression detected. Tingling in the extremities is an indicator for Carpal Tunnel Syndrome or cervical compression. ACTION: Please stand up, perform 5 shoulder rolls, and avoid repetitive clicking for the next 10 minutes. I am logging this as an ergonomic risk alert.";
             setGuidance(response);
             addLog('Nelly', response);
-            useComplianceStore.getState().logHazardEvent('posture', 'Nerve Compression & Extreme Musculoskeletal Strain Risk (Section 37)', 'BREACH');
+            useComplianceStore.getState().logHazardEvent('posture', 'Nerve Compression & Musculoskeletal Strain Risk', 'RISK_ALERT');
             speak(response, language);
             setTimeout(() => setSpeaking(false), 8000);
         } else {
@@ -163,10 +165,10 @@ export const NellyAvatar = () => {
                 const efficiency = fatigueLevel === 'nominal' ? 100 : (fatigueLevel === 'warning' ? 85 : 75);
                 let response = "";
                 if (efficiency < 85) {
-                    response = `Based on your rising Muda % to ${100 - efficiency}% (Context), please perform a 20-20-20 eye reset and posture adjustment immediately (Action) to restore your 100% O.H.E. rating and Section 37 compliance status (Result).`;
+                    response = `Based on your rising Muda % to ${100 - efficiency}% (Context), please perform a 20-20-20 eye reset and posture adjustment now (Action) to bring your fatigue risk back down (Result).`;
                     useComplianceStore.getState().logHazardEvent('break_interval', `Break Interval Exceeded: Muda ${100 - efficiency}% digital fatigue alert`, 'RISK_ALERT');
                 } else {
-                    response = `Stewardship Protocol Active: OHS standards verified for your query. Maintaining continuous compliance telemetry.`;
+                    response = `Stewardship check complete: no fatigue or posture risk flagged right now. Keep taking regular micro-breaks.`;
                 }
                 setGuidance(response);
                 addLog('Nelly', response);

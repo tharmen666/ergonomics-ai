@@ -1,3 +1,5 @@
+import { wholesaleCashCarryPreset, retailButcheryPreset } from './industryPresets';
+
 export interface TenantConfig {
   tenantId: string;
   companyName: string;
@@ -23,9 +25,10 @@ export const oredaxPilotConfig: TenantConfig = {
   companyName: 'Oredax (Pty) Ltd',
   industry: 'Customer Support / Inbound Call Centre',
   regulatoryFramework: [
-    'Occupational Health and Safety Act (Act 85 of 1993)',
-    'Ergonomics Regulations (2019)',
-    'Environmental Regulations for Workplaces (ERW)'
+    'Occupational Health and Safety Act 85 of 1993',
+    'Ergonomics Regulations, 2019 (GN R1589, GG 42894 of 6 December 2019)',
+    'Physical Agents Regulations, 2024 (GN 5952, GG 52226)',
+    'General Safety Regulations - GSR 13H (Housekeeping) & GSR 13J (Emergency Egress)'
   ],
   workstationSettings: {
     screenBreakIntervalMinutes: 60,
@@ -48,3 +51,5 @@ export const oredaxPilotConfig: TenantConfig = {
 export const getOredaxUser = (userId: string) => {
   return oredaxPilotConfig.pilotUsers.find(u => u.userId === userId) || oredaxPilotConfig.pilotUsers[1];
 };
+
+export { wholesaleCashCarryPreset, retailButcheryPreset };

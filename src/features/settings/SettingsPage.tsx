@@ -79,13 +79,14 @@ export const SettingsPage: React.FC = () => {
                         <EyeOff className="text-ohs-blue" size={20} />
                         Privacy & Telemetry
                     </h3>
-                    <p className="text-xs text-gray-400">Control data sharding and zero-knowledge ledger submission modes.</p>
+                    <p className="text-xs text-gray-400">Manage client-side preferences and telemetry settings.</p>
 
                     <div className="space-y-4">
                         <div className="flex items-center justify-between p-3 bg-white/5 border border-white/10 rounded-xl">
                             <div>
-                                <span className="text-xs font-bold text-white block">Strict POPIA Shielding</span>
-                                <span className="text-[10px] text-gray-400 font-medium">Anonymize raw coordinates locally</span>
+                                <span className="text-xs font-bold text-white block">Strict POPIA Shielding <span className="text-[10px] text-amber-400 font-normal">(Not yet implemented)</span></span>
+                                {/* TODO(privacy): implement encryption, access control + POPIA s26 special-information handling before production */}
+                                <span className="text-[10px] text-gray-400 font-medium">Prototype: data stays in this browser only and is not yet encrypted or access-controlled.</span>
                             </div>
                             <button
                                 type="button"

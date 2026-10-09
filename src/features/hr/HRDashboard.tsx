@@ -1,4 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
+import { caseStatusLabel, caseEscalationLabel, caseSlaLabel, formatLogged } from '../../utils/caseLabels';
+import { HIGH_RISK_TAG } from '../../store/complianceStore';
 import { useState, useEffect } from 'react';
 import { 
     ShieldAlert, 
@@ -136,9 +138,9 @@ export const HRDashboard = () => {
                                                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black transition-all flex-shrink-0 aspect-square ${
                                                     c.status === 'BREACH' 
                                                         ? 'bg-red-500/20 text-red-500' 
-                                                        : c.status === 'RISK_ALERT' 
-                                                            ? 'bg-ohs-orange/20 text-ohs-orange' 
-                                                            : 'bg-ohs-green/20 text-ohs-green'
+                                                        : c.status === 'COMPLIANT' 
+                                                            ? 'bg-ohs-green/20 text-ohs-green' 
+                                                            : 'bg-ohs-orange/20 text-ohs-orange'
                                                 }`}>
                                                     {c.employeeName.charAt(0)}
                                                 </div>
@@ -156,7 +158,7 @@ export const HRDashboard = () => {
                                             <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
                                                 <div className="text-right">
                                                     <p className={`text-sm font-black ${
-                                                        c.status === 'BREACH' ? 'text-red-500' : c.status === 'RISK_ALERT' ? 'text-ohs-orange' : 'text-ohs-green'
+                                                        c.status === 'BREACH' ? 'text-red-500' : c.status === 'COMPLIANT' ? 'text-ohs-green' : 'text-ohs-orange'
                                                     }`}>
                                                         Score: {c.score}%
                                                     </p>
@@ -195,7 +197,7 @@ export const HRDashboard = () => {
                             <div className="relative border-l-2 border-white/10 pl-6 ml-4 space-y-8 py-2">
                                 <div className="relative">
                                     <div className={`absolute -left-9 w-6 h-6 rounded-full flex items-center justify-center border text-[9px] font-black ${
-                                        status === 'BREACH' ? 'bg-red-500/20 border-red-500 text-red-400' : 'bg-ohs-green/20 border-ohs-green text-ohs-green'
+                                        status === 'BREACH' ? 'bg-red-500/20 border-red-500 text-red-400' : status === 'COMPLIANT' ? 'bg-ohs-green/20 border-ohs-green text-ohs-green' : 'bg-ohs-orange/20 border-ohs-orange text-ohs-orange'
                                     }`}>
                                         U
                                     </div>
@@ -227,7 +229,7 @@ export const HRDashboard = () => {
                                     </div>
                                     <div>
                                         <p className="text-xs font-black text-white uppercase tracking-wider">Level 2: CEO / HR Head</p>
-                                        <p className="text-[10px] text-gray-400">Statutory liability triggered. Administrative lockout active.</p>
+                                        <p className="text-[10px] text-gray-400">Overdue cases escalate to executive level for action.</p>
                                     </div>
                                 </div>
                             </div>
@@ -315,13 +317,46 @@ export const HRDashboard = () => {
                                     )}
                                 </div>
 
-                                {/* Explicit Incident Provenance Metadata Badge (Manus Audit Requirement) */}
+                                {/* Explicit Incident Provenance Metadata Badge from Real Case Record */}
                                 <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center gap-2 text-xs font-mono">
                                     <ShieldAlert className="text-red-400 shrink-0" size={16} />
                                     <span className="font-bold text-red-300">
-                                        Status: CEO Escalated | Triggered: 18 Aug 2026 14:00 | Owner: OHS Manager | SLA: 24h Remaining
+                                        Status: {activeCase.escalationState === 'escalated_level_2' ? 'CEO Escalated' : activeCase.escalationState === 'routed_to_manager' ? 'Routed to Manager' : activeCase.escalationState === 'resolved' ? 'Resolved' : activeCase.status} | Triggered: {new Date(activeCase.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} {new Date(activeCase.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} | Owner: {activeCase.managerName || 'OHS Manager'} | SLA: {getCountdown(activeCase).text}
                                     </span>
                                 </div>
+
+                                {/* Statutory Guardrails & Record Retention Badge */}
+                                {activeCase.statutoryMetadata && (
+                                    <div className={`p-3 rounded-xl border space-y-1.5 text-xs ${
+                                        activeCase.statutoryMetadata.isStatutoryBreach 
+                                            ? 'bg-red-500/15 border-red-500/40' 
+                                            : 'bg-amber-500/10 border-amber-500/30'
+                                    }`}>
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-1.5 font-bold">
+                                                <ShieldCheck size={16} className={activeCase.statutoryMetadata.isStatutoryBreach ? "text-red-400" : "text-amber-400"} />
+                                                <span className={activeCase.statutoryMetadata.isStatutoryBreach ? "text-red-300 uppercase tracking-wider font-black" : "text-amber-400"}>
+                                                    {activeCase.statutoryMetadata.isStatutoryBreach 
+                                                        ? 'STATUTORY LEGAL BREACH' 
+                                                        : HIGH_RISK_TAG}
+                                                </span>
+                                            </div>
+                                            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-white font-bold">
+                                                {typeof activeCase.statutoryMetadata.retentionPeriod === 'number' 
+                                                    ? `${activeCase.statutoryMetadata.retentionPeriod}-YR RETENTION` 
+                                                    : 'DURATION OF EMPLOYMENT (TENURE)'}
+                                            </span>
+                                        </div>
+                                        <p className="text-gray-300 text-[11px] font-medium leading-relaxed">
+                                            {activeCase.statutoryMetadata.statutoryCitation}
+                                        </p>
+                                        {activeCase.statutoryMetadata.ompReferralStatus && (
+                                            <div className="text-[10px] font-bold text-amber-300 bg-amber-500/15 border border-amber-500/25 px-2.5 py-1.5 rounded-lg leading-relaxed">
+                                                {activeCase.statutoryMetadata.ompReferralStatus}
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
 
                                 {/* OHS Audit Timeline */}
                                 <div className="space-y-4">
@@ -333,7 +368,7 @@ export const HRDashboard = () => {
                                             <span className="absolute -left-[21px] top-0.5 w-2 h-2 rounded-full bg-ohs-orange" />
                                             <div className="space-y-1">
                                                 <p className="font-bold text-white">Hazard Trigger / Incident Logged</p>
-                                                <p className="text-gray-400 text-[10px]">Status: Logged | Triggered: {new Date(activeCase.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} {new Date(activeCase.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} | Owner: {activeCase.employeeName} | SLA: Initiated</p>
+                                                <p className="text-gray-400 text-[10px]">Logged: {formatLogged(activeCase.createdAt)} | Owner: {activeCase.employeeName}</p>
                                                 <p className="text-gray-400 italic">"{activeCase.hazardTrigger}"</p>
                                             </div>
                                         </div>
@@ -345,7 +380,7 @@ export const HRDashboard = () => {
                                             }`} />
                                             <div className="space-y-1">
                                                 <p className="font-bold text-white">Escalated to Line Manager</p>
-                                                <p className="text-gray-400 text-[10px]">Status: Line Manager Assigned | Triggered: {new Date(activeCase.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} | Owner: {activeCase.managerName} | SLA: {activeCase.timeframeHours}h Remaining</p>
+                                                <p className="text-gray-400 text-[10px]">Owner: {activeCase.managerName} | {caseSlaLabel(activeCase)}</p>
                                             </div>
                                         </div>
 
@@ -358,8 +393,8 @@ export const HRDashboard = () => {
                                                 <p className="font-bold text-white">Level 2 Escalation (CEO & HR head)</p>
                                                 <p className="text-gray-400 text-[10px]">
                                                     {activeCase.escalationState === 'escalated_level_2' 
-                                                        ? `Status: CEO Escalated | Triggered: ${new Date(activeCase.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} ${new Date(activeCase.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} | Owner: CEO & OHS Executive | SLA: Critical Breach Active` 
-                                                        : `Status: Standby | Triggered: ${new Date(activeCase.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} | Owner: Line Manager | SLA: ${activeCase.timeframeHours}h Remaining`}
+                                                        ? `${caseEscalationLabel(activeCase)} | Status: ${caseStatusLabel(activeCase)} | Logged: ${formatLogged(activeCase.createdAt)} | ${caseSlaLabel(activeCase)}` 
+                                                        : `Standby | Owner: Line Manager | ${caseSlaLabel(activeCase)}`}
                                                 </p>
                                             </div>
                                         </div>

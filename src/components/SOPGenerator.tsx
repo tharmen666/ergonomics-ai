@@ -41,13 +41,19 @@ export const SOPGenerator: React.FC = () => {
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
 
+  // Competent Person Sign-Off Gate
+  const [isReviewed, setIsReviewed] = useState<boolean>(false);
+  const [competentPersonName, setCompetentPersonName] = useState<string>('');
+  const [competentPersonRole, setCompetentPersonRole] = useState<string>('');
+  const isSignOffValid = isReviewed && competentPersonName.trim().length > 2 && competentPersonRole.trim().length > 2;
+
   const [generatedSOP, setGeneratedSOP] = useState<SOPData>({
-    sopNumber: "SOP-ISO45001-2026-0892",
+    sopNumber: "SOP-DRAFT-2026-0892",
     title: "Ergonomic Desk & Workstation Operation",
     department: "Distributed Workforce / Remote Operations",
-    author: "Nelly Organic SOP Engine",
+    author: "Nelly Operational SOP Assistant",
     date: new Date().toLocaleDateString('en-ZA'),
-    isoReference: "ISO 45001:2018 Clause 8.1 / OHSA Act 85 Sec 8 & 37",
+    isoReference: "Voluntary ISO 45001:2018 / OHS Act 85 Sec 8",
     purpose: "Establishes a standardized safe operating method for remote computer desk operations to mitigate repetitive strain injuries (RSI) and cervical spine degeneration.",
     scope: "Applies to all full-time and hybrid workers operating computer workstations.",
     hazards: [
@@ -66,16 +72,18 @@ export const SOPGenerator: React.FC = () => {
       "Maintain neutral 90-degree elbow and knee flex angles."
     ],
     steps: [
-      { stepNo: 1, instruction: "Perform Pre-Login Cognitive & Ergonomic Handshake via ErgoSafe Reborn.", complianceNote: "OHS Sec 8 Compliance" },
-      { stepNo: 2, instruction: "Adjust chair height until feet rest flat on floor with thigh parallel to floor.", complianceNote: "ISO 45001 Clause 6.1" },
-      { stepNo: 3, instruction: "Position keyboard 10-15cm from desk edge to allow forearm support.", complianceNote: "Ergonomic Standard 2026" },
+      { stepNo: 1, instruction: "Perform Pre-Login Cognitive & Ergonomic Handshake via ErgoSafe Reborn.", complianceNote: "OHS Sec 8 Guidance" },
+      { stepNo: 2, instruction: "Adjust chair height until feet rest flat on floor with thigh parallel to floor.", complianceNote: "Ergonomic Baseline" },
+      { stepNo: 3, instruction: "Position keyboard 10-15cm from desk edge to allow forearm support.", complianceNote: "Ergonomic Guidelines" },
       { stepNo: 4, instruction: "Engage 3-minute guided stretch upon receiving 90-minute automated system nudge.", complianceNote: "Fatigue Mitigation Policy" }
     ],
-    section37Agreement: "The employee acknowledges receipt of safe operating controls and agrees to follow prescribed micro-break protocols. Employer fulfills Section 37 duty of care."
+    // TODO(legal-verify): removed 'Employer fulfills Section 37 duty of care'
+    section37Agreement: "The employee acknowledges receipt of standard operating guidelines and agrees to follow prescribed ergonomic controls. Draft document pending competent person review."
   });
 
   const handleGenerateSOP = () => {
     setIsGenerating(true);
+    setIsReviewed(false);
     setTimeout(() => {
       // Auto-parse conversational text into SOP structure
       const isLifting = userInput.toLowerCase().includes('lift') || userInput.toLowerCase().includes('box') || userInput.toLowerCase().includes('warehouse');
@@ -83,22 +91,21 @@ export const SOPGenerator: React.FC = () => {
 
       if (isLifting) {
         setGeneratedSOP({
-          sopNumber: `SOP-ISO45001-${Math.floor(1000 + Math.random() * 9000)}`,
+          sopNumber: `SOP-DRAFT-${Math.floor(1000 + Math.random() * 9000)}`,
           title: "Manual Material Handling & Rack Stacking Procedure",
           department: "Warehouse & Logistics Division",
-          author: "Nelly Organic SOP Engine",
+          author: "Nelly Operational SOP Assistant",
           date: new Date().toLocaleDateString('en-ZA'),
-          isoReference: "ISO 45001:2018 Clause 8.1.2 / OHSA Act 85 Sec 8",
-          purpose: "Defines ergonomic lifting mechanics to eliminate lumbar disc herniations and lower back injuries during manual material handling.",
-          scope: "Mandatory for all warehouse staff handling loads exceeding 5kg.",
+          isoReference: "Voluntary ISO 45001:2018 / OHS Act 85 Sec 8",
+          purpose: "Defines ergonomic lifting mechanics to mitigate lumbar disc herniations and lower back injuries during manual material handling.",
+          scope: "Operational guidance for warehouse staff handling manual material loads.",
           hazards: [
-            { category: "Lumbar Disc Compression", description: "Bending at waist with load exceeds 3400N spinal shear force threshold.", riskLevel: "High" },
+            { category: "Lumbar Disc Compression", description: "Bending at waist with load exceeds biomechanical safety thresholds.", riskLevel: "High" },
             { category: "Pinch & Impact Risks", description: "Manual box placement near high rack edges.", riskLevel: "Medium" }
           ],
           ppe: [
-            "ISO-Certified Steel-Toe Safety Boots",
-            "High-Grip Anti-Slip Gloves",
-            "Ergonomic Back Support Belt (Optional)"
+            "Steel-Toe Safety Boots",
+            "High-Grip Anti-Slip Gloves"
           ],
           controls: [
             "Use squat-lift technique (bend knees, keep back straight, lift with legs).",
@@ -108,52 +115,53 @@ export const SOPGenerator: React.FC = () => {
           steps: [
             { stepNo: 1, instruction: "Inspect box weight label and assess load stability before touch.", complianceNote: "Pre-Task Risk Audit" },
             { stepNo: 2, instruction: "Position feet shoulder-width apart, bend knees to 90 degrees.", complianceNote: "Biomechanical Safety" },
-            { stepNo: 3, instruction: "Hold load close to chest center of gravity, avoiding torso twisting.", complianceNote: "ISO 45001 Lifting Code" },
-            { stepNo: 4, instruction: "Log completion and rest 2 minutes after 10 continuous heavy lifts.", complianceNote: "Fatigue Gate Protocol" }
+            // TODO(legal-verify): removed 'ISO 45001 Lifting Code'
+            { stepNo: 3, instruction: "Hold load close to chest center of gravity, avoiding torso twisting.", complianceNote: "Ergonomic Lifting Guidelines" },
+            { stepNo: 4, instruction: "Log completion and rest 2 minutes after continuous heavy lifts.", complianceNote: "Fatigue Gate Protocol" }
           ],
-          section37Agreement: "Certified Section 37 agreement verified: Worker trained in biomechanical squat-lift mechanics."
+          // TODO(legal-verify): removed 'Certified Section 37 agreement verified'
+          section37Agreement: "Worker instruction recorded: Safe lifting techniques demonstrated. Draft document pending competent person review."
         });
       } else if (isFleet) {
         setGeneratedSOP({
-          sopNumber: `SOP-ISO45001-${Math.floor(1000 + Math.random() * 9000)}`,
+          sopNumber: `SOP-DRAFT-${Math.floor(1000 + Math.random() * 9000)}`,
           title: "Commercial Fleet Pre-Trip Inspection & Fatigue Handshake",
           department: "Fleet Operations & Transport Logistics",
-          author: "Nelly Organic SOP Engine",
+          author: "Nelly Operational SOP Assistant",
           date: new Date().toLocaleDateString('en-ZA'),
-          isoReference: "ISO 45001 / National Road Traffic Act / OHSA Sec 38",
+          isoReference: "Voluntary ISO 45001 / National Road Traffic Act / OHS Act 85 Sec 8",
           purpose: "Ensures vehicle roadworthiness and driver alertness prior to dispatch.",
           scope: "Applies to all commercial drivers and logistics personnel.",
           hazards: [
-            { category: "Driver Fatigue Impairment", description: "Shift duration > 4 hours increases reaction latency by 35%.", riskLevel: "High" },
+            { category: "Driver Fatigue Impairment", description: "Extended driving duration increases reaction latency.", riskLevel: "High" },
             { category: "Mechanical Failure", description: "Unchecked tire inflation or brake fluid degradation during transit.", riskLevel: "High" }
           ],
           ppe: [
             "High-Visibility Reflective Vest",
-            "High-Traction Work Boots",
-            "Ergonomic Seat Lumbar Support Cushion"
+            "High-Traction Work Boots"
           ],
           controls: [
-            "Mandatory 15-minute vehicle walkaround checklist before key ignition.",
-            "Enforce 10-minute walk break every 4 hours of continuous driving.",
+            "Conduct vehicle walkaround checklist before key ignition.",
+            "Schedule break every 4 hours of continuous driving.",
             "Complete driver fatigue telemetry sync."
           ],
           steps: [
             { stepNo: 1, instruction: "Conduct visual walkaround checking tires, lights, and brake lines.", complianceNote: "Pre-Dispatch Inspection" },
             { stepNo: 2, instruction: "Complete ErgoSafe Driver Telemetry & Cognitive Baseline Handshake.", complianceNote: "Impairment Guard" },
             { stepNo: 3, instruction: "Adjust seat back angle to 100-110 degrees and mirror line of sight.", complianceNote: "Ergonomic Alignment" },
-            { stepNo: 4, instruction: "Pull over safely for 10-minute stretch break upon 4-hour prompt.", complianceNote: "Road Safety Mandate" }
+            { stepNo: 4, instruction: "Pull over safely for 10-minute stretch break upon 4-hour prompt.", complianceNote: "Road Safety Protocol" }
           ],
-          section37Agreement: "Section 37 & Section 38 compliance logged: Driver authorized for shift with zero fatigue flag."
+          section37Agreement: "Pre-trip verification logged: Driver pre-shift checklist completed. Draft document pending competent person review."
         });
       } else {
         // Standard Desk Routine
         setGeneratedSOP({
-          sopNumber: `SOP-ISO45001-${Math.floor(1000 + Math.random() * 9000)}`,
+          sopNumber: `SOP-DRAFT-${Math.floor(1000 + Math.random() * 9000)}`,
           title: "Ergonomic Desk & Workstation Operation",
           department: "Distributed Workforces / Remote Operations",
-          author: "Nelly Organic SOP Engine",
+          author: "Nelly Operational SOP Assistant",
           date: new Date().toLocaleDateString('en-ZA'),
-          isoReference: "ISO 45001:2018 Clause 8.1 / OHSA Act 85 Sec 8 & 37",
+          isoReference: "Voluntary ISO 45001:2018 / OHS Act 85 Sec 8",
           purpose: "Establishes a standardized safe operating method for remote computer desk operations.",
           scope: "Applies to all full-time and hybrid workers operating computer workstations.",
           hazards: [
@@ -169,11 +177,12 @@ export const SOPGenerator: React.FC = () => {
             "Position top 1/3 of monitor at horizontal eye-level line."
           ],
           steps: [
-            { stepNo: 1, instruction: "Perform Pre-Login Cognitive & Ergonomic Handshake via ErgoSafe Reborn.", complianceNote: "OHS Sec 8 Compliance" },
-            { stepNo: 2, instruction: "Adjust chair height until feet rest flat on floor.", complianceNote: "ISO 45001 Clause 6.1" },
+            { stepNo: 1, instruction: "Perform Pre-Login Cognitive & Ergonomic Handshake via ErgoSafe Reborn.", complianceNote: "OHS Sec 8 Guidance" },
+            { stepNo: 2, instruction: "Adjust chair height until feet rest flat on floor.", complianceNote: "Ergonomic Baseline" },
             { stepNo: 3, instruction: "Engage 3-minute guided stretch upon receiving 90-minute automated system nudge.", complianceNote: "Fatigue Protocol" }
           ],
-          section37Agreement: "The employee acknowledges receipt of safe operating controls. Employer fulfills Section 37 duty of care."
+          // TODO(legal-verify): removed 'Employer fulfills Section 37 duty of care'
+          section37Agreement: "The employee acknowledges receipt of safe operating controls. Draft document pending competent person review."
         });
       }
       setIsGenerating(false);
@@ -181,6 +190,8 @@ export const SOPGenerator: React.FC = () => {
   };
 
   const copyToClipboard = () => {
+    if (!isSignOffValid) return;
+    const signOffBlock = `\n\n=== STATUTORY VERIFICATION & COMPETENT PERSON SIGN-OFF ===\nReviewed & Approved By: ${competentPersonName}\nStatutory Capacity: ${competentPersonRole}\nVerification Timestamp: ${new Date().toISOString()}`;
     const textToCopy = `=== ${generatedSOP.sopNumber}: ${generatedSOP.title} ===
 Reference: ${generatedSOP.isoReference}
 Date: ${generatedSOP.date}
@@ -194,8 +205,8 @@ ${generatedSOP.hazards.map(h => `- [${h.riskLevel} Risk] ${h.category}: ${h.desc
 SAFE OPERATING STEPS:
 ${generatedSOP.steps.map(s => `${s.stepNo}. ${s.instruction} (${s.complianceNote})`).join('\n')}
 
-SECTION 37 COMPLIANCE:
-${generatedSOP.section37Agreement}`;
+ACKNOWLEDGEMENT:
+${generatedSOP.section37Agreement}${signOffBlock}`;
 
     navigator.clipboard.writeText(textToCopy);
     setCopied(true);
@@ -203,6 +214,7 @@ ${generatedSOP.section37Agreement}`;
   };
 
   const handlePrint = () => {
+    if (!isSignOffValid) return;
     window.print();
   };
 
@@ -218,17 +230,17 @@ ${generatedSOP.section37Agreement}`;
                 <FileText size={24} />
               </span>
               <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white uppercase">
-                Organic SOP & <span className="text-purple-400">ISO 45001 Generator</span>
+                Operational SOP & <span className="text-purple-400">Ergonomics Generator</span>
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-gray-300 max-w-2xl">
-              Talk through or describe your daily worker routines in casual everyday language. Our real-time engine auto-formats it into an audit-ready Standard Operating Procedure grounded in mandatory South African OHS Act 85 statutory law and ISO 45001 voluntary best-practices!
+              Talk through or describe daily worker routines in simple terms. Our engine drafts Standard Operating Procedures aligned with the South African OHS Act 85 of 1993 and voluntary ISO 45001:2018 best-practice guidance.
             </p>
           </div>
 
           <div className="flex items-center gap-2">
             <span className="text-xs font-mono font-bold bg-purple-500/10 text-purple-300 border border-purple-500/20 px-3 py-1.5 rounded-xl">
-              Audit-Ready Standard
+              Draft Operational Standard
             </span>
           </div>
         </div>
@@ -243,7 +255,7 @@ ${generatedSOP.section37Agreement}`;
                 <Sparkles size={16} className="text-purple-400" /> Describe Daily Work Routine
               </h3>
               <span className="text-[10px] font-black bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">
-                Zero-Prompt Input
+                Draft Input
               </span>
             </div>
 
@@ -282,9 +294,9 @@ ${generatedSOP.section37Agreement}`;
               className="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-xl text-xs sm:text-sm transition-all shadow-lg cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {isGenerating ? (
-                <><RefreshCw size={16} className="animate-spin" /> Formatting ISO 45001 SOP...</>
+                <><RefreshCw size={16} className="animate-spin" /> Drafting Procedure...</>
               ) : (
-                <><Sparkles size={16} /> Auto-Generate Audit SOP</>
+                <><Sparkles size={16} /> Generate Draft SOP</>
               )}
             </button>
           </div>
@@ -297,22 +309,24 @@ ${generatedSOP.section37Agreement}`;
             <div className="flex items-center gap-2">
               <FileCheck size={18} className="text-emerald-400" />
               <span className="text-xs font-bold text-white uppercase tracking-wider">
-                ISO 45001 / OHS Act 85 Audit SOP Document
+                Draft Standard Operating Procedure
               </span>
             </div>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={copyToClipboard}
-                className="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-bold text-gray-200 transition-colors flex items-center gap-1.5 cursor-pointer"
-                title="Copy SOP Text"
+                disabled={!isSignOffValid}
+                className="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-bold text-gray-200 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                title={isSignOffValid ? "Copy SOP Text" : "Requires Competent Person sign-off before copying"}
               >
                 <Copy size={14} /> {copied ? "Copied!" : "Copy"}
               </button>
               <button
                 onClick={handlePrint}
-                className="px-3 py-1.5 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 rounded-xl text-xs font-bold text-purple-300 transition-colors flex items-center gap-1.5 cursor-pointer"
-                title="Print or Export PDF"
+                disabled={!isSignOffValid}
+                className="px-3 py-1.5 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 rounded-xl text-xs font-bold text-purple-300 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                title={isSignOffValid ? "Print or Export PDF" : "Requires Competent Person sign-off before printing"}
               >
                 <Printer size={14} /> Print / Export PDF
               </button>
@@ -325,8 +339,9 @@ ${generatedSOP.section37Agreement}`;
             <div className="border border-purple-500/30 bg-purple-500/5 rounded-xl p-4 space-y-2">
               <div className="flex flex-wrap justify-between items-center gap-2 border-b border-purple-500/20 pb-2">
                 <span className="text-xs font-mono font-bold text-purple-300">{generatedSOP.sopNumber}</span>
-                <span className="text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full">
-                  Status: Approved & Encrypted
+                {/* TODO(legal-verify): removed 'Status: Approved & Encrypted' */}
+                <span className="text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-full">
+                  Draft — requires competent person review
                 </span>
               </div>
               <h1 className="text-lg font-black text-white">{generatedSOP.title}</h1>
@@ -412,10 +427,62 @@ ${generatedSOP.section37Agreement}`;
               </div>
             </div>
 
-            {/* Statutory Compliance Footer */}
-            <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-xl space-y-1.5">
-              <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs">
-                <UserCheck size={16} /> Section 37/38 Vicarious Liability Audit Sign-off
+            {/* Competent Person Sign-Off Gate Pattern (Required before print/copy) */}
+            <div className="bg-slate-950/80 border border-purple-500/30 rounded-xl p-4 space-y-3">
+              <div className="flex items-center gap-2">
+                <UserCheck className="text-purple-400" size={16} />
+                <h4 className="text-xs font-black text-white uppercase tracking-wider">
+                  Competent Person Sign-Off Gate
+                </h4>
+              </div>
+              <p className="text-[11px] text-gray-400 leading-relaxed">
+                In terms of the OHS Act 85 of 1993, this draft SOP requires verification and adaptation to site conditions by a designated Competent Person before authorization.
+              </p>
+
+              <div className="space-y-3 pt-1">
+                <label className="flex items-start gap-2.5 cursor-pointer text-xs text-gray-200">
+                  <input
+                    type="checkbox"
+                    checked={isReviewed}
+                    onChange={(e) => setIsReviewed(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 rounded border-gray-600 bg-slate-800 text-purple-600 focus:ring-purple-500 cursor-pointer"
+                  />
+                  <span>I confirm I have reviewed this draft procedure against workplace conditions and applicable statutory standards.</span>
+                </label>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">
+                      Competent Person Name
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Sipho Dlamini"
+                      value={competentPersonName}
+                      onChange={(e) => setCompetentPersonName(e.target.value)}
+                      className="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-purple-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">
+                      Statutory Capacity / Role
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Ergonomics Assessor / OHS Officer"
+                      value={competentPersonRole}
+                      onChange={(e) => setCompetentPersonRole(e.target.value)}
+                      className="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-purple-400"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Document Acknowledgement Footer */}
+            <div className="bg-white/5 border border-white/10 p-4 rounded-xl space-y-1.5">
+              <div className="flex items-center gap-2 text-purple-300 font-bold text-xs">
+                <FileCheck size={16} /> Operational Implementation Note
               </div>
               <p className="text-[11px] text-gray-300 leading-relaxed">
                 {generatedSOP.section37Agreement}

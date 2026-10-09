@@ -14,31 +14,34 @@ Industrial workplace compliance (anchored by frameworks like the South African O
 
 ## ⚙️ Architectural Core & Stack
 
-* **Agent Orchestration & Intelligence:** Orchestrated with Gemini models via Google Cloud Agent Builder, enabling natural language safety advisory and procedural multi-lingual voice coaching ("Nelly").
-* **Telemetry & State Machines:** Deterministic calculation engines evaluating noise dosimeter thresholds (85 dBA 3dB exchange rate), WBGT thermal stress indicators, and ergonomic strain factors.
-* **Integrity & Auditability:** Client-side tamper-evident event logging utilizing the **Web Crypto API (SHA-256)**, creating an immutable verification chain for inspection preparation.
+* **AI document drafting:** `/api/compliance` calls the Anthropic Messages API (model from `ANTHROPIC_MODEL`) to draft HIRA/SWP/toolbox documents that a competent person must review and sign off. "Nelly" voice coaching uses rule-based responses and the browser's speech synthesis.
+* **Telemetry & State Machines:** Deterministic rules for manual handling (>25 kg), carcass handling, knife deboning, cold-room exposure, posture angles and driver fatigue. These are risk triggers, not statutory limits.
+* **Integrity & Auditability:** Client-side event logging and local browser storage for prototype demonstration.
+  <!-- // TODO(privacy): implement encryption + POPIA s26 special-information handling before production -->
 * **Human-in-the-Loop (HITL) Governance:** Pre-shift assessments highlight fatigue and strain risk indicators, routing alerts to shift supervisors rather than imposing unverified black-box decisions.
-* **Database & Partner Ledger:** MongoDB MCP Server integration for live safety telemetry, posture scans, and Section 37/38 legal compliance logs.
+* **Storage:** Prototype only - all compliance records live in the browser (Zustand + localStorage). There is no server database yet, no encryption and no access control.
 * **Frontend & Edge Delivery:** High-performance React 18, Vite, and Tailwind CSS deployed on global edge infrastructure with sub-second responsive interaction.
 
 ---
 
-## ⚖️ Legal Guardrails: Sections 37 & 38
+## ⚖️ Statutory Framework: OHS Act 85 of 1993
 
-Designed with the **Occupational Health and Safety Act 85 of 1993** at its core, ErgoSafe Reborn explicitly addresses the strict liability factors that modern workplace leadership faces:
+Designed with the **Occupational Health and Safety Act 85 of 1993** at its core, ErgoSafe Reborn assists employers with statutory compliance:
 
-- **Section 37 (Acts or Omissions by Employees):** Tracks and mitigates ergonomic and environmental risks, logging a verifiable digital trail of safety interventions to protect corporate leadership from claims of negligence.
-- **Section 38 (Offences):** Non-compliance with safety provisions can result in severe fines or penalties. ErgoSafe features a **DOA Lockout** mechanism that temporarily disables high-risk operational sign-offs for employees flagged with acute fatigue or strain.
+- **Section 8 (General Duties of Employers):** Assists employers in providing and maintaining a working environment that is safe and without risk to health.
+- **Section 37 (Acts or Omissions of Employees and Mandataries):** Addresses employer and mandatary responsibilities, facilitating compliance documentation and Section 37(2) written arrangements.
+  <!-- // TODO(legal-verify): removed claim that Section 37 provides automatic legal defense against negligence -->
+- **Section 38 (Offences and Penalties):** Supports organizational visibility into compliance gaps to proactively address workplace health and safety.
 
 ---
 
 ## 🧠 Key Features & Workflows
 
-1. **Pre-Shift & Pre-Login Cognitive Handshake:** A mandatory interaction test establishing a cognitive baseline. Reaction drops > 20% trigger specialized fatigue mitigation protocols.
-2. **Nelly Multilingual Voice Coach:** Real-time conversational triage and audio coaching across 7 regional languages (en-ZA, zu-ZA, xh-ZA, st-ZA, sw-KE, zh-CN, de-DE).
-3. **3D Biomechanical Spine Viewer:** Real-time posture hazard monitoring (Tech-neck, Working from bed, Couch slouching) dispatching automated compliance ledger events.
-4. **Shandray's Prizm Driver Fatigue Telemetry:** Continuous driving-hour tracking and reaction drop scoring with automated rest advisories.
-5. **Zero-Knowledge Audit Dossiers:** Client-side Web Crypto API (SHA-256) tamper-evident event logging producing ISO 45001/45003 compliance audit records.
+1. **Pre-Shift Cognitive Handshake:** An interactive baseline test to identify acute cognitive fatigue. Reaction drops trigger fatigue mitigation protocols.
+2. **Nelly Multilingual Voice Coach:** Conversational triage and audio coaching across regional languages.
+3. **3D Biomechanical Spine Viewer:** Posture hazard visualizer (Tech-neck, Working from bed, Couch slouching) with ergonomic alerts.
+4. **Prizm Driver Fatigue Telemetry:** Driving-hour tracking and reaction drop scoring with structured rest advisories.
+5. **Audit Documentation:** In-browser compliance records aligned with OHS regulations and voluntary ISO 45001/45003 guidance.
 
 ---
 
@@ -104,6 +107,20 @@ npx playwright test
 ```bash
 npm run build
 ```
+
+---
+
+## 🔐 Server configuration (Vercel environment variables)
+
+| Variable | Required | Purpose |
+|---|---|---|
+| `ERGOSAFE_API_TOKEN` | **Yes** | Shared bearer token for `/api/*`. If unset, the API refuses every request (fails closed). |
+| `VITE_ERGOSAFE_API_TOKEN` | Yes (same value) | Sent by the browser. **Visible in the public JS bundle** - this is a bot/cost guard, not user authentication. Replace with per-user sessions before production. |
+| `ALLOWED_ORIGINS` | Yes in production | Comma-separated list of allowed origins for CORS (e.g. `https://ergosafe.example`). |
+| `ANTHROPIC_API_KEY` | For AI drafting | Key for `/api/compliance`. Without it the endpoint returns 503. |
+| `ANTHROPIC_MODEL` | No | Defaults to `claude-sonnet-5-5`. |
+
+`/api/compliance` is rate-limited to 10 requests per 10 minutes per IP (per serverless instance).
 
 ---
 

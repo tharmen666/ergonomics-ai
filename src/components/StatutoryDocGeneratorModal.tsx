@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getClientApiToken } from '../utils/apiToken';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FileCheck, 
@@ -61,9 +62,13 @@ export const StatutoryDocGeneratorModal: React.FC<StatutoryDocGeneratorModalProp
     setIsReviewed(false);
 
     try {
+      const token = getClientApiToken();
       const response = await fetch('/api/compliance', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
           taskType,
           siteContext,
@@ -73,14 +78,18 @@ export const StatutoryDocGeneratorModal: React.FC<StatutoryDocGeneratorModalProp
 
       if (response.ok) {
         const data = await response.json();
-        if (data.success && data.document) {
-          setGeneratedDoc(data.document);
+        if (data.document) {
+          const content = data.fallback
+            ? `> ⚠️ **Offline template — not AI-generated**\n\n${data.document}`
+            : data.document;
+          setGeneratedDoc(content);
           setDocMetadata(data.metadata || null);
         } else {
           setGeneratedDoc(`### Error generating document\n${data.error || 'Unknown error occurred.'}`);
         }
       } else {
-        setGeneratedDoc('### Server Error\nUnable to reach server-side statutory engine.');
+        const errData = await response.json().catch(() => null);
+        setGeneratedDoc(`### Server Error\n${errData?.error || 'Unable to reach server-side statutory engine.'}`);
       }
     } catch (err: any) {
       console.error('Error generating document:', err);
@@ -201,7 +210,7 @@ ${STATUTORY_DISCLAIMER_BANNER}`;
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md overflow-y-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -239,8 +248,9 @@ ${STATUTORY_DISCLAIMER_BANNER}`;
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="font-bold text-gray-400 uppercase tracking-wider text-[10px]">Mandatory SA Statutory Frameworks:</span>
               <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold">OHS Act 85 of 1993</span>
-              <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold">Ergonomics Regs 2019 (GNR 1009)</span>
-              <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold">GSR</span>
+              <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold">Ergonomics Regs 2019 (GN R1589)</span>
+              <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold">Physical Agents Regs 2024 (GN 5952)</span>
+              <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold">GSR (13H/13J)</span>
               <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold">COIDA</span>
             </div>
             <div className="flex items-center gap-1.5">

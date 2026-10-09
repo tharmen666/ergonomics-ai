@@ -8,6 +8,7 @@ interface TenantLoginProps {
     onSuccess?: () => void;
 }
 
+// TODO(auth): replace with real SSO before production
 export const TenantLogin: React.FC<TenantLoginProps> = ({ onSuccess }) => {
     const { companies, login } = useTenantStore();
     const [mode, setMode] = useState<'demo' | 'sso'>('demo');
@@ -28,7 +29,7 @@ export const TenantLogin: React.FC<TenantLoginProps> = ({ onSuccess }) => {
         }
 
         if (!userId.trim()) {
-            setError('Please enter a valid User ID or Enterprise SSO Identity.');
+            setError('Please enter a valid User ID.');
             return;
         }
 
@@ -37,7 +38,7 @@ export const TenantLogin: React.FC<TenantLoginProps> = ({ onSuccess }) => {
                 login('', userId, true);
                 onSuccess?.();
             } else {
-                setError('Invalid Master Admin credentials. Hint: use "admin" or "owner".');
+                setError('Invalid credentials.');
             }
         } else {
             login(selectedCompanyId, userId, false);
@@ -62,7 +63,7 @@ export const TenantLogin: React.FC<TenantLoginProps> = ({ onSuccess }) => {
                             <Shield className="text-ohs-orange animate-pulse" size={44} />
                         </div>
                         <h2 className="text-3xl font-black text-white tracking-tight uppercase">ERGOSAFE REBORN</h2>
-                        <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-1.5">Secure Multi-Tenant Auth Portal</p>
+                        <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-1.5">Demo login (no real authentication)</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
@@ -88,7 +89,7 @@ export const TenantLogin: React.FC<TenantLoginProps> = ({ onSuccess }) => {
                                         : 'text-gray-400 hover:text-white'
                                 }`}
                             >
-                                🔐 Enterprise SSO Login
+                                🔐 Demo login (no real authentication)
                             </button>
                         </div>
 
@@ -142,21 +143,21 @@ export const TenantLogin: React.FC<TenantLoginProps> = ({ onSuccess }) => {
                             </div>
                         ) : (
                             <div className="bg-ohs-blue/10 border border-ohs-blue/20 p-4 rounded-2xl">
-                                <span className="text-[10px] font-black text-ohs-blue uppercase tracking-widest block mb-1">Owner Credentials</span>
-                                <p className="text-xs text-gray-400 leading-relaxed">System administrator mode. Log in as "admin" to reconcile billing cycles and monitor real-time audit streaming.</p>
+                                <span className="text-[10px] font-black text-ohs-blue uppercase tracking-widest block mb-1">Administrator Access</span>
+                                <p className="text-xs text-gray-400 leading-relaxed">System administrator mode for monitoring and reconciliation.</p>
                             </div>
                         )}
 
                                 <div className="space-y-2">
                                     <label className="text-xs font-black text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                                        <UserCircle size={14} className={role === 'admin' ? 'text-ohs-blue' : 'text-ohs-orange'} /> User ID / Enterprise SSO Identity
+                                        <UserCircle size={14} className={role === 'admin' ? 'text-ohs-blue' : 'text-ohs-orange'} /> User ID
                                     </label>
                                     <div className="relative">
                                         <input
                                             type="text"
                                             value={userId}
                                             onChange={(e) => setUserId(e.target.value)}
-                                            placeholder={role === 'admin' ? 'Enter "admin"' : 'e.g. mike_ross, sarah_j, user@company.com'}
+                                            placeholder={role === 'admin' ? 'Enter administrator ID' : 'e.g. mike_ross, sarah_j, user@company.com'}
                                             className="w-full bg-white/5 border border-white/10 text-white rounded-xl pl-11 pr-4 py-3 text-sm font-semibold placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-ohs-orange transition-all"
                                         />
                                         <Key className="absolute left-4 top-3.5 text-gray-500" size={16} />
@@ -183,7 +184,7 @@ export const TenantLogin: React.FC<TenantLoginProps> = ({ onSuccess }) => {
                                     : (role === 'admin' ? 'bg-ohs-blue hover:bg-ohs-blue/90 text-white shadow-ohs-blue/20' : 'bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy shadow-ohs-orange/20')
                             }`}
                         >
-                            {mode === 'demo' ? '🚀 Launch Demo Workspace (COMP-001)' : 'Establish Enterprise SSO Connection'}
+                            {mode === 'demo' ? '🚀 Launch Demo Workspace (COMP-001)' : 'Log In (Demo)'}
                         </button>
                     </form>
                 </GlassCard>

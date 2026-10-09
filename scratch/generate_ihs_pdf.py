@@ -145,8 +145,9 @@ def create_ihs_statutory_pdf(output_path, document_title="HIRA DOSSIER", site_co
     taxonomy_text = (
         "<b>Mandatory South African Statutory Frameworks:</b><br/>"
         "• OHS Act 85 of 1993 (Section 8 Employer Duties)<br/>"
-        "• Ergonomics Regulations 2019 (GNR 1009 Regulation 6)<br/>"
-        "• General Safety Regulations (GSR 2 & 3)<br/>"
+        "• Ergonomics Regulations, 2019 (GN R1589 Regulation 6 & Regulation 8)<br/>"
+        "• Physical Agents Regulations, 2024 (GN 5952)<br/>"
+        "• General Safety Regulations (GSR 13H & GSR 13J)<br/>"
         "• Compensation for Occupational Injuries and Diseases Act (COIDA Act 130 of 1993)<br/><br/>"
         "<b>Voluntary Best-Practice Frameworks:</b><br/>"
         "• ISO 45001:2018 (Occupational Health & Safety Management Systems)"

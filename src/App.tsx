@@ -1,36 +1,36 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { Layout } from './components/layout/Layout';
 import { NellyAvatar } from './components/nelly/NellyAvatar';
-import { DashboardPage } from './features/dashboard/DashboardPage';
-import { TrainingPage } from './features/training/TrainingPage';
-import { ChecklistPage } from './features/checklist/ChecklistPage';
-import { RiskPage } from './features/risk/RiskPage';
-import { TeamPage } from './features/team/TeamPage';
-
-import { SelfAssessmentPage } from './features/assessment/SelfAssessmentPage';
-import { RiskyBehaviorsPage } from './features/risk/RiskyBehaviorsPage';
-import { AdminPortal } from './features/admin/AdminPortal';
-import { HRDashboard } from './features/hr/HRDashboard';
-import { HQTechnicalDemo } from './features/demo/HQTechnicalDemo';
-import { ExecutiveBriefing } from './features/dashboard/ExecutiveBriefing';
 import { PrivacyHandshake } from './assets/Privacy-Shield/PrivacyHandshake';
 import { CognitiveHandshake } from './components/AI-Coach/CognitiveHandshake';
-import { SettingsPage } from './features/settings/SettingsPage';
-import { ReportsPage } from './features/reports/ReportsPage';
 import { TenantLogin } from './components/auth/TenantLogin';
-import { MasterAdminPortal } from './features/admin/MasterAdminPortal';
 import { useTenantStore } from './store/tenantStore';
 
 import { TourManager } from './components/agent/TourManager';
 import { GEAROverlay } from './components/ui/GEAROverlay';
-import { GEARDashboardPage } from './features/dashboard/GEARDashboardPage';
 import { BBSCorrectiveActionOverlay } from './components/agent/BBSCorrectiveActionOverlay';
-
-import { InvoicePage } from './features/invoices/InvoicePage';
-import { CompanionHub } from './components/CompanionHub';
-import { SmartBreakTimer } from './components/SmartBreakTimer';
-import { SOPGenerator } from './components/SOPGenerator';
 import { ErgoMicroPrompt } from './components/callcenter/ErgoMicroPrompt';
+
+// Dynamic React.lazy Code-Splitting for all feature pages
+const ExecutiveBriefing = lazy(() => import('./features/dashboard/ExecutiveBriefing').then(m => ({ default: m.ExecutiveBriefing })));
+const GEARDashboardPage = lazy(() => import('./features/dashboard/GEARDashboardPage').then(m => ({ default: m.GEARDashboardPage })));
+const DashboardPage = lazy(() => import('./features/dashboard/DashboardPage').then(m => ({ default: m.DashboardPage })));
+const TrainingPage = lazy(() => import('./features/training/TrainingPage').then(m => ({ default: m.TrainingPage })));
+const ChecklistPage = lazy(() => import('./features/checklist/ChecklistPage').then(m => ({ default: m.ChecklistPage })));
+const RiskPage = lazy(() => import('./features/risk/RiskPage').then(m => ({ default: m.RiskPage })));
+const TeamPage = lazy(() => import('./features/team/TeamPage').then(m => ({ default: m.TeamPage })));
+const SelfAssessmentPage = lazy(() => import('./features/assessment/SelfAssessmentPage').then(m => ({ default: m.SelfAssessmentPage })));
+const RiskyBehaviorsPage = lazy(() => import('./features/risk/RiskyBehaviorsPage').then(m => ({ default: m.RiskyBehaviorsPage })));
+const AdminPortal = lazy(() => import('./features/admin/AdminPortal').then(m => ({ default: m.AdminPortal })));
+const MasterAdminPortal = lazy(() => import('./features/admin/MasterAdminPortal').then(m => ({ default: m.MasterAdminPortal })));
+const HRDashboard = lazy(() => import('./features/hr/HRDashboard').then(m => ({ default: m.HRDashboard })));
+const HQTechnicalDemo = lazy(() => import('./features/demo/HQTechnicalDemo').then(m => ({ default: m.HQTechnicalDemo })));
+const SettingsPage = lazy(() => import('./features/settings/SettingsPage').then(m => ({ default: m.SettingsPage })));
+const ReportsPage = lazy(() => import('./features/reports/ReportsPage').then(m => ({ default: m.ReportsPage })));
+const InvoicePage = lazy(() => import('./features/invoices/InvoicePage').then(m => ({ default: m.InvoicePage })));
+const CompanionHub = lazy(() => import('./components/CompanionHub').then(m => ({ default: m.CompanionHub })));
+const SmartBreakTimer = lazy(() => import('./components/SmartBreakTimer').then(m => ({ default: m.SmartBreakTimer })));
+const SOPGenerator = lazy(() => import('./components/SOPGenerator').then(m => ({ default: m.SOPGenerator })));
 
 function renderTabContent(activeTab: string) {
   switch (activeTab) {
@@ -98,7 +98,7 @@ function renderTabContent(activeTab: string) {
 }
 
 function App() {
-  const { companyId, isAdmin } = useTenantStore();
+  const { companyId, isAdmin, userId } = useTenantStore();
   const [activeTab, setActiveTab] = useState('executive');
 
   if (!companyId && !isAdmin) {
@@ -110,7 +110,11 @@ function App() {
   }
 
   if (activeTab === 'demo') {
-    return <HQTechnicalDemo onExit={() => setActiveTab('executive')} />;
+    return (
+      <Suspense fallback={<div className="p-8 text-center text-ohs-orange font-mono">Loading Demo...</div>}>
+        <HQTechnicalDemo onExit={() => setActiveTab('executive')} />
+      </Suspense>
+    );
   }
 
   return (
@@ -123,10 +127,23 @@ function App() {
         <NellyAvatar />
         <GEAROverlay />
         <BBSCorrectiveActionOverlay />
-        <ErgoMicroPrompt currentUser="ODX-AGT-01" />
+        
+        {/* Isolated to Oredax Pilot Tenant; never loads hardcoded across other tenants */}
+        {companyId === 'COMP-ODX-01' && (
+          <ErgoMicroPrompt currentUser={userId || 'ODX-AGT-01'} />
+        )}
 
         <div className="w-full max-w-full min-h-screen flex flex-col flex-1 overflow-x-hidden">
-          {renderTabContent(activeTab)}
+          <Suspense fallback={
+            <div className="flex-1 flex items-center justify-center p-12 text-slate-400 font-mono text-xs">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-ohs-orange animate-ping" />
+                <span>Loading Module...</span>
+              </div>
+            </div>
+          }>
+            {renderTabContent(activeTab)}
+          </Suspense>
         </div>
       </Layout>
     </div>

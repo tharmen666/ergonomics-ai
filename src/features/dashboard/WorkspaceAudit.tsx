@@ -70,7 +70,7 @@ export const WorkspaceAudit = () => {
                             Structural Tracking Loop
                         </span>
                         <p className="text-xs text-gray-300 font-medium leading-relaxed">
-                            112 WFH setups lack documented employer validation. By OSHA / SA guidelines, unverified remote setups expose the firm to Section 37 liability. Automated Corrective Action routing active.
+                            Remote (WFH) setups without a documented employer check should be assessed under Regulation 6 of the Ergonomics Regulations, 2019. Flagged setups are routed for corrective action.
                         </p>
                     </div>
                 </div>

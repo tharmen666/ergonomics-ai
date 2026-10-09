@@ -135,17 +135,18 @@ export const MasterAdminPortal: React.FC = () => {
                             <ShieldCheck className="text-ohs-green" size={20} />
                             Telemetry Integrity
                         </h3>
+                        {/* // TODO(privacy): implement encryption + POPIA s26 special-information handling before production */}
                         <p className="text-xs text-gray-400 leading-relaxed mb-6">
-                            Usage metrics are calculated at the core engine level and signed using local sharded cryptographic nodes. Frontline clients cannot alter or bypass evaluation counters.
+                            Usage metrics are calculated at the core application store level for prototype session tracking.
                         </p>
                         <div className="bg-white/5 p-4 rounded-2xl border border-white/5 space-y-2">
                             <div className="flex justify-between text-[10px] font-bold text-gray-400">
-                                <span>SHARDS SYNCED</span>
-                                <span className="text-ohs-green">100%</span>
+                                <span>STORE STATUS</span>
+                                <span className="text-ohs-green">ACTIVE</span>
                             </div>
                             <div className="flex justify-between text-[10px] font-bold text-gray-400">
-                                <span>LEDGER STATE</span>
-                                <span className="text-ohs-green">IMMUTABLE</span>
+                                <span>TRACKING STATE</span>
+                                <span className="text-ohs-green">IN-BROWSER</span>
                             </div>
                         </div>
                     </div>

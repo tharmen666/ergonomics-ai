@@ -28,12 +28,12 @@ export const ReasoningLog = () => {
             <div className="bg-white/5 p-2 px-3 border-b border-white/5 flex items-center justify-between">
                 <div className="flex items-center gap-2 text-ohs-orange">
                     <Terminal size={12} />
-                    <span className="font-bold tracking-wider uppercase">Agent Reasoning Log</span>
+                    <span className="font-bold tracking-wider uppercase">Agent Reasoning Log (Demo Simulation)</span>
                 </div>
                 <div className="flex gap-2">
-                    <div className="flex items-center gap-1 text-ohs-green">
+                    <div className="flex items-center gap-1 text-amber-400">
                         <Cpu size={10} />
-                        <span>LIVE</span>
+                        <span>DEMO SIMULATION</span>
                     </div>
                 </div>
             </div>

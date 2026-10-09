@@ -1,11 +1,8 @@
-// @ts-nocheck
 import { motion } from 'framer-motion';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, ContactShadows } from '@react-three/drei';
+import { lazy, Suspense } from 'react';
 import { GlowButton } from '../../components/ui/GlowButton';
 import { Volume2, VolumeX, X, Play, Square, ChevronLeft, ChevronRight, CheckCircle, Globe } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
-import * as THREE from 'three';
 import { speak, stopSpeaking, VOICEOVER_ACCENT_MAP } from '../../utils/speech';
 import { useNellyStore } from '../../store/nellyStore';
 import { FRESH_OHS_PROJECT_REGISTRY } from '../../utils/master_ohs_boot';
@@ -19,91 +16,11 @@ interface TrainingModuleProps {
     onClose: () => void;
 }
 
-// Shared material instantiations moved outside render cycle to prevent GC thrashing and frame drops
-const botMaterial = new THREE.MeshStandardMaterial({
-    color: "#F9A825",
-    roughness: 0.3,
-    metalness: 0.8
-});
-const botJointMaterial = new THREE.MeshStandardMaterial({
-    color: "#003D5C",
-    roughness: 0.5,
-    metalness: 0.5
-});
+// Course steps exist in en/zu/xh/st; other UI languages fall back to English text.
+const localisedStepText = (step: { en: string } & Partial<Record<Language, string>>, lang: Language): string =>
+    step[lang] || step.en;
 
-// Procedural "ErgoBot" Avatar for demonstrations
-const ErgoBot = ({ isPlaying }: { isPlaying: boolean }) => {
-    const groupRef = useRef<THREE.Group>(null);
-    const leftArmRef = useRef<THREE.Group>(null);
-    const rightArmRef = useRef<THREE.Group>(null);
-    const headRef = useRef<THREE.Mesh>(null);
-
-    useFrame(({ clock }) => {
-        if (!isPlaying || !leftArmRef.current || !rightArmRef.current || !headRef.current) {
-            // Idle breathing
-            if (groupRef.current) groupRef.current.position.y = Math.sin(clock.elapsedTime) * 0.1;
-            return;
-        }
-
-        const t = clock.elapsedTime * 2; // Speed
-
-        // Generic Exercise Animation (Arm raises / Torso twists)
-        // Arms up/down
-        leftArmRef.current.rotation.z = Math.sin(t) * 1.5 + 0.5; // Flapping motion
-        rightArmRef.current.rotation.z = -(Math.sin(t) * 1.5 + 0.5);
-
-        // Head bob
-        headRef.current.rotation.y = Math.sin(t * 0.5) * 0.5;
-
-        // Body subtle sway
-        if (groupRef.current) {
-            groupRef.current.rotation.y = Math.sin(t * 0.5) * 0.2;
-        }
-    });
-
-    return (
-        <group ref={groupRef} position={[0, -1, 0]}>
-            <Float speed={2} rotationIntensity={0.2} floatIntensity={0.2}>
-                {/* HEAD */}
-                <mesh ref={headRef} position={[0, 1.8, 0]} material={botMaterial}>
-                    <sphereGeometry args={[0.5, 32, 32]} />
-                </mesh>
-
-                {/* NECK */}
-                <mesh position={[0, 1.25, 0]} material={botJointMaterial}>
-                    <cylinderGeometry args={[0.15, 0.15, 0.5]} />
-                </mesh>
-
-                {/* TORSO */}
-                <mesh position={[0, 0.5, 0]} material={botMaterial}>
-                    <cylinderGeometry args={[0.4, 0.3, 1.5, 16]} />
-                </mesh>
-
-                {/* LEFT ARM GROUP (Pivot at shoulder) */}
-                <group ref={leftArmRef} position={[0.5, 1.1, 0]}>
-                    <mesh material={botJointMaterial}>
-                        <sphereGeometry args={[0.2]} />
-                    </mesh>
-                    <mesh position={[0.1, -0.6, 0]} material={botMaterial} rotation={[0, 0, -0.2]}>
-                        <capsuleGeometry args={[0.12, 1.2, 4, 8]} />
-                    </mesh>
-                </group>
-
-                {/* RIGHT ARM GROUP */}
-                <group ref={rightArmRef} position={[-0.5, 1.1, 0]}>
-                    <mesh material={botJointMaterial}>
-                        <sphereGeometry args={[0.2]} />
-                    </mesh>
-                    <mesh position={[-0.1, -0.6, 0]} material={botMaterial} rotation={[0, 0, 0.2]}>
-                        <capsuleGeometry args={[0.12, 1.2, 4, 8]} />
-                    </mesh>
-                </group>
-
-            </Float>
-            <ContactShadows opacity={0.4} scale={10} blur={2.5} far={4} />
-        </group>
-    );
-};
+const ErgoBotCanvas = lazy(() => import('./ErgoBotCanvas'));
 
 export const TrainingModule = ({ id, title, description, duration, onClose }: TrainingModuleProps) => {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -126,7 +43,7 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
 
     const speakCurrentInstruction = (step = currentStep) => {
         if (!step) return;
-        const stepText = step[language] || step['en'];
+        const stepText = localisedStepText(step, language);
         speak(`Step ${step.step}: ${step.title}. ${stepText}`, language);
     };
 
@@ -170,7 +87,7 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-ohs-dark/95 backdrop-blur-xl p-3 sm:p-4 overflow-x-hidden overflow-y-auto"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-ohs-dark/95 backdrop-blur-xl p-3 sm:p-4 overflow-x-hidden overflow-y-auto"
         >
             <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
@@ -189,12 +106,9 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
                 {/* Left: 3D Visualization */}
                 <div className="flex-1 md:flex-[1.2] bg-gradient-to-br from-black/40 to-transparent relative overflow-hidden flex flex-col min-h-[35vh] md:min-h-auto">
                     <div className="absolute inset-0 z-0">
-                        <Canvas camera={{ position: [0, 1, 5] }}>
-                            <ambientLight intensity={0.7} />
-                            <pointLight position={[10, 10, 10]} intensity={2} color="#F9A825" />
-                            <pointLight position={[-10, 5, -10]} intensity={2} color="#003D5C" />
-                            <ErgoBot isPlaying={isPlaying} />
-                        </Canvas>
+                        <Suspense fallback={<div className="flex items-center justify-center h-full text-ohs-orange text-xs font-mono">Loading 3D Visualizer...</div>}>
+                            <ErgoBotCanvas isPlaying={isPlaying} />
+                        </Suspense>
                     </div>
 
                     <div className="mt-auto p-4 sm:p-8 relative z-10 flex flex-col gap-4">
@@ -264,7 +178,7 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
 
                                 <div className="p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 shadow-inner">
                                     <p className="text-gray-300 text-sm sm:text-lg leading-relaxed font-medium italic break-words whitespace-normal">
-                                        "{currentStep[language] || currentStep['en']}"
+                                        "{localisedStepText(currentStep, language)}"
                                     </p>
                                 </div>
                             </motion.div>

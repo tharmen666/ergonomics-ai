@@ -1,15 +1,17 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { speak, stopSpeaking, VOICEOVER_ACCENT_MAP } from '../../utils/speech';
 import { useNellyStore } from '../../store/nellyStore';
-import { SpineViewer } from '../../components/agent/SpineViewer';
 import {
     ShieldAlert,
     ShieldCheck,
     FileText,
     Activity,
-    Target
+    Target,
+    Loader2
 } from 'lucide-react';
+
+const SpineViewer = lazy(() => import('../../components/agent/SpineViewer').then(m => ({ default: m.SpineViewer })));
 
 interface SceneAudio {
     audioPath: string;
@@ -275,7 +277,14 @@ export const HQTechnicalDemo = ({ onExit }: { onExit: () => void }) => {
                                 </p>
                             </div>
                             <div className="w-full md:flex-1 h-full max-w-full flex items-stretch">
-                                <SpineViewer />
+                                <Suspense fallback={
+                                    <div className="w-full h-full flex flex-col items-center justify-center bg-black/40 rounded-2xl border border-white/10 text-gray-400 gap-3">
+                                        <Loader2 className="w-8 h-8 animate-spin text-emerald-400" />
+                                        <span className="text-xs uppercase tracking-widest font-mono text-emerald-300">Initializing 3D Telemetry...</span>
+                                    </div>
+                                }>
+                                    <SpineViewer />
+                                </Suspense>
                             </div>
                         </motion.div>
                     )}

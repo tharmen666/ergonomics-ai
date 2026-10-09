@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getClientApiToken } from '../../utils/apiToken';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, Zap, FileCheck, Brain, TrendingUp, CheckCircle2, Truck, AlertTriangle, RefreshCw, Timer, HardHat, Gauge, Target, ShieldCheck } from 'lucide-react';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
@@ -50,7 +51,7 @@ export const GEARDashboardPage = () => {
         try {
             const res = await fetch('/api/v1/fatigue-score', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getClientApiToken()}` },
                 body: JSON.stringify({
                     driverId: 'DRV-9042',
                     drivingHours,
@@ -69,7 +70,7 @@ export const GEARDashboardPage = () => {
                 success: true,
                 handshakeStatus: 'PRIZM_LOCAL_FALLBACK',
                 fatigueScore: driverFatigueScore,
-                riskLevel: prizmAlertActive ? 'CRITICAL_BREACH' : 'NOMINAL',
+                riskLevel: prizmAlertActive ? 'CRITICAL' : 'NOMINAL',
                 drivingHours,
                 reactionDropPct,
                 prizmAlertTriggered: prizmAlertActive,
@@ -139,8 +140,8 @@ export const GEARDashboardPage = () => {
             color: 'text-emerald-400',
             bgColor: 'bg-emerald-500/10',
             borderColor: 'border-emerald-500/20',
-            desc: 'Section 37 & ISO 45001 Standard Compliance',
-            details: 'ErgoSafe Reborn aligns workstation operations with the South African Occupational Health and Safety Act. All audits are encrypted in zero-knowledge dossiers.'
+            desc: 'Section 37 & Voluntary ISO 45001 Alignment',
+            details: 'ErgoSafe Reborn aligns workstation operations with the South African Occupational Health and Safety Act. Data is stored locally in the browser for this prototype. // TODO(privacy): implement encryption + POPIA s26 special-information handling before production'
         },
         {
             id: 'E',
@@ -196,7 +197,7 @@ export const GEARDashboardPage = () => {
                     <h3 className="text-base sm:text-lg font-bold text-slate-100 flex items-center gap-2 truncate">
                         <CheckCircle2 className="text-emerald-400 shrink-0" size={20} /> Overall Compliance Rating
                     </h3>
-                    <p className="mt-1 text-xs text-slate-300 block truncate">All administrative zero-knowledge audits are up-to-date and registered on-chain.</p>
+                    <p className="mt-1 text-xs text-slate-300 block truncate">All administrative audits are logged locally in browser storage.</p>
                 </div>
                 <div className="flex gap-4 w-full md:w-auto">
                     <div className="flex-1 md:flex-none bg-white/5 px-4 sm:px-6 py-3 rounded-2xl border border-white/5 text-center">
@@ -343,7 +344,7 @@ export const GEARDashboardPage = () => {
                             ))}
                         </div>
                         <p className="text-[10px] text-gray-400 italic">
-                            Continuous shift duration triggers automated Section 37 lockout rules at &gt;4h warning and &gt;7.5h critical.
+                            Continuous shift duration triggers a rest-break warning at &gt;4h and a critical alert at &gt;7.5h (site-configurable thresholds, not statutory limits).
                         </p>
                     </div>
 
@@ -552,7 +553,7 @@ export const GEARDashboardPage = () => {
                 <div className="space-y-3 font-mono text-xs">
                     <div className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
                         <span className="text-gray-400 truncate max-w-[240px] sm:max-w-none">[08:42:15] POPI Privacy Handshake Active</span>
-                        <span className="text-emerald-400 font-bold uppercase tracking-wider text-[9px] shrink-0">ENCRYPTED</span>
+                        <span className="text-emerald-400 font-bold uppercase tracking-wider text-[9px] shrink-0">LOCAL</span>
                     </div>
                     <div className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5">
                         <span className="text-gray-400 truncate max-w-[240px] sm:max-w-none">[08:42:18] Cognitive Latency Checked (650ms)</span>

@@ -52,8 +52,12 @@ const SpineModel = ({
         critical: '#ef4444'   // red
     };
 
-    const targetColor = new (THREE as any).Color(baseColors[postureState]);
+    const targetColorRef = useRef(new (THREE as any).Color(baseColors[postureState]));
+    targetColorRef.current.set(baseColors[postureState]);
     const currentColor = useRef(new (THREE as any).Color(baseColors.good));
+    const cachedColorRegion = useRef(new (THREE as any).Color(baseColors[postureState]));
+    const cachedColorMuted = useRef(new (THREE as any).Color('#1f2937'));
+    cachedColorRegion.current.set(baseColors[postureState]);
 
     // Dynamic curve based on posture state (simulating tech-neck/slouch)
     const getCurve = (index: number) => {
@@ -75,8 +79,10 @@ const SpineModel = ({
         return { zOffset, pitch };
     };
 
-    useFrame((state, delta) => {
-        currentColor.current.lerp(targetColor, delta * 12);
+    useFrame((state, rawDelta) => {
+        // Clamp so a long pause (tab hidden / off-screen) can't overshoot the interpolation
+        const delta = Math.min(rawDelta, 0.05);
+        currentColor.current.lerp(targetColorRef.current, Math.min(1, delta * 12));
         
         if (groupRef.current) {
             // Gentle breathing animation
@@ -91,14 +97,14 @@ const SpineModel = ({
             } else if (selectedSection === 'T1-T12') {
                 targetRotationY = Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
             }
-            groupRef.current.rotation.y = (THREE as any).MathUtils.lerp(groupRef.current.rotation.y, targetRotationY, delta * 8);
+            groupRef.current.rotation.y = (THREE as any).MathUtils.lerp(groupRef.current.rotation.y, targetRotationY, Math.min(1, delta * 8));
 
             groupRef.current.children.forEach((child: any, i: number) => {
                 const { zOffset, pitch } = getCurve(i);
                 
                 // Interpolate positions for smooth transition
-                child.position.z = (THREE as any).MathUtils.lerp(child.position.z, -zOffset, delta * 12);
-                child.rotation.x = (THREE as any).MathUtils.lerp(child.rotation.x, -pitch, delta * 12);
+                child.position.z = (THREE as any).MathUtils.lerp(child.position.z, -zOffset, Math.min(1, delta * 12));
+                child.rotation.x = (THREE as any).MathUtils.lerp(child.rotation.x, -pitch, Math.min(1, delta * 12));
 
                 // Highlight regional selection
                 let isRegionSelected = false;
@@ -110,8 +116,8 @@ const SpineModel = ({
                 child.children.forEach((mesh: any) => {
                     if (mesh.material && mesh.name !== 'disc') {
                         const finalColor = isRegionSelected
-                            ? new (THREE as any).Color(baseColors[postureState])
-                            : (selectedSection ? new (THREE as any).Color('#1f2937') : currentColor.current);
+                            ? cachedColorRegion.current
+                            : (selectedSection ? cachedColorMuted.current : currentColor.current);
 
                         mesh.material.color.copy(finalColor);
                         if (mesh.name === 'cord') {
@@ -142,6 +148,26 @@ const SpineModel = ({
 };
 
 export const SpineViewer = () => {
+    // Render continuously only while the canvas is on screen and the tab is visible.
+    // (frameloop="demand" without invalidate() froze the animation mid-transition.)
+    const canvasWrapRef = useRef<HTMLDivElement>(null);
+    const [inView, setInView] = useState(true);
+    const [tabVisible, setTabVisible] = useState(
+        typeof document === 'undefined' ? true : document.visibilityState !== 'hidden'
+    );
+    useEffect(() => {
+        const onVis = () => setTabVisible(document.visibilityState !== 'hidden');
+        document.addEventListener('visibilitychange', onVis);
+        let io: IntersectionObserver | undefined;
+        if (canvasWrapRef.current && typeof IntersectionObserver !== 'undefined') {
+            io = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting), { threshold: 0.01 });
+            io.observe(canvasWrapRef.current);
+        }
+        return () => {
+            document.removeEventListener('visibilitychange', onVis);
+            io?.disconnect();
+        };
+    }, []);
     const [postureState, setPostureState] = useState<'good' | 'warning' | 'critical'>('good');
     const [selectedSection, setSelectedSection] = useState<'C1-C7' | 'T1-T12' | 'L1-L5' | null>(null);
     const [activeScenario, setActiveScenario] = useState<string>('desk');
@@ -275,8 +301,8 @@ export const SpineViewer = () => {
                     ))}
                 </div>
 
-                <div className="absolute inset-0">
-                    <Canvas camera={{ position: [0, 0, 7.5], fov: 40 }}>
+                <div ref={canvasWrapRef} className="absolute inset-0" data-testid="spine-canvas" data-frameloop={inView && tabVisible ? 'always' : 'never'}>
+                    <Canvas frameloop={inView && tabVisible ? 'always' : 'never'} camera={{ position: [0, 0, 7.5], fov: 40 }}>
                         <ambientLight intensity={0.6} />
                         <directionalLight position={[10, 10, 5]} intensity={1.2} color="#ffffff" />
                         <directionalLight position={[-10, 0, -5]} intensity={0.6} color="#10b981" />

@@ -228,16 +228,17 @@ export const SmartBreakTimer: React.FC = () => {
           <p className="text-[11px] text-gray-400 mt-2">{totalBreaksCompleted} total breaks logged</p>
         </div>
 
-        {/* OHS Score */}
+        {/* Break Completion Tracker */}
         <div className="bg-slate-900/90 border border-white/10 rounded-2xl p-5 shadow-xl relative overflow-hidden">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Ergo Compliance</span>
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Break Adherence</span>
             <span className="p-2 bg-purple-500/20 text-purple-400 rounded-xl"><ShieldCheck size={18} /></span>
           </div>
+          {/* TODO(legal-verify): removed hardcoded '96% … OHS Section 8 standard compliant' */}
           <div className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2">
-            {complianceScore}% <span className="text-xs text-purple-400 font-semibold">Optimal</span>
+            {complianceScore}% <span className="text-xs text-purple-400 font-semibold">Active</span>
           </div>
-          <p className="text-[11px] text-gray-400 mt-2">OHS Section 8 standard compliant</p>
+          <p className="text-[11px] text-gray-400 mt-2">Routine mobility completion rate</p>
         </div>
       </div>
 

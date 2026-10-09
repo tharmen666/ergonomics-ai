@@ -119,7 +119,7 @@ Every employer must provide and maintain, as far as is reasonably practicable, a
 *   Enforcing safety measures in the workplace.
 
 > [!WARNING]
-> **Remote Work Jurisprudence**: Under 2026 administrative directives by the South African Department of Employment and Labour (DEL), **an employer's Section 8 Duty of Care extends fully to remote home offices**. Employers must actively verify and document that remote workstation setups are ergonomically sound and free from psychosocial hazards (like digital tethering).
+> **Remote Work Jurisprudence**: Under Section 8(1) of the OHS Act 85 of 1993, **an employer's Section 8 Duty of Care extends fully to remote home offices**. Employers must actively verify and document that remote workstation setups are ergonomically sound and free from psychosocial hazards (like digital tethering).
 
 ### 2. General Duties of the Employee (Section 14)
 Every employee must:
@@ -225,7 +225,7 @@ Employers must provide clean, functional toilets, hand wash basins with running 
 All HCAs must have a visible **Safety Data Sheet (SDS)**. Workers must be trained on the hazards, dilution instructions, and required PPE for handling each chemical.
 
 ### 17. Offences and Penalties (Section 38)
-*   **Fine Thresholds**: Under the latest amendments, negligent executives face administrative fines up to **10% of company annual turnover or R5,000,000 (whichever is greater)**, or up to **2 years imprisonment**.
+*   **Fine Thresholds**: Under the latest amendments, negligent executives face administrative statutory penalties under Section 38 of the OHS Act (fines up to R50,000 or 1 year imprisonment, or up to R100,000 or 2 years imprisonment where negligence causes injury).
 *   **DOA Lockouts**: Proactively restrict operational sign-offs on active high-fatigue readings, eliminating negligent liability.
 
 ---
@@ -320,7 +320,7 @@ $$\text{Risk Score (RS)} = \text{Probability (P)} \times \text{Severity (S)}$$
 *For Course US 259622 NQF Level 2 Certification*
 
 1.  **Under OHS Act Section 8, does an employer's duty of care apply to an employee working remotely from home?**
-    *   *Answer*: Yes. Under Section 8 and the latest DEL administrative directives, the employer must ensure the remote workspace is safe and without risk, particularly regarding ergonomic safety.
+    *   *Answer*: Yes. Under Section 8 of the OHS Act, the employer must ensure the remote workspace is safe and without risk, particularly regarding ergonomic safety.
 2.  **What is the minimum ratio of Health and Safety Representatives required in an office environment with 250 employees?**
     *   *Answer*: 1 Representative for every 100 employees. Therefore, a minimum of 3 Representatives must be appointed.
 3.  **Within how many days must a workplace incident be investigated, and how long must OHS Committee minutes be retained?**
@@ -328,7 +328,7 @@ $$\text{Risk Score (RS)} = \text{Probability (P)} \times \text{Severity (S)}$$
 4.  **According to the Hierarchy of Controls, when should Personal Protective Equipment (PPE) be deployed?**
     *   *Answer*: Only as a last line of defense, after elimination, substitution, engineering, and administrative controls have been exhausted.
 5.  **Explain the penalty liability faced by a CEO under OHS Act Section 38 for negligent safety failures.**
-    *   *Answer*: The CEO faces an administrative fine up to 10% of annual company turnover or R5,000,000 (whichever is greater), or up to 2 years of imprisonment.
+    *   *Answer*: The CEO faces an administrative statutory penalties prescribed under Section 38 of the OHS Act 85 of 1993.
 
 ---
 ### *Safety, Health, and Environment: Driven by Ambition, Synchronized by GEAR.* 🐾

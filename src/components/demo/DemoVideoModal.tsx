@@ -13,28 +13,30 @@ export const DEMO_VIDEO_SCRIPT = [
     seconds: 0,
     title: "1. The Regulatory Reality & Financial Risk",
     badge: "OHSA 85 of 1993 & COIDA",
-    text: "South African employers face statutory strict liability under Section 8(1) of the Occupational Health and Safety Act 85 of 1993, the Ergonomics Regulations (2019), and COIDA frameworks. Unmitigated remote work and workstation ergonomics expose corporate boards to CCMA constructive dismissal claims and severe non-compliance fines up to 10% of annual turnover."
+    // TODO(legal-verify): removed fabricated 'fines up to 10% of annual turnover'
+    text: "South African employers face statutory duties under Section 8(1) of the Occupational Health and Safety Act 85 of 1993, the Ergonomics Regulations, 2019, and COIDA frameworks. Unmitigated ergonomics hazards expose organizations to statutory non-compliance penalties under Section 38."
   },
   {
     time: "0:20 - 0:45",
     seconds: 20,
     title: "2. Introducing ErgoSafe & Staff Buy-In",
     badge: "Cognitive Handshake & Privacy-First",
-    text: "ErgoSafe Reborn introduces a Privacy-First 'Human-in-the-Loop' architecture. By deploying a mandatory 30-second Pre-Login Cognitive Sync to establish reaction baselines, employees experience zero invasive camera surveillance—transforming cold regulatory box-ticking into a high-performance gamified safety streak culture."
+    text: "ErgoSafe Reborn introduces a Privacy-First 'Human-in-the-Loop' architecture. By deploying a 30-second Pre-Login Cognitive Sync to establish reaction baselines, employees experience zero invasive camera surveillance—transforming cold regulatory box-ticking into a high-performance gamified safety streak culture."
   },
   {
     time: "0:45 - 1:10",
     seconds: 45,
     title: "3. 3D Spine Telemetry & Interactive AI Coach",
     badge: "3D Spine Telemetry & Prizm Engine",
-    text: "Powered by Three.js biomechanical posture mapping, Nelly—our Google Cloud Agent Builder digital wingman—monitors C1-C7 cervical tilt and L1-L5 lumbar strain in real time. Deeply integrated with Prizm Driver Fatigue score (/api/v1/fatigue-score), workers receive automated Tier-2 micro-stretch interventions before fatigue turns into acute injury."
+    text: "Powered by Three.js biomechanical posture mapping, Nelly—our digital safety wingman—monitors C1-C7 cervical tilt and L1-L5 lumbar strain in real time. Deeply integrated with Prizm Driver Fatigue score (/api/v1/fatigue-score), workers receive automated Tier-2 micro-stretch interventions before fatigue turns into acute injury."
   },
   {
     time: "1:10 - 1:30",
     seconds: 70,
     title: "4. Audit-Ready Compliance & Closing",
-    badge: "Section 37/38 MongoDB Dossier",
-    text: "Every daily safety scan, postural calibration, and fatigue resolution is autonomously embedded into the MongoDB MCP Server compliance ledger. Google Cloud Agent Builder queries this zero-knowledge dossier in real time—generating legal Section 37/38 audit trails that protect leadership while eliminating corporate liability."
+    badge: "Section 37/38 Compliance Dossier",
+    // TODO(privacy): removed 'zero-knowledge dossier' and liability elimination claims
+    text: "Every daily safety scan, postural calibration, and fatigue resolution is embedded into the compliance ledger. This records statutory compliance data to support structured health and safety governance across the organization."
   }
 ];
 

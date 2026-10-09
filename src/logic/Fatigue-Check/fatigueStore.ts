@@ -1,7 +1,38 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import { useComplianceStore } from '../../store/complianceStore';
 import { useTenantStore } from '../../store/tenantStore';
+
+const safeStorage = {
+    getItem: (name: string): string | null => {
+        try {
+            if (typeof window !== 'undefined' && window.localStorage) {
+                return window.localStorage.getItem(name);
+            }
+        } catch {
+            return null;
+        }
+        return null;
+    },
+    setItem: (name: string, value: string): void => {
+        try {
+            if (typeof window !== 'undefined' && window.localStorage) {
+                window.localStorage.setItem(name, value);
+            }
+        } catch {
+            // Safe fallback
+        }
+    },
+    removeItem: (name: string): void => {
+        try {
+            if (typeof window !== 'undefined' && window.localStorage) {
+                window.localStorage.removeItem(name);
+            }
+        } catch {
+            // Safe fallback
+        }
+    }
+};
 
 interface FatigueState {
     status: 'NOMINAL' | 'WARNING' | 'HIGH';
@@ -44,14 +75,38 @@ export const useFatigueStore = create<FatigueState>()(
             fatigueScore: 0,
             locked: false,
             fatigueLevel: 'nominal',
-            cognitiveHandshakePassed: true,
+            cognitiveHandshakePassed: false,
             showCognitiveHandshake: false,
             setShowCognitiveHandshake: (show) => set({ showCognitiveHandshake: show }),
             setFatigueLevel: (level) => set({ fatigueLevel: level }),
-            passCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'nominal', showCognitiveHandshake: false }),
-            failCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'nominal', showCognitiveHandshake: false }),
-            warnCognitiveHandshake: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'nominal', showCognitiveHandshake: false }),
-            supervisorOverride: () => set({ cognitiveHandshakePassed: true, fatigueLevel: 'nominal', showCognitiveHandshake: false, status: 'NOMINAL', locked: false }),
+            passCognitiveHandshake: () => set({ 
+                cognitiveHandshakePassed: true, 
+                fatigueLevel: 'nominal', 
+                status: 'NOMINAL',
+                locked: false,
+                showCognitiveHandshake: false 
+            }),
+            failCognitiveHandshake: () => set({ 
+                cognitiveHandshakePassed: false, 
+                fatigueLevel: 'high', 
+                status: 'HIGH',
+                locked: true,
+                showCognitiveHandshake: false 
+            }),
+            warnCognitiveHandshake: () => set({ 
+                cognitiveHandshakePassed: false, 
+                fatigueLevel: 'warning', 
+                status: 'WARNING',
+                locked: false,
+                showCognitiveHandshake: false 
+            }),
+            supervisorOverride: () => set({ 
+                cognitiveHandshakePassed: true, 
+                fatigueLevel: 'nominal', 
+                showCognitiveHandshake: false, 
+                status: 'NOMINAL', 
+                locked: false 
+            }),
 
             lastLoginTime: Date.now(),
             consecutiveRestBreaks: 0,
@@ -100,6 +155,7 @@ export const useFatigueStore = create<FatigueState>()(
                 else if (dropPct > 20) reactionPenalty = 25;
                 else if (dropPct > 10) reactionPenalty = 15;
 
+                const prevLevel = get().fatigueLevel;
                 const score = Math.min(100, Math.round(hourPenalty + reactionPenalty));
                 const alertTriggered = score >= 40 || hours >= 4 || dropPct >= 15;
                 const isCritical = score >= 70 || hours >= 7.5 || dropPct >= 35;
@@ -110,27 +166,34 @@ export const useFatigueStore = create<FatigueState>()(
                 if (isCritical) {
                     level = 'high';
                     action = 'PRIZM ALERT: CRITICAL DRIVER FATIGUE! Pull over immediately for mandatory 30-min rest.';
-                    useComplianceStore.getState().logHazardEvent('break_interval', `Prizm Alert: Critical Driver Fatigue (${hours}h driven, score ${score}/100)`, 'BREACH');
                 } else if (alertTriggered) {
                     level = 'warning';
                     action = 'PRIZM WARNING: Elevated continuous driving hours. Plan a 15-min rest break at next stop.';
-                    useComplianceStore.getState().logHazardEvent('break_interval', `Prizm Warning: Driver Rest Break Advised (${hours}h driven)`, 'RISK_ALERT');
                 }
 
-                if (alertTriggered && typeof window !== 'undefined') {
-                    window.dispatchEvent(new CustomEvent('TRIGGER_BBS_INTERVENTION', {
-                        detail: {
-                            type: 'driver-power-breathing',
-                            duration: 60,
-                            hazard: `Prizm Driver Fatigue (${hours}h driven, Score ${score}/100)`,
-                            title: '60-Second Driver Power-Breathing & Hydration Protocol',
-                            instructions: [
-                                'Pull over safely at nearest rest stop or service area.',
-                                'Consume 250ml water to rehydrate vascular system.',
-                                'Perform 4-4-4 diaphragmatic breathing (Inhale 4s, Hold 4s, Exhale 4s) to reset focus.'
-                            ]
-                        }
-                    }));
+                // Task 3.2: Only log/fire when the risk level changes (nominal -> warning -> high), not on every evaluation.
+                if (level !== prevLevel) {
+                    if (level === 'high') {
+                        useComplianceStore.getState().logHazardEvent('break_interval', `Prizm Alert: Critical Driver Fatigue (${hours}h driven, score ${score}/100)`, 'RISK_ALERT');
+                    } else if (level === 'warning') {
+                        useComplianceStore.getState().logHazardEvent('break_interval', `Prizm Warning: Driver Rest Break Advised (${hours}h driven)`, 'RISK_ALERT');
+                    }
+
+                    if (alertTriggered && typeof window !== 'undefined') {
+                        window.dispatchEvent(new CustomEvent('TRIGGER_BBS_INTERVENTION', {
+                            detail: {
+                                type: 'driver-power-breathing',
+                                duration: 60,
+                                hazard: `Prizm Driver Fatigue (${hours}h driven, Score ${score}/100)`,
+                                title: '60-Second Driver Power-Breathing & Hydration Protocol',
+                                instructions: [
+                                    'Pull over safely at nearest rest stop or service area.',
+                                    'Consume 250ml water to rehydrate vascular system.',
+                                    'Perform 4-4-4 diaphragmatic breathing (Inhale 4s, Hold 4s, Exhale 4s) to reset focus.'
+                                ]
+                            }
+                        }));
+                    }
                 }
 
                 set({
@@ -145,6 +208,9 @@ export const useFatigueStore = create<FatigueState>()(
                 });
             }
         }),
-        { name: 'fatigue-vector-vault' }
+        { 
+            name: 'fatigue-vector-vault',
+            storage: createJSONStorage(() => safeStorage)
+        }
     )
 );

@@ -21,15 +21,8 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
     const [gameCompleted, setGameCompleted] = useState(false);
     const [showKaizenBonus, setShowKaizenBonus] = useState(false);
     const [showLiabilityWarning, setShowLiabilityWarning] = useState(false);
-
-    // Single-trigger deterministic consent check & instant storage key writer
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('ergo_privacy_consent_verified', 'true');
-            passCognitiveHandshake();
-            setShowCognitiveHandshake(false);
-        }
-    }, [passCognitiveHandshake, setShowCognitiveHandshake]);
+    const [handshakeResult, setHandshakeResult] = useState<'pass' | 'warning' | 'fail' | null>(null);
+    const [measuredAvgReaction, setMeasuredAvgReaction] = useState<number | null>(null);
 
     const TOTAL_TARGETS = 5;
 
@@ -37,6 +30,8 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
         setTargetsHit(0);
         setReactionTimes([]);
         setGameCompleted(false);
+        setHandshakeResult(null);
+        setMeasuredAvgReaction(null);
         setShowLiabilityWarning(false);
         setLastTargetTime(Date.now());
         setTargetPos({
@@ -66,6 +61,7 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
         setGameCompleted(true);
 
         const avgReaction = finalTimes.reduce((a, b) => a + b, 0) / finalTimes.length;
+        setMeasuredAvgReaction(avgReaction);
         
         // Calculate Standard Deviation (Variance Analysis)
         const squareDiffs = finalTimes.map(time => Math.pow(time - avgReaction, 2));
@@ -95,29 +91,30 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
         const dropPct = Math.round(Math.min(50, Math.max(0, (variancePercentage / 2))));
         evaluateDriverFatigue(drivingHours, dropPct);
 
-        if (typeof window !== 'undefined') {
-            localStorage.setItem('ergo_privacy_consent_verified', 'true');
-        }
-
         setSpeaking(true);
         if (isFatigued) {
             failCognitiveHandshake();
+            setHandshakeResult('fail');
+            setShowLiabilityWarning(true);
             setMood('concerned');
             
             const reason = variancePercentage > 35 ? "High Cognitive Variance" : "Latency Threshold Breach";
             setGuidance(`PROTOCOL ALERT: ${reason} detected. Handshake failed with ${Math.round(variancePercentage)}% variance. Status logged as High Fatigue.`);
         } else if (historicalBaseline && avgReaction < (historicalBaseline * 1.10) && avgReaction < 700) {
             passCognitiveHandshake();
+            setHandshakeResult('pass');
             setShowKaizenBonus(true);
             setMood('happy');
             setGuidance("KAIZEN BONUS: Optimal latency (<700ms) and low variance detected. Handshake cleared. Prizm Driver Fatigue Telemetry updated.");
             setTimeout(() => setShowKaizenBonus(false), 1200);
         } else if (historicalBaseline && (avgReaction >= (historicalBaseline * 1.15) || variancePercentage > 25)) {
             warnCognitiveHandshake();
+            setHandshakeResult('warning');
             setMood('concerned');
             setGuidance(`MUDA DETECTED: Variance is ${Math.round(variancePercentage)}% from baseline. Your cognitive consistency is slipping. Consider a professional reset.`);
         } else {
             passCognitiveHandshake();
+            setHandshakeResult('pass');
             setMood('happy');
             setGuidance("Cognitive Handshake passed! Prizm Shift & Ergonomic Latency status set to NOMINAL.");
         }
@@ -175,6 +172,7 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
                                     animate={{ scale: [0, 1.2, 1] }}
                                     transition={{ type: "spring", duration: 0.3 }}
                                     onClick={handleTargetClick}
+                                    aria-label="Handshake target"
                                     className="absolute flex items-center justify-center w-14 h-14 min-h-[48px] min-w-[48px] bg-ohs-orange hover:bg-yellow-400 text-ohs-navy rounded-full shadow-[0_0_30px_rgba(249,168,37,0.8)] cursor-crosshair transform -translate-x-1/2 -translate-y-1/2 active:scale-90 transition-transform"
                                     style={{ left: `${targetPos.x}%`, top: `${targetPos.y}%` }}
                                 >
@@ -182,12 +180,31 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
                                 </motion.button>
                             ) : (
                                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-slate-900/90 backdrop-blur-md">
-                                    <div className="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center border border-emerald-500/30 mb-4">
+                                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center border mb-4 ${
+                                        handshakeResult === 'fail' 
+                                            ? 'bg-red-500/20 text-red-400 border-red-500/30' 
+                                            : handshakeResult === 'warning'
+                                            ? 'bg-amber-500/20 text-amber-400 border-amber-500/30'
+                                            : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'
+                                    }`}>
                                         <BrainCircuit size={36} />
                                     </div>
-                                    <h3 className="text-2xl font-black text-white uppercase tracking-tight">HANDSHAKE VERIFIED & PASSED</h3>
+                                    <h3 className="text-2xl font-black text-white uppercase tracking-tight">
+                                        {handshakeResult === 'fail'
+                                            ? 'HANDSHAKE FAILED — HIGH FATIGUE DETECTED'
+                                            : handshakeResult === 'warning'
+                                            ? 'HANDSHAKE WARNING — MODERATE FATIGUE'
+                                            : (gameCompleted && handshakeResult === 'pass' && cognitiveHandshakePassed)
+                                            ? 'HANDSHAKE VERIFIED & PASSED'
+                                            : 'HANDSHAKE PENDING'}
+                                    </h3>
                                     <p className="text-gray-300 text-xs mt-2 max-w-md">
-                                        Cognitive latency nominal. Average Reaction Time: <strong className="text-emerald-400">{Math.round(reactionTimes.reduce((a,b)=>a+b,0)/reactionTimes.length || 650)}ms</strong>. Prizm Driver Fatigue Telemetry updated to NOMINAL.
+                                        {handshakeResult === 'fail'
+                                            ? <>Cognitive latency exceeded threshold. Average Reaction Time: <strong className="text-red-400">{Math.round(measuredAvgReaction ?? (reactionTimes.length ? reactionTimes.reduce((a,b)=>a+b,0)/reactionTimes.length : 0))}ms</strong>. High fatigue safety intervention required.</>
+                                            : handshakeResult === 'warning'
+                                            ? <>Cognitive variance slipping from baseline. Average Reaction Time: <strong className="text-amber-400">{Math.round(measuredAvgReaction ?? (reactionTimes.length ? reactionTimes.reduce((a,b)=>a+b,0)/reactionTimes.length : 0))}ms</strong>. Warning status logged.</>
+                                            : <>Cognitive latency nominal. Average Reaction Time: <strong className="text-emerald-400">{Math.round(measuredAvgReaction ?? (reactionTimes.length ? reactionTimes.reduce((a,b)=>a+b,0)/reactionTimes.length : 0))}ms</strong>. Prizm Driver Fatigue Telemetry updated to NOMINAL.</>
+                                        }
                                     </p>
                                     <button
                                         onClick={resetTest}
@@ -201,7 +218,7 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
 
                         <div className="flex justify-between items-center text-xs text-gray-400 pt-2">
                             <span>Target Hits: <strong className="text-white">{targetsHit} / {TOTAL_TARGETS}</strong></span>
-                            <span>Status: <strong className={cognitiveHandshakePassed ? 'text-emerald-400' : 'text-ohs-orange'}>{cognitiveHandshakePassed ? 'PASSED & COMPLIANT' : 'READY FOR TEST'}</strong></span>
+                            <span>Status: <strong className={cognitiveHandshakePassed && handshakeResult === 'pass' ? 'text-emerald-400' : (handshakeResult === 'fail' ? 'text-red-400' : handshakeResult === 'warning' ? 'text-amber-400' : 'text-ohs-orange')}>{cognitiveHandshakePassed && handshakeResult === 'pass' ? 'PASSED & COMPLIANT' : (handshakeResult === 'fail' ? 'FAILED (HIGH FATIGUE)' : handshakeResult === 'warning' ? 'WARNING (MODERATE FATIGUE)' : 'READY FOR TEST')}</strong></span>
                         </div>
                     </div>
                 </motion.div>
@@ -226,12 +243,12 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
                         className="max-w-2xl bg-black border-2 border-red-600 p-10 rounded-[3rem] shadow-[0_0_100px_rgba(220,38,38,0.4)]"
                     >
                         <ShieldAlert size={80} className="text-red-500 mx-auto mb-6 animate-pulse" />
-                        <h1 className="text-4xl font-black text-white mb-4 tracking-tighter uppercase">Section 37 Liability Warning</h1>
+                        <h1 className="text-4xl font-black text-white mb-4 tracking-tighter uppercase">Fatigue Safety Warning</h1>
                         <div className="h-1 w-24 bg-red-600 mx-auto mb-8 rounded-full" />
                         <p className="text-xl text-gray-300 font-bold mb-8 leading-relaxed">
                             UNACCEPTABLE COGNITIVE LATENCY DETECTED.
                             <br />
-                            <span className="text-red-500 mt-2 block italic text-sm">Corporate Risk Protocol: Section 8(1) OHS Act 85 of 1993</span>
+                            <span className="text-red-500 mt-2 block italic text-sm">Employer duty of care: Section 8(1) OHS Act 85 of 1993</span>
                         </p>
                         <p className="text-gray-400 text-sm mb-10 leading-relaxed px-4">
                             Your reaction times have deviated significantly from safe operational baselines. To protect the organization and your personal safety, <strong>DOA Lockout</strong> has been triggered. Please contact your supervisor for a mandatory wellness check.

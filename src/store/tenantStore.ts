@@ -1,11 +1,31 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+export interface EmergencyContact {
+    label: string;
+    number: string;
+}
+
 export interface CompanyTenant {
     id: string;
     name: string;
     activeSeats: number;
+    emergencyContacts?: EmergencyContact[];
+    emergencyContactNumber?: string;
+    assemblyPoint?: string;
+    bankName?: string;
+    bankAccountName?: string;
+    bankAccountNumber?: string;
+    branchCode?: string;
+    companyRegistration?: string;
+    vatNumber?: string;
 }
+
+export const SA_PUBLIC_EMERGENCY_CONTACTS: EmergencyContact[] = [
+    { label: 'Emergency (Mobile)', number: '112' },
+    { label: 'Ambulance & Fire', number: '10177' },
+    { label: 'Police', number: '10111' },
+];
 
 export interface AuthSessionLog {
     id: string;
@@ -33,13 +53,42 @@ interface TenantState {
     logout: () => void;
     recordUsage: (companyId?: string) => void;
     supervisorOverride: () => void;
+    getCurrentTenant: () => CompanyTenant | undefined;
 }
 
 const DEFAULT_COMPANIES: CompanyTenant[] = [
-    { id: 'COMP-ODX-01', name: 'Oredax (Pty) Ltd', activeSeats: 11 },
-    { id: 'COMP-001', name: 'Sovereign Health Ltd', activeSeats: 12 },
-    { id: 'COMP-002', name: 'Vanguard Logistics', activeSeats: 45 },
-    { id: 'COMP-003', name: 'Apex Financials', activeSeats: 8 },
+    { 
+        id: 'COMP-ODX-01', 
+        name: 'Oredax (Pty) Ltd', 
+        activeSeats: 11,
+        emergencyContacts: SA_PUBLIC_EMERGENCY_CONTACTS,
+        emergencyContactNumber: '112',
+        assemblyPoint: 'Follow your site evacuation plan'
+    },
+    { 
+        id: 'COMP-001', 
+        name: 'Sovereign Health Ltd', 
+        activeSeats: 12,
+        emergencyContacts: SA_PUBLIC_EMERGENCY_CONTACTS,
+        emergencyContactNumber: '112',
+        assemblyPoint: 'Follow your site evacuation plan'
+    },
+    { 
+        id: 'COMP-002', 
+        name: 'Vanguard Logistics', 
+        activeSeats: 45,
+        emergencyContacts: SA_PUBLIC_EMERGENCY_CONTACTS,
+        emergencyContactNumber: '112',
+        assemblyPoint: 'Follow your site evacuation plan'
+    },
+    { 
+        id: 'COMP-003', 
+        name: 'Apex Financials', 
+        activeSeats: 8,
+        emergencyContacts: SA_PUBLIC_EMERGENCY_CONTACTS,
+        emergencyContactNumber: '112',
+        assemblyPoint: 'Follow your site evacuation plan'
+    },
 ];
 
 const DEFAULT_USAGE: Record<string, TenantBillingInfo> = {
@@ -49,14 +98,47 @@ const DEFAULT_USAGE: Record<string, TenantBillingInfo> = {
     'COMP-003': { total_usage_count: 86, login_count: 14 },
 };
 
+import { createJSONStorage } from 'zustand/middleware';
+
+const safeStorage = {
+    getItem: (name: string): string | null => {
+        try {
+            if (typeof window !== 'undefined' && window.localStorage) {
+                return window.localStorage.getItem(name);
+            }
+        } catch {
+            return null;
+        }
+        return null;
+    },
+    setItem: (name: string, value: string): void => {
+        try {
+            if (typeof window !== 'undefined' && window.localStorage) {
+                window.localStorage.setItem(name, value);
+            }
+        } catch {
+            // Safe fallback in non-browser/Node test environments
+        }
+    },
+    removeItem: (name: string): void => {
+        try {
+            if (typeof window !== 'undefined' && window.localStorage) {
+                window.localStorage.removeItem(name);
+            }
+        } catch {
+            // Safe fallback in non-browser/Node test environments
+        }
+    }
+};
+
 export const useTenantStore = create<TenantState>()(
     persist(
         (set, get) => ({
             status: 'NOMINAL',
             fatigueScore: 0,
             locked: false,
-            companyId: 'COMP-001',
-            userId: 'usr-sarah',
+            companyId: null,
+            userId: null,
             isAdmin: false,
             companies: DEFAULT_COMPANIES,
             logs: [
@@ -124,9 +206,15 @@ export const useTenantStore = create<TenantState>()(
 
                 return { usage: updatedUsage };
             }),
+
+            getCurrentTenant: () => {
+                const state = get();
+                return state.companies.find(c => c.id === state.companyId) || state.companies[0];
+            },
         }),
         {
             name: 'tenant-billing-telemetry-storage',
+            storage: createJSONStorage(() => safeStorage),
         }
     )
 );

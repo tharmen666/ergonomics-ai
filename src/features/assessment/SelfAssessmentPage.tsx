@@ -1,8 +1,10 @@
+import React, { lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { SelfAssessment } from '../training/SelfAssessment';
-import { SpineViewer } from '../../components/agent/SpineViewer';
 import { HomeOfficeSetupGuide } from './HomeOfficeSetupGuide';
 import { Activity } from 'lucide-react';
+
+const SpineViewer = lazy(() => import('../../components/agent/SpineViewer').then(m => ({ default: m.SpineViewer })));
 
 export const SelfAssessmentPage = () => {
     return (
@@ -47,7 +49,14 @@ export const SelfAssessmentPage = () => {
                 </div>
 
                 <div className="w-full h-[400px] md:h-[450px]">
-                    <SpineViewer />
+                    <Suspense fallback={
+                        <div className="w-full h-full flex flex-col items-center justify-center bg-white/5 border border-white/10 rounded-2xl animate-pulse text-gray-400 gap-2">
+                            <Activity className="animate-spin text-ohs-orange" size={24} />
+                            <span className="text-xs font-mono uppercase tracking-widest text-ohs-orange">Loading 3D Biomechanical Telemetry Engine...</span>
+                        </div>
+                    }>
+                        <SpineViewer />
+                    </Suspense>
                 </div>
             </motion.div>
 

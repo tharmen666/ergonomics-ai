@@ -11,9 +11,11 @@ import {
     Building2, 
     X, 
     Filter,
-    Briefcase
+    Briefcase,
+    AlertTriangle
 } from 'lucide-react';
 import { GlassCard } from '../../components/ui/GlassCard';
+import { useTenantStore } from '../../store/tenantStore';
 
 export interface Invoice {
     id: string;
@@ -96,6 +98,19 @@ const INITIAL_INVOICES: Invoice[] = [
 ];
 
 export const InvoicePage = () => {
+    const { companyId, companies } = useTenantStore();
+    const activeCompany = companies.find(c => c.id === companyId);
+    const supplierVat = activeCompany?.vatNumber?.trim() || '';
+    const supplierReg = activeCompany?.companyRegistration?.trim() || '';
+    const bankName = activeCompany?.bankName?.trim() || '';
+    const bankAccountName = activeCompany?.bankAccountName?.trim() || '';
+    const bankAccountNumber = activeCompany?.bankAccountNumber?.trim() || '';
+    const branchCode = activeCompany?.branchCode?.trim() || '';
+
+    const isBankingConfigured = !!(bankAccountNumber && branchCode && bankName);
+    const isVatConfigured = !!supplierVat;
+    const isInvoiceConfigured = isBankingConfigured && isVatConfigured && !!supplierReg;
+
     const [invoices, setInvoices] = useState<Invoice[]>(INITIAL_INVOICES);
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState<'ALL' | 'PAID' | 'PENDING' | 'OVERDUE'>('ALL');
@@ -105,7 +120,7 @@ export const InvoicePage = () => {
     // Form state for generating new invoice
     const [newClientName, setNewClientName] = useState('');
     const [newClientVat, setNewClientVat] = useState('');
-    const [newAssessmentType, setNewAssessmentType] = useState('ISO 45003 Workstation Ergonomics Audit');
+    const [newAssessmentType, setNewAssessmentType] = useState('Workstation Ergonomics Audit');
     const [newWorkstations, setNewWorkstations] = useState<number>(10);
     const [newUnitPrice, setNewUnitPrice] = useState<number>(1250);
     const [newAssessor, setNewAssessor] = useState('Desigan Tharmen (HSEQ Lead)');
@@ -136,7 +151,8 @@ export const InvoicePage = () => {
         const nextNum = invoices.length + 1;
         const generatedInvoice: Invoice = {
             id: `inv-${Date.now()}`,
-            invoiceNumber: `INV-2026-00${nextNum}`,
+            // Zero-padded invoice number (e.g. INV-2026-004, INV-2026-010)
+            invoiceNumber: `INV-2026-${String(nextNum).padStart(3, '0')}`,
             clientName: newClientName,
             clientVat: newClientVat || 'ZA-PENDING',
             assessmentType: newAssessmentType,
@@ -465,7 +481,7 @@ export const InvoicePage = () => {
                             {/* Action Bar */}
                             <div className="flex items-center justify-between pb-6 border-b border-white/10 print:hidden">
                                 <span className="text-xs font-mono font-bold text-ohs-orange">
-                                    Official OHS Tax Invoice - {selectedInvoice.invoiceNumber}
+                                    {isVatConfigured ? 'Official OHS Tax Invoice' : 'OHS Assessment Invoice'} - {selectedInvoice.invoiceNumber}
                                 </span>
                                 <div className="flex items-center gap-3">
                                     <button
@@ -483,6 +499,19 @@ export const InvoicePage = () => {
                                 </div>
                             </div>
 
+                            {/* Configuration Warning Banner */}
+                            {!isInvoiceConfigured && (
+                                <div className="mt-4 p-3.5 bg-amber-500/15 border border-amber-500/30 rounded-2xl flex items-start gap-2.5 text-xs text-amber-300 print:hidden">
+                                    <AlertTriangle size={18} className="text-amber-400 shrink-0 mt-0.5" />
+                                    <div>
+                                        <strong className="block font-bold">Configure Company Profile Before Issuing:</strong>
+                                        <span>
+                                            Supplier banking details {!isBankingConfigured && '(Bank/Account/Branch)'} {!isVatConfigured && 'and VAT registration number'} are not configured for this tenant. Invoices cannot be issued as statutory Tax Invoices without a configured supplier VAT number.
+                                        </span>
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Clean Printable Invoice Layout */}
                             <div className="space-y-6 pt-4 print:space-y-4">
                                 {/* Header */}
@@ -493,15 +522,18 @@ export const InvoicePage = () => {
                                                 OHS
                                             </div>
                                             <h2 className="text-xl font-black text-white tracking-tighter uppercase print:text-black">
-                                                ERGOSAFE <span className="text-ohs-orange">REBORN</span>
+                                                {activeCompany?.name || 'ERGOSAFE REBORN'}
                                             </h2>
                                         </div>
-                                        <p className="text-[10px] text-gray-400 mt-1 print:text-gray-600">ErgoSafe OHS Solutions (Pty) Ltd</p>
-                                        <p className="text-[10px] text-gray-400 print:text-gray-600">VAT Reg: ZA904128941 | Reg: 2026/019283/07</p>
-                                        <p className="text-[10px] text-gray-400 print:text-gray-600">Sandton Office Park, Johannesburg, South Africa</p>
+                                        <p className="text-[10px] text-gray-400 mt-1 print:text-gray-600">{activeCompany?.name || 'ErgoSafe Enterprise Solutions'}</p>
+                                        <p className="text-[10px] text-gray-400 print:text-gray-600">
+                                            VAT Reg: {supplierVat || 'Not Configured'} | Reg: {supplierReg || 'Not Configured'}
+                                        </p>
                                     </div>
                                     <div className="text-right">
-                                        <h3 className="text-2xl font-black text-ohs-orange uppercase tracking-wider print:text-black">TAX INVOICE</h3>
+                                        <h3 className="text-2xl font-black text-ohs-orange uppercase tracking-wider print:text-black">
+                                            {isVatConfigured ? 'TAX INVOICE' : 'INVOICE'}
+                                        </h3>
                                         <p className="text-xs font-mono font-bold text-white print:text-black">{selectedInvoice.invoiceNumber}</p>
                                         <p className="text-[10px] text-gray-400 mt-1 print:text-gray-600">Issue Date: {selectedInvoice.issueDate}</p>
                                         <p className="text-[10px] text-gray-400 print:text-gray-600">Due Date: {selectedInvoice.dueDate}</p>
@@ -559,35 +591,43 @@ export const InvoicePage = () => {
                                 <div className="flex justify-end">
                                     <div className="w-64 space-y-2 bg-white/5 p-4 rounded-2xl border border-white/10 print:bg-gray-100 print:border-gray-300">
                                         <div className="flex justify-between text-xs text-gray-300 print:text-black">
-                                            <span>Subtotal:</span>
-                                            <span className="font-mono font-bold">R {selectedInvoice.subtotal.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}</span>
-                                        </div>
-                                        <div className="flex justify-between text-xs text-gray-300 print:text-black">
-                                            <span>VAT (15%):</span>
-                                            <span className="font-mono font-bold">R {selectedInvoice.vatAmount.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}</span>
-                                        </div>
-                                        <div className="flex justify-between text-sm font-bold text-ohs-orange pt-2 border-t border-white/10 print:text-black print:border-gray-300">
-                                            <span>Total (ZAR):</span>
-                                            <span className="font-mono font-black">R {selectedInvoice.totalAmount.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                             <span>Subtotal:</span>
+                                             <span className="font-mono font-bold">R {selectedInvoice.subtotal.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}</span>
+                                         </div>
+                                         <div className="flex justify-between text-xs text-gray-300 print:text-black">
+                                             <span>VAT (15%):</span>
+                                             <span className="font-mono font-bold">R {selectedInvoice.vatAmount.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}</span>
+                                         </div>
+                                         <div className="flex justify-between text-sm font-bold text-ohs-orange pt-2 border-t border-white/10 print:text-black print:border-gray-300">
+                                             <span>Total (ZAR):</span>
+                                             <span className="font-mono font-black">R {selectedInvoice.totalAmount.toLocaleString('en-ZA', { minimumFractionDigits: 2 })}</span>
+                                         </div>
+                                     </div>
+                                 </div>
 
-                                {/* Notes & Bank Payment Details */}
-                                <div className="border-t border-white/10 pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-[10px] text-gray-400 print:border-gray-300 print:text-gray-700">
-                                    <div>
-                                        <span className="font-bold uppercase text-white block mb-1 print:text-black">Banking Details for Settlement:</span>
-                                        <p>Bank: Standard Bank South Africa</p>
-                                        <p>Account Name: ErgoSafe OHS Solutions</p>
-                                        <p>Account #: 0918239102 | Branch Code: 051001</p>
-                                        <p>Reference: {selectedInvoice.invoiceNumber}</p>
-                                    </div>
-                                    <div>
-                                        <span className="font-bold uppercase text-white block mb-1 print:text-black">Compliance Disclaimer:</span>
-                                        <p>{selectedInvoice.notes}</p>
-                                    </div>
-                                </div>
-                            </div>
+                                 {/* Notes & Bank Payment Details */}
+                                 <div className="border-t border-white/10 pt-4 grid grid-cols-1 sm:grid-cols-2 gap-4 text-[10px] text-gray-400 print:border-gray-300 print:text-gray-700">
+                                     <div>
+                                         <span className="font-bold uppercase text-white block mb-1 print:text-black">Banking Details for Settlement:</span>
+                                         {isBankingConfigured ? (
+                                             <>
+                                                 <p>Bank: {bankName}</p>
+                                                 <p>Account Name: {bankAccountName || activeCompany?.name || 'ErgoSafe Client'}</p>
+                                                 <p>Account #: {bankAccountNumber} | Branch Code: {branchCode}</p>
+                                                 <p>Reference: {selectedInvoice.invoiceNumber}</p>
+                                             </>
+                                         ) : (
+                                             <p className="text-amber-400 italic">
+                                                 Banking details unconfigured. Please configure tenant banking settings before issuing.
+                                             </p>
+                                         )}
+                                     </div>
+                                     <div>
+                                         <span className="font-bold uppercase text-white block mb-1 print:text-black">Compliance Disclaimer:</span>
+                                         <p>{selectedInvoice.notes}</p>
+                                     </div>
+                                 </div>
+                             </div>
                         </motion.div>
                     </div>
                 )}

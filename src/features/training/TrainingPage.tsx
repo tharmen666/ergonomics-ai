@@ -13,7 +13,7 @@ export const TrainingPage = () => {
     const { addLog } = useAgentLog();
     const { completedModules, recommendations, completeModule } = useNellyStore();
     const { incidents } = useLpsStore();
-    const { companyId } = useTenantStore();
+    const { companyId, userId, companies } = useTenantStore();
     const [selectedModule, setSelectedModule] = useState<any>(null);
     const [certificateModule, setCertificateModule] = useState<OperationalLibrary | null>(null);
 
@@ -41,7 +41,7 @@ export const TrainingPage = () => {
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-6 w-full max-w-full">
                 <div className="min-w-0">
                     <span className="text-[10px] font-black text-ohs-orange uppercase tracking-[0.3em] block mb-1 truncate">
-                        SA OHS Act & ISO 45001 Accredited Curriculum
+                        Ergonomics & Workplace Safety Curriculum
                     </span>
                     <h1 className="text-3xl sm:text-4xl font-black text-white flex items-center gap-3 break-words">
                         <Award size={36} className="text-ohs-orange shrink-0" />
@@ -203,27 +203,28 @@ export const TrainingPage = () => {
                                     </div>
                                 </div>
 
+                                {/* TODO(legal-verify): renamed from CERTIFICATE OF COMPETENCY to Certificate of Ergonomic Training Attendance / Completion, removed unverified statutory/ISO certifications and hardcoded Sovereign Health Ltd */}
                                 <span className="text-[10px] font-black text-emerald-400 uppercase tracking-[0.4em] block">
-                                    REPUBLIC OF SOUTH AFRICA • OHS ACT 85 OF 1993 COMPLIANT
+                                    ERGOSAFE TRAINING & WELLNESS
                                 </span>
                                 
                                 <h2 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
-                                    CERTIFICATE OF COMPETENCY
+                                    Certificate of Ergonomic Training Attendance / Completion
                                 </h2>
 
                                 <p className="text-xs text-gray-300 font-medium max-w-md mx-auto">
-                                    This certifies that the employee has successfully completed the accredited ergonomics and biomechanics curriculum module:
+                                    This certifies that <span className="font-bold text-white underline">{userId || 'Participant'}</span> has completed the ergonomic awareness learning module:
                                 </p>
 
                                 <div className="py-3 bg-white/5 border border-white/10 rounded-xl max-w-lg mx-auto">
                                     <h3 className="text-lg font-black text-ohs-orange">{certificateModule.title}</h3>
-                                    <p className="text-[10px] font-mono text-gray-400 mt-1">ISO 45001 & Section 8 Compliance Verified</p>
+                                    <p className="text-[10px] font-mono text-gray-400 mt-1">Ergonomic Awareness & Movement Training</p>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4 text-left text-xs bg-slate-950 p-4 rounded-xl border border-white/5 max-w-lg mx-auto">
                                     <div>
                                         <span className="text-[9px] font-bold text-gray-400 uppercase block">Company / Tenant:</span>
-                                        <span className="font-bold text-white">{companyId || 'COMP-001'} (Sovereign Health Ltd)</span>
+                                        <span className="font-bold text-white">{companies.find(c => c.id === companyId)?.name || companyId || 'Enterprise Tenant'}</span>
                                     </div>
                                     <div>
                                         <span className="text-[9px] font-bold text-gray-400 uppercase block">Issue Date:</span>

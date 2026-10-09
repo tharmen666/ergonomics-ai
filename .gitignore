@@ -39,3 +39,7 @@ Thumbs.db
 
 # Vite timestamp artifacts
 vite.config.ts.timestamp-*.mjs
+
+# Playwright output
+test-results/
+playwright-report/

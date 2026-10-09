@@ -50,6 +50,8 @@ export const checkEscalation = (employee: Employee) => {
     return null;
 };
 
+// TODO(legal-verify): removed specific fine amount of R1,000,000
 export const getLegalShockContent = () => {
-    return "Failure to adhere to Section 8(1) and 38(1) of the OHS Act 85 of 1993 may result in corporate liability, including fines up to R1,000,000 or imprisonment for top management.";
+    return "Failure to adhere to Section 8(1) and Section 38 of the Occupational Health and Safety Act 85 of 1993 may result in statutory liability and penalties as prescribed under the Act.";
 };
+

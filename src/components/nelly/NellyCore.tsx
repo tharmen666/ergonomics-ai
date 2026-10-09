@@ -14,6 +14,9 @@ export const NellyCore = ({ isSpeaking, onClick }: NellyCoreProps) => {
             className={`relative group w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full border-2 sm:border-4 border-ohs-orange/30 p-0.5 sm:p-1 bg-ohs-navy shadow-2xl overflow-hidden cursor-pointer pointer-events-auto flex-shrink-0 aspect-square`}
             layoutId="nelly-core"
             onClick={onClick}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(); } }}
+            role="button"
+            tabIndex={0}
             whileTap={{ scale: 0.95 }}
             aria-label="Nelly AI Avatar"
             title="Nelly AI Avatar"

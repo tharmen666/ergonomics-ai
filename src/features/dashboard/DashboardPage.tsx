@@ -2,14 +2,15 @@ import { ActivityChart, ComplianceRing } from './Charts';
 import { Users, AlertCircle, FileText, Target, Shield, Lock, Download, Film } from 'lucide-react';
 import { DailySafetyChecklist } from './DailySafetyChecklist';
 import { WorkspaceAudit } from './WorkspaceAudit';
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ShieldCheck } from 'lucide-react';
+import { Check, ShieldCheck, Loader2 } from 'lucide-react';
 import { SafetyStreaks } from '../../components/AI-Coach/SafetyStreaks';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
-import { SpineViewer } from '../../components/agent/SpineViewer';
 import { HandshakeCardHeader } from '../../components/common/HandshakeCardHeader';
 import { DemoVideoModal } from '../../components/demo/DemoVideoModal';
+
+const SpineViewer = lazy(() => import('../../components/agent/SpineViewer').then(m => ({ default: m.SpineViewer })));
 
 export const DashboardPage = () => {
     const { cognitiveHandshakePassed, setShowCognitiveHandshake } = useFatigueStore();
@@ -102,7 +103,14 @@ export const DashboardPage = () => {
 
                     {/* 3D Spine Viewer - Primary Interactive Element */}
                     <div className="h-[400px] w-full max-w-full overflow-hidden">
-                        <SpineViewer />
+                        <Suspense fallback={
+                            <div className="w-full h-full flex flex-col items-center justify-center bg-black/40 rounded-2xl border border-white/10 text-gray-400 gap-3">
+                                <Loader2 className="w-8 h-8 animate-spin text-ohs-orange" />
+                                <span className="text-xs uppercase tracking-widest font-mono text-ohs-orange/90">Loading 3D Biomechanical Spine Model...</span>
+                            </div>
+                        }>
+                            <SpineViewer />
+                        </Suspense>
                     </div>
 
                     {/* Operational Video Walkthrough */}

@@ -19,6 +19,7 @@ export const PrivacyHandshake = () => {
     const handleAccept = () => {
         setIsVisible(false);
         localStorage.setItem('popiHandshakeAccepted', 'true');
+        localStorage.setItem('ergo_privacy_consent_verified', 'true');
     };
 
     return (
@@ -41,20 +42,21 @@ export const PrivacyHandshake = () => {
                         <div className="mb-6">
                             <HandshakeCardHeader
                                 title="YOUR DATA IS YOUR SHIELD"
-                                subtext="Privacy-First OHS Architecture & Zero-Knowledge Stewardship Authority"
+                                subtext="Privacy-First OHS Architecture & Local Browser Storage"
                                 icon={<ShieldCheck size={32} />}
                             />
                         </div>
 
                         <div className="space-y-4 mb-8">
+                            {/* // TODO(privacy): implement encryption + POPIA s26 special-information handling before production */}
                             <p className="text-gray-300 leading-relaxed text-sm">
-                                ErgoSafe Reborn operates strictly as a <strong>Stewardship Authority</strong>. This is a <strong>performance tool, not a spy tool</strong>. Your cognitive and ergonomic assessment data is end-to-end encrypted and completely anonymized.
+                                ErgoSafe Reborn collects reaction time latency and ergonomic risk assessment inputs. For this prototype, your data is stored locally in the browser and is not yet encrypted.
                             </p>
                             <div className="bg-white/5 border border-white/5 rounded-xl p-4 flex items-start gap-4">
                                 <Lock className="text-white opacity-50 shrink-0 mt-1" size={20} />
                                 <div>
                                     <h4 className="text-sm font-bold text-white mb-1">Human in the Loop Guarantee</h4>
-                                    <p className="text-gray-400 text-xs leading-relaxed">Safety is our #1 priority. We do not track you to punish you. We coach you to keep you at peak performance. All compliance reports and behavioral audits are filed securely into zero-knowledge dossiers.</p>
+                                    <p className="text-gray-400 text-xs leading-relaxed">Safety is our #1 priority. We do not track you to punish you. We coach you to keep you at peak performance. Data is stored in your local browser state for prototype demonstration.</p>
                                 </div>
                             </div>
                         </div>

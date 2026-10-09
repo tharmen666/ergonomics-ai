@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { caseStatusLabel, caseEscalationLabel, caseSlaLabel, formatLogged } from '../../utils/caseLabels';
 import { motion } from 'framer-motion';
 import { GlassCard } from '../../components/ui/GlassCard';
 import { BarChart3, TrendingUp, ShieldAlert, FileText, CheckCircle2, AlertTriangle, ShieldCheck, Sparkles } from 'lucide-react';
@@ -81,23 +82,29 @@ export const ReportsPage: React.FC = () => {
                         </h3>
                         <p className="text-xs text-gray-400 mt-1 break-words">Real-time telemetry stream from 3D spine hazard alerts, Prizm driver fatigue checks, and micro-stretches.</p>
                     </div>
-                    <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 w-max shrink-0">
-                        ZERO-KNOWLEDGE POPIA ENCRYPTED
+                    {/* TODO(privacy): implement encryption, access control + POPIA s26 special-information handling before production */}
+                    <span className="text-[10px] font-mono text-amber-300 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20 w-max shrink-0">
+                        Prototype: stored in this browser only (not encrypted, no access control)
                     </span>
                 </div>
 
-                {/* Explicit Incident Provenance Metadata Badge (Manus Audit Requirement) */}
-                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono w-full max-w-full">
-                    <div className="flex items-center gap-2 min-w-0">
-                        <ShieldAlert className="text-red-400 shrink-0" size={16} />
-                        <span className="font-bold text-red-300 break-words">
-                            Status: CEO Escalated | Triggered: 18 Aug 2026 14:00 | Owner: OHS Manager | SLA: 24h Remaining
-                        </span>
-                    </div>
-                    <span className="text-[10px] bg-red-500/20 text-red-200 px-2 py-0.5 rounded font-black uppercase shrink-0">
-                        CRITICAL SLA AUDIT BADGE
-                    </span>
-                </div>
+                {/* Explicit Incident Provenance Metadata Badge from Real Case Record */}
+                {cases.length > 0 && (() => {
+                    const criticalCase = cases.find(c => c.status === 'BREACH' || c.escalationState === 'escalated_level_2') || cases[0];
+                    return (
+                        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs font-mono w-full max-w-full">
+                            <div className="flex items-center gap-2 min-w-0">
+                                <ShieldAlert className="text-red-400 shrink-0" size={16} />
+                                <span className="font-bold text-red-300 break-words">
+                                    Status: {caseStatusLabel(criticalCase)} | {caseEscalationLabel(criticalCase)} | Logged: {formatLogged(criticalCase.createdAt)} | Owner: {criticalCase.managerName || 'OHS Manager'} | {caseSlaLabel(criticalCase)}
+                                </span>
+                            </div>
+                            <span className="text-[10px] bg-red-500/20 text-red-200 px-2 py-0.5 rounded font-black uppercase shrink-0">
+                                MOST URGENT OPEN CASE
+                            </span>
+                        </div>
+                    );
+                })()}
 
                 <div className="space-y-3 font-mono text-xs overflow-x-auto">
                     {cases.length > 0 ? (
@@ -109,7 +116,7 @@ export const ReportsPage: React.FC = () => {
                                         c.status === 'RISK_ALERT' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' :
                                         'bg-red-500/20 text-red-300 border border-red-500/30'
                                     }`}>
-                                        Status: {c.status === 'BREACH' ? 'CEO Escalated' : c.status} | Triggered: {new Date(c.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })} {new Date(c.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} | Owner: {c.managerName || 'OHS Manager'} | SLA: {c.timeframeHours || 24}h Remaining
+                                        Status: {caseStatusLabel(c)} | {caseEscalationLabel(c)} | Logged: {formatLogged(c.createdAt)} | Owner: {c.managerName || 'OHS Manager'} | {caseSlaLabel(c)}
                                     </span>
                                     <div className="min-w-0">
                                         <p className="text-slate-100 font-medium truncate">{c.hazardTrigger}</p>
@@ -125,7 +132,7 @@ export const ReportsPage: React.FC = () => {
                         logs.slice(0, 5).map((l, idx) => (
                             <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-white/5 border border-white/5 rounded-xl gap-2">
                                 <span className="px-2 py-0.5 rounded text-[9px] font-black uppercase bg-blue-500/20 text-blue-300 border border-blue-500/30 shrink-0">
-                                    Status: Logged | Triggered: {new Date(l.timestamp).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })} {new Date(l.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} | Owner: HSEQ Lead | SLA: Nominal
+                                    Logged: {new Date(l.timestamp).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })} {new Date(l.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} | Owner: HSEQ Lead
                                 </span>
                                 <span className="text-gray-300 truncate">{l.reason}</span>
                             </div>

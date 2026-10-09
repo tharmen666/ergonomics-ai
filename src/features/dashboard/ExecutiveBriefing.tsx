@@ -3,11 +3,14 @@ import { motion } from 'framer-motion';
 import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp, Volume2, VolumeX, Truck, Activity, Scale, Award } from 'lucide-react';
 import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
 import { LeanPerformanceRail } from '../../components/AI-Coach/LeanPerformanceRail';
-import { REASONABLY_PRACTICABLE_2026, RIGHT_TO_DISCONNECT_FRAMEWORK, FINANCIAL_PITCHES } from '../../logic/financePitches';
+import { REASONABLY_PRACTICABLE_OHS, RIGHT_TO_DISCONNECT_FRAMEWORK, FINANCIAL_PITCHES } from '../../logic/financePitches';
 import { useNellyStore } from '../../store/nellyStore';
+import { useComplianceStore } from '../../store/complianceStore';
 import { speak, stopSpeaking } from '../../utils/speech';
 
 export const ExecutiveBriefing = () => {
+    // Real count of open statutory breaches (no hardcoded "no offences" badge)
+    const openStatutoryBreaches = useComplianceStore((s) => s.cases.filter(c => c.status === 'BREACH' && c.escalationState !== 'resolved').length);
     const { language } = useNellyStore();
     const [isNarrating, setIsNarrating] = useState(false);
     const [showSupportingMatrix, setShowSupportingMatrix] = useState(false);
@@ -49,7 +52,7 @@ export const ExecutiveBriefing = () => {
             setIsNarrating(false);
         } else {
             setIsNarrating(true);
-            const script = `Executive Briefing Narration Active. Welcome to ErgoSafe Reborn V3. This executive summary integrates live OHS Act Section 37 compliance telemetry with the Demo Video Feature. Core fatigue gaps, including long-distance driver shift fatigue, micro-sleep risks, and cervical neck strain, are systematically resolved via Prizm Driver Fatigue Handshake and Nelly's Ergonomic Engine. Our platform establishes a legally defensible audit trail under Section 8 clause 1 of the Occupational Health and Safety Act, reducing corporate liability and securing up to 142% return on driver safety investment.`;
+            const script = `Executive Briefing Narration Active. Welcome to ErgoSafe Reborn V3. This executive summary integrates live OHS Act Section 37 compliance telemetry with the Demo Video Feature. Core fatigue gaps, including long-distance driver shift fatigue, micro-sleep risks, and cervical neck strain, are systematically resolved via Prizm Driver Fatigue Handshake and Nelly's Ergonomic Engine. Our platform establishes a legally defensible audit trail under Section 8 clause 1 of the Occupational Health and Safety Act, reducing corporate liability and demonstrating substantial return on driver safety investment.`;
             speak(script, language, () => setIsNarrating(false));
         }
     };
@@ -66,7 +69,7 @@ export const ExecutiveBriefing = () => {
                     <div className="space-y-2 max-w-3xl min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
                             <span className="text-[9px] sm:text-[10px] font-black text-ohs-orange uppercase tracking-wider bg-ohs-orange/10 px-3 py-1 rounded-full border border-ohs-orange/30 whitespace-normal leading-tight max-w-full">
-                                🛡️ PRIMARY DECISION CONTROLS • P0 AUDIT PASSED
+                                🛡️ PRIMARY DECISION CONTROLS
                             </span>
                             <span className="text-[9px] sm:text-[10px] font-bold text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 whitespace-normal leading-tight max-w-full">
                                 LIVE TELEMETRY STREAM
@@ -76,7 +79,7 @@ export const ExecutiveBriefing = () => {
                             SAFETY COMMAND <span className="text-ohs-orange">CENTRE</span>
                         </h1>
                         <p className="text-gray-300 font-medium text-xs md:text-sm leading-relaxed break-words">
-                            Section 37 & 38 OHS Act 85 Governance Engine. Continuous monitoring of biomechanical strain, continuous driver fatigue, and statutory corporate liability.
+                            OHS Act 85 of 1993 governance dashboard: ergonomic strain and driver fatigue monitoring, with escalation to accountable managers.
                         </p>
                     </div>
 
@@ -204,11 +207,11 @@ export const ExecutiveBriefing = () => {
             >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                     <div className="min-w-0 flex-1">
-                        <h3 className="text-xl font-black text-white flex items-center gap-3 break-words"><FileText className="text-green-500 shrink-0" size={24} /> Admin-Zero File Status (MongoDB MCP)</h3>
-                        <p className="text-gray-400 font-medium mt-1 break-words">All compliance actions have been automatically queried and assembled by Google Cloud Agent Builder into the MongoDB compliance ledger.</p>
+                        <h3 className="text-xl font-black text-white flex items-center gap-3 break-words"><FileText className="text-green-500 shrink-0" size={24} /> Compliance Record Status</h3>
+                        <p className="text-gray-400 font-medium mt-1 break-words">Compliance actions are recorded in this browser's local compliance log (prototype - not yet synced to a server).</p>
                     </div>
-                    <div className="bg-green-500/20 text-green-400 px-6 py-3 rounded-full font-bold uppercase tracking-widest text-sm whitespace-nowrap block text-center sm:text-left w-full sm:w-auto shrink-0">
-                        NO PENDING OFFENCES
+                    <div className={`px-6 py-3 rounded-full font-bold uppercase tracking-widest text-sm whitespace-nowrap block text-center sm:text-left w-full sm:w-auto shrink-0 ${openStatutoryBreaches === 0 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                        {openStatutoryBreaches === 0 ? 'NO OPEN STATUTORY BREACHES' : `${openStatutoryBreaches} OPEN STATUTORY BREACH${openStatutoryBreaches === 1 ? '' : 'ES'}`}
                     </div>
                 </div>
             </motion.div>
@@ -227,7 +230,7 @@ export const ExecutiveBriefing = () => {
                             LPS ROI: <span className="text-ohs-orange">Productivity Recovered</span>
                         </h3>
                         <p className="text-gray-400 font-medium mt-2 leading-relaxed break-words">
-                            via Section 37 Compliance. Our continuous Ergo Stability engine is directly tracking and recuperating lost efficiency by aligning OHS legislation directly with overall human effectiveness metrics.
+                            Tracks productive time recovered through ergonomic breaks and completed corrective actions.
                         </p>
                     </div>
                 </div>
@@ -257,7 +260,7 @@ export const ExecutiveBriefing = () => {
                             Reasonably Practicable Standard Active
                         </div>
                         <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-ohs-blue/10 border border-ohs-blue/30 rounded-xl text-ohs-blue text-[10px] sm:text-xs font-black uppercase whitespace-normal break-words">
-                            Right to Disconnect Shield Active
+                            Rest & Work-Life Boundary Coaching
                         </div>
                     </div>
                 </div>
@@ -269,18 +272,18 @@ export const ExecutiveBriefing = () => {
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
                                 <h4 className="text-base sm:text-lg font-black text-white uppercase tracking-wide flex items-center gap-2 break-words">
                                     <span className="w-2.5 h-2.5 rounded-full bg-ohs-orange shrink-0" />
-                                    {REASONABLY_PRACTICABLE_2026.standardName}
+                                    {REASONABLY_PRACTICABLE_OHS.standardName}
                                 </h4>
                                 <div className="px-2.5 py-1 bg-ohs-orange/10 border border-ohs-orange/30 text-ohs-orange font-black text-[9px] uppercase tracking-wider rounded-lg w-max max-w-full break-words shrink-0">
-                                    {REASONABLY_PRACTICABLE_2026.statuteReference}
+                                    {REASONABLY_PRACTICABLE_OHS.statuteReference}
                                 </div>
                             </div>
                             <p className="text-gray-300 text-sm leading-relaxed font-medium mb-4 break-words">
-                                {REASONABLY_PRACTICABLE_2026.description}
+                                {REASONABLY_PRACTICABLE_OHS.description}
                             </p>
                         </div>
                         <p className="text-xs text-red-400/90 font-bold bg-red-500/10 border border-red-500/20 p-3 rounded-xl break-words">
-                            {REASONABLY_PRACTICABLE_2026.finesFramework}
+                            {REASONABLY_PRACTICABLE_OHS.finesFramework}
                         </p>
                     </div>
 
