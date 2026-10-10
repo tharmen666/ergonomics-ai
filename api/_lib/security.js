@@ -1,3 +1,5 @@
+import { timingSafeEqual } from 'node:crypto';
+
 // Shared request guards for the serverless API (files under api/_lib are not routed by Vercel).
 //
 // IMPORTANT (TODO(auth)): the bearer token is a shared secret. The browser app has to send it,
@@ -15,7 +17,7 @@ const DEFAULT_DEV_ORIGINS = [
   'http://127.0.0.1:5173'
 ];
 
-/** CORS from an allow-list. Never combines a wildcard origin with credentials. */
+/** CORS from an allow-list. No wildcard origin and no credentialed (cookie) requests. */
 export function applyCors(req, res, allowHeaders = 'Authorization, Content-Type, X-Requested-With, Accept') {
   const allowedOrigins = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',').map((s) => s.trim()).filter(Boolean)
@@ -25,7 +27,7 @@ export function applyCors(req, res, allowHeaders = 'Authorization, Content-Type,
   if (origin && allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Vary', 'Origin');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    // No Allow-Credentials: the API uses bearer tokens, not cookies.
   }
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST');
   res.setHeader('Access-Control-Allow-Headers', allowHeaders);
@@ -46,24 +48,58 @@ export function requireToken(req, res) {
   const token = typeof authHeader === 'string' && authHeader.startsWith('Bearer ')
     ? authHeader.slice(7).trim()
     : null;
-  if (!token || token !== expectedToken) {
+  if (!token || !safeEqual(token, expectedToken)) {
     res.status(401).json({ error: 'Unauthorized: missing or invalid Bearer token' });
     return false;
   }
   return true;
 }
 
+/** Constant-time string comparison (length-safe) so the token can't be guessed by timing. */
+function safeEqual(a, b) {
+  const ab = Buffer.from(String(a));
+  const bb = Buffer.from(String(b));
+  if (ab.length !== bb.length) {
+    timingSafeEqual(ab, ab); // keep timing similar on a length mismatch
+    return false;
+  }
+  return timingSafeEqual(ab, bb);
+}
+
+/**
+ * Client IP for rate limiting. The FIRST x-forwarded-for entry is supplied by the client and can be
+ * spoofed, so prefer the headers Vercel's edge sets itself, then the LAST forwarded hop, then the socket.
+ */
+export function clientIp(req) {
+  const h = req.headers || {};
+  const vercel = h['x-vercel-forwarded-for'];
+  if (typeof vercel === 'string' && vercel.trim()) return vercel.split(',')[0].trim();
+  const real = h['x-real-ip'];
+  if (typeof real === 'string' && real.trim()) return real.trim();
+  const fwd = h['x-forwarded-for'];
+  if (typeof fwd === 'string' && fwd.trim()) {
+    const hops = fwd.split(',').map((s) => s.trim()).filter(Boolean);
+    if (hops.length) return hops[hops.length - 1];
+  }
+  return (req.socket && req.socket.remoteAddress) || 'unknown';
+}
+
 const buckets = new Map();
+const MAX_BUCKETS = 5000;
+
+function evictExpired(now, windowMs) {
+  for (const [key, entry] of buckets) {
+    if (now - entry.start >= windowMs) buckets.delete(key);
+  }
+}
 
 /**
  * Simple in-memory fixed-window rate limit per client IP.
  * Per serverless instance only (instances don't share memory) - a cost guard, not a hard quota.
  */
 export function rateLimit(req, res, { limit = 10, windowMs = 10 * 60 * 1000, now = Date.now() } = {}) {
-  const forwarded = req.headers['x-forwarded-for'];
-  const ip = (typeof forwarded === 'string' && forwarded.split(',')[0].trim())
-    || (req.socket && req.socket.remoteAddress)
-    || 'unknown';
+  const ip = clientIp(req);
+  if (buckets.size > MAX_BUCKETS) evictExpired(now, windowMs);
   const entry = buckets.get(ip);
   if (!entry || now - entry.start >= windowMs) {
     buckets.set(ip, { start: now, count: 1 });

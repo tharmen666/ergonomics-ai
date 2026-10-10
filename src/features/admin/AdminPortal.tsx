@@ -13,32 +13,32 @@ export const AdminPortal = () => {
 
     const allEmployees: Record<string, { name: string; dept: string; score: string; status: string; trend: string; escalation?: string }[]> = {
         'COMP-001': [
-            { name: 'Sarah Jenkins', dept: 'Marketing', score: '98%', status: 'Compliant', trend: 'up' },
-            { name: 'Mike Ross', dept: 'Engineering', score: '65%', status: 'Risk Alert', trend: 'down', escalation: 'Supervisor Notified' },
-            { name: 'Jessica Pearson', dept: 'Legal', score: '100%', status: 'Compliant', trend: 'stable' },
-            { name: 'Harvey Specter', dept: 'Legal', score: '88%', status: 'Pending Review', trend: 'up' },
+            { name: 'Thandi Mokoena', dept: 'Marketing', score: '98%', status: 'Compliant', trend: 'up' },
+            { name: 'Sipho Ndlovu', dept: 'Engineering', score: '65%', status: 'Risk Alert', trend: 'down', escalation: 'Supervisor Notified' },
+            { name: 'Naledi Khumalo', dept: 'Legal', score: '100%', status: 'Compliant', trend: 'stable' },
+            { name: 'Pieter Nel', dept: 'Legal', score: '88%', status: 'Pending Review', trend: 'up' },
         ],
         'COMP-002': [
-            { name: 'Louis Litt', dept: 'Finance', score: '42%', status: 'Liability', trend: 'down', escalation: 'CEO ESCALATED' },
-            { name: 'Rachel Zane', dept: 'Operations', score: '95%', status: 'Compliant', trend: 'up' },
-            { name: 'Harold Gunderson', dept: 'Logistics', score: '58%', status: 'Risk Alert', trend: 'down', escalation: 'Supervisor Notified' },
+            { name: 'Rajesh Naidoo', dept: 'Finance', score: '42%', status: 'Liability', trend: 'down', escalation: 'CEO ESCALATED' },
+            { name: 'Zanele Dube', dept: 'Operations', score: '95%', status: 'Compliant', trend: 'up' },
+            { name: 'Hendrik Smit', dept: 'Logistics', score: '58%', status: 'Risk Alert', trend: 'down', escalation: 'Supervisor Notified' },
         ],
         'COMP-003': [
-            { name: 'Katrina Bennett', dept: 'Compliance', score: '99%', status: 'Compliant', trend: 'stable' },
-            { name: 'Donna Paulsen', dept: 'Administration', score: '96%', status: 'Compliant', trend: 'up' },
+            { name: 'Kerry-Ann Adams', dept: 'Compliance', score: '99%', status: 'Compliant', trend: 'stable' },
+            { name: 'Lerato Mahlangu', dept: 'Administration', score: '96%', status: 'Compliant', trend: 'up' },
         ]
     };
 
     const allSupervisors = {
         'COMP-001': [
-            { name: 'Robert Zane', team: 'Legal', compliance: 95, status: 'Elite' },
-            { name: 'Gretchen Bodinski', team: 'Operations', compliance: 88, status: 'Steady' },
+            { name: 'Johan Botha', team: 'Legal', compliance: 95, status: 'Elite' },
+            { name: 'Grace Mthembu', team: 'Operations', compliance: 88, status: 'Steady' },
         ],
         'COMP-002': [
-            { name: 'Sheila Sazs', team: 'Finance', compliance: 62, status: 'At Risk' },
+            { name: 'Ayesha Patel', team: 'Finance', compliance: 62, status: 'At Risk' },
         ],
         'COMP-003': [
-            { name: 'Benjamin', team: 'IT Systems', compliance: 91, status: 'Elite' },
+            { name: 'Bongani Zulu', team: 'IT Systems', compliance: 91, status: 'Elite' },
         ]
     };
 

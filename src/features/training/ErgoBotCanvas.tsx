@@ -4,22 +4,22 @@ import { Float } from '@react-three/drei';
 import * as THREE from 'three';
 
 // Shared material instantiations outside render cycle to avoid GC thrashing
-const botMaterial = new THREE.MeshStandardMaterial({
+const botMaterial = new (THREE as any).MeshStandardMaterial({
     color: "#F9A825",
     roughness: 0.3,
     metalness: 0.8
 });
-const botJointMaterial = new THREE.MeshStandardMaterial({
+const botJointMaterial = new (THREE as any).MeshStandardMaterial({
     color: "#003D5C",
     roughness: 0.5,
     metalness: 0.5
 });
 
 const ErgoBot = ({ isPlaying }: { isPlaying: boolean }) => {
-    const groupRef = useRef<THREE.Group>(null);
-    const leftArmRef = useRef<THREE.Group>(null);
-    const rightArmRef = useRef<THREE.Group>(null);
-    const headRef = useRef<THREE.Mesh>(null);
+    const groupRef = useRef<any>(null);
+    const leftArmRef = useRef<any>(null);
+    const rightArmRef = useRef<any>(null);
+    const headRef = useRef<any>(null);
 
     useFrame(({ clock }) => {
         if (!isPlaying || !leftArmRef.current || !rightArmRef.current || !headRef.current) {

@@ -1,5 +1,8 @@
 import { generateStatutoryDocument } from '../src/api/compliance.js';
+import { randomUUID } from 'node:crypto';
 import { applyCors, requireToken, rateLimit } from './_lib/security.js';
+
+const newRequestId = () => `req-${randomUUID()}`;
 
 const VALID_TASK_TYPES = ['HIRA', 'SWP', 'Incident Root Cause', 'Toolbox Talk'];
 
@@ -29,8 +32,19 @@ export default async function handler(req, res) {
   if (req.method === 'POST') {
     // Each POST calls the paid AI model: cap it per client IP (10 per 10 minutes)
     if (!rateLimit(req, res, { limit: 10, windowMs: 10 * 60 * 1000 })) return;
+    let body;
     try {
-      const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+      body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+    } catch {
+      res.status(400).json({ error: 'Bad Request: body must be valid JSON' });
+      return;
+    }
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      res.status(400).json({ error: 'Bad Request: body must be a JSON object' });
+      return;
+    }
+    const requestId = newRequestId();
+    try {
       const { taskType, siteContext, hazards } = body;
 
       // Input validation
@@ -41,36 +55,52 @@ export default async function handler(req, res) {
         return;
       }
 
-      if (siteContext && typeof siteContext === 'string' && siteContext.length > 200) {
+      if (siteContext !== undefined && siteContext !== null && typeof siteContext !== 'string') {
+        res.status(400).json({ error: 'Bad Request: siteContext must be a string' });
+        return;
+      }
+      if (hazards !== undefined && hazards !== null && typeof hazards !== 'string') {
+        res.status(400).json({ error: 'Bad Request: hazards must be a string' });
+        return;
+      }
+
+      if (siteContext && siteContext.length > 200) {
         res.status(400).json({
           error: 'Bad Request: siteContext exceeds maximum allowed length of 200 characters'
         });
         return;
       }
 
-      if (hazards && typeof hazards === 'string' && hazards.length > 2000) {
+      if (hazards && hazards.length > 2000) {
         res.status(400).json({
           error: 'Bad Request: hazards exceeds maximum allowed length of 2000 characters'
         });
         return;
       }
 
-      const result = await generateStatutoryDocument(body);
+      // Only the validated fields reach the generator - never the raw body.
+      const result = await generateStatutoryDocument({
+        taskType,
+        siteContext: siteContext || undefined,
+        hazards: hazards || undefined
+      });
       if (!result.success && result.error && result.error.includes('Service Unavailable')) {
+        console.error(`[API /api/compliance] ${requestId} upstream unavailable:`, result.error);
         res.status(503).json({
           success: false,
           error: 'Service Unavailable: upstream AI compliance model is currently unavailable',
-          details: result.error
+          requestId
         });
         return;
       }
       res.status(200).json(result);
     } catch (err) {
-      console.error('[API /api/compliance] Error processing request:', err);
+      // Details stay in the server log; the client only gets a reference it can quote.
+      console.error(`[API /api/compliance] ${requestId} error processing request:`, err);
       res.status(500).json({
         success: false,
-        error: 'Failed to generate statutory compliance document',
-        details: err.message
+        error: 'Failed to generate compliance document',
+        requestId
       });
     }
   } else {

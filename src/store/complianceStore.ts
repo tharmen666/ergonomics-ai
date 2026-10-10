@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import { useTenantStore } from './tenantStore';
+import { useTenantStore, recordCompanyId, APPOINTEE_NOT_ASSIGNED, DEFAULT_MANUAL_HANDLING_GUIDANCE_KG } from './tenantStore';
+import { newId } from '../utils/ids';
 import { 
     StatutoryComplianceMetadata, 
     StatutoryRetentionPeriod, 
@@ -106,44 +107,114 @@ export const parseMaxWeightKg = (text: string): number => {
     return max;
 };
 
+// ---------------------------------------------------------------------------------------------
+// Free-text helpers (Phase 1.4): negation, mechanical-handling exclusion, cold exposure context
+// ---------------------------------------------------------------------------------------------
+
+const NEGATION_RE = /\b(?:no|not|without|none|never|zero|nil|n\/a|free of|isn't|wasn't|aren't|don't|doesn't|didn't)\b/;
+
+/** True when a negation word appears shortly before `index` in the same clause ("no carcass handling"). */
+const isNegatedAt = (text: string, index: number): boolean => {
+    const before = text.slice(Math.max(0, index - 40), index);
+    const clause = before.split(/[.;!?\n,]/).pop() ?? '';
+    const lastWords = clause.trim().split(/\s+/).slice(-2).join(' ');
+    return NEGATION_RE.test(lastWords);
+};
+
+/** True when any term occurs at least once WITHOUT a negation just before it. */
+const hasUnnegatedTerm = (text: string, terms: string[]): boolean =>
+    terms.some((term) => {
+        let from = 0;
+        let i: number;
+        while ((i = text.indexOf(term, from)) !== -1) {
+            if (!isNegatedAt(text, i)) return true;
+            from = i + term.length;
+        }
+        return false;
+    });
+
+const MANUAL_HANDLING_RE = /\b(?:lift(?:s|ed|ing)?|carr(?:y|ies|ied|ying)|lower(?:s|ed|ing)?|push(?:es|ed|ing)?|pull(?:s|ed|ing)?|handl(?:e|es|ed|ing)|by hand|manual(?:ly)?|team lift|stack(?:s|ed|ing)?|unload(?:s|ed|ing)?|load(?:s|ed|ing)?)\b/;
+const MECHANICAL_HANDLING_RE = /\b(?:forklift|fork-lift|pallet jack|pallet truck|reach truck|hoist|crane|conveyor|vacuum lifter|scissor lift|stacker|electric pallet)s?\b/;
+
+/** Cold-environment words only count when the text also describes someone being exposed to them. */
+const COLD_PLACE_TERMS = ['cold room', 'cold-room', 'coldroom', 'freezer', 'chiller', 'blast freezer', 'cold store'];
+const COLD_DIRECT_TERMS = ['cold stress', 'thermal stress', 'sub-zero', 'sub zero', 'hypothermia', 'frostbite'];
+const COLD_EXPOSURE_RE = /\b(?:work(?:s|ed|ing)?|exposed|exposure|inside|enter(?:s|ed|ing)?|shift|hours?|minutes?|mins?|stack(?:s|ed|ing)?|pick(?:s|ed|ing)?|load(?:s|ed|ing)?|spend(?:s)?|spent)\b|-\s?\d+\s?°?\s?c\b|−\s?\d+/;
+
+export type PhysicalHazardCategory = 'manual_handling' | 'carcass_handling' | 'knife_deboning' | 'cold_stress';
+
+export interface HazardDetectionOptions {
+    /** Company manual-handling guidance threshold in kg (guidance, not a statutory limit). Default 25. */
+    guidanceKg?: number;
+    /** Categories a person explicitly confirmed (e.g. picked from a list). These always count. */
+    confirmedCategories?: PhysicalHazardCategory[];
+}
+
+/** Maps the explicit hazard-type keys used by the UI/API to confirmed categories. */
+export const HAZARD_TYPE_CATEGORY: Record<string, PhysicalHazardCategory | undefined> = {
+    carcass_handling: 'carcass_handling',
+    knife_boning: 'knife_deboning',
+    cold_room_stress: 'cold_stress',
+};
+
 /**
  * Deterministic Physical Hazard Evaluation Engine
  * 1. Physical Ergonomic & Thermal Hazard Risks -> HIGH RISK (priority action), never a legal BREACH.
  *    OMP referral is a *recommendation* under Regulation 8(1) of the Ergonomics Regulations, 2019.
  * 2. Statutory Legal Breaches are created ONLY through the explicit logStatutoryLegalBreach API.
  *    Free text can at most raise `suggestedStatutoryReview` for a human to confirm.
+ * 3. Free text is read conservatively: negated mentions ("no cold room work") do not count, weights
+ *    moved by machine ("forklift moves a 1 000 kg pallet") are not manual handling, and a cold-room
+ *    word only counts when the text describes someone being exposed to it.
+ * 4. The weight threshold is the COMPANY GUIDANCE figure (default 25 kg). The Ergonomics Regulations
+ *    are risk-assessment based and do not set a statutory lifting limit.
  */
-export const detectPhysicalStatutoryHazard = (text: string): { 
+export const detectPhysicalStatutoryHazard = (text: string, options: HazardDetectionOptions = {}): { 
     isPhysicalHighRisk: boolean; 
     isStatutoryBreach: false;
     suggestedStatutoryReview: boolean;
     hazardLabel: string;
+    categories: PhysicalHazardCategory[];
     statutoryMetadata: StatutoryComplianceMetadata 
 } => {
-    const lower = text.toLowerCase();
+    const lower = text.toLowerCase().replace(/_/g, ' ');
+    const guidanceKg = options.guidanceKg && options.guidanceKg > 0 ? options.guidanceKg : DEFAULT_MANUAL_HANDLING_GUIDANCE_KG;
+    const confirmed = new Set(options.confirmedCategories ?? []);
 
     // Free text never creates a legal breach. It can only suggest a human review
     // (e.g. a note saying "no SHE rep appointed on night shift").
     const suggestedStatutoryReview = /\b(?:no|missing|absent|without|lack of|failed to appoint)\s+(?:a\s+)?(?:section\s*17|she|health\s*(?:&|and)\s*safety)\s*(?:rep|representative|designation|appointment)\b/i.test(lower);
 
-    // Manual handling: HIGH RISK only for a parsed weight strictly greater than 25 kg.
+    // Manual handling: parsed weight strictly above the guidance threshold, not negated, and not
+    // moved by machine (a mechanical-handling cue with no manual-handling verb excludes it).
     const parsedWeight = parseMaxWeightKg(lower);
-    const isOver25kgManualHandling = parsedWeight > 25;
+    const weightNegated = /\b(?:no|not|never|without|zero)\s+(?:\w+\s+)?(?:lift|carr|handl|manual)/.test(lower);
+    const mechanicalOnly = MECHANICAL_HANDLING_RE.test(lower) && !MANUAL_HANDLING_RE.test(lower.replace(MECHANICAL_HANDLING_RE, ' '));
+    const isOverGuidanceManualHandling = confirmed.has('manual_handling')
+        || (parsedWeight > guidanceKg && !weightNegated && !mechanicalOnly);
 
-    const isCarcassHandling = lower.includes('carcass') || lower.includes('beef quarter') || lower.includes('hanging rail');
-    const isKnifeDeboning = lower.includes('deboning') || lower.includes('knife boning') || lower.includes('meat cutting') || lower.includes('band saw');
-    const isColdRoomStress = lower.includes('cold room') || lower.includes('cold-room') || lower.includes('freezer') || lower.includes('chiller') || lower.includes('thermal stress') || lower.includes('sub-zero') || lower.includes('cold stress');
+    const isCarcassHandling = confirmed.has('carcass_handling') || hasUnnegatedTerm(lower, ['carcass', 'beef quarter', 'beef side', 'hanging rail']);
+    const isKnifeDeboning = confirmed.has('knife_deboning') || hasUnnegatedTerm(lower, ['deboning', 'knife boning', 'meat cutting', 'band saw']);
+    const isColdRoomStress = confirmed.has('cold_stress')
+        || hasUnnegatedTerm(lower, COLD_DIRECT_TERMS)
+        || (hasUnnegatedTerm(lower, COLD_PLACE_TERMS) && COLD_EXPOSURE_RE.test(lower));
 
-    const isPhysicalHighRisk = isOver25kgManualHandling || isCarcassHandling || isKnifeDeboning || isColdRoomStress;
+    const categories: PhysicalHazardCategory[] = [];
+    if (isOverGuidanceManualHandling) categories.push('manual_handling');
+    if (isCarcassHandling) categories.push('carcass_handling');
+    if (isKnifeDeboning) categories.push('knife_deboning');
+    if (isColdRoomStress) categories.push('cold_stress');
+
+    const isPhysicalHighRisk = categories.length > 0;
 
     let hazardLabel = 'Physical Ergonomic Risk Factor';
     let citation = 'Ergonomics Regulations, 2019 (GN R1589, GG 42894 of 6 December 2019) Reg 6 & Reg 10(1)';
     let controls = 'Elimination -> Engineering -> Administrative -> PPE';
 
-    if (isOver25kgManualHandling) {
-        hazardLabel = `${HIGH_RISK_TAG}: Manual Handling > 25 kg`;
+    if (isOverGuidanceManualHandling) {
+        hazardLabel = `${HIGH_RISK_TAG}: Manual Handling > ${guidanceKg} kg (company guidance threshold - ergonomic risk assessment required)`;
         citation = 'Ergonomics Regulations, 2019 (GN R1589, GG 42894 of 6 December 2019) Reg 6, Reg 8(1), Reg 8(2) & Reg 10(1); OHS Act Sec 8(2)(b)';
-        controls = 'Elimination (pallet automation) -> Engineering (scissor lift / vacuum lifter; inspection logs retained 3 years under Regs 7 & 9) -> Administrative (2-person team lift > 25kg; employee training retained for tenure under Reg 3) -> PPE (steel-toe footwear)';
+        controls = `Elimination (pallet automation) -> Engineering (scissor lift / vacuum lifter; inspection logs retained 3 years under Regs 7 & 9) -> Administrative (2-person team lift above the ${guidanceKg} kg company guidance figure; employee training retained for tenure under Reg 3) -> PPE (steel-toe footwear)`;
     } else if (isCarcassHandling) {
         hazardLabel = `${HIGH_RISK_TAG}: Heavy Carcass Handling`;
         citation = 'Ergonomics Regulations, 2019 (GN R1589, GG 42894 of 6 December 2019) Reg 6, Reg 8(1), Reg 8(2) & Reg 10(1); GSR 13H (Housekeeping & Non-Slip Drainage)';
@@ -165,6 +236,7 @@ export const detectPhysicalStatutoryHazard = (text: string): {
         isStatutoryBreach: false,
         suggestedStatutoryReview,
         hazardLabel,
+        categories,
         statutoryMetadata: {
             retentionPeriod: 40,
             retentionCategory: isPhysicalHighRisk ? 'REG_8_2_MEDICAL_SURVEILLANCE_RECORD_40_YR' : 'REG_6_ERGONOMIC_RISK_ASSESSMENT_40_YR',
@@ -189,17 +261,17 @@ const initialCases = (): EmployeeCase[] => {
     const mikeCreated = new Date(now.getTime() - 22 * 1000).toISOString();
     const louisCreated = new Date(now.getTime() - 26 * 1000).toISOString();
     const sarahCreated = new Date(now.getTime() - 48 * 1000).toISOString();
-    const harveyCreated = new Date(now.getTime() - 5 * 1000).toISOString();
+    const pieterCreated = new Date(now.getTime() - 5 * 1000).toISOString();
 
     return [
         {
             id: 'case-1',
             companyId: 'COMP-001',
-            employeeName: 'Sarah Jenkins',
+            employeeName: 'Thandi Mokoena',
             dept: 'Marketing',
             score: 98,
             status: 'COMPLIANT',
-            managerName: 'Robert Zane',
+            managerName: 'Johan Botha (demo)',
             hazardTrigger: 'Ergonomic Desk Adjustment & Monitor Arm Calibration',
             createdAt: sarahCreated,
             timeframeHours: 72,
@@ -220,11 +292,11 @@ const initialCases = (): EmployeeCase[] => {
         {
             id: 'case-2',
             companyId: 'COMP-001',
-            employeeName: 'Mike Ross',
+            employeeName: 'Sipho Ndlovu',
             dept: 'Engineering',
             score: 65,
             status: 'RISK_ALERT',
-            managerName: 'Harvey Specter',
+            managerName: 'Pieter van Wyk (demo)',
             hazardTrigger: 'Kitchen Counter Workspace (typing on high surface, shoulder shrugging)',
             createdAt: mikeCreated,
             timeframeHours: 24,
@@ -245,11 +317,11 @@ const initialCases = (): EmployeeCase[] => {
         {
             id: 'case-3',
             companyId: 'COMP-002',
-            employeeName: 'Louis Litt',
+            employeeName: 'Rajesh Naidoo',
             dept: 'Finance',
             score: 30,
             status: 'RISK_ALERT', // Physical postural hazard: High Risk (Priority Action), NOT Statutory Breach
-            managerName: 'Sheila Sazs',
+            managerName: 'Ayesha Patel (demo)',
             hazardTrigger: `[${HIGH_RISK_TAG}] Working from Bed (severe pelvic tilt >=120°, cervical forward tilt >=30°)`,
             createdAt: louisCreated,
             timeframeHours: 24,
@@ -271,13 +343,13 @@ const initialCases = (): EmployeeCase[] => {
         {
             id: 'case-4',
             companyId: 'COMP-001',
-            employeeName: 'Harvey Specter',
+            employeeName: 'Pieter Nel',
             dept: 'Legal',
             score: 88,
             status: 'RISK_ALERT',
-            managerName: 'Jessica Pearson',
+            managerName: 'Naledi Khumalo',
             hazardTrigger: 'Monitor Height mismatch & continuous cervical extension',
-            createdAt: harveyCreated,
+            createdAt: pieterCreated,
             timeframeHours: 72,
             escalationState: 'routed_to_manager',
             statutoryMetadata: {
@@ -328,6 +400,11 @@ export const useComplianceStore = create<ComplianceState>((set, get) => {
         return { governance, efficiency, accountability, resilience };
     };
 
+    // Tenant-scoped values for new records. No session -> NO_TENANT_SESSION, never a real tenant.
+    const tenantCompanyId = () => recordCompanyId(useTenantStore.getState().companyId);
+    const tenantAppointee = () => useTenantStore.getState().getCurrentTenant()?.ohsAppointee || APPOINTEE_NOT_ASSIGNED;
+    const tenantGuidanceKg = () => useTenantStore.getState().getCurrentTenant()?.manualHandlingGuidanceKg || DEFAULT_MANUAL_HANDLING_GUIDANCE_KG;
+
     // NOTE: the store no longer listens to its own NON_COMPLIANCE_TRIGGER event.
     // Every action writes its own log entry; the event is only for other listeners.
 
@@ -348,13 +425,13 @@ export const useComplianceStore = create<ComplianceState>((set, get) => {
             const newExs = [...state.exceptions, exception];
             
             const newCase: EmployeeCase = {
-                id: `case-${Date.now()}`,
-                companyId: useTenantStore.getState().companyId || 'COMP-001',
+                id: newId('case'),
+                companyId: tenantCompanyId(),
                 employeeName: 'Self (Remote User)',
                 dept: 'Engineering',
                 score: 70,
                 status: 'RISK_ALERT',
-                managerName: 'Harvey Specter',
+                managerName: tenantAppointee(),
                 hazardTrigger: `Workspace Exception: ${exception}`,
                 createdAt: new Date().toISOString(),
                 timeframeHours: 24,
@@ -399,7 +476,7 @@ export const useComplianceStore = create<ComplianceState>((set, get) => {
 
         logHazardEvent: (type, description, severity = 'RISK_ALERT') => {
             const state = get();
-            const evalResult = detectPhysicalStatutoryHazard(description + ' ' + type);
+            const evalResult = detectPhysicalStatutoryHazard(description + ' ' + type, { guidanceKg: tenantGuidanceKg() });
             
             const finalStatus: ComplianceStatus = evalResult.isStatutoryBreach 
                 ? 'BREACH' 
@@ -414,13 +491,13 @@ export const useComplianceStore = create<ComplianceState>((set, get) => {
                     : `[Nelly Engine ${type.toUpperCase()}] ${description}`);
 
             const newCase: EmployeeCase = {
-                id: `case-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-                companyId: useTenantStore.getState().companyId || 'COMP-001',
+                id: newId('case'),
+                companyId: tenantCompanyId(),
                 employeeName: 'Self (ErgoSafe Telemetry)',
                 dept: evalResult.isPhysicalHighRisk ? 'Operations & Processing' : 'Workstation Ergonomics',
                 score: finalScore,
                 status: finalStatus,
-                managerName: 'Harvey Specter',
+                managerName: tenantAppointee(),
                 hazardTrigger: formattedTrigger,
                 createdAt: new Date().toISOString(),
                 timeframeHours: evalResult.isStatutoryBreach ? 24 : 72,
@@ -446,8 +523,7 @@ export const useComplianceStore = create<ComplianceState>((set, get) => {
             set({
                 cases: newCases,
                 gear: newGear,
-                status: evalResult.isStatutoryBreach ? 'BREACH' : state.status,
-                requiresEscalation: true,
+                ...summariseStatus(newCases),
                 logs: [newLog, ...state.logs]
             });
 
@@ -462,58 +538,67 @@ export const useComplianceStore = create<ComplianceState>((set, get) => {
         },
 
         evaluateStatutoryPhysicalHazard: (hazardType, contextDetails, employeeName = 'Floor Operator', dept = 'Processing & Logistics') => {
-            const evalResult = detectPhysicalStatutoryHazard(`${hazardType} ${contextDetails}`);
-            
-            // Physical risk thresholds are HIGH RISK (priority action), never a statutory BREACH
-            const formattedTrigger = evalResult.isPhysicalHighRisk
+            const confirmedCategory = HAZARD_TYPE_CATEGORY[hazardType];
+            const evalResult = detectPhysicalStatutoryHazard(`${hazardType} ${contextDetails}`, {
+                guidanceKg: tenantGuidanceKg(),
+                confirmedCategories: confirmedCategory ? [confirmedCategory] : []
+            });
+            const highRisk = evalResult.isPhysicalHighRisk;
+            const meta = evalResult.statutoryMetadata;
+
+            // Everything below derives from evalResult: a low-risk finding is logged for review,
+            // it is NOT tagged HIGH RISK, NOT referred to an OMP and NOT escalated to a manager.
+            const formattedTrigger = highRisk
                 ? `[${evalResult.hazardLabel}] ${contextDetails}`
-                : `[${HIGH_RISK_TAG}] ${evalResult.hazardLabel}: ${contextDetails}`;
+                : `[Risk review] ${evalResult.hazardLabel}: ${contextDetails}`;
+            const score = highRisk ? 30 : 68;
 
             const caseRecord: EmployeeCase = {
-                id: `statutory-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-                companyId: useTenantStore.getState().companyId || 'COMP-001',
+                id: newId('statutory'),
+                companyId: tenantCompanyId(),
                 employeeName,
                 dept,
-                score: 30, // High Risk score
-                status: 'RISK_ALERT', // Physical hazard is classified as RISK_ALERT / High Risk, NOT statutory BREACH
-                managerName: 'Harvey Specter (OHS Sec 16.2 Appointee)',
+                score,
+                status: 'RISK_ALERT', // physical hazards are risks to act on, never a statutory BREACH
+                managerName: tenantAppointee(),
                 hazardTrigger: formattedTrigger,
                 createdAt: new Date().toISOString(),
                 timeframeHours: HIGH_RISK_SLA_HOURS,
-                escalationState: 'routed_to_manager',
-                statutoryMetadata: evalResult.statutoryMetadata
+                escalationState: highRisk ? 'routed_to_manager' : 'triggered',
+                statutoryMetadata: meta
             };
 
             const state = get();
             const newCases = [caseRecord, ...state.cases];
-            const newGear = calculateGEARMetrics(newCases);
             const newLog: ComplianceLog = {
                 timestamp: new Date().toISOString(),
-                score: 30,
+                score,
                 threshold: 80,
                 reason: formattedTrigger,
-                retentionPeriod: 40,
-                retentionCategory: 'REG_8_2_MEDICAL_SURVEILLANCE_RECORD_40_YR',
-                requiresOMPReferral: true,
-                ompReferralStatus: OMP_REFERRAL_STATUTORY_STRING,
+                retentionPeriod: meta.retentionPeriod,
+                retentionCategory: meta.retentionCategory,
+                requiresOMPReferral: meta.requiresOMPReferral,
+                ompReferralStatus: meta.ompReferralStatus,
                 isStatutoryBreach: false
             };
 
             set({
                 cases: newCases,
-                gear: newGear,
-                requiresEscalation: true,
+                gear: calculateGEARMetrics(newCases),
+                ...summariseStatus(newCases),
                 logs: [newLog, ...state.logs]
             });
 
-            fireEvent('NON_COMPLIANCE_TRIGGER', {
-                score: 30,
-                threshold: 80,
-                timestamp: newLog.timestamp,
-                reason: newLog.reason
-            });
+            if (highRisk) {
+                fireEvent('NON_COMPLIANCE_TRIGGER', {
+                    score,
+                    threshold: 80,
+                    timestamp: newLog.timestamp,
+                    reason: newLog.reason
+                });
+            }
 
-            return { triggered: true, caseRecord };
+            return { triggered: highRisk, caseRecord };
         },
 
         logStatutoryLegalBreach: (breachType, details, responsiblePerson = 'Appointed Section 16(2) Manager') => {
@@ -538,8 +623,8 @@ export const useComplianceStore = create<ComplianceState>((set, get) => {
             }
 
             const caseRecord: EmployeeCase = {
-                id: `breach-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-                companyId: useTenantStore.getState().companyId || 'COMP-001',
+                id: newId('breach'),
+                companyId: tenantCompanyId(),
                 employeeName: responsiblePerson,
                 dept: 'Executive Compliance & Legal',
                 score: 15,
@@ -600,8 +685,8 @@ export const useComplianceStore = create<ComplianceState>((set, get) => {
             const timestamp = new Date().toISOString();
 
             const newCase: EmployeeCase = {
-                id: `train-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-                companyId: useTenantStore.getState().companyId || 'COMP-001',
+                id: newId('train'),
+                companyId: tenantCompanyId(),
                 employeeName,
                 dept: 'Ergonomics Training & Competency',
                 score: competencyVerified ? 100 : 75,
@@ -652,13 +737,13 @@ export const useComplianceStore = create<ComplianceState>((set, get) => {
             const userId = useTenantStore.getState().userId || 'EMP-7749';
 
             const newCase: EmployeeCase = {
-                id: `bbs-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-                companyId: useTenantStore.getState().companyId || 'COMP-001',
+                id: newId('bbs'),
+                companyId: tenantCompanyId(),
                 employeeName: `Self (${userId})`,
                 dept: 'Behavior-Based Safety (BBS)',
                 score: 98,
                 status: 'COMPLIANT',
-                managerName: 'Harvey Specter',
+                managerName: tenantAppointee(),
                 hazardTrigger: `Verified BBS Micro-Intervention: Resolved [${hazardResolved}] via ${durationSeconds}s ${type}`,
                 createdAt: timestamp,
                 timeframeHours: 72,
@@ -699,14 +784,14 @@ export const useComplianceStore = create<ComplianceState>((set, get) => {
 
         exportStatutoryDocToAuditLog: (docType, siteContext, previewText, reviewerName = 'Competent Person (Appointed Sec 16.2)', reviewerRole = 'Statutory Risk Assessor') => set((state) => {
             const timestamp = new Date().toISOString();
-            const id = `statutory-doc-${Date.now()}`;
+            const id = newId('statutory-doc');
             
             // 40-year retention under Ergonomics Regulations Regulation 10(1)
             const retentionPeriod: StatutoryRetentionPeriod = 40;
 
             const newCase: EmployeeCase = {
                 id,
-                companyId: useTenantStore.getState().companyId || 'COMP-001',
+                companyId: tenantCompanyId(),
                 employeeName: `Document Compilation: ${docType}`,
                 dept: 'Statutory OHS Assurance',
                 score: 100,
@@ -864,15 +949,15 @@ export const useComplianceStore = create<ComplianceState>((set, get) => {
             }
 
             if (triggered) {
-                const evalResult = detectPhysicalStatutoryHazard(reason);
+                const evalResult = detectPhysicalStatutoryHazard(reason, { guidanceKg: tenantGuidanceKg() });
                 const newCase: EmployeeCase = {
-                    id: `case-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-                    companyId: useTenantStore.getState().companyId || 'COMP-001',
+                    id: newId('case'),
+                    companyId: tenantCompanyId(),
                     employeeName: 'Self (Remote User)',
                     dept: 'Engineering',
                     score: 30, // High Risk score
                     status: 'RISK_ALERT', // Physical postural hazard: High Risk (Priority Action), NOT statutory BREACH
-                    managerName: setupName === 'Bed' ? 'Sheila Sazs' : 'Harvey Specter',
+                    managerName: tenantAppointee(),
                     hazardTrigger: `[${HIGH_RISK_TAG}] ${reason}`,
                     createdAt: new Date().toISOString(),
                     timeframeHours: 72,

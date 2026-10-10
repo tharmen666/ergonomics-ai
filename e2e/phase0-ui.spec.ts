@@ -34,8 +34,10 @@ test.describe('PHASE 0 UI: Consent & Emergency UI Verification', () => {
 
         await expect(page.getByText('Critical Escalation Active')).toBeVisible();
         await expect(page.locator('a[href="tel:112"]').first()).toBeVisible();
-        await expect(page.locator('a[href="tel:10177"]')).toBeVisible();
-        await expect(page.locator('a[href="tel:10111"]')).toBeVisible();
+        // 10177 can appear twice (big call button + list) by design
+        await expect(page.locator('a[href="tel:10177"]').first()).toBeVisible();
+        await expect(page.locator('a[href="tel:10111"]').first()).toBeVisible();
+        await expect(page.getByRole('alertdialog')).toBeVisible();
 
         const hrefs = await page.locator('a[href^="tel:"]').evaluateAll(els => els.map(e => e.getAttribute('href')));
         // The footer may show the business contact; the emergency panel must not

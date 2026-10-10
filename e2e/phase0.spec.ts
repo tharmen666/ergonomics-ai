@@ -25,8 +25,13 @@ test.describe('PHASE 0: Life-Safety & Correctness Verification Suite', () => {
         expect(numbers).not.toContain('+27622655708');
         expect(numbers).not.toContain('27622655708');
 
-        // Assembly point fallback
-        expect(tenant?.assemblyPoint).toBe('Follow your site evacuation plan');
+        // Assembly point fallback (same rule the emergency panel uses). With no session there is no
+        // tenant at all - the app must never borrow another company's settings.
+        expect(tenant?.assemblyPoint || 'Follow your site evacuation plan').toBe('Follow your site evacuation plan');
+
+        useTenantStore.setState({ companyId: 'COMP-001' });
+        expect(useTenantStore.getState().getCurrentTenant()?.assemblyPoint).toBe('Follow your site evacuation plan');
+        useTenantStore.setState({ companyId: null });
     });
 
     test('0.2 Fatigue Store: failCognitiveHandshake leaves cognitiveHandshakePassed === false', () => {

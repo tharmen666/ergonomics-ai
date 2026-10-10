@@ -19,7 +19,19 @@ export interface CompanyTenant {
     branchCode?: string;
     companyRegistration?: string;
     vatNumber?: string;
+    /** Name of the person appointed under OHS Act s16(2). Leave unset until the client confirms it. */
+    ohsAppointee?: string;
+    /** Company manual-handling guidance threshold in kg (a guidance figure, not a statutory limit). Default 25. */
+    manualHandlingGuidanceKg?: number;
 }
+
+/** Shown wherever a s16(2) appointee is needed but the tenant has not configured one. */
+export const APPOINTEE_NOT_ASSIGNED = 's16(2) appointee not assigned';
+
+/** companyId stamped on records created with no tenant session, so they never merge into a real tenant's data. */
+export const NO_TENANT_ID = 'NO_TENANT_SESSION';
+
+export const DEFAULT_MANUAL_HANDLING_GUIDANCE_KG = 25;
 
 export const SA_PUBLIC_EMERGENCY_CONTACTS: EmergencyContact[] = [
     { label: 'Emergency (Mobile)', number: '112' },
@@ -56,6 +68,9 @@ interface TenantState {
     getCurrentTenant: () => CompanyTenant | undefined;
 }
 
+/** companyId to stamp on a new record: the signed-in tenant, or NO_TENANT_ID (never a real tenant). */
+export const recordCompanyId = (companyId: string | null | undefined): string => companyId || NO_TENANT_ID;
+
 const DEFAULT_COMPANIES: CompanyTenant[] = [
     { 
         id: 'COMP-ODX-01', 
@@ -71,7 +86,8 @@ const DEFAULT_COMPANIES: CompanyTenant[] = [
         activeSeats: 12,
         emergencyContacts: SA_PUBLIC_EMERGENCY_CONTACTS,
         emergencyContactNumber: '112',
-        assemblyPoint: 'Follow your site evacuation plan'
+        assemblyPoint: 'Follow your site evacuation plan',
+        ohsAppointee: 'Pieter van Wyk (demo)'
     },
     { 
         id: 'COMP-002', 
@@ -79,7 +95,8 @@ const DEFAULT_COMPANIES: CompanyTenant[] = [
         activeSeats: 45,
         emergencyContacts: SA_PUBLIC_EMERGENCY_CONTACTS,
         emergencyContactNumber: '112',
-        assemblyPoint: 'Follow your site evacuation plan'
+        assemblyPoint: 'Follow your site evacuation plan',
+        ohsAppointee: 'Ayesha Patel (demo)'
     },
     { 
         id: 'COMP-003', 
@@ -87,7 +104,8 @@ const DEFAULT_COMPANIES: CompanyTenant[] = [
         activeSeats: 8,
         emergencyContacts: SA_PUBLIC_EMERGENCY_CONTACTS,
         emergencyContactNumber: '112',
-        assemblyPoint: 'Follow your site evacuation plan'
+        assemblyPoint: 'Follow your site evacuation plan',
+        ohsAppointee: 'Johan Botha (demo)'
     },
 ];
 
@@ -209,7 +227,9 @@ export const useTenantStore = create<TenantState>()(
 
             getCurrentTenant: () => {
                 const state = get();
-                return state.companies.find(c => c.id === state.companyId) || state.companies[0];
+                // No session -> no tenant. Never fall back to another company's settings.
+                if (!state.companyId) return undefined;
+                return state.companies.find(c => c.id === state.companyId);
             },
         }),
         {

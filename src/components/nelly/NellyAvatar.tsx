@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { reportsEmergency } from '../../utils/emergencyIntent';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNellyStore } from '../../store/nellyStore';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
@@ -55,12 +56,10 @@ export const NellyAvatar = () => {
 
         const lowCase = userInput.toLowerCase();
         addLog('User', userInput);
-
-        const emergencyKeywords = ['severe pain', 'fainting', 'injury', 'accident'];
         const firstAidKeywords = ['first aid', 'first_aid', 'basic_first_aid_training_nsh', 'bleeding'];
         const symptomKeywords = ['tingling', 'numbness', 'pins and needles', 'sharp pain', 'burning'];
         
-        const isEmerg = emergencyKeywords.some(word => lowCase.includes(word));
+        const isEmerg = reportsEmergency(lowCase);
         const isFirstAid = firstAidKeywords.some(word => lowCase.includes(word));
         const isSymptom = symptomKeywords.some(word => lowCase.includes(word));
         const isNeckPain = lowCase.includes('neck pain') || lowCase.includes('cervical') || lowCase.includes('neck');
