@@ -43,3 +43,16 @@ vite.config.ts.timestamp-*.mjs
 # Playwright output
 test-results/
 playwright-report/
+
+# Audit dumps, scratch work and local tooling (removed from Git at lock-down)
+CLAUDE_AUDIT_PAYLOAD*.xml
+CLAUDE_AUDIT_PROMPT.md
+CLAUDE_AUDIT_REPORT.md
+*_AUDIT_BUNDLE*
+scratch/
+*.db
+BEAUTY_SALON_OHS_MASTER_FILE.pdf
+LOCK_LOG.txt
+LOCK_ERGOSAFE.bat
+lock_ergosafe.ps1
+_lock_patch/
