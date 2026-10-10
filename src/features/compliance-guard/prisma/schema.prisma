@@ -1,0 +1,63 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Document {
+  id           String   @id @default(cuid())
+  status       String   @default("draft")
+  version      Int      @default(1)
+  contentHash  String
+  content      String   // Serialized JSON of DocumentContent
+  intake       String   // Serialized JSON of SiteIntake
+  reviewerName String?
+  reviewerBody String?
+  reviewerRegNo String?
+  verifiedOn   String?
+  seal         String?
+  history      String   @default("[]") // Serialized JSON array of AuditEvent
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Order {
+  id               String   @id @default(cuid())
+  ref              String   @unique
+  gatewayPaymentId String?  @unique
+  amountCents      Int
+  status           String   @default("pending") // pending | paid | failed | refunded
+  docId            String
+  email            String
+  clientName       String?
+  clientAddress    String?
+  paidAt           DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  invoice          Invoice?
+}
+
+model Invoice {
+  id        String   @id @default(cuid())
+  number    String   @unique // INV-YYYY-NNNNNN
+  orderId   String   @unique
+  data      String   // Serialized JSON of InvoiceData
+  issuedAt  DateTime @default(now())
+  createdAt DateTime @default(now())
+  order     Order    @relation(fields: [orderId], references: [id])
+}
+
+model InvoiceCounter {
+  year       Int @id
+  lastNumber Int @default(0)
+}
+
+model DownloadUse {
+  jti       String   @id
+  uses      Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
