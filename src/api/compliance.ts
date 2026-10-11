@@ -96,7 +96,7 @@ Ensure clear headers, statutory reference citations, an initial risk rating sect
       clearTimeout(timeoutId);
 
       if (response.ok) {
-        const data = await response.json();
+        const data = (await response.json()) as any;
         const contentBlock = data.content?.[0];
         if (contentBlock && contentBlock.type === 'text' && contentBlock.text) {
           return {
