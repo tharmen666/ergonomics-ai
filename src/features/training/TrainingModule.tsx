@@ -23,9 +23,12 @@ const localisedStepText = (step: { en: string } & Partial<Record<Language, strin
 const ErgoBotCanvas = lazy(() => import('./ErgoBotCanvas'));
 
 export const TrainingModule = ({ id, title, description, duration, onClose }: TrainingModuleProps) => {
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [voiceEnabled, setVoiceEnabled] = useState(true);
-    const [currentStepIdx, setCurrentStepIdx] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(true);
+    const [isTtsActive, setIsTtsActive] = useState(true);
+    const [currentStepIndex, setCurrentStepIndex] = useState(0);
+    const currentStepIdx = currentStepIndex; // Backwards compatibility alias
+    const voiceEnabled = isTtsActive; // Backwards compatibility alias
+    const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const { completeModule, language, setLanguage } = useNellyStore();
 
     useEffect(() => {
@@ -35,51 +38,140 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
         };
     }, []);
 
-
     // Get the course from our stabilized master data registry
-    const course = FRESH_OHS_PROJECT_REGISTRY[id];
+    const course = FRESH_OHS_PROJECT_REGISTRY[id] || FRESH_OHS_PROJECT_REGISTRY['CORPORATE_POSTURE'];
     const steps = course ? course.steps : [];
-    const currentStep = steps[currentStepIdx];
+    const currentStep = steps[currentStepIndex];
 
-    const speakCurrentInstruction = (step = currentStep) => {
+    const speakCurrentInstruction = (step = steps[currentStepIndex]) => {
         if (!step) return;
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
         const stepText = localisedStepText(step, language);
-        speak(`Step ${step.step}: ${step.title}. ${stepText}`, language);
+        const utterance = speak(`Step ${step.step}: ${step.title}. ${stepText}`, language);
+        if (utterance) {
+            utteranceRef.current = utterance;
+            if (typeof window !== 'undefined') {
+                (window as any).__activeUtterance = utterance;
+            }
+        }
     };
 
+    // Modal Cleanup: Immediately cancel speech on unmount
     useEffect(() => {
         return () => {
+            if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
             stopSpeaking();
+            utteranceRef.current = null;
+            if (typeof window !== 'undefined') {
+                (window as any).__activeUtterance = null;
+            }
         };
     }, [id]);
 
+    // Step-by-Step Narration Sync:
+    // Keyed to [currentStepIndex, isTtsActive] so changing steps automatically cancels
+    // any pending speech and immediately narrates newly active step.
+    useEffect(() => {
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
+
+        if (!isTtsActive || !currentStep) {
+            return;
+        }
+
+        const stepText = localisedStepText(currentStep, language);
+        const utterance = speak(`Step ${currentStep.step}: ${currentStep.title}. ${stepText}`, language);
+        if (utterance) {
+            utteranceRef.current = utterance;
+            if (typeof window !== 'undefined') {
+                (window as any).__activeUtterance = utterance;
+            }
+        }
+    }, [currentStepIndex, isTtsActive]);
+
     const handleTogglePlay = () => {
-        const nextIsPlaying = !isPlaying;
-        setIsPlaying(nextIsPlaying);
-        if (nextIsPlaying && voiceEnabled) {
-            speakCurrentInstruction();
-        } else if (!nextIsPlaying) {
+        if (isPlaying) {
+            // User toggles STOP GUIDANCE OFF
+            setIsPlaying(false);
+            setIsTtsActive(false);
+            if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
             stopSpeaking();
+            utteranceRef.current = null;
+            if (typeof window !== 'undefined') {
+                (window as any).__activeUtterance = null;
+            }
+        } else {
+            // User toggles ON
+            setIsPlaying(true);
+            setIsTtsActive(true);
+        }
+    };
+
+    const handleToggleTts = () => {
+        const nextState = !isTtsActive;
+        setIsTtsActive(nextState);
+        if (!nextState) {
+            // User toggles Nelly Active TTS Guidance OFF
+            setIsPlaying(false);
+            if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+            stopSpeaking();
+            utteranceRef.current = null;
+            if (typeof window !== 'undefined') {
+                (window as any).__activeUtterance = null;
+            }
+        } else {
+            setIsPlaying(true);
         }
     };
 
     const handleNext = () => {
-        if (currentStepIdx < steps.length - 1) {
-            const nextStepIdx = currentStepIdx + 1;
-            setCurrentStepIdx(nextStepIdx);
-            if (voiceEnabled) {
-                speakCurrentInstruction(steps[nextStepIdx]);
+        if (currentStepIndex < steps.length - 1) {
+            if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
             }
+            setCurrentStepIndex(prev => prev + 1);
         } else {
+            if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+            stopSpeaking();
+            utteranceRef.current = null;
+            if (typeof window !== 'undefined') {
+                (window as any).__activeUtterance = null;
+            }
             completeModule(id);
             onClose();
         }
     };
 
     const handlePrev = () => {
-        if (currentStepIdx > 0) {
-            setCurrentStepIdx(currentStepIdx - 1);
+        if (currentStepIndex > 0) {
+            if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+            setCurrentStepIndex(prev => prev - 1);
         }
+    };
+
+    const handleClose = () => {
+        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
+        stopSpeaking();
+        utteranceRef.current = null;
+        if (typeof window !== 'undefined') {
+            (window as any).__activeUtterance = null;
+        }
+        onClose();
     };
 
     return (
@@ -96,7 +188,7 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
             >
                 {/* Close Button */}
                 <button
-                    onClick={onClose}
+                    onClick={handleClose}
                     aria-label="Close"
                     className="absolute top-4 right-4 sm:top-6 sm:right-6 z-50 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white flex items-center justify-center cursor-pointer transition-all shadow-lg"
                 >
@@ -160,7 +252,7 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
                         {/* Step Display Area */}
                         {currentStep && (
                             <motion.div
-                                key={currentStepIdx}
+                                key={currentStepIndex}
                                 initial={{ opacity: 0, x: 20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0, x: -20 }}
@@ -190,11 +282,16 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
                                 <button
                                     key={idx}
                                     aria-label={`Jump to step ${idx + 1}`}
-                                    onClick={() => setCurrentStepIdx(idx)}
+                                    onClick={() => {
+                                        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+                                            window.speechSynthesis.cancel();
+                                        }
+                                        setCurrentStepIndex(idx);
+                                    }}
                                     className={`h-1.5 rounded-full transition-all flex-1 min-w-[12px] ${
-                                        idx === currentStepIdx 
+                                        idx === currentStepIndex 
                                             ? 'bg-ohs-orange shadow-[0_0_8px_#F9A825]' 
-                                            : idx < currentStepIdx 
+                                            : idx < currentStepIndex 
                                                 ? 'bg-ohs-green' 
                                                 : 'bg-white/10'
                                     }`}
@@ -208,7 +305,7 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
                         {/* Audio Guidance Feedback */}
                         <div className="flex items-center justify-between bg-white/5 p-3 sm:p-4 rounded-2xl border border-white/5 gap-2">
                             <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-                                {voiceEnabled ? <Volume2 className="text-ohs-green shrink-0" /> : <VolumeX className="text-gray-500 shrink-0" />}
+                                {isTtsActive ? <Volume2 className="text-ohs-green shrink-0" /> : <VolumeX className="text-gray-500 shrink-0" />}
                                 <div className="min-w-0">
                                     <span className="font-bold text-white text-xs sm:text-sm block truncate">Nelly Active TTS Guidance</span>
                                     <span className="text-[9px] sm:text-[10px] text-gray-400 font-medium block truncate">Automatic voice playback for localized pipelines</span>
@@ -216,16 +313,8 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
                             </div>
                             <button
                                 aria-label="Toggle Voice Guidance"
-                                onClick={() => {
-                                    const nextVoiceEnabled = !voiceEnabled;
-                                    setVoiceEnabled(nextVoiceEnabled);
-                                    if (nextVoiceEnabled) {
-                                        speakCurrentInstruction();
-                                    } else {
-                                        stopSpeaking();
-                                    }
-                                }}
-                                className={`w-12 h-6 rounded-full relative flex items-center transition-all p-0.5 shrink-0 ${voiceEnabled ? 'bg-ohs-green justify-end' : 'bg-white/20 justify-start'}`}
+                                onClick={handleToggleTts}
+                                className={`w-12 h-6 rounded-full relative flex items-center transition-all p-0.5 shrink-0 ${isTtsActive ? 'bg-ohs-green justify-end' : 'bg-white/20 justify-start'}`}
                             >
                                 <div className="w-5 h-5 rounded-full bg-white shadow-md transition-all" />
                             </button>
@@ -237,9 +326,9 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
                                 <button
                                     aria-label="Previous Step"
                                     onClick={handlePrev}
-                                    disabled={currentStepIdx === 0}
+                                    disabled={currentStepIndex === 0}
                                     className={`px-4 py-3 rounded-2xl border border-white/10 flex items-center justify-center transition-all flex-1 sm:flex-none ${
-                                        currentStepIdx === 0 
+                                        currentStepIndex === 0 
                                             ? 'opacity-40 cursor-not-allowed bg-transparent text-gray-500' 
                                             : 'bg-white/5 text-white hover:bg-white/10'
                                     }`}
@@ -271,7 +360,7 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
                                 onClick={handleNext}
                                 className="w-full sm:flex-[2] text-xs sm:text-sm py-3.5 flex items-center justify-center gap-2 bg-ohs-green text-ohs-navy hover:bg-green-400 shadow-ohs-green/20"
                             >
-                                {currentStepIdx === steps.length - 1 ? (
+                                {currentStepIndex === steps.length - 1 ? (
                                     <>
                                         <CheckCircle size={16} />
                                         COMPLETE SESSION

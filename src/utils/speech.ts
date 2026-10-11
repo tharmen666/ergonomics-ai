@@ -136,6 +136,13 @@ const findBestNeuralVoice = (targetLang: string, targetLocale: string): SpeechSy
     ) || voices.find(v => v.lang.toLowerCase().startsWith('en')) || null;
 };
 
+// Chrome TTS Garbage Collection Guard: module-level and window instance persistence
+let activeSpeechUtterance: SpeechSynthesisUtterance | null = null;
+if (typeof window !== 'undefined') {
+    (window as any).__activeUtterance = null;
+    (window as any).__activeSpeechUtterance = null;
+}
+
 /**
  * High-Fidelity Multilingual Speech Engine for Nelly AI Companion
  */
@@ -144,16 +151,16 @@ export const speakNellyGuidance = (
     lang: string = 'en-US', 
     onStart?: () => void, 
     onEnd?: () => void
-) => {
+): SpeechSynthesisUtterance | null => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
         console.warn('Web Speech API is not supported in this browser.');
         if (onEnd) onEnd();
-        return;
+        return null;
     }
 
     if (isAudioMuted) {
         if (onEnd) onEnd();
-        return;
+        return null;
     }
 
     const synth = window.speechSynthesis;
@@ -177,7 +184,7 @@ export const speakNellyGuidance = (
     const cleanText = text.trim();
     if (!cleanText) {
         if (onEnd) onEnd();
-        return;
+        return null;
     }
 
     const langKey = lang.split('-')[0].toLowerCase();
@@ -188,6 +195,15 @@ export const speakNellyGuidance = (
     utterance.lang = targetLocale;
     utterance.rate = 0.95; // Natural conversational tempo
     utterance.pitch = 1.0;
+
+    // Chrome TTS Garbage Collection Guard:
+    // Chromium aggressively garbage-collects active SpeechSynthesisUtterance instances mid-speech
+    // if not retained in an active reference.
+    activeSpeechUtterance = utterance;
+    if (typeof window !== 'undefined') {
+        (window as any).__activeUtterance = utterance;
+        (window as any).__activeSpeechUtterance = utterance;
+    }
 
     const voice = findBestNeuralVoice(langKey, targetLocale);
     if (voice) {
@@ -204,6 +220,17 @@ export const speakNellyGuidance = (
     };
 
     utterance.onend = () => {
+        if (activeSpeechUtterance === utterance) {
+            activeSpeechUtterance = null;
+        }
+        if (typeof window !== 'undefined') {
+            if ((window as any).__activeUtterance === utterance) {
+                (window as any).__activeUtterance = null;
+            }
+            if ((window as any).__activeSpeechUtterance === utterance) {
+                (window as any).__activeSpeechUtterance = null;
+            }
+        }
         try {
             useNellyStore.getState().setSpeaking(false);
         } catch (e) {
@@ -213,6 +240,17 @@ export const speakNellyGuidance = (
     };
 
     utterance.onerror = (e) => {
+        if (activeSpeechUtterance === utterance) {
+            activeSpeechUtterance = null;
+        }
+        if (typeof window !== 'undefined') {
+            if ((window as any).__activeUtterance === utterance) {
+                (window as any).__activeUtterance = null;
+            }
+            if ((window as any).__activeSpeechUtterance === utterance) {
+                (window as any).__activeSpeechUtterance = null;
+            }
+        }
         console.error('Nelly Speech Error:', e);
         try {
             useNellyStore.getState().setSpeaking(false);
@@ -231,6 +269,17 @@ export const speakNellyGuidance = (
             synth.speak(utterance);
         } catch (e) {
             console.error('Failed to trigger speech synthesis:', e);
+            if (activeSpeechUtterance === utterance) {
+                activeSpeechUtterance = null;
+            }
+            if (typeof window !== 'undefined') {
+                if ((window as any).__activeUtterance === utterance) {
+                    (window as any).__activeUtterance = null;
+                }
+                if ((window as any).__activeSpeechUtterance === utterance) {
+                    (window as any).__activeSpeechUtterance = null;
+                }
+            }
             try {
                 useNellyStore.getState().setSpeaking(false);
             } catch (err) {
@@ -259,13 +308,15 @@ export const speakNellyGuidance = (
             }
         }, 100);
     }
+
+    return utterance;
 };
 
 /**
  * Convenience export for backward compatibility
  */
-export const speak = (text: string, lang: string = 'en', onEnd?: () => void) => {
-    speakNellyGuidance(text, lang, undefined, onEnd);
+export const speak = (text: string, lang: string = 'en', onEnd?: () => void): SpeechSynthesisUtterance | null => {
+    return speakNellyGuidance(text, lang, undefined, onEnd);
 };
 
 export const stopSpeaking = () => {
@@ -275,6 +326,11 @@ export const stopSpeaking = () => {
         } catch (e) {
             console.warn('Error stopping speech synth:', e);
         }
+    }
+    activeSpeechUtterance = null;
+    if (typeof window !== 'undefined') {
+        (window as any).__activeUtterance = null;
+        (window as any).__activeSpeechUtterance = null;
     }
     try {
         useNellyStore.getState().setSpeaking(false);

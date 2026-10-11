@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float } from '@react-three/drei';
 import * as THREE from 'three';
@@ -76,7 +76,9 @@ export const ErgoBotCanvas = ({ isPlaying }: { isPlaying: boolean }) => {
             <ambientLight intensity={0.7} />
             <pointLight position={[10, 10, 10]} intensity={2} color="#F9A825" />
             <pointLight position={[-10, 5, -10]} intensity={2} color="#003D5C" />
-            <ErgoBot isPlaying={isPlaying} />
+            <Suspense fallback={null}>
+                <ErgoBot isPlaying={isPlaying} />
+            </Suspense>
         </Canvas>
     );
 };

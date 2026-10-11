@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Box, Cylinder } from '@react-three/drei';
 import * as THREE from 'three';
@@ -308,15 +308,17 @@ export const SpineViewer = () => {
                         <directionalLight position={[-10, 0, -5]} intensity={0.6} color="#10b981" />
                         <pointLight position={[0, 4, 0]} intensity={1.0} color="#f59e0b" />
                         
-                        <SpineModel postureState={postureState} selectedSection={selectedSection} />
-                        
-                        <OrbitControls 
-                            enablePan={false} 
-                            minPolarAngle={Math.PI / 4} 
-                            maxPolarAngle={Math.PI / 2} 
-                            minDistance={4}
-                            maxDistance={12}
-                        />
+                        <Suspense fallback={null}>
+                            <SpineModel postureState={postureState} selectedSection={selectedSection} />
+                            
+                            <OrbitControls 
+                                enablePan={false} 
+                                minPolarAngle={Math.PI / 4} 
+                                maxPolarAngle={Math.PI / 2} 
+                                minDistance={4}
+                                maxDistance={12}
+                            />
+                        </Suspense>
                     </Canvas>
                 </div>
 
@@ -429,3 +431,6 @@ export const SpineViewer = () => {
         </div>
     );
 };
+
+export const SpineMonitor = SpineViewer;
+export default SpineViewer;

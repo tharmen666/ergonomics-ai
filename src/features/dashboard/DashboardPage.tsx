@@ -102,7 +102,7 @@ export const DashboardPage = () => {
                     )}
 
                     {/* 3D Spine Viewer - Primary Interactive Element */}
-                    <div className="h-[400px] w-full max-w-full overflow-hidden">
+                    <div className="h-[460px] md:h-[400px] w-full max-w-full overflow-hidden">
                         <Suspense fallback={
                             <div className="w-full h-full flex flex-col items-center justify-center bg-black/40 rounded-2xl border border-white/10 text-gray-400 gap-3">
                                 <Loader2 className="w-8 h-8 animate-spin text-ohs-orange" />

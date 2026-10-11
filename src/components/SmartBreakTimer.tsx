@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Timer, Activity, Footprints, Flame, CheckCircle, Play, Pause, RotateCcw, 
-  X, AlertCircle, ArrowRight, ShieldCheck, Heart, Sparkles, Volume2, Bell 
+  X, AlertCircle, ArrowRight, ShieldCheck, Heart, Sparkles, Volume2, VolumeX, Bell 
 } from 'lucide-react';
-import { speak } from '../utils/speech';
+import { speak, stopSpeaking } from '../utils/speech';
 
 interface StretchStep {
   title: string;
@@ -65,6 +65,8 @@ export const SmartBreakTimer: React.FC = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
   const [stepSecondsLeft, setStepSecondsLeft] = useState<number>(0);
   const [isBreakPaused, setIsBreakPaused] = useState<boolean>(false);
+  const [isTtsActive, setIsTtsActive] = useState<boolean>(true);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   // Gamification stats
   const [breakStreak, setBreakStreak] = useState<number>(7);
@@ -80,6 +82,62 @@ export const SmartBreakTimer: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Cleanup on modal unmount
+  useEffect(() => {
+    return () => {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      stopSpeaking();
+      utteranceRef.current = null;
+      if (typeof window !== 'undefined') {
+        (window as any).__activeUtterance = null;
+      }
+    };
+  }, []);
+
+  // Cleanup when modal closes
+  useEffect(() => {
+    if (!activeModal) {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      stopSpeaking();
+      utteranceRef.current = null;
+      if (typeof window !== 'undefined') {
+        (window as any).__activeUtterance = null;
+      }
+    }
+  }, [activeModal]);
+
+  // Step-by-Step Narration Sync:
+  // Keyed to [currentStepIndex, isTtsActive] so Nelly reads every instruction aloud when auto-speech is enabled.
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+
+    if (!activeModal || !isTtsActive || isBreakPaused) {
+      return;
+    }
+
+    const steps = activeModal === '90min' ? STRETCHES_90MIN : MOBILITY_4HR;
+    const step = steps[currentStepIndex];
+    if (step) {
+      const textToSpeak = currentStepIndex === 0
+        ? `Starting ${activeModal === '90min' ? '90-minute desk micro-stretch' : '4-hour dynamic walk'}. ${step.title}. ${step.instruction}`
+        : `Step ${currentStepIndex + 1}: ${step.title}. ${step.instruction}`;
+
+      const utterance = speak(textToSpeak);
+      if (utterance) {
+        utteranceRef.current = utterance;
+        if (typeof window !== 'undefined') {
+          (window as any).__activeUtterance = utterance;
+        }
+      }
+    }
+  }, [currentStepIndex, isTtsActive]);
+
   // Ticking active break step countdown
   useEffect(() => {
     if (!activeModal || isBreakPaused) return;
@@ -91,6 +149,9 @@ export const SmartBreakTimer: React.FC = () => {
         // Step completed, move to next or finish
         const steps = activeModal === '90min' ? STRETCHES_90MIN : MOBILITY_4HR;
         if (currentStepIndex < steps.length - 1) {
+          if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+          }
           setCurrentStepIndex(c => c + 1);
           return steps[currentStepIndex + 1].durationSec;
         } else {
@@ -124,16 +185,39 @@ export const SmartBreakTimer: React.FC = () => {
   };
 
   const startBreak = (type: '90min' | '4hr') => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    stopSpeaking();
     playChimeSound();
     setActiveModal(type);
-    setCurrentStepIndex(0);
     const steps = type === '90min' ? STRETCHES_90MIN : MOBILITY_4HR;
     setStepSecondsLeft(steps[0].durationSec);
     setIsBreakPaused(false);
-    speak(`Starting ${type === '90min' ? '90-minute desk micro-stretch' : '4-hour dynamic walk'}. ${steps[0].instruction}`);
+    if (currentStepIndex === 0 && isTtsActive) {
+      const step = steps[0];
+      const textToSpeak = `Starting ${type === '90min' ? '90-minute desk micro-stretch' : '4-hour dynamic walk'}. ${step.title}. ${step.instruction}`;
+      const utterance = speak(textToSpeak);
+      if (utterance) {
+        utteranceRef.current = utterance;
+        if (typeof window !== 'undefined') {
+          (window as any).__activeUtterance = utterance;
+        }
+      }
+    } else {
+      setCurrentStepIndex(0);
+    }
   };
 
   const completeBreak = () => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    stopSpeaking();
+    utteranceRef.current = null;
+    if (typeof window !== 'undefined') {
+      (window as any).__activeUtterance = null;
+    }
     playChimeSound();
     setActiveModal(null);
     setBreakStreak(s => s + 1);
@@ -142,6 +226,55 @@ export const SmartBreakTimer: React.FC = () => {
 
     if (activeModal === '90min') setSecondsUntil90Min(90 * 60);
     if (activeModal === '4hr') setSecondsUntil4Hr(240 * 60);
+  };
+
+  const handleCloseModal = () => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    stopSpeaking();
+    utteranceRef.current = null;
+    if (typeof window !== 'undefined') {
+      (window as any).__activeUtterance = null;
+    }
+    setActiveModal(null);
+  };
+
+  const handleToggleBreakPause = () => {
+    const nextPaused = !isBreakPaused;
+    setIsBreakPaused(nextPaused);
+    if (nextPaused) {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      stopSpeaking();
+    } else if (isTtsActive && activeModal) {
+      const steps = activeModal === '90min' ? STRETCHES_90MIN : MOBILITY_4HR;
+      const step = steps[currentStepIndex];
+      if (step) {
+        const utterance = speak(`Resuming. ${step.title}. ${step.instruction}`);
+        if (utterance) {
+          utteranceRef.current = utterance;
+          if (typeof window !== 'undefined') {
+            (window as any).__activeUtterance = utterance;
+          }
+        }
+      }
+    }
+  };
+
+  const handleNextStep = () => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    const currentSteps = activeModal === '90min' ? STRETCHES_90MIN : MOBILITY_4HR;
+    if (currentStepIndex < currentSteps.length - 1) {
+      const nextIndex = currentStepIndex + 1;
+      setCurrentStepIndex(nextIndex);
+      setStepSecondsLeft(currentSteps[nextIndex].durationSec);
+    } else {
+      completeBreak();
+    }
   };
 
   const formatMinSec = (totalSec: number) => {
@@ -342,7 +475,8 @@ export const SmartBreakTimer: React.FC = () => {
                 </div>
 
                 <button
-                  onClick={() => setActiveModal(null)}
+                  onClick={handleCloseModal}
+                  aria-label="Close"
                   className="p-2 bg-white/5 hover:bg-white/10 rounded-xl text-gray-400 hover:text-white transition-colors cursor-pointer"
                 >
                   <X size={20} />
@@ -375,24 +509,50 @@ export const SmartBreakTimer: React.FC = () => {
                 </div>
               </div>
 
+              {/* Audio Guidance Feedback */}
+              <div className="flex items-center justify-between bg-white/5 p-3 rounded-2xl border border-white/5 gap-2">
+                <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                  {isTtsActive ? <Volume2 className="text-emerald-400 shrink-0" size={18} /> : <VolumeX className="text-gray-500 shrink-0" size={18} />}
+                  <div className="min-w-0">
+                    <span className="font-bold text-white text-xs block truncate">Nelly Active TTS Guidance</span>
+                    <span className="text-[10px] text-gray-400 font-medium block truncate">Automatic voice playback for desk micro-nudges</span>
+                  </div>
+                </div>
+                <button
+                  aria-label="Toggle Voice Guidance"
+                  onClick={() => {
+                    const next = !isTtsActive;
+                    setIsTtsActive(next);
+                    if (!next) {
+                      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+                        window.speechSynthesis.cancel();
+                      }
+                      stopSpeaking();
+                      utteranceRef.current = null;
+                      if (typeof window !== 'undefined') {
+                        (window as any).__activeUtterance = null;
+                      }
+                    }
+                  }}
+                  className={`w-11 h-6 rounded-full relative flex items-center transition-all p-0.5 shrink-0 cursor-pointer ${
+                    isTtsActive ? 'bg-emerald-500 justify-end' : 'bg-white/20 justify-start'
+                  }`}
+                >
+                  <div className="w-5 h-5 rounded-full bg-white shadow-md transition-all" />
+                </button>
+              </div>
+
               {/* Action Buttons */}
               <div className="flex items-center justify-between gap-3 pt-2">
                 <button
-                  onClick={() => setIsBreakPaused(!isBreakPaused)}
+                  onClick={handleToggleBreakPause}
                   className="flex-1 py-3 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {isBreakPaused ? <><Play size={16} /> Resume</> : <><Pause size={16} /> Pause</>}
                 </button>
 
                 <button
-                  onClick={() => {
-                    if (currentStepIndex < currentSteps.length - 1) {
-                      setCurrentStepIndex(c => c + 1);
-                      setStepSecondsLeft(currentSteps[currentStepIndex + 1].durationSec);
-                    } else {
-                      completeBreak();
-                    }
-                  }}
+                  onClick={handleNextStep}
                   className="flex-1 py-3 bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy font-black rounded-xl text-xs transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer"
                 >
                   Next Step <ArrowRight size={16} />
