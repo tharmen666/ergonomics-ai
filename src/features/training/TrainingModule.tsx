@@ -14,6 +14,7 @@ interface TrainingModuleProps {
     description: string;
     duration: string;
     onClose: () => void;
+    onComplete?: () => void;
 }
 
 // Course steps exist in en/zu/xh/st; other UI languages fall back to English text.
@@ -22,7 +23,10 @@ const localisedStepText = (step: { en: string } & Partial<Record<Language, strin
 
 const ErgoBotCanvas = lazy(() => import('./ErgoBotCanvas'));
 
-export const TrainingModule = ({ id, title, description, duration, onClose }: TrainingModuleProps) => {
+// Outer/global reference guard to protect against browser garbage collection mid-speech
+let activeTrainingUtterance: SpeechSynthesisUtterance | null = null;
+
+export const TrainingModule = ({ id, title, description, duration, onClose, onComplete }: TrainingModuleProps) => {
     const [isPlaying, setIsPlaying] = useState(true);
     const [isTtsActive, setIsTtsActive] = useState(true);
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -30,6 +34,21 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
     const voiceEnabled = isTtsActive; // Backwards compatibility alias
     const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
     const { completeModule, language, setLanguage } = useNellyStore();
+
+    const onCompleteRef = useRef(onComplete);
+    useEffect(() => {
+        onCompleteRef.current = onComplete;
+    }, [onComplete]);
+
+    const isPlayingRef = useRef(isPlaying);
+    useEffect(() => {
+        isPlayingRef.current = isPlaying;
+    }, [isPlaying]);
+
+    const currentStepIndexRef = useRef(currentStepIndex);
+    useEffect(() => {
+        currentStepIndexRef.current = currentStepIndex;
+    }, [currentStepIndex]);
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -45,65 +64,84 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
 
     const speakCurrentInstruction = (step = steps[currentStepIndex]) => {
         if (!step) return;
-        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-        }
         const stepText = localisedStepText(step, language);
-        const utterance = speak(`Step ${step.step}: ${step.title}. ${stepText}`, language);
+        const utterance = speak(
+            `Step ${step.step}: ${step.title}. ${stepText}`,
+            language,
+            () => {
+                if (!isPlayingRef.current) return;
+                if (currentStepIndexRef.current < steps.length - 1) {
+                    setCurrentStepIndex(prev => prev + 1);
+                } else {
+                    completeModule(id);
+                    if (onCompleteRef.current) {
+                        onCompleteRef.current();
+                    }
+                }
+            }
+        );
         if (utterance) {
             utteranceRef.current = utterance;
+            activeTrainingUtterance = utterance;
             if (typeof window !== 'undefined') {
                 (window as any).__activeUtterance = utterance;
             }
         }
     };
 
-    // Modal Cleanup: Immediately cancel speech on unmount
+    // Modal Cleanup: Cancel speech ONLY on component unmount
     useEffect(() => {
         return () => {
-            if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-            }
             stopSpeaking();
             utteranceRef.current = null;
+            activeTrainingUtterance = null;
             if (typeof window !== 'undefined') {
                 (window as any).__activeUtterance = null;
             }
         };
-    }, [id]);
+    }, []);
 
     // Step-by-Step Narration Sync:
-    // Keyed to [currentStepIndex, isTtsActive] so changing steps automatically cancels
-    // any pending speech and immediately narrates newly active step.
+    // Keyed to [currentStepIndex, isTtsActive, id] so changing steps narrate active step
+    // without abruptly cancelling on arbitrary component re-renders.
     useEffect(() => {
-        if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-        }
-
         if (!isTtsActive || !currentStep) {
             return;
         }
 
         const stepText = localisedStepText(currentStep, language);
-        const utterance = speak(`Step ${currentStep.step}: ${currentStep.title}. ${stepText}`, language);
+        const utterance = speak(
+            `Step ${currentStep.step}: ${currentStep.title}. ${stepText}`,
+            language,
+            () => {
+                if (!isPlayingRef.current) return;
+                if (currentStepIndexRef.current < steps.length - 1) {
+                    setCurrentStepIndex(prev => prev + 1);
+                } else {
+                    completeModule(id);
+                    if (onCompleteRef.current) {
+                        onCompleteRef.current();
+                    }
+                }
+            }
+        );
         if (utterance) {
             utteranceRef.current = utterance;
+            activeTrainingUtterance = utterance;
             if (typeof window !== 'undefined') {
                 (window as any).__activeUtterance = utterance;
             }
         }
-    }, [currentStepIndex, isTtsActive]);
+    }, [currentStepIndex, isTtsActive, id]);
 
     const handleTogglePlay = () => {
         if (isPlaying) {
             // User toggles STOP GUIDANCE OFF
             setIsPlaying(false);
             setIsTtsActive(false);
-            if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-            }
             stopSpeaking();
             utteranceRef.current = null;
+            activeTrainingUtterance = null;
             if (typeof window !== 'undefined') {
                 (window as any).__activeUtterance = null;
             }
@@ -120,11 +158,9 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
         if (!nextState) {
             // User toggles Nelly Active TTS Guidance OFF
             setIsPlaying(false);
-            if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-            }
             stopSpeaking();
             utteranceRef.current = null;
+            activeTrainingUtterance = null;
             if (typeof window !== 'undefined') {
                 (window as any).__activeUtterance = null;
             }
@@ -145,10 +181,12 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
             }
             stopSpeaking();
             utteranceRef.current = null;
+            activeTrainingUtterance = null;
             if (typeof window !== 'undefined') {
                 (window as any).__activeUtterance = null;
             }
             completeModule(id);
+            if (onComplete) onComplete();
             onClose();
         }
     };
@@ -168,6 +206,7 @@ export const TrainingModule = ({ id, title, description, duration, onClose }: Tr
         }
         stopSpeaking();
         utteranceRef.current = null;
+        activeTrainingUtterance = null;
         if (typeof window !== 'undefined') {
             (window as any).__activeUtterance = null;
         }

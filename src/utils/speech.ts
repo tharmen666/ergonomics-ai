@@ -138,10 +138,38 @@ const findBestNeuralVoice = (targetLang: string, targetLocale: string): SpeechSy
 
 // Chrome TTS Garbage Collection Guard: module-level and window instance persistence
 let activeSpeechUtterance: SpeechSynthesisUtterance | null = null;
+let speechHeartbeatTimer: ReturnType<typeof setInterval> | null = null;
+
 if (typeof window !== 'undefined') {
     (window as any).__activeUtterance = null;
     (window as any).__activeSpeechUtterance = null;
 }
+
+const startSpeechHeartbeat = () => {
+    stopSpeechHeartbeat();
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    
+    // 10-second pause/resume heartbeat interval to bypass the 15-second Chromium audio timeout
+    speechHeartbeatTimer = setInterval(() => {
+        if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+        const synth = window.speechSynthesis;
+        if (synth.speaking && !synth.paused) {
+            try {
+                synth.pause();
+                synth.resume();
+            } catch (e) {
+                console.warn('Speech synthesis heartbeat error:', e);
+            }
+        }
+    }, 10000);
+};
+
+const stopSpeechHeartbeat = () => {
+    if (speechHeartbeatTimer) {
+        clearInterval(speechHeartbeatTimer);
+        speechHeartbeatTimer = null;
+    }
+};
 
 /**
  * High-Fidelity Multilingual Speech Engine for Nelly AI Companion
@@ -211,6 +239,7 @@ export const speakNellyGuidance = (
     }
 
     utterance.onstart = () => {
+        startSpeechHeartbeat();
         try {
             useNellyStore.getState().setSpeaking(true);
         } catch (e) {
@@ -220,6 +249,7 @@ export const speakNellyGuidance = (
     };
 
     utterance.onend = () => {
+        stopSpeechHeartbeat();
         if (activeSpeechUtterance === utterance) {
             activeSpeechUtterance = null;
         }
@@ -239,7 +269,8 @@ export const speakNellyGuidance = (
         if (onEnd) onEnd();
     };
 
-    utterance.onerror = (e) => {
+    utterance.onerror = (e: SpeechSynthesisErrorEvent) => {
+        stopSpeechHeartbeat();
         if (activeSpeechUtterance === utterance) {
             activeSpeechUtterance = null;
         }
@@ -251,12 +282,16 @@ export const speakNellyGuidance = (
                 (window as any).__activeSpeechUtterance = null;
             }
         }
-        console.error('Nelly Speech Error:', e);
         try {
             useNellyStore.getState().setSpeaking(false);
         } catch (err) {
             // ignore store errors if uninitialized
         }
+        // If canceled or interrupted by another utterance, do not trigger error completion
+        if (e.error === 'canceled' || e.error === 'interrupted') {
+            return;
+        }
+        console.error('Nelly Speech Error:', e);
         if (onEnd) onEnd();
     };
 
@@ -320,6 +355,7 @@ export const speak = (text: string, lang: string = 'en', onEnd?: () => void): Sp
 };
 
 export const stopSpeaking = () => {
+    stopSpeechHeartbeat();
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
         try {
             window.speechSynthesis.cancel();
