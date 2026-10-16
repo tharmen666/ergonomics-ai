@@ -1,7 +1,10 @@
 import { defineConfig, Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { execSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { generateStatutoryDocument } from './src/api/compliance';
+import { validateUserInput } from './src/lib/guardrails';
+import { logStatutoryEvent } from './src/lib/auditLogger';
 
 // Real build identifier for the Navbar badge: Vercel's commit SHA, else local git, else "local".
 const resolveBuildId = (): string => {
@@ -105,6 +108,116 @@ function apiDevMiddleware(): Plugin {
           }
         }
 
+        if (req.url === '/api/manual-handling') {
+          const authHeader = req.headers['authorization'] || req.headers['Authorization'];
+          const token = typeof authHeader === 'string' && authHeader.startsWith('Bearer ')
+            ? authHeader.slice(7).trim()
+            : null;
+          const expectedToken = process.env.ERGOSAFE_API_TOKEN || 'ergosafe-dev-token';
+
+          if (!token || token !== expectedToken) {
+            res.statusCode = 401;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ error: 'Unauthorized: missing or invalid Bearer token' }));
+            return;
+          }
+
+          if (req.method === 'GET') {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({
+              service: 'ErgoSafe Statutory Manual Handling Calculation Engine',
+              endpoint: '/api/manual-handling',
+              status: 'OPERATIONAL',
+              version: 'v3.0.0',
+              statutoryFramework: 'OHS Act 85 of 1993 & Ergonomics Regulations 2019 (GN R1589)',
+              timestamp: new Date().toISOString()
+            }));
+            return;
+          }
+
+          if (req.method === 'POST') {
+            let body = '';
+            req.on('data', chunk => { body += chunk; });
+            req.on('end', async () => {
+              try {
+                const payload = body ? JSON.parse(body) : {};
+                const { userId, role, taskDescription, manualHandlingMetrics } = payload;
+                const ip = (req.socket && req.socket.remoteAddress) || '127.0.0.1';
+
+                if (!manualHandlingMetrics || typeof manualHandlingMetrics !== 'object') {
+                  res.statusCode = 400;
+                  res.setHeader('Content-Type', 'application/json');
+                  res.end(JSON.stringify({ error: 'Bad Request: manualHandlingMetrics object is required' }));
+                  return;
+                }
+
+                const loadWeightKg = Number(manualHandlingMetrics.loadWeightKg);
+                const frequencyPerHour = Number(manualHandlingMetrics.frequencyPerHour);
+
+                if (!Number.isFinite(loadWeightKg) || loadWeightKg < 0 || !Number.isFinite(frequencyPerHour) || frequencyPerHour < 0) {
+                  res.statusCode = 400;
+                  res.setHeader('Content-Type', 'application/json');
+                  res.end(JSON.stringify({ error: 'Bad Request: loadWeightKg and frequencyPerHour must be non-negative numbers' }));
+                  return;
+                }
+
+                const validation = validateUserInput(taskDescription);
+                if (!validation.isValid) {
+                  await logStatutoryEvent({
+                    userId: userId || 'anonymous',
+                    userRole: role || 'unverified',
+                    action: 'SECURITY_VIOLATION',
+                    systemModule: 'ERGOSAFE',
+                    promptInput: typeof taskDescription === 'string' ? taskDescription : String(taskDescription ?? ''),
+                    statutoryOutcome: `BLOCKED: ${validation.violationCode}`,
+                    ipAddress: ip
+                  });
+                  res.statusCode = 403;
+                  res.setHeader('Content-Type', 'application/json');
+                  res.end(JSON.stringify({ error: validation.reason, code: validation.violationCode }));
+                  return;
+                }
+
+                const calculatedRisk = Number(((loadWeightKg * frequencyPerHour) / 100).toFixed(2));
+                const isOver25Kg = loadWeightKg > 25;
+                const isHighRisk = calculatedRisk > 2.0 || isOver25Kg;
+                const statutoryOutcome = isHighRisk ? 'HIGH_RISK_MANDATORY_INTERVENTION' : 'COMPLIANT';
+                const statutoryLevel = isHighRisk ? 'Priority Level 1' : 'Routine Maintenance';
+
+                const auditRecord = await logStatutoryEvent({
+                  userId: userId || 'anonymous',
+                  userRole: role || 'unverified',
+                  action: 'AUDIT_RUN',
+                  systemModule: 'ERGOSAFE',
+                  promptInput: validation.sanitizedInput,
+                  calculatedRiskScore: calculatedRisk,
+                  statutoryOutcome,
+                  ipAddress: ip
+                });
+
+                res.statusCode = 200;
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({
+                  status: 'success',
+                  riskScore: calculatedRisk,
+                  statutoryLevel,
+                  statutoryOutcome,
+                  requiresOMPReferral: isHighRisk,
+                  statutoryCitation: 'Ergonomics Regulations, 2019 (GN R1589, GG 42894)',
+                  auditLogId: auditRecord.id,
+                  timestamp: new Date().toISOString()
+                }));
+              } catch (err: any) {
+                res.statusCode = 500;
+                res.setHeader('Content-Type', 'application/json');
+                res.end(JSON.stringify({ success: false, error: err.message }));
+              }
+            });
+            return;
+          }
+        }
+
         next();
       });
     }
@@ -114,6 +227,11 @@ function apiDevMiddleware(): Plugin {
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/',
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    }
+  },
   plugins: [react(), apiDevMiddleware()],
   define: {
     __APP_BUILD__: JSON.stringify(resolveBuildId())
