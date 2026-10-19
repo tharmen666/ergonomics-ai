@@ -70,7 +70,7 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
         const variancePercentage = (stdDev / avgReaction) * 100;
 
         // Connect to Memory Vault
-        const { reactionMemory, addReactionMemory, evaluateDriverFatigue, drivingHours } = useFatigueStore.getState();
+        const { reactionMemory, addReactionMemory } = useFatigueStore.getState();
         let isFatigued = false;
         let historicalBaseline = 0;
 
@@ -86,10 +86,6 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
         }
 
         addReactionMemory(avgReaction);
-
-        // Sync with Prizm Driver Shift Fatigue score
-        const dropPct = Math.round(Math.min(50, Math.max(0, (variancePercentage / 2))));
-        evaluateDriverFatigue(drivingHours, dropPct);
 
         setSpeaking(true);
         if (isFatigued) {

@@ -1,5 +1,5 @@
 import { ActivityChart, ComplianceRing } from './Charts';
-import { Users, AlertCircle, FileText, Target, Shield, Lock, Download, Film } from 'lucide-react';
+import { Users, AlertCircle, FileText, Target, Shield, Lock, Download, Film, Calculator, Briefcase, Fuel, Monitor, Scale, ArrowRight } from 'lucide-react';
 import { DailySafetyChecklist } from './DailySafetyChecklist';
 import { WorkspaceAudit } from './WorkspaceAudit';
 import { useState, lazy, Suspense } from 'react';
@@ -9,6 +9,7 @@ import { SafetyStreaks } from '../../components/AI-Coach/SafetyStreaks';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 import { HandshakeCardHeader } from '../../components/common/HandshakeCardHeader';
 import { DemoVideoModal } from '../../components/demo/DemoVideoModal';
+import { StatutoryDisclaimerBanner } from '../../components/common/StatutoryDisclaimerBanner';
 
 const SpineViewer = lazy(() => import('../../components/agent/SpineViewer').then(m => ({ default: m.SpineViewer })));
 
@@ -72,6 +73,112 @@ export const DashboardPage = () => {
                         Privacy-First Telemetry
                     </h3>
                     <p className="text-xs text-gray-400 font-medium break-words">Zero raw camera data is stored. All skeletal telemetry is processed locally and discarded instantly.</p>
+                </div>
+            </motion.div>
+
+            {/* Statutory Competent Person Gate Notice */}
+            <StatutoryDisclaimerBanner />
+
+            {/* 4 Core Statutory Assessment Workspaces Selector */}
+            <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-slate-900/90 border border-white/10 rounded-3xl p-5 sm:p-6 shadow-2xl relative overflow-hidden"
+            >
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-4 border-b border-white/10">
+                    <div>
+                        <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[10px] font-black uppercase tracking-wider text-ohs-orange bg-ohs-orange/10 px-2 py-0.5 rounded-full border border-ohs-orange/20">
+                                GN R1589 Statutory Framework
+                            </span>
+                            <span className="text-xs text-gray-400 font-mono">4 Core Assessment Workspaces</span>
+                        </div>
+                        <h2 className="text-lg sm:text-xl font-black text-white tracking-tight">
+                            Ergonomic Risk Assessment Workspaces & Biomechanical Engines
+                        </h2>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {/* Retail & Wholesale */}
+                    <div className="bg-slate-950/60 border border-amber-500/20 hover:border-amber-500/50 rounded-2xl p-4 transition-all flex flex-col justify-between">
+                        <div>
+                            <div className="p-2.5 bg-amber-500/10 text-amber-400 rounded-xl w-fit mb-3 border border-amber-500/20">
+                                <Scale size={20} />
+                            </div>
+                            <h3 className="text-sm font-bold text-white mb-1">Retail & Wholesale</h3>
+                            <p className="text-[10px] text-amber-400/90 font-medium mb-2">Cash & Carry High-Risk Zones</p>
+                            <ul className="text-[11px] text-gray-400 space-y-1 mb-3">
+                                <li>• Butchery: RULA / knife grip</li>
+                                <li>• Bakery & Deli: NIOSH & WBGT</li>
+                                <li>• Receiving: REBA / pallet unstacking</li>
+                                <li>• Tills: RULA / standing scan</li>
+                            </ul>
+                        </div>
+                        <span className="text-[10px] text-amber-300 font-black flex items-center gap-1 uppercase tracking-wider">
+                            Active Templates (4) <ArrowRight size={12} />
+                        </span>
+                    </div>
+
+                    {/* Corporate & Call Centres */}
+                    <div className="bg-slate-950/60 border border-cyan-500/20 hover:border-cyan-500/50 rounded-2xl p-4 transition-all flex flex-col justify-between">
+                        <div>
+                            <div className="p-2.5 bg-cyan-500/10 text-cyan-400 rounded-xl w-fit mb-3 border border-cyan-500/20">
+                                <Monitor size={20} />
+                            </div>
+                            <h3 className="text-sm font-bold text-white mb-1">Corporate & Call Centres</h3>
+                            <p className="text-[10px] text-cyan-400/90 font-medium mb-2">VDU Display Screen Risk</p>
+                            <ul className="text-[11px] text-gray-400 space-y-1 mb-3">
+                                <li>• ROSA Screen Ergonomics</li>
+                                <li>• Cervical & Lumbar Posture</li>
+                                <li>• RSIP Typing Strain Monitoring</li>
+                                <li>• BCEA s15 Micro-Break Triggers</li>
+                            </ul>
+                        </div>
+                        <span className="text-[10px] text-cyan-300 font-black flex items-center gap-1 uppercase tracking-wider">
+                            Active Templates (3) <ArrowRight size={12} />
+                        </span>
+                    </div>
+
+                    {/* Petroleum Forecourt & Convenience */}
+                    <div className="bg-slate-950/60 border border-teal-500/20 hover:border-teal-500/50 rounded-2xl p-4 transition-all flex flex-col justify-between">
+                        <div>
+                            <div className="p-2.5 bg-teal-500/10 text-teal-400 rounded-xl w-fit mb-3 border border-teal-500/20">
+                                <Fuel size={20} />
+                            </div>
+                            <h3 className="text-sm font-bold text-white mb-1">Petroleum & Convenience</h3>
+                            <p className="text-[10px] text-teal-400/90 font-medium mb-2">SANS 10089 Compliance</p>
+                            <ul className="text-[11px] text-gray-400 space-y-1 mb-3">
+                                <li>• SANS 10089 Nozzle Handling</li>
+                                <li>• Tank Dipstick Reach</li>
+                                <li>• Safe Drops & Till Drops</li>
+                                <li>• Slip & Static Biomechanics</li>
+                            </ul>
+                        </div>
+                        <span className="text-[10px] text-teal-300 font-black flex items-center gap-1 uppercase tracking-wider">
+                            Active Templates (3) <ArrowRight size={12} />
+                        </span>
+                    </div>
+
+                    {/* Biomechanical Calculators */}
+                    <div className="bg-slate-950/60 border border-purple-500/20 hover:border-purple-500/50 rounded-2xl p-4 transition-all flex flex-col justify-between">
+                        <div>
+                            <div className="p-2.5 bg-purple-500/10 text-purple-400 rounded-xl w-fit mb-3 border border-purple-500/20">
+                                <Calculator size={20} />
+                            </div>
+                            <h3 className="text-sm font-bold text-white mb-1">Biomechanical Engines</h3>
+                            <p className="text-[10px] text-purple-400/90 font-medium mb-2">Standalone Statutory Tools</p>
+                            <ul className="text-[11px] text-gray-400 space-y-1 mb-3">
+                                <li>• Rapid Entire Body (REBA)</li>
+                                <li>• Rapid Upper Limb (RULA)</li>
+                                <li>• NIOSH Lifting Equation (25kg)</li>
+                                <li>• Thermal WBGT (Solar / Heat)</li>
+                            </ul>
+                        </div>
+                        <span className="text-[10px] text-purple-300 font-black flex items-center gap-1 uppercase tracking-wider">
+                            Standalone Suite (4) <ArrowRight size={12} />
+                        </span>
+                    </div>
                 </div>
             </motion.div>
 

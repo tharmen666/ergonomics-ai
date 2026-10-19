@@ -33,7 +33,7 @@ const DOCUMENT_TYPES = [
   { id: 'Toolbox Talk', title: 'Toolbox Talk', subtitle: 'Pre-Shift Safety & Ergonomic Briefing', icon: BookOpen }
 ];
 
-export const STATUTORY_DISCLAIMER_BANNER = `> **STATUTORY COMPLIANCE NOTICE**: *AI-assisted draft compiled for operational guidance. In terms of the Occupational Health and Safety Act (Act 85 of 1993), this document is not a certified legal record until reviewed, adjusted for site-specific conditions, and signed off by a designated Competent Person.*`;
+export const STATUTORY_DISCLAIMER_BANNER = `> **Statutory Notice**: *Digital biomechanical screening under GN R1589 (Ergonomics Regulations 2019). Baseline scores and control hierarchies are screening indicators and must be reviewed and countersigned by an appointed Competent Person / Section 16.2 Appointee.*`;
 
 export const StatutoryDocGeneratorModal: React.FC<StatutoryDocGeneratorModalProps> = ({ isOpen, onClose }) => {
   const { exportStatutoryDocToAuditLog } = useComplianceStore();
@@ -49,11 +49,12 @@ export const StatutoryDocGeneratorModal: React.FC<StatutoryDocGeneratorModalProp
   const [isReviewed, setIsReviewed] = useState<boolean>(false);
   const [competentPersonName, setCompetentPersonName] = useState<string>('');
   const [competentPersonRole, setCompetentPersonRole] = useState<string>('');
+  const [assessmentDate, setAssessmentDate] = useState<string>(new Date().toISOString().split('T')[0]);
   
   const [copied, setCopied] = useState<boolean>(false);
   const [exported, setExported] = useState<boolean>(false);
 
-  const isSignOffValid = isReviewed && competentPersonName.trim().length > 2 && competentPersonRole.trim().length > 2;
+  const isSignOffValid = isReviewed && competentPersonName.trim().length > 2 && competentPersonRole.trim().length > 2 && assessmentDate.trim().length > 0;
 
   const handleGenerate = async () => {
     setIsGenerating(true);
@@ -359,8 +360,8 @@ ${STATUTORY_DISCLAIMER_BANNER}`;
                 </div>
 
                 {/* Top Statutory Banner Preview */}
-                <div className="p-3 bg-amber-500/15 border border-amber-500/30 rounded-xl text-xs text-amber-200 font-sans italic">
-                  <strong>STATUTORY COMPLIANCE NOTICE:</strong> AI-assisted draft compiled for operational guidance. In terms of the Occupational Health and Safety Act (Act 85 of 1993), this document is not a certified legal record until reviewed, adjusted for site-specific conditions, and signed off by a designated Competent Person.
+                <div className="p-3.5 bg-amber-500/15 border-2 border-ohs-orange/40 rounded-xl text-xs text-amber-200 font-sans leading-relaxed">
+                  <strong className="text-ohs-orange font-black">Statutory Notice:</strong> Digital biomechanical screening under GN R1589 (Ergonomics Regulations 2019). Baseline scores and control hierarchies are screening indicators and must be reviewed and countersigned by an appointed Competent Person / Section 16.2 Appointee.
                 </div>
 
                 {/* Document Preview Box */}
@@ -386,34 +387,46 @@ ${STATUTORY_DISCLAIMER_BANNER}`;
                         className="mt-1 w-4 h-4 rounded border-gray-600 bg-white/5 text-ohs-orange focus:ring-ohs-orange focus:ring-offset-0 cursor-pointer"
                       />
                       <span className="text-xs text-gray-200 font-medium leading-normal group-hover:text-white transition-colors">
-                        I confirm that I am a designated Competent Person (in terms of OHS Act General Administrative Regulations / Ergonomics Regulation 1) and have reviewed, verified, and adapted these draft hazard controls to site-specific conditions.
+                        I confirm that I am a designated Competent Person / Section 16.2 Appointee (in terms of OHS Act 85 of 1993 and GN R1589) and have reviewed, verified, and adapted these draft hazard controls to site-specific conditions.
                       </span>
                     </label>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
                       <div className="space-y-1">
                         <label className="text-[11px] font-bold text-gray-300 uppercase tracking-wider block">
-                          Competent Person Full Name <span className="text-red-400">*</span>
+                          Competent Person Name <span className="text-red-400">*</span>
                         </label>
                         <input
                           type="text"
                           value={competentPersonName}
                           onChange={(e) => setCompetentPersonName(e.target.value)}
-                          placeholder="e.g., Appointed Sec 16.2 / Ergonomics Facilitator"
+                          placeholder="e.g. S. Sithole (Pr.Eng)"
                           className="w-full px-3.5 py-2.5 bg-white/5 border border-white/15 rounded-xl text-xs text-white focus:outline-none focus:border-ohs-orange placeholder:text-gray-600"
                         />
                       </div>
 
                       <div className="space-y-1">
                         <label className="text-[11px] font-bold text-gray-300 uppercase tracking-wider block">
-                          Designation / Statutory Role <span className="text-red-400">*</span>
+                          Legal Designation <span className="text-red-400">*</span>
                         </label>
                         <input
                           type="text"
                           value={competentPersonRole}
                           onChange={(e) => setCompetentPersonRole(e.target.value)}
-                          placeholder="e.g., SHE Representative, Risk Assessor"
+                          placeholder="e.g. Section 16.2 / SHE Rep"
                           className="w-full px-3.5 py-2.5 bg-white/5 border border-white/15 rounded-xl text-xs text-white focus:outline-none focus:border-ohs-orange placeholder:text-gray-600"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-bold text-gray-300 uppercase tracking-wider block">
+                          Assessment Date <span className="text-red-400">*</span>
+                        </label>
+                        <input
+                          type="date"
+                          value={assessmentDate}
+                          onChange={(e) => setAssessmentDate(e.target.value)}
+                          className="w-full px-3.5 py-2.5 bg-white/5 border border-white/15 rounded-xl text-xs text-white focus:outline-none focus:border-ohs-orange"
                         />
                       </div>
                     </div>

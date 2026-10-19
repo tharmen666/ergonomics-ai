@@ -28,7 +28,7 @@ export const Footer = () => {
             <div className="max-w-7xl mx-auto px-6 mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-[10px] font-black text-gray-600 uppercase tracking-widest gap-4">
                 <p>© 2026 ERGOSAFE REBORN. ALL RIGHTS RESERVED.</p>
                 <div className="flex gap-6">
-                    <button className="hover:text-white transition-colors">Privacy Protcol</button>
+                    <button className="hover:text-white transition-colors">Privacy Protocol</button>
                     <button className="hover:text-white transition-colors">Security Node</button>
                     <button className="hover:text-white transition-colors">Compliance Core</button>
                 </div>

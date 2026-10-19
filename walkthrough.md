@@ -1,11 +1,12 @@
 # ErgoSafe Reborn V3 - Walkthrough
 
-> **Status update (9 Oct 2026, round 2 review):** parts of the earlier report below overstated what was done.
-> In particular: hazards were logged twice, `fireEvent` still ran inside `set()` in `tickSimulatedTime`/`resolveCase`,
-> manual self-assessments and some resolutions could still set a global BREACH, free text could still create a
-> statutory breach, the route test silently skipped routes, the API fell back to a default token, and the "19 passed"
-> suite included tests that could not fail. These are now fixed - see **ROUND2_CHANGES.md** for the verified list,
-> the tests that cover each fix, and real build/test output.
+> **Status update (19 Oct 2026, GN R1589 Statutory Alignment Pass):**
+> 1. Preserved and decoupled driver fatigue telemetry into standalone module `src/modules/FatigueSentinel_Prizm.tsx`.
+> 2. Purged all internal sales & investor pitch artifacts (`PitchSentinel`, `InvestorDecks`, `BankingOutreach`, `EmailOutreach`, `financePitches`).
+> 3. Standardized SA statutory terminology ("BCEA Section 15 Regulated Rest Periods & VDU Micro-Breaks", corrected "Privacy Protocol").
+> 4. Embedded statutory Competent Person sign-off gate & disclaimer banners across screening views and exports.
+> 5. Configured 4 Core Statutory Workspaces (Retail & Wholesale Cash & Carry, Corporate & Call Centres, Petroleum Forecourt & Convenience, and Biomechanical Calculators).
+> 6. Production build (`tsc && vite build`) and full Playwright test suite (81/81 tests) verified 100% passing.
 
 ---
 

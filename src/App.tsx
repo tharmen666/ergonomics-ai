@@ -37,11 +37,8 @@ function renderTabContent(activeTab: string) {
     case 'executive':
     case 'stewardship':
       return <ExecutiveBriefing />;
-    case 'fatigue':
     case 'telemetry':
     case 'gear':
-    case 'prizm':
-    case 'driver-telemetry':
       return <GEARDashboardPage />;
     case 'cognitive-handshake':
     case 'handshake':
@@ -65,6 +62,8 @@ function renderTabContent(activeTab: string) {
     case 'training':
       return <TrainingPage />;
     case 'assessment':
+    case 'workspaces':
+    case 'calculators':
       return <SelfAssessmentPage />;
     case 'kiosk':
     case 'checklist':

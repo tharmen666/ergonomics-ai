@@ -46,7 +46,7 @@ export const translations: Record<Language, TranslationEntry> = {
         compliance_check: "Daily safety scan required. Please complete your checklist by 12:00 PM Friday.",
         admin_zero: "Assessment complete. I've saved it to the compliance log in this browser.",
         first_aid: "Stop bleeding, clean the wound, cover it.",
-        right_to_disconnect: "Rest outside your agreed working hours matters. Repeated after-hours contact can be a psychosocial risk (see the voluntary ISO 45003:2021 guidance).",
+        right_to_disconnect: "BCEA Section 15 Regulated Rest Periods & VDU Micro-Breaks: Daily rest intervals and workstation pauses are mandated under Section 15 of the Basic Conditions of Employment Act and GN R1589 ergonomic controls.",
         // TODO(privacy): implement encryption + POPIA s26 special-information handling before production
         popi_title: "YOUR DATA PRIVACY",
         popi_subtitle: "Privacy-Aware OHS Architecture",

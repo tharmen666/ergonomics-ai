@@ -59,7 +59,7 @@ In service station environments (Engen, BP, Shell, Astron Energy), attendants mu
 
 ---
 
-## 🧠 MODULE 4: PSYCHOSOCIAL SAFETY & THE RIGHT TO DISCONNECT
+## 🧠 MODULE 4: PSYCHOSOCIAL SAFETY & BCEA SECTION 15 REGULATED REST PERIODS & VDU MICRO-BREAKS
 
 ### 4.1 CCMA "Digital Tethering" and Unpaid Overtime
 In 2026, CCMA constructive dismissal and unpaid overtime claims due to after-hours messaging have risen by **142%**. Remote and hybrid workers are protected from digital exhaustion under the ISO 45003:2021 standard.

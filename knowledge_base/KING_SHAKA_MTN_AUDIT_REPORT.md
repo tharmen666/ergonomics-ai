@@ -15,7 +15,7 @@
 Using the standard **Probability vs. Severity Matrix**:
 * **High-Risk Scenario:** Hydrocarbon spill during tanker replenishment.
   * *Mitigation:* Automatic shutoff valves tested; attendant safety buffers verified.
-* **Psychosocial/Worker Welfare:** Right to disconnect protocols successfully implemented for non-shift personnel.
+* **Psychosocial/Worker Welfare:** BCEA Section 15 Regulated Rest Periods & VDU Micro-Breaks protocols successfully implemented for non-shift personnel.
 
 ---
 *Authorized by Agent 007 Security Clearance.*

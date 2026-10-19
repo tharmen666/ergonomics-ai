@@ -193,7 +193,7 @@ echo ===========================================================================
 echo  - Module 1: OHS Act Section 8 Frameworks and Executive General Duty Obligations
 echo  - Module 2: Workplace Hazard Risk Identification Protocols (Probability/Severity Matrix)
 echo  - Module 3: First Aid and Emergency Response Sequences (HazMat forecourt spills)
-echo  - Module 4: Psychosocial Risk Mitigation and the CCMA Right to Disconnect Protocols
+echo  - Module 4: Psychosocial Risk Mitigation and BCEA Section 15 Regulated Rest Periods & VDU Micro-Breaks
 echo.
 echo [SAVED] Successfully compiled and generated full LMS compliance asset:
 echo        -^> PATH: .\LMS_READY\LMS_TRAINING_MANUAL_V1.md

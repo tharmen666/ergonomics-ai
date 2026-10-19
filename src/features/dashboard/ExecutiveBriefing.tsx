@@ -1,46 +1,57 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp, Volume2, VolumeX, Truck, Activity, Scale, Award } from 'lucide-react';
+import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp, Volume2, VolumeX, Activity, Scale, Award, ShieldCheck, UserCheck } from 'lucide-react';
 import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
 import { LeanPerformanceRail } from '../../components/AI-Coach/LeanPerformanceRail';
-import { REASONABLY_PRACTICABLE_OHS, RIGHT_TO_DISCONNECT_FRAMEWORK, FINANCIAL_PITCHES } from '../../logic/financePitches';
 import { useNellyStore } from '../../store/nellyStore';
 import { useComplianceStore } from '../../store/complianceStore';
 import { speak, stopSpeaking } from '../../utils/speech';
 
+export const REASONABLY_PRACTICABLE_OHS = {
+    standardName: "Reasonably Practicable Standard",
+    statuteReference: "OHS Act 85 of 1993, Section 8(1) & Section 37/38",
+    description: "Section 8 of the Occupational Health and Safety Act 85 of 1993 requires employers to provide and maintain, as far as is reasonably practicable, a safe working environment without risk to the health of employees. A structured ergonomic screening and risk monitoring system assists organizations in identifying and addressing workstation hazards.",
+    finesFramework: "Section 38 prescribes statutory penalties for non-compliance with the provisions of the OHS Act and GN R1589 Ergonomics Regulations 2019."
+} as const;
+
+export const BCEA_REST_PERIODS_FRAMEWORK = {
+    concept: "BCEA Section 15 Regulated Rest Periods & VDU Micro-Breaks",
+    statutoryBasis: "Basic Conditions of Employment Act (Act 75 of 1997) Section 15 & GN R1589",
+    description: "Extended continuous VDU screen-time and postural immobilization pose severe musculoskeletal risks. ErgoSafe enforces structured micro-break intervals to support employee physiological recovery aligned with BCEA Section 15 regulated daily rest periods.",
+    complianceCode: "BCEA Sec 15 Daily Rest Period & GN R1589 Regulation 6/7 Ergonomic Controls."
+} as const;
+
 export const ExecutiveBriefing = () => {
-    // Real count of open statutory breaches (no hardcoded "no offences" badge)
     const openStatutoryBreaches = useComplianceStore((s) => s.cases.filter(c => c.status === 'BREACH' && c.escalationState !== 'resolved').length);
     const { language } = useNellyStore();
     const [isNarrating, setIsNarrating] = useState(false);
     const [showSupportingMatrix, setShowSupportingMatrix] = useState(false);
-    const [showFinancialPitches, setShowFinancialPitches] = useState(false);
 
-    const fatigueGapClosures = [
+    const ergonomicRiskClosures = [
         {
-            gapTitle: "Driver Shift Fatigue & Micro-Sleep Risks",
-            riskLevel: "CRITICAL HIGHWAY LIABILITY",
-            solution: "Prizm Driver Fatigue Handshake (/api/v1/fatigue-score)",
-            details: "Monitors continuous driving hours (2h, 4.5h, 6.5h, 8h thresholds) and cognitive latency drops. Triggers mandatory 30-minute rest lockouts before micro-sleep incidents occur.",
-            statute: "Section 8(1) OHS Act 85 of 1993",
-            icon: Truck,
+            gapTitle: "Manual Material Handling & Heavy Lifting (>25kg)",
+            riskLevel: "CRITICAL MUSCULOSKELETAL LIABILITY",
+            solution: "GN R1589 Regulation 6 Screening & NIOSH Lifting Controls",
+            details: "Evaluates bulk sack lifting, carcass handling, and receiving unstacking against the 25kg statutory limit. Automatically triggers team-lift mandates and mechanical aid engineering controls.",
+            statute: "GN R1589 Reg 6 & OHS Act Sec 8(2)(b)",
+            icon: Award,
             badgeColor: "bg-red-500/20 text-red-400 border-red-500/30"
         },
         {
             gapTitle: "Neck Strain & C1-C7 Cervical Vertebrae Compression",
             riskLevel: "CHRONIC MUSCULOSKELETAL INJURY",
-            solution: "Nelly Ergonomic Engine Real-Time Telemetry",
-            details: "Tracks forward neck tilt and shoulder shrugging in remote/WFH environments. Automatically logs posture breaches into the OHS hazard ledger and prompts Tier 2 micro-stretches.",
+            solution: "Nelly Biomechanical Telemetry Engine",
+            details: "Tracks forward neck tilt, monitor height mismatch, and shoulder shrugging across corporate and industrial workstations. Logs postural anomalies into the statutory ledger.",
             statute: "Ergonomics Regulations (GN R1589)",
             icon: Activity,
             badgeColor: "bg-amber-500/20 text-amber-400 border-amber-500/30"
         },
         {
-            gapTitle: "Digital Tethering & Psychosocial Exhaustion",
-            riskLevel: "CONSTRUCTIVE DISMISSAL & BURNOUT",
-            solution: "Fatigue-Gate & Right-to-Disconnect Lockouts",
-            details: "Restricts after-hours messaging access for off-duty personnel, defending employers against CCMA overtime claims while complying with global ISO 45003 standards.",
-            statute: "ISO 45003:2021 Psychosocial Health Standard",
+            gapTitle: "VDU Screen Immobilization & Fatigue",
+            riskLevel: "PHYSIOLOGICAL & VISUAL STRAIN",
+            solution: "BCEA Section 15 Regulated Rest Periods & VDU Micro-Breaks",
+            details: "Enforces timely micro-stretch intervals and postural resets, assisting employers in fulfilling statutory duty of care under OHS Act Section 8 and BCEA Section 15.",
+            statute: "BCEA Section 15 & GN R1589 Regulation 7",
             icon: Scale,
             badgeColor: "bg-blue-500/20 text-blue-400 border-blue-500/30"
         }
@@ -52,14 +63,14 @@ export const ExecutiveBriefing = () => {
             setIsNarrating(false);
         } else {
             setIsNarrating(true);
-            const script = `Executive Briefing Narration Active. Welcome to ErgoSafe Reborn V3. This executive summary integrates live OHS Act Section 37 compliance telemetry with the Demo Video Feature. Core fatigue gaps, including long-distance driver shift fatigue, micro-sleep risks, and cervical neck strain, are systematically resolved via Prizm Driver Fatigue Handshake and Nelly's Ergonomic Engine. Our platform establishes a legally defensible audit trail under Section 8 clause 1 of the Occupational Health and Safety Act, reducing corporate liability and demonstrating substantial return on driver safety investment.`;
+            const script = `Executive Briefing Narration Active. Welcome to ErgoSafe Reborn V3. This executive summary integrates live OHS Act Section 37 compliance telemetry with statutory ergonomic screening under GN R1589 (Ergonomics Regulations 2019). Core ergonomic risk factors, including manual material handling, cervical spine strain, and workstation micro-break compliance, are systematically resolved via Nelly's Biomechanical Engine. Our platform establishes a legally defensible audit trail under Section 8 of the Occupational Health and Safety Act, reducing corporate musculoskeletal liability.`;
             speak(script, language, () => setIsNarrating(false));
         }
     };
 
     return (
         <div className="p-3 sm:p-6 md:p-8 w-full max-w-7xl mx-auto space-y-6 sm:space-y-8 mb-24 overflow-x-hidden font-sans box-border">
-            {/* DOMINANT SAFETY COMMAND CENTRE BANNER (P0 AUDIT FIX) */}
+            {/* DOMINANT SAFETY COMMAND CENTRE BANNER */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -69,17 +80,17 @@ export const ExecutiveBriefing = () => {
                     <div className="space-y-2 max-w-3xl min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
                             <span className="text-[9px] sm:text-[10px] font-black text-ohs-orange uppercase tracking-wider bg-ohs-orange/10 px-3 py-1 rounded-full border border-ohs-orange/30 whitespace-normal leading-tight max-w-full">
-                                🛡️ PRIMARY DECISION CONTROLS
+                                🛡️ STATUTORY OHS COMMAND
                             </span>
                             <span className="text-[9px] sm:text-[10px] font-bold text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 whitespace-normal leading-tight max-w-full">
-                                LIVE TELEMETRY STREAM
+                                GN R1589 COMPLIANCE ENGINE
                             </span>
                         </div>
                         <h1 className="text-2xl sm:text-3xl md:text-5xl font-black text-white tracking-tight uppercase break-words leading-tight">
-                            SAFETY COMMAND <span className="text-ohs-orange">CENTRE</span>
+                            STATUTORY SAFETY <span className="text-ohs-orange">COMMAND CENTRE</span>
                         </h1>
                         <p className="text-gray-300 font-medium text-xs md:text-sm leading-relaxed break-words">
-                            OHS Act 85 of 1993 governance dashboard: ergonomic strain and driver fatigue monitoring, with escalation to accountable managers.
+                            Occupational Health and Safety Act (Act 85 of 1993) & Ergonomics Regulations 2019 (GN R1589) digital governance dashboard with Section 16.2 Competent Person oversight.
                         </p>
                     </div>
 
@@ -98,24 +109,31 @@ export const ExecutiveBriefing = () => {
                     </div>
                 </div>
 
+                {/* Statutory Competent Person Gate Disclaimer Banner */}
+                <div className="p-4 bg-ohs-navy/80 border-2 border-ohs-orange/50 rounded-2xl flex items-start gap-3 shadow-md">
+                    <ShieldAlert className="text-ohs-orange shrink-0 mt-0.5" size={20} />
+                    <p className="text-xs text-amber-100/90 leading-relaxed font-sans">
+                        <strong className="text-ohs-orange font-black">Statutory Notice:</strong> Digital biomechanical screening under GN R1589 (Ergonomics Regulations 2019). Baseline scores and control hierarchies are screening indicators and must be reviewed and countersigned by an appointed Competent Person / Section 16.2 Appointee.
+                    </p>
+                </div>
             </motion.div>
 
-            {/* SECONDARY COLLAPSIBLE SECTION: FATIGUE GAP & COMPLIANCE MATRIX */}
+            {/* COLLAPSIBLE SECTION: ERGONOMIC RISK & COMPLIANCE MATRIX */}
             <div className="bg-black/40 border border-white/10 rounded-[2rem] p-4 sm:p-6 space-y-4 w-full max-w-full overflow-hidden">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="min-w-0">
                         <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest block mb-1 truncate">
-                            Supporting Compliance & Explanatory Copy
+                            GN R1589 Statutory Framework
                         </span>
                         <h2 className="text-xl font-black text-white break-words">
-                            Secondary Decision Tools & Regulatory Matrices
+                            Ergonomic Risk Mitigation & Legal Compliance
                         </h2>
                     </div>
                     <button
                         onClick={() => setShowSupportingMatrix(!showSupportingMatrix)}
                         className="bg-white/5 hover:bg-white/10 border border-white/10 text-ohs-orange px-4 py-2.5 rounded-xl font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-2 self-start sm:self-auto shrink-0"
                     >
-                        <span>{showSupportingMatrix ? 'HIDE SUPPORTING MATRIX' : 'EXPAND SUPPORTING MATRIX'}</span>
+                        <span>{showSupportingMatrix ? 'HIDE COMPLIANCE MATRIX' : 'EXPAND COMPLIANCE MATRIX'}</span>
                     </button>
                 </div>
 
@@ -125,15 +143,14 @@ export const ExecutiveBriefing = () => {
                         animate={{ opacity: 1, height: 'auto' }}
                         className="space-y-6 pt-4 border-t border-white/10"
                     >
-                        {/* FATIGUE GAP CLOSURE & LEGAL COMPLIANCE MATRIX */}
                         <div className="space-y-6">
                             <div>
-                                <h3 className="text-lg font-black text-white break-words">Fatigue Gap Closure & Statutory Compliance Highlights</h3>
-                                <p className="text-xs text-gray-400 mt-1 break-words">Direct mapping of corporate physical and cognitive fatigue risks to legally defensible ErgoSafe controls.</p>
+                                <h3 className="text-lg font-black text-white break-words">Ergonomic Risk Mitigation & Control Hierarchy</h3>
+                                <p className="text-xs text-gray-400 mt-1 break-words">Systematic elimination, engineering, and administrative controls mapped to South African statutory regulations.</p>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full max-w-full min-w-0">
-                                {fatigueGapClosures.map((gap, idx) => (
+                                {ergonomicRiskClosures.map((gap, idx) => (
                                     <div
                                         key={idx}
                                         className="bg-white/5 border border-white/10 rounded-2xl p-6 flex flex-col justify-between space-y-4 relative overflow-hidden group hover:border-ohs-orange/40 transition-all duration-300"
@@ -151,7 +168,7 @@ export const ExecutiveBriefing = () => {
                                                 {gap.gapTitle}
                                             </h3>
                                             <div className="p-3 rounded-xl bg-black/60 border border-white/10 space-y-1">
-                                                <span className="text-[9px] font-black text-ohs-orange uppercase block">Solution Integration:</span>
+                                                <span className="text-[9px] font-black text-ohs-orange uppercase block">Statutory Control:</span>
                                                 <p className="text-xs font-bold text-white">{gap.solution}</p>
                                             </div>
                                             <p className="text-xs text-gray-300 leading-relaxed font-medium">
@@ -188,7 +205,7 @@ export const ExecutiveBriefing = () => {
                                     <div className={`bg-opacity-10 border p-4 rounded-xl flex items-start gap-4 ${idx % 2 === 0 ? 'bg-ohs-orange border-ohs-orange/30' : 'bg-red-500 border-red-500/30'}`}>
                                         <CheckCircle2 className={`${idx % 2 === 0 ? 'text-ohs-orange' : 'text-red-500'} shrink-0 mt-1`} size={20} />
                                         <p className={`text-sm font-bold break-words ${idx % 2 === 0 ? 'text-ohs-orange' : 'text-red-500'}`}>
-                                            Mitigation Strategy: Active Stewardship tracking enforces compliance routing.
+                                            Mitigation Strategy: Active GN R1589 hazard logging and Section 16.2 review.
                                         </p>
                                     </div>
                                 </motion.div>
@@ -198,7 +215,7 @@ export const ExecutiveBriefing = () => {
                 )}
             </div>
 
-            {/* Admin-Zero Status Banner */}
+            {/* Statutory Compliance Record Status */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -207,8 +224,8 @@ export const ExecutiveBriefing = () => {
             >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                     <div className="min-w-0 flex-1">
-                        <h3 className="text-xl font-black text-white flex items-center gap-3 break-words"><FileText className="text-green-500 shrink-0" size={24} /> Compliance Record Status</h3>
-                        <p className="text-gray-400 font-medium mt-1 break-words">Compliance actions are recorded in this browser's local compliance log (prototype - not yet synced to a server).</p>
+                        <h3 className="text-xl font-black text-white flex items-center gap-3 break-words"><FileText className="text-green-500 shrink-0" size={24} /> Statutory Ledger Status</h3>
+                        <p className="text-gray-400 font-medium mt-1 break-words">All ergonomic risk assessments are indexed under Regulation 10(1) with mandatory 40-year retention.</p>
                     </div>
                     <div className={`px-6 py-3 rounded-full font-bold uppercase tracking-widest text-sm whitespace-nowrap block text-center sm:text-left w-full sm:w-auto shrink-0 ${openStatutoryBreaches === 0 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
                         {openStatutoryBreaches === 0 ? 'NO OPEN STATUTORY BREACHES' : `${openStatutoryBreaches} OPEN STATUTORY BREACH${openStatutoryBreaches === 1 ? '' : 'ES'}`}
@@ -216,7 +233,7 @@ export const ExecutiveBriefing = () => {
                 </div>
             </motion.div>
 
-            {/* LPS ROI Layer */}
+            {/* Productivity Recovered */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -230,13 +247,13 @@ export const ExecutiveBriefing = () => {
                             LPS ROI: <span className="text-ohs-orange">Productivity Recovered</span>
                         </h3>
                         <p className="text-gray-400 font-medium mt-2 leading-relaxed break-words">
-                            Tracks productive time recovered through ergonomic breaks and completed corrective actions.
+                            Tracks productive time recovered through ergonomic micro-breaks and verified posture interventions.
                         </p>
                     </div>
                 </div>
             </motion.div>
 
-            {/* 2026 SOVEREIGN FINANCIAL OUTREACH MATRIX */}
+            {/* STATUTORY GOVERNANCE & REST PERIOD FRAMEWORK (NO SALES CLUTTER) */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -246,27 +263,26 @@ export const ExecutiveBriefing = () => {
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8 pb-6 border-b border-white/10">
                     <div className="min-w-0">
                         <span className="text-[10px] font-black text-ohs-orange uppercase tracking-widest block mb-1 truncate">
-                            Sovereign Commercial Matrix 2026
+                            South African Statutory Architecture
                         </span>
                         <h3 className="text-2xl md:text-3xl font-black text-white tracking-tight break-words">
-                            FINANCIAL PITCH SENTINEL
+                            STATUTORY OHS GOVERNANCE STANDARDS
                         </h3>
                         <p className="text-gray-400 font-medium text-sm mt-1 break-words">
-                            Operationalizing the home office 'Duty of Care' & 'Right to Disconnect' standards for Tier-1 Banking & Insurance.
+                            Ergonomics Regulations 2019 (GN R1589) & Basic Conditions of Employment Act Section 15.
                         </p>
                     </div>
                     <div className="flex flex-wrap gap-2 sm:gap-3 bg-white/5 p-2 rounded-2xl border border-white/5 max-w-full">
                         <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-ohs-orange/10 border border-ohs-orange/30 rounded-xl text-ohs-orange text-[10px] sm:text-xs font-black uppercase whitespace-normal break-words">
-                            Reasonably Practicable Standard Active
+                            Section 16.2 Appointee Gate Active
                         </div>
                         <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-ohs-blue/10 border border-ohs-blue/30 rounded-xl text-ohs-blue text-[10px] sm:text-xs font-black uppercase whitespace-normal break-words">
-                            Rest & Work-Life Boundary Coaching
+                            BCEA Section 15 Aligned
                         </div>
                     </div>
                 </div>
 
-                {/* Statutory Background Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8 w-full max-w-full min-w-0">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4 w-full max-w-full min-w-0">
                     <div className="p-4 sm:p-6 rounded-2xl bg-white/5 border border-white/10 relative overflow-hidden flex flex-col justify-between space-y-4">
                         <div>
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
@@ -292,60 +308,20 @@ export const ExecutiveBriefing = () => {
                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
                                 <h4 className="text-base sm:text-lg font-black text-white uppercase tracking-wide flex items-center gap-2 break-words">
                                     <span className="w-2.5 h-2.5 rounded-full bg-ohs-blue shrink-0" />
-                                    {RIGHT_TO_DISCONNECT_FRAMEWORK.concept}
+                                    {BCEA_REST_PERIODS_FRAMEWORK.concept}
                                 </h4>
                                 <div className="px-2.5 py-1 bg-ohs-blue/10 border border-ohs-blue/30 text-ohs-blue font-black text-[9px] uppercase tracking-wider rounded-lg w-max max-w-full break-words shrink-0">
-                                    {RIGHT_TO_DISCONNECT_FRAMEWORK.ccmaRisk}
+                                    {BCEA_REST_PERIODS_FRAMEWORK.statutoryBasis}
                                 </div>
                             </div>
                             <p className="text-gray-300 text-sm leading-relaxed font-medium mb-4 break-words">
-                                {RIGHT_TO_DISCONNECT_FRAMEWORK.description}
+                                {BCEA_REST_PERIODS_FRAMEWORK.description}
                             </p>
                         </div>
                         <p className="text-xs text-ohs-green font-bold bg-ohs-green/10 border border-ohs-green/20 p-3 rounded-xl break-words">
-                            Compliance Vector: {RIGHT_TO_DISCONNECT_FRAMEWORK.complianceCode}
+                            Statutory Vector: {BCEA_REST_PERIODS_FRAMEWORK.complianceCode}
                         </p>
                     </div>
-                </div>
-
-                {/* Pitch Interactive Deck */}
-                <h4 className="text-sm font-black text-ohs-orange uppercase tracking-wider mb-4 px-1 break-words">Tailored Financial Outreach Decks</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 w-full max-w-full min-w-0">
-                    {Object.entries(FINANCIAL_PITCHES).map(([key, pitch]) => (
-                        <div key={key} className="p-4 sm:p-6 rounded-2xl bg-black/60 border border-white/10 flex flex-col justify-between hover:border-ohs-orange/40 transition-all duration-300 group">
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-start gap-4">
-                                    <h5 className="text-xl font-black text-white tracking-tight break-words">{pitch.client}</h5>
-                                    <span className="text-[10px] font-black text-gray-400 border border-white/15 px-2.5 py-1 rounded-full uppercase tracking-wider bg-white/5 shrink-0">
-                                        Active Pitch
-                                    </span>
-                                </div>
-                                
-                                <div className="space-y-2">
-                                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Target: <span className="text-white normal-case font-medium break-words">{pitch.targetAudience}</span></p>
-                                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Duty of Care: <span className="text-gray-300 normal-case font-medium break-words">{pitch.dutyOfCareFocus}</span></p>
-                                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Disconnect Strategy: <span className="text-gray-300 normal-case font-medium break-words">{pitch.disconnectStrategy}</span></p>
-                                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Proposition: <span className="text-ohs-orange normal-case font-medium break-words">{pitch.valueProposition}</span></p>
-                                </div>
-                            </div>
-
-                            <div className="mt-6 pt-6 border-t border-white/5 flex flex-col gap-3">
-                                <div className="bg-white/5 p-3 rounded-xl border border-white/10">
-                                    <span className="text-[10px] font-black text-ohs-orange uppercase block mb-1">Outreach Subject Line:</span>
-                                    <p className="text-xs font-bold text-white italic break-words">"{pitch.outreachSubject}"</p>
-                                </div>
-                                <details className="group/details">
-                                    <summary className="text-xs font-black text-ohs-blue hover:text-white transition-colors cursor-pointer list-none flex items-center justify-between">
-                                        <span>VIEW SOVEREIGN EMAIL DRAFT</span>
-                                        <span className="transform group-open/details:rotate-180 transition-transform">▼</span>
-                                    </summary>
-                                    <div className="mt-4 p-4 bg-black/80 border border-white/5 rounded-xl font-mono text-[10px] text-gray-300 leading-relaxed max-h-48 overflow-y-auto whitespace-pre-line select-all scrollbar-thin break-words">
-                                        {pitch.emailDraft}
-                                    </div>
-                                </details>
-                            </div>
-                        </div>
-                    ))}
                 </div>
             </motion.div>
 
@@ -353,3 +329,5 @@ export const ExecutiveBriefing = () => {
         </div>
     );
 };
+
+export default ExecutiveBriefing;

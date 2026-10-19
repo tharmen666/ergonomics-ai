@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   FileText, Sparkles, Shield, CheckCircle, Copy, Printer, Download, 
-  Wrench, AlertTriangle, UserCheck, RefreshCw, FileCheck, Layers 
+  Wrench, AlertTriangle, UserCheck, RefreshCw, FileCheck, Layers, Calendar
 } from 'lucide-react';
+import { StatutoryDisclaimerBanner } from './common/StatutoryDisclaimerBanner';
 
 interface SOPData {
   sopNumber: string;
@@ -45,7 +46,8 @@ export const SOPGenerator: React.FC = () => {
   const [isReviewed, setIsReviewed] = useState<boolean>(false);
   const [competentPersonName, setCompetentPersonName] = useState<string>('');
   const [competentPersonRole, setCompetentPersonRole] = useState<string>('');
-  const isSignOffValid = isReviewed && competentPersonName.trim().length > 2 && competentPersonRole.trim().length > 2;
+  const [assessmentDate, setAssessmentDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const isSignOffValid = isReviewed && competentPersonName.trim().length > 2 && competentPersonRole.trim().length > 2 && assessmentDate.trim().length > 0;
 
   const [generatedSOP, setGeneratedSOP] = useState<SOPData>({
     sopNumber: "SOP-DRAFT-2026-0892",
@@ -335,6 +337,9 @@ ${generatedSOP.section37Agreement}${signOffBlock}`;
 
           {/* SOP Content Sheet */}
           <div className="p-6 space-y-6 overflow-y-auto max-h-[600px] scrollbar-thin text-slate-100">
+            {/* Statutory Disclaimer Banner */}
+            <StatutoryDisclaimerBanner className="mb-4" />
+
             {/* Document Control Header */}
             <div className="border border-purple-500/30 bg-purple-500/5 rounded-xl p-4 space-y-2">
               <div className="flex flex-wrap justify-between items-center gap-2 border-b border-purple-500/20 pb-2">
@@ -450,10 +455,10 @@ ${generatedSOP.section37Agreement}${signOffBlock}`;
                   <span>I confirm I have reviewed this draft procedure against workplace conditions and applicable statutory standards.</span>
                 </label>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
                     <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">
-                      Competent Person Name
+                      Competent Person Name *
                     </label>
                     <input
                       type="text"
@@ -465,13 +470,24 @@ ${generatedSOP.section37Agreement}${signOffBlock}`;
                   </div>
                   <div>
                     <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">
-                      Statutory Capacity / Role
+                      Statutory Capacity / Role *
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. Ergonomics Assessor / OHS Officer"
+                      placeholder="e.g. Ergonomics Assessor / Sec 16.2"
                       value={competentPersonRole}
                       onChange={(e) => setCompetentPersonRole(e.target.value)}
+                      className="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-purple-400"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-bold text-gray-400 uppercase mb-1">
+                      Assessment Date *
+                    </label>
+                    <input
+                      type="date"
+                      value={assessmentDate}
+                      onChange={(e) => setAssessmentDate(e.target.value)}
                       className="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-purple-400"
                     />
                   </div>

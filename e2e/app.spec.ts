@@ -64,10 +64,10 @@ test.describe('ErgoSafe Reborn V3 End-to-End Suite', () => {
     const drawerTabs = [
       { name: 'HR & Compliance Dashboard', expectedPattern: /OHS Compliance & Escalation Audit Trail/i },
       { name: 'Ergonomics Training & Certification', expectedPattern: /Curriculum|Enterprise OHS/i },
-      { name: 'Daily Self-Risk Assessment (WFH / Desk)', expectedPattern: /Ergonomic Self-Risk Assessment|Assessment/i },
+      { name: 'GN R1589 Statutory Assessment Workspaces', expectedPattern: /Statutory Assessment Workspaces|Ergonomic Self-Risk Assessment|Assessment/i },
       { name: 'Daily Workstation Safety Checklist', expectedPattern: /Daily Workstation Safety Checklist|Checklist/i },
       { name: 'Nelly Posture & Hazard Monitoring Engine (3D Spine)', expectedPattern: /Nelly Posture & Hazard Engine|Nelly Intelligence Grid/i },
-      { name: 'Prizm Driver & Shift Fatigue Telemetry', expectedPattern: /G\.E\.A\.R\.|Prizm Driver/i },
+      { name: 'Biomechanical Calculators (REBA/RULA/NIOSH/WBGT)', expectedPattern: /Biomechanical Calculators|REBA|RULA/i },
       { name: 'Assessment PDF Invoices & Billing', expectedPattern: /Ergonomics Assessment Invoicing/i },
       { name: 'Analytics & Regulatory Audit Logs', expectedPattern: /Analytics & Regulatory Audit Logs/i },
     ];

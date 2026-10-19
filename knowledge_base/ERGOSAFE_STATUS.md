@@ -45,7 +45,7 @@ useEffect(() => {
 
 ---
 
-## ⚖️ 3. OHS Act Section 8 & Right to Disconnect Framework
+## ⚖️ 3. OHS Act Section 8 & BCEA Section 15 Regulated Rest Periods & VDU Micro-Breaks Framework
 
 ErgoSafe Reborn embeds the stringent South African Occupational Health and Safety (OHS) statutory duties and global ISO guidelines directly into the codebase.
 
@@ -57,7 +57,7 @@ ErgoSafe Reborn embeds the stringent South African Occupational Health and Safet
     *   **Section 37** holds executives and directors vicariously liable for remote ergonomic and psychosocial injuries sustained by distributed employees.
     *   **Section 38(1) 2026 Amendment** imposes severe administrative penalties up to **10% of annual turnover** or **R5,000,000** (whichever is greater), alongside potential imprisonment, for failing to maintain active home-office safety audits.
 
-### Psychosocial Risk Mitigation & The Right to Disconnect
+### Psychosocial Risk Mitigation & BCEA Section 15 Regulated Rest Periods & VDU Micro-Breaks
 Remote working has triggered a **142% spike in CCMA "Digital Tethering" claims** (constructive dismissal and unpaid overtime due to after-hours messaging).
 
 *   **ISO 45003:2021 Alignment**: Operates in accordance with Psychosocial Risk Management guidelines (Clause 6.1.2) to identify and mitigate digital over-exhaustion.
