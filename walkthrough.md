@@ -1,6 +1,7 @@
 # ErgoSafe Reborn V3 - Walkthrough
 
 > **Status update (19 Oct 2026, GN R1589 Statutory Alignment Pass):**
+>
 > 1. Preserved and decoupled driver fatigue telemetry into standalone module `src/modules/FatigueSentinel_Prizm.tsx`.
 > 2. Purged all internal sales & investor pitch artifacts (`PitchSentinel`, `InvestorDecks`, `BankingOutreach`, `EmailOutreach`, `financePitches`).
 > 3. Standardized SA statutory terminology ("BCEA Section 15 Regulated Rest Periods & VDU Micro-Breaks", corrected "Privacy Protocol").

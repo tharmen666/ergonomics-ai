@@ -1,15 +1,17 @@
-import React, { lazy, Suspense } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { useNellyStore } from '../../store/nellyStore';
 import { GlowButton } from '../../components/ui/GlowButton';
-import { AlertTriangle, CheckCircle, Activity, Loader2 } from 'lucide-react';
+import { AlertTriangle, CheckCircle, Activity, Loader2, Camera, Cuboid } from 'lucide-react';
 import { speak } from '../../utils/speech';
 import { NellyInterface } from '../../components/nelly/NellyInterface';
 
 const SpineViewer = lazy(() => import('../../components/agent/SpineViewer').then(m => ({ default: m.SpineViewer })));
+const LivePostureTelemetry = lazy(() => import('../posture/LivePostureTelemetry').then(m => ({ default: m.LivePostureTelemetry })));
 
 export const RiskyBehaviorsPage = () => {
     const { setGuidance, setSpeaking, setMood, addRecommendation } = useNellyStore();
+    const [postureViewMode, setPostureViewMode] = useState<'3d' | 'camera'>('3d');
 
     const risks = [
         { id: 1, title: 'Slouching / Turtling', desc: 'Leaning forward towards the screen creates neck strain.' },
@@ -29,50 +31,89 @@ export const RiskyBehaviorsPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="space-y-6"
             >
-                <div>
-                    <span className="text-[10px] font-black text-red-400 uppercase tracking-[0.3em] block mb-1">Biomechanical Hazard Engine</span>
-                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-red-500 flex items-center gap-3">
-                        <AlertTriangle size={36} className="text-red-500 shrink-0" />
-                        Nelly Posture & Hazard Engine
-                    </h1>
-                    <p className="text-gray-300 text-sm md:text-base font-medium mt-2">
-                        Select any posture habits or workplace environments to evaluate cervical load and trigger corrective actions.
-                    </p>
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <span className="text-[10px] font-black text-red-400 uppercase tracking-[0.3em] block mb-1">Biomechanical Hazard Engine</span>
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-red-500 flex items-center gap-3">
+                            <AlertTriangle size={36} className="text-red-500 shrink-0" />
+                            Nelly Posture & Hazard Engine
+                        </h1>
+                        <p className="text-gray-300 text-sm md:text-base font-medium mt-2">
+                            Real-time client-side biomechanical posture telemetry via MediaPipe & 3D spine simulation.
+                        </p>
+                    </div>
+
+                    {/* Mode Switcher */}
+                    <div className="flex items-center gap-2 p-1.5 bg-black/50 border border-white/10 rounded-2xl self-start md:self-auto shrink-0">
+                        <button
+                            onClick={() => setPostureViewMode('camera')}
+                            className={`px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer ${
+                                postureViewMode === 'camera'
+                                    ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/25'
+                                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                            }`}
+                        >
+                            <Camera size={16} />
+                            <span>Live AI Webcam Telemetry</span>
+                        </button>
+                        <button
+                            onClick={() => setPostureViewMode('3d')}
+                            className={`px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer ${
+                                postureViewMode === '3d'
+                                    ? 'bg-red-500 text-white shadow-lg shadow-red-500/25'
+                                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                            }`}
+                        >
+                            <Cuboid size={16} />
+                            <span>3D Spine Simulation</span>
+                        </button>
+                    </div>
                 </div>
 
-                {/* 3D Spine Viewer & Conversational Nelly Interface Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div className="lg:col-span-2 bg-black/40 border border-white/10 rounded-3xl p-4 sm:p-6 space-y-4">
-                        <div className="flex items-center gap-3">
-                            <div className="p-2.5 bg-red-500/20 rounded-xl text-red-400 border border-red-500/30">
-                                <Activity size={22} />
-                            </div>
-                            <div>
-                                <h3 className="text-base sm:text-lg font-black text-white">
-                                    Live 3D Spine Alignment & Hazard Telemetry
-                                </h3>
-                                <p className="text-xs text-gray-400 font-medium">
-                                    Test posture scenarios (Bed, Couch, Tech-Neck, Monitor Mismatch) to trigger real-time hazard log alerts.
-                                </p>
-                            </div>
+                {/* Primary Mode Viewport */}
+                {postureViewMode === 'camera' ? (
+                    <Suspense fallback={
+                        <div className="w-full h-96 flex flex-col items-center justify-center bg-black/40 rounded-3xl border border-white/10 text-gray-400 gap-3">
+                            <Loader2 className="w-8 h-8 animate-spin text-emerald-400" />
+                            <span className="text-xs uppercase tracking-widest font-mono text-emerald-300">Loading MediaPipe Pose Landmarker Engine...</span>
                         </div>
-
-                        <div className="w-full h-[400px] md:h-[450px]">
-                            <Suspense fallback={
-                                <div className="w-full h-full flex flex-col items-center justify-center bg-black/40 rounded-2xl border border-white/10 text-gray-400 gap-3">
-                                    <Loader2 className="w-8 h-8 animate-spin text-emerald-400" />
-                                    <span className="text-xs uppercase tracking-widest font-mono text-emerald-300">Initializing 3D Biomechanical Spine Model...</span>
+                    }>
+                        <LivePostureTelemetry />
+                    </Suspense>
+                ) : (
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <div className="lg:col-span-2 bg-black/40 border border-white/10 rounded-3xl p-4 sm:p-6 space-y-4">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2.5 bg-red-500/20 rounded-xl text-red-400 border border-red-500/30">
+                                    <Activity size={22} />
                                 </div>
-                            }>
-                                <SpineViewer />
-                            </Suspense>
+                                <div>
+                                    <h3 className="text-base sm:text-lg font-black text-white">
+                                        Live 3D Spine Alignment & Hazard Telemetry
+                                    </h3>
+                                    <p className="text-xs text-gray-400 font-medium">
+                                        Test posture scenarios (Bed, Couch, Tech-Neck, Monitor Mismatch) to trigger real-time hazard log alerts.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="w-full h-[400px] md:h-[450px]">
+                                <Suspense fallback={
+                                    <div className="w-full h-full flex flex-col items-center justify-center bg-black/40 rounded-2xl border border-white/10 text-gray-400 gap-3">
+                                        <Loader2 className="w-8 h-8 animate-spin text-emerald-400" />
+                                        <span className="text-xs uppercase tracking-widest font-mono text-emerald-300">Initializing 3D Biomechanical Spine Model...</span>
+                                    </div>
+                                }>
+                                    <SpineViewer />
+                                </Suspense>
+                            </div>
+                        </div>
+
+                        <div className="lg:col-span-1 flex flex-col justify-center">
+                            <NellyInterface />
                         </div>
                     </div>
-
-                    <div className="lg:col-span-1 flex flex-col justify-center">
-                        <NellyInterface />
-                    </div>
-                </div>
+                )}
 
                 {/* Behavior Cards */}
                 <div className="pt-4">

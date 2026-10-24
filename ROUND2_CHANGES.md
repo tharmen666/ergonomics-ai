@@ -4,6 +4,7 @@ Done by Claude on 9 Oct 2026, working on `Desktop\ErgoSafe_Reborn_V3`.
 Every item below was built and tested; the output at the bottom is copied from the real run, unedited.
 
 ## Proof the new tests are real
+
 The new tests were also run against the **original** code (before these fixes):
 
 - `e2e/round2-store.spec.ts`: **9 of 15 failed** on the original store (duplicate logs, false BREACHes, keyword breach,
@@ -15,7 +16,7 @@ The new tests were also run against the **original** code (before these fixes):
 ## What changed
 
 | # | Problem | Fix | Test |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | A1 | Every hazard was logged twice (store listened to its own event) | Removed the self-listener; `processTelemetry` now writes its own log | `round2-store` A1 x3 |
 | A2 | `fireEvent` / `recordUsage` ran inside `set()` updaters | All side effects now run after `set()` | covered by A1/A3 tests |
 | A3 | Manual self-assessment (score >= 15) set global **BREACH** | `RiskPage` logs a RISK_ALERT; `triggerBreach` removed | `round2-store` A3, `round2-ui` A3 |
@@ -44,6 +45,7 @@ The new tests were also run against the **original** code (before these fixes):
 | Tests | Invoice test only passed on en-ZA number formatting | Accepts `25 000` and `25,000` | `app` 3 |
 
 ## Files you can delete (not imported anywhere; they never reach the app)
+
 - `src/assets/Legal-Guardrails/PrivacyHandshake.tsx` (duplicate - the app uses `Privacy-Shield`)
 - `src/features/risks/RiskyBehaviorsPage.tsx` (duplicate - the app uses `features/risk/`)
 - `src/logic/security/irisCore.json` (duplicate - the app uses `src/data/irisCore.json`)
@@ -53,10 +55,12 @@ The new tests were also run against the **original** code (before these fixes):
 The build and all tests were run **without** these files.
 
 ## Before you deploy (Vercel environment variables)
+
 Set `ERGOSAFE_API_TOKEN`, `VITE_ERGOSAFE_API_TOKEN` (same value), `ALLOWED_ORIGINS` and `ANTHROPIC_API_KEY`.
 Without `ERGOSAFE_API_TOKEN` the API now refuses every request on purpose. See README "Server configuration".
 
 ## Still open (not fixed here - needs a decision or a specialist)
+
 - **Real authentication** (TODO(auth)): the demo login and the shared API token are not user authentication.
 - **Encryption / POPIA s26** handling of health data (TODO(privacy)).
 - **Native-speaker review** of isiZulu, isiXhosa, Sesotho and Kiswahili strings (TODO(native-review)); the
@@ -68,7 +72,8 @@ Without `ERGOSAFE_API_TOKEN` the API now refuses every request on purpose. See R
   Vercel build (it works in the test runner).
 
 ## Build output (`npm run build`)
-```
+
+```text
 > ergo-safe-reborn@0.0.0 build
 > tsc && vite build
 vite v5.4.21 building for production...
@@ -111,7 +116,8 @@ dist/assets/react-three-fiber.esm-C76BUSm8.js       800.25 kB
 ```
 
 ## Test output (`npx playwright test`, 51 tests)
-```
+
+```text
 ✓   1 [chromium] › e2e/api.spec.ts:32:5 › API guards & validation › C1: fails closed (500) when ERGOSAFE_API_TOKEN is not configured - no default token (16ms)
 ✓   2 [chromium] › e2e/api.spec.ts:41:5 › API guards & validation › C1: wrong or missing token -> 401 (5ms)
 ✓   3 [chromium] › e2e/api.spec.ts:50:5 › API guards & validation › C1: CORS never sends a wildcard origin with credentials (4ms)

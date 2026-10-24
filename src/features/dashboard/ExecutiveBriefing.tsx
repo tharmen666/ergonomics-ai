@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp, Volume2, VolumeX, Activity, Scale, Award, ShieldCheck, UserCheck } from 'lucide-react';
+import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp, Volume2, VolumeX, Activity, Scale, Award, ShieldCheck, UserCheck, Zap } from 'lucide-react';
 import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
 import { LeanPerformanceRail } from '../../components/AI-Coach/LeanPerformanceRail';
 import { useNellyStore } from '../../store/nellyStore';
@@ -23,7 +23,7 @@ export const BCEA_REST_PERIODS_FRAMEWORK = {
 
 export const ExecutiveBriefing = () => {
     const openStatutoryBreaches = useComplianceStore((s) => s.cases.filter(c => c.status === 'BREACH' && c.escalationState !== 'resolved').length);
-    const { language } = useNellyStore();
+    const { language, setIsLiveTelemetryOpen, setWingmanActive } = useNellyStore();
     const [isNarrating, setIsNarrating] = useState(false);
     const [showSupportingMatrix, setShowSupportingMatrix] = useState(false);
 
@@ -115,6 +115,63 @@ export const ExecutiveBriefing = () => {
                     <p className="text-xs text-amber-100/90 leading-relaxed font-sans">
                         <strong className="text-ohs-orange font-black">Statutory Notice:</strong> Digital biomechanical screening under GN R1589 (Ergonomics Regulations 2019). Baseline scores and control hierarchies are screening indicators and must be reviewed and countersigned by an appointed Competent Person / Section 16.2 Appointee.
                     </p>
+                </div>
+            </motion.div>
+
+            {/* HERO LAUNCH CARD: AI Posture Wingman (Live Edge Telemetry) */}
+            <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="relative overflow-hidden rounded-[2rem] border-2 border-emerald-500/50 bg-gradient-to-r from-emerald-950/70 via-slate-950 to-[#041a12] p-5 sm:p-7 shadow-[0_0_50px_rgba(16,185,129,0.2)]"
+            >
+                <div className="absolute top-0 right-0 -mt-10 -mr-10 w-72 h-72 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
+                
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+                    <div className="space-y-2.5 max-w-3xl">
+                        <div className="flex flex-wrap items-center gap-2">
+                            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                                1-Click Instant Launch
+                            </span>
+                            <span className="text-[10px] font-bold text-cyan-300 uppercase tracking-widest bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/20">
+                                MediaPipe Edge AI Vision
+                            </span>
+                        </div>
+
+                        <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight uppercase">
+                            AI Posture Wingman (Live Edge Telemetry)
+                        </h2>
+
+                        <p className="text-slate-300 text-xs sm:text-sm font-medium leading-relaxed">
+                            Zero-Surveillance POPIA compliant. Analyzes neck flexion, thoracic slouch, and shoulder tilt locally via your webcam.
+                        </p>
+
+                        <div className="flex flex-wrap items-center gap-4 pt-1 text-[11px] text-slate-400 font-mono">
+                            <span className="flex items-center gap-1 text-emerald-400 font-semibold">
+                                ✓ 100% Client-Side Processing
+                            </span>
+                            <span className="flex items-center gap-1 text-slate-300">
+                                ✓ Multilingual Verbal Feedback
+                            </span>
+                            <span className="flex items-center gap-1 text-slate-300">
+                                ✓ GN R1589 Statutory Audit Log
+                            </span>
+                        </div>
+                    </div>
+
+                    <div className="shrink-0 flex items-center">
+                        <button
+                            onClick={() => {
+                                setIsLiveTelemetryOpen(true);
+                                setWingmanActive(true);
+                            }}
+                            className="w-full sm:w-auto px-6 py-4 bg-gradient-to-r from-emerald-500 via-emerald-400 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm uppercase tracking-wider rounded-2xl shadow-[0_0_35px_rgba(16,185,129,0.5)] hover:shadow-[0_0_50px_rgba(16,185,129,0.7)] transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-3 cursor-pointer"
+                            title="Launch AI Posture Wingman in full-screen live monitor"
+                        >
+                            <Zap className="fill-slate-950 text-slate-950 animate-bounce" size={18} />
+                            <span>⚡ Launch Live AI Monitor</span>
+                        </button>
+                    </div>
                 </div>
             </motion.div>
 

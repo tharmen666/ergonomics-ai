@@ -12,6 +12,7 @@
     "claude:pack": "python scripts/pack_for_claude.py"
   },
   "dependencies": {
+    "@mediapipe/tasks-vision": "^1.1.1",
     "@react-three/drei": "^9.99.0",
     "@react-three/fiber": "^8.15.16",
     "clsx": "^2.1.0",

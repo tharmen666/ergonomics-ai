@@ -13,7 +13,9 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
         isSidebarCollapsed, 
         setSidebarCollapsed, 
         isWingmanActive, 
-        setWingmanActive 
+        setWingmanActive,
+        isLiveTelemetryOpen,
+        setIsLiveTelemetryOpen
     } = useNellyStore();
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -105,18 +107,21 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
                         <span className="text-[10px] font-black text-emerald-400 uppercase tracking-wide">NOMINAL</span>
                     </div>
 
-                    {/* Wingman Toggle Button */}
+                    {/* Wingman Live Telemetry Button */}
                     <button
-                        onClick={() => setWingmanActive(!isWingmanActive)}
+                        onClick={() => {
+                            setIsLiveTelemetryOpen(true);
+                            setWingmanActive(true);
+                        }}
                         className={`inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl font-bold text-xs transition-all shadow-md leading-none cursor-pointer whitespace-nowrap ${
-                            isWingmanActive 
-                                ? 'bg-red-500/90 hover:bg-red-600 text-white shadow-red-500/20' 
-                                : 'bg-white/10 hover:bg-white/20 text-white'
+                            isLiveTelemetryOpen
+                                ? 'bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black shadow-emerald-500/25 ring-2 ring-emerald-400'
+                                : 'bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40'
                         }`}
-                        title="Toggle Voice Wingman Assistant"
+                        title="Launch Live AI Posture Monitor & Wingman"
                     >
-                        <Radio size={14} className={isWingmanActive ? "animate-pulse" : ""} />
-                        <span>{isWingmanActive ? 'DISABLE WINGMAN' : 'ACTIVATE WINGMAN'}</span>
+                        <Radio size={14} className={isLiveTelemetryOpen || isWingmanActive ? "animate-pulse text-emerald-400" : ""} />
+                        <span>((•)) ACTIVATE WINGMAN</span>
                     </button>
 
                     {/* HQ Demo Action Button */}
@@ -189,21 +194,22 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
                             {/* Wingman Assistant Action */}
                             <button
                                 onClick={() => {
-                                    setWingmanActive(!isWingmanActive);
+                                    setIsLiveTelemetryOpen(true);
+                                    setWingmanActive(true);
                                     setIsMobileMenuOpen(false);
                                 }}
                                 className={`w-full flex items-center justify-between p-2.5 rounded-xl font-bold text-xs transition-colors cursor-pointer ${
-                                    isWingmanActive 
-                                        ? 'bg-red-500 text-white' 
-                                        : 'bg-white/10 hover:bg-white/15 text-white'
+                                    isLiveTelemetryOpen 
+                                        ? 'bg-emerald-500 text-slate-950 font-black' 
+                                        : 'bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40'
                                 }`}
                             >
                                 <span className="flex items-center gap-2">
-                                    <Radio size={14} className={isWingmanActive ? "animate-pulse" : ""} />
-                                    <span>Wingman Co-Pilot</span>
+                                    <Radio size={14} className="animate-pulse" />
+                                    <span>((•)) ACTIVATE WINGMAN</span>
                                 </span>
                                 <span className="text-[10px] uppercase font-mono">
-                                    {isWingmanActive ? 'Enabled' : 'Disabled'}
+                                    {isLiveTelemetryOpen ? 'Monitoring' : 'Launch'}
                                 </span>
                             </button>
 

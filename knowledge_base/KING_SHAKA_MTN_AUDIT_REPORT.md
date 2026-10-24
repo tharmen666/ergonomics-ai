@@ -7,12 +7,15 @@
 ---
 
 ## 1. Safety Representative & Warden Appointments
+
 * **First Aid Wardens:** Fully appointed under SAQA Unit Standard guidelines.
 * **Fire Marshal Appointees:** Verified official letters of appointment and active training credentials.
 * **Evacuation Drills:** Simulated forecourt hazardous spill evacuation completed in under **3 minutes and 45 seconds**.
 
 ## 2. Risk Assessment Protocol
+
 Using the standard **Probability vs. Severity Matrix**:
+
 * **High-Risk Scenario:** Hydrocarbon spill during tanker replenishment.
   * *Mitigation:* Automatic shutoff valves tested; attendant safety buffers verified.
 * **Psychosocial/Worker Welfare:** BCEA Section 15 Regulated Rest Periods & VDU Micro-Breaks protocols successfully implemented for non-shift personnel.

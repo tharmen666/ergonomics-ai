@@ -88,6 +88,80 @@ export const toggleMute = (): boolean => {
 
 export const getIsMuted = (): boolean => isAudioMuted;
 
+// Ensure voice list is pre-loaded on modern browsers as soon as available
+if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+    try {
+        window.speechSynthesis.getVoices();
+        window.speechSynthesis.onvoiceschanged = () => {
+            window.speechSynthesis.getVoices();
+        };
+    } catch {
+        // Safe fallback in restrictive sandbox environments
+    }
+}
+
+/**
+ * Prioritized female voice selection strategy strictly targeting South African English (en-ZA),
+ * British English (en-GB), Australian English (en-AU), or high-quality female voices.
+ * Explicitly guards against defaulting to male voices like "Microsoft David".
+ */
+export function getPreferredNellyVoice(): SpeechSynthesisVoice | null {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window)) return null;
+  const voices = window.speechSynthesis.getVoices();
+  if (!voices || voices.length === 0) return null;
+
+  const maleVoiceRegex = /david|mark|george|richard|male|guy|adam|alex|daniel|fred|james|jorge|rishi|tom|stefan/i;
+
+  // 1. Tier 1: South African Female (if available on system/browser)
+  const zaFemale = voices.find(
+    v => (v.lang === 'en-ZA' || v.lang.startsWith('en_ZA') || v.lang.toLowerCase().replace('_', '-') === 'en-za') && 
+         !maleVoiceRegex.test(v.name)
+  );
+  if (zaFemale) return zaFemale;
+
+  // 2. Tier 2: High-quality Commonwealth / Natural Female voices
+  const preferredFemaleNames = [
+    'microsoft zira desktop',
+    'microsoft zira',
+    'microsoft jenny',
+    'microsoft susan',
+    'microsoft hazel',
+    'microsoft libby',
+    'google uk english female',
+    'google south africa english female',
+    'google us english female',
+    'samantha',
+    'karen',
+    'victoria',
+    'ayanda',
+    'leah'
+  ];
+
+  for (const name of preferredFemaleNames) {
+    const match = voices.find(v => v.name.toLowerCase().includes(name));
+    if (match) return match;
+  }
+
+  // 3. Tier 3: Regex match for any English female voice
+  const genericFemale = voices.find(
+    v => v.lang.toLowerCase().startsWith('en') && 
+         /female|woman|zira|susan|hazel|jenny|ayanda|samantha|karen|libby|leah/i.test(v.name) &&
+         !maleVoiceRegex.test(v.name)
+  );
+  if (genericFemale) return genericFemale;
+
+  // 4. Fallback: Any English voice that is explicitly NOT David, Mark, George, or Richard
+  const nonMaleEnglish = voices.find(
+    v => v.lang.toLowerCase().startsWith('en') && 
+         !maleVoiceRegex.test(v.name)
+  );
+  if (nonMaleEnglish) return nonMaleEnglish;
+
+  // 5. Any voice in system that is not male
+  const nonMaleAny = voices.find(v => !maleVoiceRegex.test(v.name));
+  return nonMaleAny || voices[0] || null;
+}
+
 /**
  * Finds the best female neural voice matching target locale/language
  */
@@ -98,42 +172,29 @@ const findBestNeuralVoice = (targetLang: string, targetLocale: string): SpeechSy
 
     const locTarget = targetLocale.toLowerCase().replace('_', '-');
     const langPrefix = targetLang.split('-')[0].toLowerCase();
-    
-    const maleVoiceNames = ['adam', 'alex', 'antoni', 'daniel', 'david', 'fred', 'guy', 'james', 'jorge', 'mark', 'microsoft mark', 'rishi', 'tom'];
-    const femaleVoiceNames = ['female', 'bella', 'karen', 'kathy', 'kyoko', 'luciana', 'moira', 'nomsa', 'samantha', 'salli', 'susan', 'tessa', 'zira', 'zola', 'rachel', 'victoria'];
-    
-    const isFemaleVoice = (voice: SpeechSynthesisVoice) => {
-        const name = voice.name.toLowerCase();
-        return !maleVoiceNames.some(marker => name.includes(marker)) && femaleVoiceNames.some(marker => name.includes(marker));
-    };
+    const maleVoiceRegex = /david|mark|george|richard|male|guy|adam|alex|daniel|fred|james|jorge|rishi|tom|stefan/i;
 
-    // 1. Try exact locale match with neural/natural female keywords
-    const exactNeural = voices.find(v => 
-        v.lang.toLowerCase().replace('_', '-') === locTarget &&
-        isFemaleVoice(v) &&
-        (v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('online') || v.name.toLowerCase().includes('neural'))
-    );
-    if (exactNeural) return exactNeural;
-
-    // 2. Try exact locale match, any female voice
-    const exactAny = voices.find(v => v.lang.toLowerCase().replace('_', '-').startsWith(locTarget) && isFemaleVoice(v));
-    if (exactAny) return exactAny;
-
-    // 3. South African English fallback for ZA indigenous languages (zu, xh, st, af)
-    if (['zu', 'xh', 'st', 'af', 'en'].includes(langPrefix)) {
-        const saFemale = voices.find(v => 
-            v.lang.toLowerCase().includes('en-za') && 
-            isFemaleVoice(v)
-        );
-        if (saFemale) return saFemale;
+    // 1. For English, South African languages (en, zu, xh, st, af) or default, use getPreferredNellyVoice()
+    if (['en', 'zu', 'xh', 'st', 'af'].includes(langPrefix)) {
+        return getPreferredNellyVoice();
     }
 
-    // 4. High quality English female natural fallback
-    return voices.find(v => 
-        v.lang.toLowerCase().startsWith('en') && 
-        isFemaleVoice(v) &&
-        (v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('salli') || v.name.toLowerCase().includes('samantha') || v.name.toLowerCase().includes('karen'))
-    ) || voices.find(v => v.lang.toLowerCase().startsWith('en')) || null;
+    // 2. For foreign language targets (de, zh, sw), find female voice matching exact target locale
+    const exactFemale = voices.find(v => 
+        v.lang.toLowerCase().replace('_', '-') === locTarget &&
+        !maleVoiceRegex.test(v.name) &&
+        (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('natural') || v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('neural'))
+    );
+    if (exactFemale) return exactFemale;
+
+    const exactAnyNonMale = voices.find(v => 
+        v.lang.toLowerCase().replace('_', '-').startsWith(langPrefix) &&
+        !maleVoiceRegex.test(v.name)
+    );
+    if (exactAnyNonMale) return exactAnyNonMale;
+
+    // 3. Fall back to preferred Commonwealth / SA female voice
+    return getPreferredNellyVoice();
 };
 
 // Chrome TTS Garbage Collection Guard: module-level and window instance persistence
@@ -222,7 +283,7 @@ export const speakNellyGuidance = (
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = targetLocale;
     utterance.rate = 0.95; // Natural conversational tempo
-    utterance.pitch = 1.0;
+    utterance.pitch = 1.08; // Warm, natural female cadence (1.05 - 1.1)
 
     // Chrome TTS Garbage Collection Guard:
     // Chromium aggressively garbage-collects active SpeechSynthesisUtterance instances mid-speech

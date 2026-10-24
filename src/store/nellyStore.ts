@@ -45,6 +45,8 @@ interface NellyState {
     setTourActive: (active: boolean) => void;
     isWingmanActive: boolean;
     setWingmanActive: (active: boolean) => void;
+    isLiveTelemetryOpen: boolean;
+    setIsLiveTelemetryOpen: (open: boolean) => void;
     hasIntroduced: boolean;
     markIntroduced: () => void;
     isNellyExpanded: boolean;
@@ -71,6 +73,7 @@ export const useNellyStore = create<NellyState>()(
             mood: 'neutral',
             isTourActive: false,
             isWingmanActive: false,
+            isLiveTelemetryOpen: false,
             hasIntroduced: false,
             isNellyExpanded: false,
             isSidebarCollapsed: false,
@@ -83,6 +86,7 @@ export const useNellyStore = create<NellyState>()(
             toggleAvatar: () => set((state) => ({ showAvatar: !state.showAvatar })),
             setTourActive: (isTourActive) => set({ isTourActive }),
             setWingmanActive: (isWingmanActive) => set({ isWingmanActive }),
+            setIsLiveTelemetryOpen: (isLiveTelemetryOpen) => set({ isLiveTelemetryOpen }),
             markIntroduced: () => set({ hasIntroduced: true }),
             setNellyExpanded: (isNellyExpanded) => set({ isNellyExpanded }),
             setSidebarCollapsed: (isSidebarCollapsed) => set({ isSidebarCollapsed }),
@@ -106,11 +110,17 @@ export const useNellyStore = create<NellyState>()(
                     merged.language = 'en';
                 }
                 merged.hasIntroduced = false;
+                merged.isLiveTelemetryOpen = false;
                 return merged;
             },
-            // Exclude productiveStreak from persistence per task 4.3
+            // Exclude non-persistent UI states
             partialize: (state) => {
-                const { hasIntroduced: _hasIntroduced, productiveStreak: _productiveStreak, ...persistedState } = state;
+                const { 
+                    hasIntroduced: _hasIntroduced, 
+                    productiveStreak: _productiveStreak, 
+                    isLiveTelemetryOpen: _isLiveTelemetryOpen, 
+                    ...persistedState 
+                } = state;
                 return persistedState;
             }
         }
