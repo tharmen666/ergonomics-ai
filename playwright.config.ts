@@ -6,7 +6,7 @@ export default defineConfig({
   workers: 1,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: 'http://localhost:5188',
     trace: 'on-first-retry',
     viewport: { width: 1280, height: 800 },
   },
@@ -17,9 +17,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npx vite preview --port 5173 --strictPort',
-    url: 'http://localhost:5173',
-    reuseExistingServer: true,
+    command: 'npx vite preview --port 5188 --strictPort',
+    url: 'http://localhost:5188',
+    reuseExistingServer: !process.env.CI,
     timeout: 30000,
   },
 });

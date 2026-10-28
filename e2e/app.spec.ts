@@ -128,7 +128,9 @@ test.describe('ErgoSafe Reborn V3 End-to-End Suite', () => {
 
     // Navigate to Nelly Posture & Hazard Monitoring Engine
     await ensureSidebarOpen(page);
-    await page.locator('button:has-text("Nelly Posture & Hazard Monitoring Engine (3D Spine)")').first().click({ force: true });
+    const nellyBtn = page.locator('button:has-text("Nelly Posture & Hazard Monitoring Engine (3D Spine)")').first();
+    await nellyBtn.scrollIntoViewIfNeeded();
+    await nellyBtn.evaluate((el: HTMLElement) => el.click());
     await expect(page.locator('body')).toContainText(/Nelly Posture & Hazard Engine|Nelly Intelligence Grid/i);
 
     // Language selector buttons in NellyInterface: en-ZA, zu-ZA, xh-ZA, sw-KE, zh-CN, de-DE, st-ZA
