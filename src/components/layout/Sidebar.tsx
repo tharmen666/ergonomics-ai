@@ -20,6 +20,20 @@ const navItems = [
     { icon: BarChart2, label: "Analytics & Regulatory Audit Logs", id: "reports" },
 ];
 
+export const isTabActive = (itemId: string, currentTab: string): boolean => {
+    if (itemId === currentTab) return true;
+    const norm = (currentTab || '').toLowerCase().trim();
+    if (itemId === 'nelly' && ['nelly', 'posture', '3d-spine', '3d-spinal', 'spinal-3d', 'spinal3d', 'spinal', 'spine', '3d', 'spine-viewer', 'spine-simulation'].includes(norm)) return true;
+    if (itemId === 'risks' && ['risks', 'risk', 'risky-behaviours', 'risky-behaviors', 'riskybehaviours', 'riskybehaviors', 'risky-behaviour', 'risky-behavior', 'behaviours', 'behaviors'].includes(norm)) return true;
+    if (itemId === 'training' && ['training', 'trainings', 'training-module', 'trainingmodule', 'certification', 'curriculum'].includes(norm)) return true;
+    if (itemId === 'assessment' && ['assessment', 'assessments', 'self-assessment', 'self-assessments', 'selfassessment', 'selfassessments', 'workspaces', 'statutory-assessment', 'wfh-assessment'].includes(norm)) return true;
+    if (itemId === 'calculators' && ['calculators', 'calculator', 'biomechanical-calculators', 'reba', 'rula', 'niosh', 'wbgt'].includes(norm)) return true;
+    if (itemId === 'checklist' && ['checklist', 'kiosk', 'daily-checklist'].includes(norm)) return true;
+    if (itemId === 'hr' && ['hr', 'hr-dashboard', 'hr-compliance', 'compliance'].includes(norm)) return true;
+    if (itemId === 'executive' && ['executive', 'stewardship', 'executive-briefing', 'dashboard'].includes(norm)) return true;
+    return false;
+};
+
 interface SidebarProps {
     activeTab: string;
     setActiveTab: (id: string) => void;
@@ -78,24 +92,27 @@ export const Sidebar = ({ activeTab, setActiveTab, isCollapsed, setIsCollapsed }
 
                 <nav className="flex-1 space-y-1.5 overflow-y-auto pr-1 scrollbar-thin">
                     <span className="text-[9px] font-black text-ohs-orange uppercase tracking-widest block mb-2 px-2">Core System Modules</span>
-                    {navItems.map((item) => (
-                        <button
-                            key={item.id}
-                            onClick={() => {
-                                setActiveTab(item.id);
-                                setIsCollapsed(true);
-                            }}
-                            className={`w-full flex items-center gap-3 px-3 py-3 min-h-[48px] rounded-xl transition-all text-left cursor-pointer ${activeTab === item.id
-                                ? "bg-ohs-blue text-white shadow-lg shadow-ohs-blue/20 font-bold"
-                                : "text-gray-300 hover:bg-white/5 hover:text-white"
-                                }`}
-                        >
-                            <item.icon size={20} className="flex-shrink-0 text-ohs-orange" />
-                            <span className="text-xs font-semibold leading-tight line-clamp-2">
-                                {item.label}
-                            </span>
-                        </button>
-                    ))}
+                    {navItems.map((item) => {
+                        const isActive = isTabActive(item.id, activeTab);
+                        return (
+                            <button
+                                key={item.id}
+                                onClick={() => {
+                                    setActiveTab(item.id);
+                                    setIsCollapsed(true);
+                                }}
+                                className={`w-full flex items-center gap-3 px-3 py-3 min-h-[48px] rounded-xl transition-all text-left cursor-pointer ${isActive
+                                    ? "bg-ohs-blue text-white shadow-lg shadow-ohs-blue/20 font-bold"
+                                    : "text-gray-300 hover:bg-white/5 hover:text-white"
+                                    }`}
+                            >
+                                <item.icon size={20} className="flex-shrink-0 text-ohs-orange" />
+                                <span className="text-xs font-semibold leading-tight line-clamp-2">
+                                    {item.label}
+                                </span>
+                            </button>
+                        );
+                    })}
 
                     {isAdmin && (
                         <div className="pt-2 border-t border-white/10 mt-2">

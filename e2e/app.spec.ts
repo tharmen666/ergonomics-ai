@@ -147,7 +147,8 @@ test.describe('ErgoSafe Reborn V3 End-to-End Suite', () => {
     for (const lang of languages) {
       const langBtn = page.locator(`button:has-text("${lang.code}")`).first();
       await expect(langBtn).toBeVisible();
-      await langBtn.click({ force: true });
+      await langBtn.scrollIntoViewIfNeeded();
+      await langBtn.evaluate((el: HTMLElement) => el.click());
 
       // Verify UI text snippet updates for selected locale
       await expect(page.locator('body')).toContainText(lang.textSnippet);

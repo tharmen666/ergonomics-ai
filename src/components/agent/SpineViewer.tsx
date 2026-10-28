@@ -433,4 +433,5 @@ export const SpineViewer = () => {
 };
 
 export const SpineMonitor = SpineViewer;
+export const Spinal3D = SpineViewer;
 export default SpineViewer;

@@ -1,4 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Layout } from './components/layout/Layout';
 import { NellyAvatar } from './components/nelly/NellyAvatar';
 import { PrivacyHandshake } from './assets/Privacy-Shield/PrivacyHandshake';
@@ -35,57 +35,202 @@ const CompanionHub = lazy(() => import('./components/CompanionHub').then(m => ({
 const SmartBreakTimer = lazy(() => import('./components/SmartBreakTimer').then(m => ({ default: m.SmartBreakTimer })));
 const SOPGenerator = lazy(() => import('./components/SOPGenerator').then(m => ({ default: m.SOPGenerator })));
 
+// Architectural alias components
+export const Spinal3D = RiskyBehaviorsPage;
+export const RiskyBehaviors = RiskPage;
+export const TrainingModule = TrainingPage;
+export const SelfAssessment = SelfAssessmentPage;
+
+interface ErrorBoundaryProps {
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+  onReset?: () => void;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
+
+class ModuleErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+    console.error('Module rendering caught by ErrorBoundary:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        this.props.fallback || (
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-center space-y-4">
+            <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl text-amber-400 max-w-md">
+              <h3 className="text-base font-bold text-white mb-1">Module Rendering Notice</h3>
+              <p className="text-xs text-gray-300">
+                The requested view encountered a rendering issue. Returning to the Safety Command Centre.
+              </p>
+            </div>
+            <button
+              onClick={() => {
+                this.setState({ hasError: false, error: null });
+                this.props.onReset?.();
+              }}
+              className="px-4 py-2 bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy font-black text-xs rounded-xl shadow-md cursor-pointer"
+            >
+              Return to Dashboard
+            </button>
+          </div>
+        )
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function renderTabContent(activeTab: string) {
-  switch (activeTab) {
+  const tab = (activeTab || '').toLowerCase().trim();
+
+  switch (tab) {
+    case 'dashboard':
+      return <DashboardPage />;
+
     case 'executive':
     case 'stewardship':
+    case 'executive-briefing':
       return <ExecutiveBriefing />;
-    case 'telemetry':
-    case 'gear':
-      return <GEARDashboardPage />;
+
+    // 3D Spinal & Posture Telemetry
+    case '3d-spinal':
+    case '3d spinal':
+    case 'spinal3d':
+    case '3d-spine':
+    case '3d spine':
+    case 'spinal-3d':
+    case 'spinal':
+    case 'spine':
+    case '3d':
+    case 'spine-viewer':
+    case 'spine-simulation':
+    case 'posture':
+    case 'nelly':
+      return <RiskyBehaviorsPage />;
+
+    // Risky Behaviours Monitoring
+    case 'risks':
+    case 'risk':
+    case 'risky-behaviours':
+    case 'risky behaviours':
+    case 'risky-behaviors':
+    case 'risky behaviors':
+    case 'riskybehaviours':
+    case 'riskybehaviors':
+    case 'risky-behaviour':
+    case 'risky-behavior':
+    case 'behaviours':
+    case 'behaviors':
+      return <RiskPage />;
+
+    // Ergonomics Training & Certification / Modules
+    case 'training':
+    case 'trainings':
+    case 'training-module':
+    case 'training module':
+    case 'trainingmodule':
+    case 'certification':
+    case 'curriculum':
+      return <TrainingPage />;
+
+    // Self-Risk Assessments & Statutory Workspaces
+    case 'assessment':
+    case 'assessments':
+    case 'self-assessment':
+    case 'self assessment':
+    case 'self-assessments':
+    case 'self assessments':
+    case 'selfassessment':
+    case 'selfassessments':
+    case 'workspaces':
+    case 'statutory-assessment':
+    case 'wfh-assessment':
+      return <SelfAssessmentPage />;
+
+    // Biomechanical Calculators (REBA/RULA/NIOSH/WBGT)
+    case 'calculators':
+    case 'calculator':
+    case 'biomechanical-calculators':
+    case 'reba':
+    case 'rula':
+    case 'niosh':
+    case 'wbgt':
+      return <SelfAssessmentPage initialView="calculators" />;
+
+    // Ground-Zero Human Co-Pilot Companion
+    case 'companion-hub':
+    case 'ground-zero':
+    case 'companion':
+      return <CompanionHub />;
+
+    // Smart Break & Mobility Engine
+    case 'smart-breaks':
+    case 'smart-break':
+    case 'mobility-engine':
+    case 'breaks':
+      return <SmartBreakTimer />;
+
+    // Organic SOP & ISO 45001 Generator
+    case 'sop-generator':
+    case 'sop':
+    case 'iso-45001':
+      return <SOPGenerator />;
+
+    // Daily Workstation Safety Checklist
+    case 'checklist':
+    case 'kiosk':
+    case 'daily-checklist':
+      return <ChecklistPage />;
+
+    // Ergonomics Cognitive Handshake
     case 'cognitive-handshake':
     case 'handshake':
     case 'ergonomics-handshake':
       return <CognitiveHandshake isInlinePage={true} />;
-    case 'nelly':
-    case 'posture':
-      return <RiskyBehaviorsPage />;
+
+    // Driver & Shift Fatigue Telemetry
+    case 'fatigue':
+    case 'telemetry':
+    case 'gear':
+    case 'prizm':
+    case 'driver-telemetry':
+      return <GEARDashboardPage />;
+
+    // HR & Compliance Dashboard
     case 'hr':
     case 'hr-dashboard':
     case 'hr-compliance':
     case 'compliance':
       return <HRDashboard />;
-    case 'companion-hub':
-    case 'ground-zero':
-      return <CompanionHub />;
-    case 'smart-breaks':
-      return <SmartBreakTimer />;
-    case 'sop-generator':
-      return <SOPGenerator />;
-    case 'training':
-      return <TrainingPage />;
-    case 'assessment':
-    case 'workspaces':
-    case 'calculators':
-      return <SelfAssessmentPage />;
-    case 'kiosk':
-    case 'checklist':
-    case 'daily-checklist':
-      return <ChecklistPage />;
-    case 'risks':
-    case 'risky-behaviors':
-    case 'risk':
-      return <RiskPage />;
+
+    // Assessment PDF Invoices & Billing
     case 'invoices':
     case 'invoice':
+    case 'billing':
       return <InvoicePage />;
+
+    // Analytics & Regulatory Audit Logs
     case 'reports':
     case 'analytics':
     case 'audit-logs':
     case 'regulatory-logs':
       return <ReportsPage />;
-    case 'dashboard':
-      return <DashboardPage />;
+
+    // Settings & Portal
     case 'settings':
       return <SettingsPage />;
     case 'team':
@@ -94,8 +239,10 @@ function renderTabContent(activeTab: string) {
       return <AdminPortal />;
     case 'master-admin':
       return <MasterAdminPortal />;
+
+    // Default route: Dashboard fallback instead of blank DOM
     default:
-      return <ExecutiveBriefing />;
+      return <DashboardPage />;
   }
 }
 
@@ -205,16 +352,18 @@ function App() {
         </AnimatePresence>
 
         <div className="w-full max-w-full min-h-screen flex flex-col flex-1 overflow-x-hidden">
-          <Suspense fallback={
-            <div className="flex-1 flex items-center justify-center p-12 text-slate-400 font-mono text-xs">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-ohs-orange animate-ping" />
-                <span>Loading Module...</span>
+          <ModuleErrorBoundary onReset={() => setActiveTab('executive')} fallback={<DashboardPage />}>
+            <Suspense fallback={
+              <div className="flex-1 flex items-center justify-center p-12 text-slate-400 font-mono text-xs">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-ohs-orange animate-ping" />
+                  <span>Loading Module...</span>
+                </div>
               </div>
-            </div>
-          }>
-            {renderTabContent(activeTab)}
-          </Suspense>
+            }>
+              {renderTabContent(activeTab)}
+            </Suspense>
+          </ModuleErrorBoundary>
         </div>
       </Layout>
     </div>

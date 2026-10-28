@@ -172,3 +172,5 @@ export const RiskyBehaviorsPage = () => {
         </div>
     );
 };
+export const RiskyBehaviors = RiskyBehaviorsPage;
+export default RiskyBehaviorsPage;
