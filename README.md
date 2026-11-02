@@ -1,7 +1,6 @@
 # ErgoSafe Reborn | Autonomous Multi-Agent Industrial Safety Sentinel
 
-> **Google Cloud & NVIDIA AI Hackathon Submission**  
-> An agentic proof-of-concept demonstrating real-time ergonomics analysis, high-frequency environmental telemetry, and supervisory audit workflows powered by Google Cloud Agent Builder, Gemini, and NVIDIA-accelerated data processing.
+> Real-time ergonomics analysis, high-frequency environmental telemetry, and supervisory audit workflows for industrial safety teams.
 
 ---
 
@@ -127,7 +126,7 @@ npm run build
 
 ## 🔒 Scope & Compliance Disclaimer
 
-*ErgoSafe is an architectural prototype developed for hackathon demonstration and exploratory purposes. Audit logging and supervisory sign-off workflows demonstrate technical integrity and UI/UX patterns for statutory record-keeping, and do not constitute formal legal counsel or statutory certification under Section 16/37 of the South African OHS Act.*
+*ErgoSafe is licensed software. Its audit logging and supervisory sign-off workflows support technical record-keeping and UI patterns for statutory record-keeping. Audit logging and supervisory sign-off workflows demonstrate technical integrity and UI/UX patterns for statutory record-keeping, and do not constitute formal legal counsel or statutory certification under Section 16/37 of the South African OHS Act.*
 
 ---
 
