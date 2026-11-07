@@ -10,6 +10,7 @@ import { NellyInterface } from './NellyInterface';
 import { NellyEmergencyUI } from './NellyEmergencyUI';
 import { translations, Language, TranslationEntry } from '../../utils/translations';
 import { speak } from '../../utils/speech';
+import { nellyReply } from './nellyReplies';
 
 /**
  * NellyAvatar: The primary entry point for the Nelly AI Coach.
@@ -31,7 +32,6 @@ export const NellyAvatar = () => {
     } = useNellyStore();
     const { addLog } = useAgentLog();
     
-    const { fatigueLevel } = useFatigueStore();
     const [userInput, setUserInput] = useState('');
     const [isEmergency, setIsEmergency] = useState(false);
 
@@ -56,22 +56,24 @@ export const NellyAvatar = () => {
 
         const lowCase = userInput.toLowerCase();
         addLog('User', userInput);
+        // Whole-word matching, so "contact" does not match "act" and "no neck pain" still matches "neck pain".
+        const matchesAny = (words: string[]) => words.some((w) => new RegExp(`\\b${w}\\b`).test(lowCase));
         const firstAidKeywords = ['first aid', 'first_aid', 'basic_first_aid_training_nsh', 'bleeding'];
         const symptomKeywords = ['tingling', 'numbness', 'pins and needles', 'sharp pain', 'burning'];
         
         const isEmerg = reportsEmergency(lowCase);
-        const isFirstAid = firstAidKeywords.some(word => lowCase.includes(word));
-        const isSymptom = symptomKeywords.some(word => lowCase.includes(word));
-        const isNeckPain = lowCase.includes('neck pain') || lowCase.includes('cervical') || lowCase.includes('neck');
-        const isLowerBack = lowCase.includes('lower back') || lowCase.includes('lumbar') || lowCase.includes('back pain') || lowCase.includes('spine');
-        const isWrist = lowCase.includes('wrist') || lowCase.includes('carpal') || lowCase.includes('hand pain') || lowCase.includes('mouse');
-        const isEye = lowCase.includes('eye') || lowCase.includes('headache') || lowCase.includes('screen') || lowCase.includes('vision');
-        const isOHSQuery = lowCase.includes('ohs') || lowCase.includes('iso') || lowCase.includes('section 37') || lowCase.includes('compliance') || lowCase.includes('legal') || lowCase.includes('act');
+        const isFirstAid = matchesAny(firstAidKeywords);
+        const isSymptom = matchesAny(symptomKeywords);
+        const isNeckPain = matchesAny(['neck pain', 'cervical', 'neck']);
+        const isLowerBack = matchesAny(['lower back', 'lumbar', 'back pain', 'spine']);
+        const isWrist = matchesAny(['wrist', 'carpal', 'hand pain', 'mouse']);
+        const isEye = matchesAny(['eye', 'eyes', 'headache', 'screen', 'vision']);
+        const isOHSQuery = matchesAny(['ohs', 'iso', 'section 37', 'compliance', 'legal', 'act']);
 
         if (isEmerg) {
             setIsEmergency(true);
             setSpeaking(true);
-            const response = "EMERGENCY PROTOCOL ACTIVATED. Halted all non-critical processes. Contacting onsite first-aid immediately.";
+            const response = nellyReply('emergency', language);
             setGuidance(response);
             addLog('Nelly', response);
             useComplianceStore.getState().logHazardEvent('emergency', 'Acute Medical/Injury Emergency Protocol Triggered', 'BREACH');
@@ -86,10 +88,10 @@ export const NellyAvatar = () => {
             setTimeout(() => setSpeaking(false), 5000);
         } else if (isNeckPain) {
             setSpeaking(true);
-            const response = "WARNING: Cervical load or neck pain detected. Activating the Cervical Orthopedic Micro-Circuit. Please perform a Tier 2 micro-stretch immediately to reduce vertebrae load.";
+            const response = nellyReply('neck', language);
             setGuidance(response);
             addLog('Nelly', response);
-            useComplianceStore.getState().logHazardEvent('neck_strain', 'Cervical Load & Vertebrae Strain Warning - Tier 2 Micro-Stretch Triggered', 'RISK_ALERT');
+            useComplianceStore.getState().logHazardEvent('neck_strain', 'Neck pain reported by user', 'RISK_ALERT');
             speak(response, language);
             
             const { fatigueLevel } = useFatigueStore.getState();
@@ -99,7 +101,7 @@ export const NellyAvatar = () => {
             setTimeout(() => setSpeaking(false), 8000);
         } else if (isLowerBack) {
             setSpeaking(true);
-            const response = "ERGONOMIC TRIAGE: Lower back / lumbar strain detected. ACTION: Slide your hips fully backward against the seat backrest, ensure lumbar support cushion engages L1-L5 vertebrae, and plant feet flat on the floor at 90 degrees.";
+            const response = nellyReply('back', language);
             setGuidance(response);
             addLog('Nelly', response);
             useComplianceStore.getState().logHazardEvent('posture', 'Lower Back / Lumbar Discomfort Reported (L1-L5 Strain Risk)', 'RISK_ALERT');
@@ -107,7 +109,7 @@ export const NellyAvatar = () => {
             setTimeout(() => setSpeaking(false), 8000);
         } else if (isWrist) {
             setSpeaking(true);
-            const response = "ERGONOMIC TRIAGE: Wrist & forearm fatigue detected. ACTION: Keep forearms parallel to the floor at 90-100 degrees, avoid resting wrists on hard desk edges while typing, and perform 5 wrist extensor stretches.";
+            const response = nellyReply('wrist', language);
             setGuidance(response);
             addLog('Nelly', response);
             useComplianceStore.getState().logHazardEvent('posture', 'Wrist Fatigue & Carpal Compression Risk Reported', 'RISK_ALERT');
@@ -115,7 +117,7 @@ export const NellyAvatar = () => {
             setTimeout(() => setSpeaking(false), 8000);
         } else if (isEye) {
             setSpeaking(true);
-            const response = "ERGONOMIC TRIAGE: Visual fatigue / digital eye strain reported. ACTION: Apply the 20-20-20 rule. Look at an object 20 feet away for 20 seconds. Ensure monitor distance is arm's length (50-70cm) with zero glare.";
+            const response = nellyReply('eye', language);
             setGuidance(response);
             addLog('Nelly', response);
             useComplianceStore.getState().logHazardEvent('break_interval', 'Digital Eye Strain & Visual Fatigue Reported', 'RISK_ALERT');
@@ -142,38 +144,28 @@ export const NellyAvatar = () => {
             setSpeaking(true);
             // TODO(legal-verify): removed claim that Section 37 provides automatic liability protection and zero-knowledge claim
             // TODO(privacy): implement encryption + POPIA s26 special-information handling before production
-            const response = "OHS COMPLIANCE ADVISORY: ErgoSafe Reborn assists with South African OHS Act Section 8(1) general duties of employers and Section 37 provisions. Workstation risk assessments, break intervals, and voluntary ISO 45003 guidance are recorded in the local compliance log.";
+            const response = nellyReply('ohs', language);
             setGuidance(response);
             addLog('Nelly', response);
             speak(response, language);
             setTimeout(() => setSpeaking(false), 9000);
         } else if (isSymptom) {
             setSpeaking(true);
-            const response = "WARNING: Nerve compression detected. Tingling in the extremities is an indicator for Carpal Tunnel Syndrome or cervical compression. ACTION: Please stand up, perform 5 shoulder rolls, and avoid repetitive clicking for the next 10 minutes. I am logging this as an ergonomic risk alert.";
+            const response = nellyReply('symptom', language);
             setGuidance(response);
             addLog('Nelly', response);
-            useComplianceStore.getState().logHazardEvent('posture', 'Nerve Compression & Musculoskeletal Strain Risk', 'RISK_ALERT');
+            useComplianceStore.getState().logHazardEvent('posture', 'Tingling or numbness reported by user', 'RISK_ALERT');
             speak(response, language);
             setTimeout(() => setSpeaking(false), 8000);
         } else {
             // Context-Aware Response Algorithm
             setSpeaking(true);
-            addLog('Nelly', "Analyzing telemetry for Stewardship AI response...");
-            
-            setTimeout(() => {
-                const efficiency = fatigueLevel === 'nominal' ? 100 : (fatigueLevel === 'warning' ? 85 : 75);
-                let response = "";
-                if (efficiency < 85) {
-                    response = `Based on your rising Muda % to ${100 - efficiency}% (Context), please perform a 20-20-20 eye reset and posture adjustment now (Action) to bring your fatigue risk back down (Result).`;
-                    useComplianceStore.getState().logHazardEvent('break_interval', `Break Interval Exceeded: Muda ${100 - efficiency}% digital fatigue alert`, 'RISK_ALERT');
-                } else {
-                    response = `Stewardship check complete: no fatigue or posture risk flagged right now. Keep taking regular micro-breaks.`;
-                }
-                setGuidance(response);
-                addLog('Nelly', response);
-                speak(response, language);
-                setTimeout(() => setSpeaking(false), 3000);
-            }, 3000);
+            // Nelly does not measure fatigue or posture here, so she says so rather than guessing.
+            const response = nellyReply('unknown', language);
+            setGuidance(response);
+            addLog('Nelly', response);
+            speak(response, language);
+            setTimeout(() => setSpeaking(false), 5000);
         }
         setUserInput('');
     };

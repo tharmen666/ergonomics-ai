@@ -49,12 +49,12 @@ export const DashboardPage = () => {
                 <div className="flex flex-wrap gap-2 sm:gap-4 relative z-10 justify-start sm:justify-end shrink-0">
                     <div className="text-left sm:text-right">
                         <p className="text-[9px] font-black text-gray-500 uppercase">Board Compliance</p>
-                        <p className="text-lg sm:text-xl font-black text-glow-emerald text-[#10b981]">100%</p>
+                        <p className="text-sm sm:text-base font-black text-gray-400">Not yet measured</p>
                     </div>
                     <div className="w-px h-10 bg-white/10" />
                     <div className="text-left sm:text-right">
                         <p className="text-[9px] font-black text-gray-500 uppercase">Risk Mitigation</p>
-                        <p className="text-lg sm:text-xl font-black text-glow-emerald text-[#34d399]">SECURE</p>
+                        <p className="text-sm sm:text-base font-black text-gray-400">Not yet measured</p>
                     </div>
                 </div>
             </motion.div>

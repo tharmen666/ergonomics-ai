@@ -122,16 +122,17 @@ export const FatigueSentinel_Prizm: React.FC = () => {
       const data = await res.json();
       setApiResponse(data);
     } catch {
+      // The Prizm API is not connected in this build. Report that honestly instead of claiming a verified handshake.
       setApiResponse({
-        success: true,
-        handshakeStatus: 'PRIZM_LOCAL_FALLBACK_STAGING',
+        success: false,
+        handshakeStatus: 'PRIZM_API_UNAVAILABLE',
         fatigueScore: driverFatigueScore,
         riskLevel: isCritical ? 'CRITICAL_BREACH' : isWarning ? 'WARNING' : 'NOMINAL',
         drivingHours,
         reactionDropPct,
         prizmAlertTriggered: prizmAlertActive,
         recommendedAction: prizmRecommendedAction,
-        ohsComplianceAdvisory: 'Section 8(1) OHS Act 85 of 1993: Transit shift fatigue monitoring verified.',
+        ohsComplianceAdvisory: 'Local estimate only. No Prizm server confirmed this reading.',
         timestamp: new Date().toISOString()
       });
     } finally {

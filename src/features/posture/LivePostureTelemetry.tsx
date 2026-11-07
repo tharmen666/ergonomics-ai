@@ -78,6 +78,9 @@ export const LivePostureTelemetry: React.FC<LivePostureTelemetryProps> = ({
   const [isVoiceMuted, setIsVoiceMuted] = useState(false);
   const [activeIssueNotice, setActiveIssueNotice] = useState<string | null>(null);
   const hasAutoStartedRef = useRef(false);
+  // Session log: one posture sample every 5 seconds while the camera is on. Numbers only, no images.
+  const sessionSamplesRef = useRef<Array<Record<string, string | number | boolean>>>([]);
+  const lastSampleAtRef = useRef(0);
 
   // Trigger audio callback on sustained bad posture
   const handleSustainedBadPosture = useCallback(
@@ -148,6 +151,39 @@ export const LivePostureTelemetry: React.FC<LivePostureTelemetryProps> = ({
       startCamera();
     }
   }, [autoStart, isCameraActive, initError, startCamera]);
+
+  // Record a posture sample every 5 seconds while the camera is active.
+  useEffect(() => {
+    if (!isCameraActive) return;
+    const now = Date.now();
+    if (now - lastSampleAtRef.current < 5000) return;
+    lastSampleAtRef.current = now;
+    sessionSamplesRef.current.push({
+      time: new Date(now).toISOString(),
+      postureScore: metrics.postureScore,
+      postureStatus: metrics.postureStatus,
+      neckFlexionDeg: metrics.neckFlexionAngle,
+      torsoSlouchDeg: metrics.torsoSlouchAngle,
+      shoulderTiltDeg: metrics.shoulderTiltAngle,
+      sustainedBadPostureSec: metrics.sustainedBadPostureSeconds,
+      landmarksDetected: metrics.landmarksDetected,
+      calibrated: metrics.isCalibrated,
+    });
+  }, [metrics, isCameraActive]);
+
+  // Save the samples as a CSV file on this computer. Nothing is uploaded.
+  const saveSessionLog = () => {
+    const rows = sessionSamplesRef.current;
+    if (rows.length === 0) return;
+    const headers = Object.keys(rows[0]);
+    const csv = [headers.join(','), ...rows.map((row) => headers.map((h) => String(row[h])).join(','))].join('\n');
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `ergosafe-posture-log-${new Date().toISOString().replace(/[:.]/g, '-')}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   const handleManualTestVoice = () => {
     const langKey = language?.split('-')[0].toLowerCase() || 'en';
@@ -251,6 +287,13 @@ export const LivePostureTelemetry: React.FC<LivePostureTelemetryProps> = ({
                   >
                     <CameraOff size={14} />
                     <span>Pause</span>
+                  </button>
+
+                  <button
+                    onClick={saveSessionLog}
+                    className="px-3 py-1.5 bg-white/5 hover:bg-white/10 text-gray-200 border border-white/10 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer"
+                  >
+                    <span>Save session log (CSV)</span>
                   </button>
                 </>
               ) : (

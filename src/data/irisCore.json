@@ -185,7 +185,7 @@
       "performanceMetrics": {
         "targetTimePerVehicle": "4-minutes",
         "customerSatisfactionWeight": 0.85,
-        "safetyCompliance": "100%"
+        "safetyCompliance": "All six checks completed"
       },
       "irisVoiceIntro": {
         "en": "Iris speaking. Service is your superpower. Execute this 6-point check on every vehicle to drive sales and ensure absolute customer safety.",

@@ -75,8 +75,8 @@ These are routine procedures for customer interaction and compliance.
 | ID | Procedure | Priority | Target Time | Performance |
 |---|---|---|---|---|
 | SOP-CUST-01 | 6-Point Pump Service Routine | HIGH | 4 min/vehicle | 85% satisfaction |
-| SOP-PAY-02 | Secure Payment Processing | MEDIUM | - | 100% compliance |
-| SOP-CLEA-03 | End-of-Shift Cleanup & Security | MEDIUM | - | 100% security |
+| SOP-PAY-02 | Secure Payment Processing | MEDIUM | - | Compliance checks required |
+| SOP-CLEA-03 | End-of-Shift Cleanup & Security | MEDIUM | - | Security checks required |
 
 **Key Features**:
 - Sales optimization guidance

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp, Volume2, VolumeX, Activity, Scale, Award, ShieldCheck, UserCheck, Zap } from 'lucide-react';
 import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
-import { LeanPerformanceRail } from '../../components/AI-Coach/LeanPerformanceRail';
 import { useNellyStore } from '../../store/nellyStore';
 import { useComplianceStore } from '../../store/complianceStore';
 import { speak, stopSpeaking } from '../../utils/speech';
@@ -381,8 +380,6 @@ export const ExecutiveBriefing = () => {
                     </div>
                 </div>
             </motion.div>
-
-            <LeanPerformanceRail />
         </div>
     );
 };

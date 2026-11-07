@@ -73,7 +73,7 @@ export const wholesaleCashCarryPreset: IndustryPresetProfile = {
       egressReference: 'GSR 13J',
       requiredControls: {
         eliminationOrSubstitution: 'Golden-zone slotting: keep high-velocity stock between knee and chest level.',
-        engineering: 'Order-picking electric reach trucks, certified mobile safety ladders with dual handrails.',
+        engineering: 'Order-picking electric reach trucks, mobile safety ladders with dual handrails.',
         administrative: 'Enforce GSR 13H housekeeping to keep aisles clear of wrapping plastic; verify GSR 13J outward-opening emergency exits remain unobstructed.',
         ppe: 'High-visibility safety vests, industrial hard hats.'
       }
@@ -107,7 +107,7 @@ export const wholesaleCashCarryPreset: IndustryPresetProfile = {
       requiredControls: {
         eliminationOrSubstitution: 'Enforce physical pedestrian walkways segregated from reach trucks and counterbalance forklifts.',
         engineering: 'Floor painted demarking 2.25 m² clear staging zones (GSR 13H), impact-absorbing safety bollards, blue spot LED reverse warning beacons.',
-        administrative: 'Certified competency verification for all DMR 18 driven machinery operators; maximum stack height controls on bulk display pyramids.',
+        administrative: 'Competency verification for all DMR 18 driven machinery operators; maximum stack height controls on bulk display pyramids.',
         ppe: 'Class 3 high-visibility safety reflective bibs, steel-toe boots.'
       }
     }
@@ -203,7 +203,7 @@ export const retailButcheryPreset: IndustryPresetProfile = {
       requiredControls: {
         eliminationOrSubstitution: 'Interlocked guard systems preventing motor engagement when bandsaw doors or slicer chutes are open.',
         engineering: 'Emergency kick-stop brake switches, meat pusher sliding guides (zero bare-hand feeding into blades), LOTO padlocks on main isolators.',
-        administrative: 'Certified machine competency training under Reg 3 (retained for employee tenure); daily pre-start interlock checklists (retained 3 years under Reg 9).',
+        administrative: 'Machine competency training under Reg 3 (retained for employee tenure); daily pre-start interlock checklists (retained 3 years under Reg 9).',
         ppe: 'Close-fitting cut-resistant protective garments (no loose clothing/apron ties near rotating spindles).'
       }
     }

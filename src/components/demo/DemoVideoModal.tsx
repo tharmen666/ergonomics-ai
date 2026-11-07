@@ -28,7 +28,7 @@ export const DEMO_VIDEO_SCRIPT = [
     seconds: 45,
     title: "3. 3D Spine Telemetry & Interactive AI Coach",
     badge: "3D Spine Telemetry & Prizm Engine",
-    text: "Powered by Three.js biomechanical posture mapping, Nelly—our digital safety wingman—monitors C1-C7 cervical tilt and L1-L5 lumbar strain in real time. Deeply integrated with Prizm Driver Fatigue score (/api/v1/fatigue-score), workers receive automated Tier-2 micro-stretch interventions before fatigue turns into acute injury."
+    text: "Nelly, the on-screen safety assistant, answers posture and comfort reports with ergonomic guidance. The live webcam posture check scores your sitting position, and break timers prompt stretch breaks. The Prizm fatigue integration is not connected in this build."
   },
   {
     time: "1:10 - 1:30",

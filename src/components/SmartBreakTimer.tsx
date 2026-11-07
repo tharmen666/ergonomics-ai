@@ -69,9 +69,9 @@ export const SmartBreakTimer: React.FC = () => {
   const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   // Gamification stats
-  const [breakStreak, setBreakStreak] = useState<number>(7);
-  const [totalBreaksCompleted, setTotalBreaksCompleted] = useState<number>(24);
-  const [complianceScore, setComplianceScore] = useState<number>(96);
+  // Counts only breaks completed in this browser session. Nothing is saved or measured beyond that.
+  const [breakStreak, setBreakStreak] = useState<number>(0);
+  const [totalBreaksCompleted, setTotalBreaksCompleted] = useState<number>(0);
 
   // Ticking global timers
   useEffect(() => {
@@ -222,7 +222,6 @@ export const SmartBreakTimer: React.FC = () => {
     setActiveModal(null);
     setBreakStreak(s => s + 1);
     setTotalBreaksCompleted(b => b + 1);
-    setComplianceScore(c => Math.min(100, c + 2));
 
     if (activeModal === '90min') setSecondsUntil90Min(90 * 60);
     if (activeModal === '4hr') setSecondsUntil4Hr(240 * 60);
@@ -352,13 +351,13 @@ export const SmartBreakTimer: React.FC = () => {
         {/* Break Streak */}
         <div className="bg-slate-900/90 border border-white/10 rounded-2xl p-5 shadow-xl relative overflow-hidden">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Break Streak</span>
+            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Breaks Completed</span>
             <span className="p-2 bg-emerald-500/20 text-emerald-400 rounded-xl"><Flame size={18} /></span>
           </div>
           <div className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2">
-            {breakStreak} <span className="text-xs text-emerald-400 font-semibold">Days Streak</span>
+            {totalBreaksCompleted} <span className="text-xs text-emerald-400 font-semibold">this session</span>
           </div>
-          <p className="text-[11px] text-gray-400 mt-2">{totalBreaksCompleted} total breaks logged</p>
+          <p className="text-[11px] text-gray-400 mt-2">Counts only breaks you finish in this browser. Not saved to records yet.</p>
         </div>
 
         {/* Break Completion Tracker */}
@@ -367,11 +366,10 @@ export const SmartBreakTimer: React.FC = () => {
             <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Break Adherence</span>
             <span className="p-2 bg-purple-500/20 text-purple-400 rounded-xl"><ShieldCheck size={18} /></span>
           </div>
-          {/* TODO(legal-verify): removed hardcoded '96% … OHS Section 8 standard compliant' */}
           <div className="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2">
-            {complianceScore}% <span className="text-xs text-purple-400 font-semibold">Active</span>
+            Not yet measured
           </div>
-          <p className="text-[11px] text-gray-400 mt-2">Routine mobility completion rate</p>
+          <p className="text-[11px] text-gray-400 mt-2">An adherence rate needs scheduled breaks to compare against. It is not calculated yet.</p>
         </div>
       </div>
 
