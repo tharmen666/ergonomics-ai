@@ -16,7 +16,7 @@ interface SelfAssessmentPageProps {
 
 export const SelfAssessmentPage: React.FC<SelfAssessmentPageProps> = ({
   initialView = 'workspaces',
-  initialWorkspace = 'retail-wholesale',
+  initialWorkspace = 'office-ergonomics',
   initialCalculatorTab = 'reba'
 }) => {
   const [currentView, setCurrentView] = useState<'workspaces' | 'calculators' | '3d' | 'questionnaire'>(
@@ -43,7 +43,7 @@ export const SelfAssessmentPage: React.FC<SelfAssessmentPageProps> = ({
           STATUTORY ERGONOMIC ASSESSMENT SUITE
         </h1>
         <p className="text-slate-300 text-xs sm:text-sm md:text-base max-w-3xl font-medium">
-          Deterministic biomechanical screening across Retail & Wholesale (Cash & Carry), Corporate VDU Call Centres, Petroleum Forecourts, and Standalone Calculators (REBA, RULA, NIOSH, WBGT).
+          Deterministic biomechanical screening across Office Ergonomics (VDU Workstations), Working From Home (WFH), Stacking, Packing, Loading & Lifting (Manual Handling), and Standalone Calculators (REBA, RULA, NIOSH, WBGT).
         </p>
       </motion.div>
 
@@ -58,7 +58,7 @@ export const SelfAssessmentPage: React.FC<SelfAssessmentPageProps> = ({
           }`}
         >
           <Layers size={16} />
-          <span>4 Core Workspaces</span>
+          <span>Core Workspaces</span>
         </button>
 
         <button

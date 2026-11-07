@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
   ShoppingBag, 
   Building2, 
   Fuel, 
   Calculator, 
+  Monitor,
+  Home,
+  Package,
   CheckCircle2, 
   AlertTriangle, 
   Award, 
@@ -23,8 +26,47 @@ import {
 import { StatutoryDisclaimerBanner } from '../../components/common/StatutoryDisclaimerBanner';
 import { CompetentPersonSignOffModal } from '../../components/compliance/CompetentPersonSignOffModal';
 import { BiomechanicalCalculatorsSuite, CalculatorTab } from '../calculators/BiomechanicalCalculatorsSuite';
+import { HomeOfficeSetupGuide } from './HomeOfficeSetupGuide';
+import { SelfAssessment } from '../training/SelfAssessment';
 
-export type WorkspaceId = 'retail-wholesale' | 'corporate-callcentre' | 'petroleum-forecourt' | 'biomechanical-calculators';
+export const ERGO_WORKSPACES = [
+  {
+    id: 'office-ergonomics',
+    title: 'Office Ergonomics',
+    category: 'VDU WORKSTATIONS',
+    description: 'ROSA screen ergonomics, cervical and lumbar postural loads, and RSIP typing strain controls.',
+    regulation: 'Ergonomics Regulations 2019 & GN R1589',
+    icon: 'Monitor',
+    badgeColor: 'blue'
+  },
+  {
+    id: 'wfh-ergonomics',
+    title: 'Working From Home (WFH)',
+    category: 'REMOTE WORKFORCE',
+    description: 'Improvised workstation assessments, laptop posture adjustments, and home office risk mitigation.',
+    regulation: 'Employer Duty of Care (OHS Act Section 8)',
+    icon: 'Home',
+    badgeColor: 'purple'
+  },
+  {
+    id: 'material-handling',
+    title: 'Stacking, Packing, Loading & Lifting',
+    category: 'MANUAL HANDLING',
+    description: 'NIOSH lifting equation calculators, box stacking posture analysis, and warehouse load limits.',
+    regulation: 'Ergonomics Regulations 2019 (Handling)',
+    icon: 'Package',
+    badgeColor: 'amber'
+  }
+];
+
+export type WorkspaceId =
+  | 'office-ergonomics'
+  | 'wfh-ergonomics'
+  | 'material-handling'
+  | 'retail-wholesale'
+  | 'corporate-callcentre'
+  | 'petroleum-forecourt'
+  | 'biomechanical-calculators';
 
 interface StatutoryWorkspacesHubProps {
   initialWorkspace?: WorkspaceId;
@@ -32,11 +74,13 @@ interface StatutoryWorkspacesHubProps {
 }
 
 export const StatutoryWorkspacesHub: React.FC<StatutoryWorkspacesHubProps> = ({
-  initialWorkspace = 'retail-wholesale',
+  initialWorkspace = 'office-ergonomics',
   initialCalculatorTab = 'reba'
 }) => {
   const [selectedWorkspace, setSelectedWorkspace] = useState<WorkspaceId>(initialWorkspace);
-  const [activeTaskTemplate, setActiveTaskTemplate] = useState<string>('butchery');
+  const [activeTaskTemplate, setActiveTaskTemplate] = useState<string>(
+    initialWorkspace === 'material-handling' || initialWorkspace === 'retail-wholesale' ? 'receiving' : 'rosa-vdu'
+  );
   const [isSignOffOpen, setIsSignOffOpen] = useState(false);
 
   // Sign-off modal payload
@@ -45,50 +89,22 @@ export const StatutoryWorkspacesHub: React.FC<StatutoryWorkspacesHubProps> = ({
     type: string;
     data: Record<string, any>;
   }>({
-    title: 'Retail Wholesale Ergonomic Audit',
+    title: 'Office Ergonomics Audit',
     type: 'GN R1589 Statutory Assessment',
     data: {}
   });
 
-  // Workspaces Definition
-  const workspaces = [
-    {
-      id: 'retail-wholesale' as WorkspaceId,
-      name: 'Retail & Wholesale (Cash & Carry)',
-      sector: 'FMCG & Bulk Retail Distribution',
-      icon: ShoppingBag,
-      statute: 'Ergonomics Regulations 2019 (GN R1589) & GSR 13H/13J',
-      badgeColor: 'border-amber-500/30 text-amber-300 bg-amber-500/10',
-      description: 'Pre-configured task assessments for Butchery, Bakery & Deli, Receiving, and Tills/Cashiers.'
-    },
-    {
-      id: 'corporate-callcentre' as WorkspaceId,
-      name: 'Corporate & Call Centres',
-      sector: 'VDU Workstations & Intensive Contact Centres',
-      icon: Building2,
-      statute: 'GN R1589 & BCEA Section 15 Regulated Rest Periods',
-      badgeColor: 'border-blue-500/30 text-blue-300 bg-blue-500/10',
-      description: 'ROSA screen ergonomics, cervical/lumbar postural loads, and RSIP typing strain controls.'
-    },
-    {
-      id: 'petroleum-forecourt' as WorkspaceId,
-      name: 'Petroleum Forecourt & Convenience',
-      sector: 'Fuel Retail, Forecourt Attendants & Quick-Service',
-      icon: Fuel,
-      statute: 'SANS 10089 Part 1 & 2 / OHS Act Section 8',
-      badgeColor: 'border-emerald-500/30 text-emerald-300 bg-emerald-500/10',
-      description: 'SANS 10089 nozzle trigger handling, dipstick reach, and under-counter safe drops.'
-    },
-    {
-      id: 'biomechanical-calculators' as WorkspaceId,
-      name: 'Biomechanical Calculators',
-      sector: 'Statutory Screening Tools Suite',
-      icon: Calculator,
-      statute: 'Standalone REBA, RULA, NIOSH MMH & Thermal WBGT',
-      badgeColor: 'border-purple-500/30 text-purple-300 bg-purple-500/10',
-      description: 'Precision ergonomic calculators with action level lookup and countersignature gate.'
-    }
-  ];
+  const iconMap: Record<string, React.ElementType> = {
+    Monitor,
+    Home,
+    Package,
+  };
+
+  const badgeStyleMap: Record<string, string> = {
+    blue: 'border-blue-500/30 text-blue-300 bg-blue-500/10',
+    purple: 'border-purple-500/30 text-purple-300 bg-purple-500/10',
+    amber: 'border-amber-500/30 text-amber-300 bg-amber-500/10',
+  };
 
   // Open signoff helper
   const triggerSignOff = (title: string, type: string, data: Record<string, any>) => {
@@ -111,66 +127,68 @@ export const StatutoryWorkspacesHub: React.FC<StatutoryWorkspacesHubProps> = ({
       <StatutoryDisclaimerBanner />
 
       {/* Workspace Selector Bar */}
-      <div className="space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <span className="text-[10px] font-black uppercase tracking-[0.25em] text-ohs-orange block">
-            GN R1589 Core Assessment Workspaces
-          </span>
-          <span className="text-xs text-gray-400 font-mono">
-            Active Workspace: <strong className="text-white uppercase font-bold">{selectedWorkspace.replace('-', ' ')}</strong>
-          </span>
-        </div>
+      {selectedWorkspace !== 'biomechanical-calculators' && (
+        <div className="space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <span className="text-[10px] font-black uppercase tracking-[0.25em] text-ohs-orange block">
+              GN R1589 Core Assessment Workspaces
+            </span>
+            <span className="text-xs text-gray-400 font-mono">
+              Active Workspace: <strong className="text-white uppercase font-bold">{selectedWorkspace.replace('-', ' ')}</strong>
+            </span>
+          </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {workspaces.map((ws) => {
-            const isSelected = selectedWorkspace === ws.id;
-            const Icon = ws.icon;
-            return (
-              <button
-                key={ws.id}
-                onClick={() => {
-                  setSelectedWorkspace(ws.id);
-                  if (ws.id === 'retail-wholesale') setActiveTaskTemplate('butchery');
-                  if (ws.id === 'corporate-callcentre') setActiveTaskTemplate('rosa-vdu');
-                  if (ws.id === 'petroleum-forecourt') setActiveTaskTemplate('nozzle');
-                }}
-                className={`p-4 rounded-2xl border text-left transition-all duration-300 flex flex-col justify-between cursor-pointer ${
-                  isSelected
-                    ? 'bg-gradient-to-br from-ohs-navy via-slate-900 to-black border-ohs-orange shadow-lg shadow-ohs-orange/20 scale-[1.01]'
-                    : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20'
-                }`}
-              >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className={`p-2.5 rounded-xl ${isSelected ? 'bg-ohs-orange text-ohs-navy' : 'bg-white/5 text-gray-300'}`}>
-                      <Icon size={20} />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {ERGO_WORKSPACES.map((ws) => {
+              const isSelected = selectedWorkspace === ws.id;
+              const Icon = iconMap[ws.icon] || Monitor;
+              const badgeColorClass = badgeStyleMap[ws.badgeColor] || badgeStyleMap.blue;
+              return (
+                <button
+                  key={ws.id}
+                  onClick={() => {
+                    setSelectedWorkspace(ws.id as WorkspaceId);
+                    if (ws.id === 'office-ergonomics') setActiveTaskTemplate('rosa-vdu');
+                    if (ws.id === 'material-handling') setActiveTaskTemplate('receiving');
+                  }}
+                  className={`p-4 rounded-2xl border text-left transition-all duration-300 flex flex-col justify-between cursor-pointer ${
+                    isSelected
+                      ? 'bg-gradient-to-br from-ohs-navy via-slate-900 to-black border-ohs-orange shadow-lg shadow-ohs-orange/20 scale-[1.01]'
+                      : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20'
+                  }`}
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className={`p-2.5 rounded-xl ${isSelected ? 'bg-ohs-orange text-ohs-navy' : 'bg-white/5 text-gray-300'}`}>
+                        <Icon size={20} />
+                      </div>
+                      <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border ${badgeColorClass}`}>
+                        {ws.category}
+                      </span>
                     </div>
-                    <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border ${ws.badgeColor}`}>
-                      {ws.sector.split('&')[0]}
-                    </span>
+                    <h3 className="text-sm font-black text-white leading-tight">
+                      {ws.title}
+                    </h3>
+                    <p className="text-[11px] text-gray-400 leading-snug line-clamp-2">
+                      {ws.description}
+                    </p>
                   </div>
-                  <h3 className="text-sm font-black text-white leading-tight">
-                    {ws.name}
-                  </h3>
-                  <p className="text-[11px] text-gray-400 leading-snug line-clamp-2">
-                    {ws.description}
-                  </p>
-                </div>
 
-                <div className="mt-3 pt-3 border-t border-white/5 flex items-center justify-between text-[10px]">
-                  <span className="text-gray-400 truncate max-w-[170px]">{ws.statute.split('/')[0]}</span>
-                  <ChevronRight size={14} className={isSelected ? 'text-ohs-orange' : 'text-gray-500'} />
-                </div>
-              </button>
-            );
-          })}
+                  <div className="mt-3 pt-3 border-t border-white/5 flex items-center justify-between text-[10px]">
+                    <span className="text-gray-400 truncate max-w-[200px]">{ws.regulation}</span>
+                    <ChevronRight size={14} className={isSelected ? 'text-ohs-orange' : 'text-gray-500'} />
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ========================================================================= */}
-      {/* WORKSPACE 1: RETAIL & WHOLESALE (CASH & CARRY) */}
+      {/* WORKSPACE: STACKING, PACKING, LOADING & LIFTING (MATERIAL HANDLING) */}
       {/* ========================================================================= */}
-      {selectedWorkspace === 'retail-wholesale' && (
+      {(selectedWorkspace === 'material-handling' || selectedWorkspace === 'retail-wholesale') && (
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -179,14 +197,14 @@ export const StatutoryWorkspacesHub: React.FC<StatutoryWorkspacesHubProps> = ({
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-4">
             <div>
               <span className="text-[10px] font-black uppercase tracking-widest text-amber-400 block mb-1">
-                Sector Workspace: Retail & Wholesale Cash & Carry
+                Manual Handling: Ergonomics Regulations 2019 (Handling)
               </span>
               <h2 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
-                <ShoppingBag className="text-amber-400" size={24} />
-                High-Volume Cash & Carry Task Profiles
+                <Package className="text-amber-400" size={24} />
+                Stacking, Packing, Loading & Lifting Profiles
               </h2>
               <p className="text-xs text-gray-400">
-                Statutory risk assessments configured under Ergonomics Regulations 2019 (GN R1589) Reg 6.
+                NIOSH lifting equation calculators, box stacking posture analysis, and warehouse load limits under GN R1589.
               </p>
             </div>
 
@@ -537,9 +555,9 @@ export const StatutoryWorkspacesHub: React.FC<StatutoryWorkspacesHubProps> = ({
       )}
 
       {/* ========================================================================= */}
-      {/* WORKSPACE 2: CORPORATE & CALL CENTRES */}
+      {/* WORKSPACE: OFFICE ERGONOMICS (VDU WORKSTATIONS) */}
       {/* ========================================================================= */}
-      {selectedWorkspace === 'corporate-callcentre' && (
+      {(selectedWorkspace === 'office-ergonomics' || selectedWorkspace === 'corporate-callcentre') && (
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -548,14 +566,14 @@ export const StatutoryWorkspacesHub: React.FC<StatutoryWorkspacesHubProps> = ({
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-4">
             <div>
               <span className="text-[10px] font-black uppercase tracking-widest text-blue-400 block mb-1">
-                Sector Workspace: Corporate & Call Centres
+                VDU Workstations: Ergonomics Regulations 2019 & GN R1589
               </span>
               <h2 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
-                <Building2 className="text-blue-400" size={24} />
-                Intensive VDU Screen & Postural Strain Profiles
+                <Monitor className="text-blue-400" size={24} />
+                Office Ergonomics & VDU Postural Strain Profiles
               </h2>
               <p className="text-xs text-gray-400">
-                Screen ergonomics, spinal lordosis alignment, and micro-break compliance under BCEA Section 15.
+                ROSA screen ergonomics, cervical and lumbar postural loads, and RSIP typing strain controls.
               </p>
             </div>
 
@@ -1102,6 +1120,20 @@ export const StatutoryWorkspacesHub: React.FC<StatutoryWorkspacesHubProps> = ({
               </div>
             </div>
           )}
+        </motion.div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* WORKSPACE: WORKING FROM HOME (WFH) */}
+      {/* ========================================================================= */}
+      {selectedWorkspace === 'wfh-ergonomics' && (
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-6"
+        >
+          <HomeOfficeSetupGuide />
+          <SelfAssessment />
         </motion.div>
       )}
 
