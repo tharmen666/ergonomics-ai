@@ -47,6 +47,8 @@ interface NellyState {
     setWingmanActive: (active: boolean) => void;
     isLiveTelemetryOpen: boolean;
     setIsLiveTelemetryOpen: (open: boolean) => void;
+    isDemoModalOpen: boolean;
+    setIsDemoModalOpen: (open: boolean) => void;
     hasIntroduced: boolean;
     markIntroduced: () => void;
     isNellyExpanded: boolean;
@@ -74,6 +76,7 @@ export const useNellyStore = create<NellyState>()(
             isTourActive: false,
             isWingmanActive: false,
             isLiveTelemetryOpen: false,
+            isDemoModalOpen: false,
             hasIntroduced: false,
             isNellyExpanded: false,
             isSidebarCollapsed: false,
@@ -87,6 +90,7 @@ export const useNellyStore = create<NellyState>()(
             setTourActive: (isTourActive) => set({ isTourActive }),
             setWingmanActive: (isWingmanActive) => set({ isWingmanActive }),
             setIsLiveTelemetryOpen: (isLiveTelemetryOpen) => set({ isLiveTelemetryOpen }),
+            setIsDemoModalOpen: (isDemoModalOpen) => set({ isDemoModalOpen }),
             markIntroduced: () => set({ hasIntroduced: true }),
             setNellyExpanded: (isNellyExpanded) => set({ isNellyExpanded }),
             setSidebarCollapsed: (isSidebarCollapsed) => set({ isSidebarCollapsed }),
@@ -111,6 +115,7 @@ export const useNellyStore = create<NellyState>()(
                 }
                 merged.hasIntroduced = false;
                 merged.isLiveTelemetryOpen = false;
+                merged.isDemoModalOpen = false;
                 return merged;
             },
             // Exclude non-persistent UI states
@@ -119,6 +124,7 @@ export const useNellyStore = create<NellyState>()(
                     hasIntroduced: _hasIntroduced, 
                     productiveStreak: _productiveStreak, 
                     isLiveTelemetryOpen: _isLiveTelemetryOpen, 
+                    isDemoModalOpen: _isDemoModalOpen,
                     ...persistedState 
                 } = state;
                 return persistedState;

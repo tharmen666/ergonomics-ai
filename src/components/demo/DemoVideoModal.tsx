@@ -1,48 +1,66 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Download, X, Film, ShieldCheck, Clock, FileText, CheckCircle2 } from 'lucide-react';
+import { Play, Download, X, Film, ShieldCheck, Clock } from 'lucide-react';
 
 interface DemoVideoModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+export const DEMO_VIDEO_SRC = '/demo/ergosafe-reborn-2min-demo.mp4';
+
 export const DEMO_VIDEO_SCRIPT = [
   {
-    time: "0:00 - 0:20",
+    time: "0:00 - 0:30",
     seconds: 0,
-    title: "1. The Regulatory Reality & Financial Risk",
-    badge: "OHSA 85 of 1993 & COIDA",
-    // TODO(legal-verify): removed fabricated 'fines up to 10% of annual turnover'
-    text: "South African employers face statutory duties under Section 8(1) of the Occupational Health and Safety Act 85 of 1993, the Ergonomics Regulations, 2019, and COIDA frameworks. Unmitigated ergonomics hazards expose organizations to statutory non-compliance penalties under Section 38."
+    title: "1. Statutory OHS Governance & Duty of Care",
+    badge: "OHS Act 85 of 1993 & GN R1589",
+    text: "South African employers face statutory obligations under Section 8(1) of the Occupational Health and Safety Act 85 of 1993 and the Ergonomics Regulations, 2019 (GN R1589). ErgoSafe Reborn V3 provides proactive ergonomic risk identification and structured workstation governance."
   },
   {
-    time: "0:20 - 0:45",
-    seconds: 20,
-    title: "2. Introducing ErgoSafe & Staff Buy-In",
-    badge: "Cognitive Handshake & Privacy-First",
-    text: "ErgoSafe Reborn introduces a Privacy-First 'Human-in-the-Loop' architecture. By deploying a 30-second Pre-Login Cognitive Sync to establish reaction baselines, employees experience zero invasive camera surveillance—transforming cold regulatory box-ticking into a high-performance gamified safety streak culture."
+    time: "0:30 - 1:00",
+    seconds: 30,
+    title: "2. Privacy-First Edge AI Vision & Cognitive Handshake",
+    badge: "100% On-Device MediaPipe & POPIA",
+    text: "ErgoSafe deploys 100% client-side skeletal posture telemetry with zero cloud camera recording, paired with a pre-shift Cognitive Handshake to establish objective reaction-time baselines and protect workforce privacy under POPIA."
   },
   {
-    time: "0:45 - 1:10",
-    seconds: 45,
-    title: "3. 3D Spine Telemetry & Interactive AI Coach",
-    badge: "3D Spine Telemetry & Prizm Engine",
-    text: "Nelly, the on-screen safety assistant, answers posture and comfort reports with ergonomic guidance. The live webcam posture check scores your sitting position, and break timers prompt stretch breaks. The Prizm fatigue integration is not connected in this build."
+    time: "1:00 - 1:30",
+    seconds: 60,
+    title: "3. 3D Spine Telemetry, Nelly Voice Coach & Calculators",
+    badge: "3D Spine & REBA / RULA / NIOSH / WBGT",
+    text: "Interactive 3D spinal alignment telemetry visualizes cervical, thoracic, and lumbar loads in real time while Nelly delivers multilingual verbal posture guidance alongside deterministic REBA, RULA, NIOSH, and WBGT calculators."
   },
   {
-    time: "1:10 - 1:30",
-    seconds: 70,
-    title: "4. Audit-Ready Compliance & Closing",
-    badge: "Section 37/38 Compliance Dossier",
-    // TODO(privacy): removed 'zero-knowledge dossier' and liability elimination claims
-    text: "Every daily safety scan, postural calibration, and fatigue resolution is embedded into the compliance ledger. This records statutory compliance data to support structured health and safety governance across the organization."
+    time: "1:30 - 2:00",
+    seconds: 90,
+    title: "4. Section 16.2 Competent Person Gate & 40-Year Ledger",
+    badge: "Statutory Sign-Off & Audit Trail",
+    text: "Every ergonomic assessment, HIRA draft, and escalation is gated by Section 16.2 Competent Person verification and archived according to Regulation 10(1) 40-year and employee-tenure retention schedules."
   }
 ];
 
 export const DemoVideoModal: React.FC<DemoVideoModalProps> = ({ isOpen, onClose }) => {
   const [activeScriptIdx, setActiveScriptIdx] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  const handleClose = useCallback(() => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
+    onClose();
+  }, [onClose]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleClose();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen, handleClose]);
 
   if (!isOpen) return null;
 
@@ -56,8 +74,8 @@ export const DemoVideoModal: React.FC<DemoVideoModalProps> = ({ isOpen, onClose 
 
   const handleDownloadMp4 = () => {
     const link = document.createElement('a');
-    link.href = '/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo.mp4';
-    link.download = 'ErgoSafe_Reborn_30s_1080p_Narrated_Demo.mp4';
+    link.href = DEMO_VIDEO_SRC;
+    link.download = 'ergosafe-reborn-2min-demo.mp4';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -69,43 +87,48 @@ export const DemoVideoModal: React.FC<DemoVideoModalProps> = ({ isOpen, onClose 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[99999] bg-black/90 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 overflow-y-auto"
+        onClick={handleClose}
+        role="dialog"
+        aria-modal="true"
+        aria-label="ErgoSafe Reborn V3 2-Minute Executive Demo"
+        className="fixed inset-0 z-[99999] bg-black/85 backdrop-blur-xl flex items-center justify-center p-2 sm:p-6 overflow-y-auto"
       >
         <motion.div
           initial={{ scale: 0.95, y: 20 }}
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.95, y: 20 }}
-          className="bg-slate-900 border-2 border-ohs-orange/50 rounded-3xl max-w-5xl w-full p-4 sm:p-8 space-y-6 relative shadow-[0_0_100px_rgba(249,168,37,0.3)] my-auto max-h-[95vh] flex flex-col justify-between overflow-y-auto"
+          onClick={(e) => e.stopPropagation()}
+          className="bg-[#0F172A] border-2 border-[#D97706] rounded-2xl sm:rounded-3xl max-w-5xl w-full p-3 sm:p-6 md:p-8 space-y-5 relative shadow-[0_0_80px_rgba(217,119,6,0.3)] my-auto max-h-[95vh] flex flex-col justify-between overflow-y-auto"
         >
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
-            <div className="flex items-center gap-3">
-              <div className="p-3 bg-ohs-orange/10 border border-ohs-orange/30 rounded-2xl text-ohs-orange">
-                <Film size={26} />
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="p-2.5 sm:p-3 bg-[#064E3B] border border-[#D97706] rounded-2xl text-white shrink-0">
+                <Film size={24} />
               </div>
-              <div>
-                <span className="text-[10px] font-black text-ohs-orange uppercase tracking-[0.2em]">
-                  Executive 90-Second Walkthrough
+              <div className="min-w-0">
+                <span className="text-[10px] font-black text-[#D97706] uppercase tracking-[0.2em] block">
+                  Executive 2-Minute Narrated Walkthrough (en-ZA)
                 </span>
-                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-                  ErgoSafe Reborn V3 Demo Video & Script
+                <h2 className="text-lg sm:text-2xl font-black text-white tracking-tight truncate">
+                  ErgoSafe Reborn V3 — Executive Demo
                 </h2>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-end gap-2 shrink-0">
               <button
                 onClick={handleDownloadMp4}
-                className="bg-gradient-to-r from-ohs-orange to-yellow-400 text-ohs-navy px-4 py-2.5 rounded-xl font-black text-xs shadow-lg hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-2 cursor-pointer"
-                title="Download Standalone MP4 Video File"
+                className="bg-[#064E3B] hover:bg-[#065F46] border border-[#D97706] text-white px-3.5 py-2 rounded-xl font-black text-xs shadow-lg transition-all duration-200 flex items-center gap-2 cursor-pointer"
+                title="Download 2-Minute MP4 Video File"
               >
-                <Download size={16} />
-                <span>💾 Download MP4 Demo Video</span>
+                <Download size={15} />
+                <span>Download MP4</span>
               </button>
               <button
-                onClick={onClose}
-                className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
-                aria-label="Close Modal"
+                onClick={handleClose}
+                className="p-2.5 rounded-xl bg-white/10 hover:bg-red-500/20 text-white hover:text-red-300 border border-white/15 transition-colors cursor-pointer"
+                aria-label="Close Executive Demo Modal"
               >
                 <X size={20} />
               </button>
@@ -113,29 +136,28 @@ export const DemoVideoModal: React.FC<DemoVideoModalProps> = ({ isOpen, onClose 
           </div>
 
           {/* Video Player */}
-          <div className="relative w-full rounded-2xl overflow-hidden bg-black border border-white/15 shadow-2xl aspect-video max-h-[380px] flex items-center justify-center">
+          <div className="relative w-full shrink-0 min-h-[200px] sm:min-h-[280px] rounded-2xl overflow-hidden bg-black border border-[#D97706]/40 shadow-2xl aspect-video max-h-[420px] flex items-center justify-center">
             <video
               ref={videoRef}
               className="w-full h-full object-contain"
-              src="/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo.mp4"
+              src={DEMO_VIDEO_SRC}
               controls
-              autoPlay
-              muted
-              preload="auto"
               playsInline
+              preload="metadata"
+              autoPlay
               poster="/assets/nelly-steward-final.png"
-              title="ErgoSafe Reborn 30s 1080p Narrated Demo"
+              title="ErgoSafe Reborn V3 2-Minute Narrated Executive Demo"
             />
           </div>
 
-          {/* Teleprompter Script Accordion & Chapter Tabs */}
-          <div className="space-y-4 pt-2">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
-                <Clock size={16} className="text-ohs-orange" />
-                90-Second Teleprompter Script & Chapter Sync
+          {/* Teleprompter Script & Chapter Tabs */}
+          <div className="space-y-3 pt-1">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h3 className="text-xs sm:text-sm font-black text-white uppercase tracking-wider flex items-center gap-2">
+                <Clock size={16} className="text-[#D97706]" />
+                2-Minute Chapter Sync & Executive Script
               </h3>
-              <span className="text-[10px] font-bold text-gray-400 uppercase">Click section to jump video</span>
+              <span className="text-[10px] font-bold text-gray-400 uppercase">Click chapter to seek video</span>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -145,17 +167,17 @@ export const DemoVideoModal: React.FC<DemoVideoModalProps> = ({ isOpen, onClose 
                   <button
                     key={idx}
                     onClick={() => handleJumpToSection(item.seconds, idx)}
-                    className={`p-4 rounded-xl border text-left transition-all duration-300 cursor-pointer flex flex-col justify-between space-y-2 ${
+                    className={`p-3.5 rounded-xl border text-left transition-all duration-200 cursor-pointer flex flex-col justify-between space-y-2 ${
                       isActive
-                        ? 'bg-ohs-navy/90 border-ohs-orange shadow-[0_0_20px_rgba(249,168,37,0.25)]'
+                        ? 'bg-[#064E3B]/40 border-[#D97706] shadow-[0_0_20px_rgba(217,119,6,0.2)]'
                         : 'bg-white/5 border-white/10 hover:border-white/20 hover:bg-white/10'
                     }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-black font-mono text-ohs-orange bg-ohs-orange/10 px-2 py-0.5 rounded border border-ohs-orange/20">
+                    <div className="flex flex-wrap items-center justify-between gap-1">
+                      <span className="text-xs font-black font-mono text-[#D97706] bg-[#D97706]/10 px-2 py-0.5 rounded border border-[#D97706]/30">
                         [{item.time}]
                       </span>
-                      <span className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                      <span className="text-[9px] font-bold text-emerald-300 uppercase tracking-wider bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                         {item.badge}
                       </span>
                     </div>
@@ -168,8 +190,8 @@ export const DemoVideoModal: React.FC<DemoVideoModalProps> = ({ isOpen, onClose 
                       "{item.text}"
                     </p>
 
-                    <div className="pt-2 flex items-center gap-1 text-[10px] font-black text-ohs-orange">
-                      <Play size={10} className="fill-ohs-orange" />
+                    <div className="pt-1 flex items-center gap-1 text-[10px] font-black text-[#D97706]">
+                      <Play size={10} className="fill-[#D97706]" />
                       <span>JUMP TO {item.time.split(' - ')[0]}</span>
                     </div>
                   </button>
@@ -179,22 +201,15 @@ export const DemoVideoModal: React.FC<DemoVideoModalProps> = ({ isOpen, onClose 
           </div>
 
           {/* Footer Action Bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/10">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-white/10">
             <div className="flex items-center gap-2 text-xs text-gray-400">
-              <ShieldCheck size={16} className="text-emerald-400" />
-              <span>Standalone Asset: <code className="text-white bg-black/60 px-2 py-0.5 rounded border border-white/10 font-mono text-[11px]">C:\Users\Desigan Tharmen\Desktop\ErgoSafe_Reborn_V3_Demo.mp4</code></span>
+              <ShieldCheck size={16} className="text-emerald-400 shrink-0" />
+              <span className="truncate">ErgoSafe Reborn V3 • Narrated Executive Walkthrough (`en-ZA-LukeNeural`)</span>
             </div>
 
-            <div className="flex items-center gap-3 w-full sm:w-auto">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
               <button
-                onClick={handleDownloadMp4}
-                className="w-full sm:w-auto bg-ohs-orange text-ohs-navy px-6 py-2.5 rounded-xl font-black text-xs shadow-lg hover:bg-yellow-400 transition-all cursor-pointer flex items-center justify-center gap-2"
-              >
-                <Download size={16} />
-                <span>SAVE MP4 DEMO VIDEO</span>
-              </button>
-              <button
-                onClick={onClose}
+                onClick={handleClose}
                 className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white px-5 py-2.5 rounded-xl font-bold text-xs transition-all cursor-pointer"
               >
                 CLOSE PLAYER
@@ -206,4 +221,5 @@ export const DemoVideoModal: React.FC<DemoVideoModalProps> = ({ isOpen, onClose 
     </AnimatePresence>
   );
 };
+
 export default DemoVideoModal;

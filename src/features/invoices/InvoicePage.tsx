@@ -41,7 +41,7 @@ const INITIAL_INVOICES: Invoice[] = [
     {
         id: 'inv-101',
         invoiceNumber: 'INV-2026-001',
-        clientName: 'Astron Energy Rosebank',
+        clientName: 'ErgoSafe Forecourt Division',
         clientVat: 'ZA4920192841',
         assessmentType: 'Full ISO 45003 Workstation Ergonomics Audit',
         workstationsCount: 45,
@@ -366,7 +366,7 @@ export const InvoicePage = () => {
                                         <input
                                             type="text"
                                             required
-                                            placeholder="e.g. Astron Energy"
+                                            placeholder="e.g. ErgoSafe Enterprise"
                                             value={newClientName}
                                             onChange={(e) => setNewClientName(e.target.value)}
                                             className="w-full bg-black/40 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-ohs-orange"

@@ -21,8 +21,8 @@ export interface TenantConfig {
 }
 
 export const oredaxPilotConfig: TenantConfig = {
-  tenantId: 'oredax-za-001',
-  companyName: 'Oredax (Pty) Ltd',
+  tenantId: 'ergosafe-za-001',
+  companyName: 'ErgoSafe Call-Centre Division',
   industry: 'Customer Support / Inbound Call Centre',
   regulatoryFramework: [
     'Occupational Health and Safety Act 85 of 1993',

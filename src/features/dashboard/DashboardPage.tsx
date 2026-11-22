@@ -9,20 +9,18 @@ import { SafetyStreaks } from '../../components/AI-Coach/SafetyStreaks';
 import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
 import { useNellyStore } from '../../store/nellyStore';
 import { HandshakeCardHeader } from '../../components/common/HandshakeCardHeader';
-import { DemoVideoModal } from '../../components/demo/DemoVideoModal';
 import { StatutoryDisclaimerBanner } from '../../components/common/StatutoryDisclaimerBanner';
 
 const SpineViewer = lazy(() => import('../../components/agent/SpineViewer').then(m => ({ default: m.SpineViewer })));
 
 export const DashboardPage = () => {
     const { cognitiveHandshakePassed, setShowCognitiveHandshake } = useFatigueStore();
-    const { setIsLiveTelemetryOpen, setWingmanActive } = useNellyStore();
-    const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+    const { setIsLiveTelemetryOpen, setWingmanActive, setIsDemoModalOpen } = useNellyStore();
 
     const handleDownloadMp4 = () => {
         const link = document.createElement('a');
-        link.href = '/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo.mp4';
-        link.download = 'ErgoSafe_Reborn_30s_1080p_Narrated_Demo.mp4';
+        link.href = '/demo/ergosafe-reborn-2min-demo.mp4';
+        link.download = 'ergosafe-reborn-2min-demo.mp4';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -30,7 +28,6 @@ export const DashboardPage = () => {
 
     return (
         <div className="space-y-6 pb-20 w-full max-w-full overflow-x-hidden font-sans box-border">
-            <DemoVideoModal isOpen={isDemoModalOpen} onClose={() => setIsDemoModalOpen(false)} />
             {/* Executive Stewardship Banner */}
             <motion.div 
                 initial={{ opacity: 0, y: -20 }}
@@ -293,17 +290,17 @@ export const DashboardPage = () => {
                                     System Walkthrough & Executive Demo
                                 </h3>
                                 <p className="text-xs text-gray-400 font-medium mt-0.5 break-words">
-                                    90-Second Walkthrough covering Section 8(1) OHS Act 85, Cognitive Handshake, 3D Posture Telemetry & Section 37 Dossier Automation.
+                                    2-Minute Narrated Executive Walkthrough covering Section 8(1) OHS Act 85, Cognitive Handshake, 3D Posture Telemetry & Section 16.2 Governance.
                                 </p>
                             </div>
 
                             <div className="flex flex-wrap items-center gap-2 shrink-0">
                                 <button
                                     onClick={() => setIsDemoModalOpen(true)}
-                                    className="bg-ohs-orange/20 hover:bg-ohs-orange/30 border border-ohs-orange/50 text-ohs-orange px-4 py-2.5 rounded-xl font-black text-xs transition-all flex items-center gap-2 cursor-pointer shadow-md"
+                                    className="bg-[#064E3B] hover:bg-[#065F46] border-2 border-[#D97706] text-white px-4 py-2.5 rounded-xl font-black text-xs transition-all flex items-center gap-2 cursor-pointer shadow-md"
                                 >
                                     <Film size={16} />
-                                    <span>OPEN TELEPROMPTER MODAL</span>
+                                    <span>Watch 2-Min Executive Demo</span>
                                 </button>
                                 <button
                                     onClick={handleDownloadMp4}
@@ -318,14 +315,12 @@ export const DashboardPage = () => {
                         <div className="relative w-full rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(249,168,37,0.15)] border border-white/10 bg-black aspect-video max-w-full">
                             <video
                                 className="w-full h-full object-contain"
-                                src="/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo.mp4"
+                                src="/demo/ergosafe-reborn-2min-demo.mp4"
                                 controls
-                                autoPlay
-                                muted
-                                preload="auto"
+                                preload="metadata"
                                 playsInline
                                 poster="/assets/nelly-steward-final.png"
-                                title="ErgoSafe Reborn 30s 1080p Narrated Demo"
+                                title="ErgoSafe Reborn V3 2-Minute Narrated Executive Demo"
                             />
                         </div>
                     </motion.div>

@@ -74,7 +74,7 @@ export const recordCompanyId = (companyId: string | null | undefined): string =>
 const DEFAULT_COMPANIES: CompanyTenant[] = [
     { 
         id: 'COMP-ODX-01', 
-        name: 'Oredax (Pty) Ltd', 
+        name: 'ErgoSafe Call-Centre Pilot', 
         activeSeats: 11,
         emergencyContacts: SA_PUBLIC_EMERGENCY_CONTACTS,
         emergencyContactNumber: '112',

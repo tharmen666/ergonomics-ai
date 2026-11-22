@@ -12,6 +12,7 @@ import { TourManager } from './components/agent/TourManager';
 import { GEAROverlay } from './components/ui/GEAROverlay';
 import { BBSCorrectiveActionOverlay } from './components/agent/BBSCorrectiveActionOverlay';
 import { ErgoMicroPrompt } from './components/callcenter/ErgoMicroPrompt';
+import { DemoVideoModal } from './components/demo/DemoVideoModal';
 
 // Dynamic React.lazy Code-Splitting for all feature pages
 const LivePostureTelemetry = lazy(() => import('./features/posture/LivePostureTelemetry').then(m => ({ default: m.LivePostureTelemetry })));
@@ -249,7 +250,7 @@ function renderTabContent(activeTab: string) {
 function App() {
   const { companyId, isAdmin, userId } = useTenantStore();
   const [activeTab, setActiveTab] = useState('executive');
-  const { isLiveTelemetryOpen, setIsLiveTelemetryOpen } = useNellyStore();
+  const { isLiveTelemetryOpen, setIsLiveTelemetryOpen, isDemoModalOpen, setIsDemoModalOpen } = useNellyStore();
 
   // Close modal on Escape key
   useEffect(() => {
@@ -288,6 +289,7 @@ function App() {
         <NellyAvatar />
         <GEAROverlay />
         <BBSCorrectiveActionOverlay />
+        <DemoVideoModal isOpen={isDemoModalOpen} onClose={() => setIsDemoModalOpen(false)} />
         
         {/* Isolated to Oredax Pilot Tenant; never loads hardcoded across other tenants */}
         {companyId === 'COMP-ODX-01' && (

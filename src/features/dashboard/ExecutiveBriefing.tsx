@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp, Volume2, VolumeX, Activity, Scale, Award, ShieldCheck, UserCheck, Zap } from 'lucide-react';
+import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp, Volume2, VolumeX, Activity, Scale, Award, ShieldCheck, UserCheck, Zap, Play } from 'lucide-react';
 import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
 import { useNellyStore } from '../../store/nellyStore';
 import { useComplianceStore } from '../../store/complianceStore';
@@ -22,7 +22,7 @@ export const BCEA_REST_PERIODS_FRAMEWORK = {
 
 export const ExecutiveBriefing = () => {
     const openStatutoryBreaches = useComplianceStore((s) => s.cases.filter(c => c.status === 'BREACH' && c.escalationState !== 'resolved').length);
-    const { language, setIsLiveTelemetryOpen, setWingmanActive } = useNellyStore();
+    const { language, setIsLiveTelemetryOpen, setWingmanActive, setIsDemoModalOpen } = useNellyStore();
     const [isNarrating, setIsNarrating] = useState(false);
     const [showSupportingMatrix, setShowSupportingMatrix] = useState(false);
 
@@ -94,6 +94,13 @@ export const ExecutiveBriefing = () => {
                     </div>
 
                     <div className="flex flex-wrap items-center gap-3">
+                        <button
+                            onClick={() => setIsDemoModalOpen(true)}
+                            className="flex items-center justify-center gap-2.5 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl bg-[#064E3B] hover:bg-[#065F46] border-2 border-[#D97706] text-white font-black text-xs transition-all shadow-lg cursor-pointer w-full sm:w-auto"
+                        >
+                            <Play size={16} className="fill-white text-white shrink-0" />
+                            <span>Watch 2-Min Executive Demo</span>
+                        </button>
                         <button
                             onClick={toggleNarration}
                             className={`flex items-center justify-center gap-2.5 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl font-black text-xs transition-all shadow-lg cursor-pointer w-full sm:w-auto ${

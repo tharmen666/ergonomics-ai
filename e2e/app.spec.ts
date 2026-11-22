@@ -100,7 +100,7 @@ test.describe('ErgoSafe Reborn V3 End-to-End Suite', () => {
     await page.click('button:has-text("GENERATE NEW INVOICE")');
 
     // Fill client name & VAT
-    await page.fill('input[placeholder="e.g. Astron Energy"]', 'Playwright Automated Enterprise');
+    await page.fill('input[placeholder="e.g. ErgoSafe Enterprise"]', 'Playwright Automated Enterprise');
     await page.fill('input[placeholder="e.g. ZA4920192841"]', 'ZA999888777');
     
     // Fill workstations count to 20
@@ -153,6 +153,34 @@ test.describe('ErgoSafe Reborn V3 End-to-End Suite', () => {
       // Verify UI text snippet updates for selected locale
       await expect(page.locator('body')).toContainText(lang.textSnippet);
     }
+  });
+
+  test('5. 2-Min Executive Demo Modal, HTTP 206 Byte-Range Streaming & 375px Mobile Viewport', async ({ page, request }) => {
+    await seedAuthSession(page);
+
+    // Verify HTTP 206 byte-range streaming on /demo/ergosafe-reborn-2min-demo.mp4
+    const rangeRes = await request.get('/demo/ergosafe-reborn-2min-demo.mp4', {
+      headers: { Range: 'bytes=0-1023' }
+    });
+    expect(rangeRes.status()).toBe(206);
+    expect(rangeRes.headers()['accept-ranges']).toBe('bytes');
+    expect(rangeRes.headers()['content-type']).toContain('video/mp4');
+
+    // Mobile 375px viewport modal launch & Escape close
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto('/');
+    const demoBtn = page.locator('button:has-text("Watch 2-Min Executive Demo"):visible').first();
+    await expect(demoBtn).toBeVisible();
+    await demoBtn.click();
+
+    const modalDialog = page.locator('[role="dialog"][aria-label*="2-Minute Executive Demo"]');
+    await expect(modalDialog).toBeVisible();
+    const videoEl = modalDialog.locator('video[src="/demo/ergosafe-reborn-2min-demo.mp4"]');
+    await expect(videoEl).toBeVisible();
+    await expect(videoEl).toHaveAttribute('preload', 'metadata');
+
+    await page.keyboard.press('Escape');
+    await expect(modalDialog).toBeHidden();
   });
 
 });

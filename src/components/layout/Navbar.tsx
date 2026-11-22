@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Menu, MoreVertical, ShieldCheck, Sparkles, LogOut, Radio, X } from 'lucide-react';
+import { Menu, MoreVertical, ShieldCheck, Sparkles, LogOut, Radio, X, Play } from 'lucide-react';
 import { useNellyStore } from '../../store/nellyStore';
 import { useTenantStore } from '../../store/tenantStore';
 
@@ -15,7 +15,8 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
         isWingmanActive, 
         setWingmanActive,
         isLiveTelemetryOpen,
-        setIsLiveTelemetryOpen
+        setIsLiveTelemetryOpen,
+        setIsDemoModalOpen
     } = useNellyStore();
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -134,11 +135,21 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
                         <span>((•)) LIVE MONITOR</span>
                     </button>
 
+                    {/* Watch 2-Min Executive Demo Button */}
+                    <button
+                        onClick={() => setIsDemoModalOpen(true)}
+                        className="inline-flex items-center gap-1.5 bg-[#064E3B] hover:bg-[#065F46] border-2 border-[#D97706] text-white px-3 py-1.5 min-h-[38px] rounded-xl font-black text-xs transition-all shadow-md whitespace-nowrap leading-none cursor-pointer"
+                        title="Watch 2-Min Executive Demo"
+                    >
+                        <Play size={13} className="fill-white text-white" />
+                        <span>Watch 2-Min Executive Demo</span>
+                    </button>
+
                     {/* HQ Demo Action Button */}
                     <button
                         onClick={() => setActiveTab('demo')}
                         className="inline-flex items-center gap-1.5 bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-3 py-1.5 min-h-[38px] rounded-xl font-black text-xs transition-all shadow-md whitespace-nowrap leading-none cursor-pointer"
-                        title="Launch Interactive Executive Demo"
+                        title="Launch Interactive 3D Demo"
                     >
                         <Sparkles size={14} />
                         <span>HQ DEMO</span>
@@ -157,12 +168,14 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
 
                 {/* Right: Mobile Compact Controls (< 768px) with Collapsible Tray */}
                 <div className="flex md:hidden items-center gap-1.5 flex-shrink-0" ref={menuRef}>
-                    {/* Compact Primary Action Button */}
+                    {/* Watch 2-Min Executive Demo Mobile Button */}
                     <button
-                        onClick={() => setActiveTab('demo')}
-                        className="bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-2.5 py-1.5 min-h-[34px] rounded-lg font-black text-[10px] transition-all shadow-sm whitespace-nowrap leading-none cursor-pointer"
+                        onClick={() => setIsDemoModalOpen(true)}
+                        className="bg-[#064E3B] hover:bg-[#065F46] border-2 border-[#D97706] text-white px-2.5 py-1.5 min-h-[34px] rounded-lg font-black text-[10px] transition-all shadow-sm whitespace-nowrap leading-none cursor-pointer flex items-center gap-1"
+                        title="Watch 2-Min Executive Demo"
                     >
-                        HQ DEMO
+                        <Play size={10} className="fill-white text-white shrink-0" />
+                        <span>Watch 2-Min Executive Demo</span>
                     </button>
 
                     {/* Collapsible Quick Menu Trigger */}

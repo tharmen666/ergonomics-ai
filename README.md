@@ -92,7 +92,7 @@ Open `http://127.0.0.1:5173` in a browser.
 With the development server running, verify that the HQ video and audio tracks load:
 
 ```text
-http://127.0.0.1:5173/assets/ErgoSafe_Reborn_30s_1080p_Narrated_Demo.mp4
+http://127.0.0.1:5173/demo/ergosafe-reborn-2min-demo.mp4
 http://127.0.0.1:5173/assets/rachel_narrative.mp3
 ```
 
