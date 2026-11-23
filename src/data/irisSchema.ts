@@ -86,7 +86,7 @@ export interface IrisCoreDatabase {
   irisPersonality: IrisPersonalityProfile;
   sideA_EmergencySOPs: SOPTrack[];
   sideB_ServiceRoutines: SOPTrack[];
-  astronTransitionDeck: FAQCard[];
+  forecourtFaqDeck: FAQCard[];
   frontendIntegration: FrontendIntegration;
 }
 

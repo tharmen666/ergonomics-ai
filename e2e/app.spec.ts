@@ -23,11 +23,13 @@ test.describe('ErgoSafe Reborn V3 End-to-End Suite', () => {
   }
 
   async function ensureSidebarOpen(page: any) {
-    const sidebar = page.locator('div.fixed.left-0.top-0');
+    const sidebar = page.locator('div.fixed.left-0.top-0').first();
+    await expect(sidebar).toBeAttached();
     const isOffscreen = await sidebar.evaluate((el: HTMLElement) => el.classList.contains('-translate-x-full'));
     if (isOffscreen) {
-      const toggleButton = page.locator('button[title="Toggle Sidebar"]').first();
-      await toggleButton.click({ force: true });
+      const toggleButton = page.getByRole('button', { name: 'Toggle Sidebar' }).first();
+      await toggleButton.click();
+      await expect(sidebar).not.toHaveClass(/-translate-x-full/);
       await page.waitForTimeout(350);
     }
   }
@@ -181,6 +183,198 @@ test.describe('ErgoSafe Reborn V3 End-to-End Suite', () => {
 
     await page.keyboard.press('Escape');
     await expect(modalDialog).toBeHidden();
+  });
+
+  async function seedPrivacyAcceptedSession(page: any) {
+    await seedAuthSession(page);
+    await page.addInitScript(() => {
+      window.localStorage.setItem('popiHandshakeAccepted', 'true');
+      window.localStorage.setItem('ergo_privacy_consent_verified', 'true');
+    });
+  }
+
+  test('6. Desktop (1440x900) & Mobile (375x667) Zero Console/Page Errors and Zero Horizontal Overflow', async ({ page }) => {
+    test.setTimeout(60000);
+    const consoleErrors: string[] = [];
+    const pageErrors: string[] = [];
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') consoleErrors.push(msg.text());
+    });
+    page.on('pageerror', (err) => {
+      pageErrors.push(err.message);
+    });
+
+    await seedPrivacyAcceptedSession(page);
+
+    const routes = [
+      { label: 'Stewardship Overview', expectPattern: /STATUTORY SAFETY COMMAND CENTRE/i },
+      { label: 'Trust & Enterprise Licensing', expectPattern: /Enterprise Trust Center|Run Live Verification Diagnostics/i },
+      { label: 'Statutory Risk & Governance (GN R1589)', expectPattern: /Statutory Ergonomic Risk Register/i },
+      { label: 'GN R1589 Statutory Assessment Workspaces', expectPattern: /STATUTORY ERGONOMIC ASSESSMENT SUITE/i },
+      { label: 'Nelly Posture & Hazard Monitoring Engine (3D Spine)', expectPattern: /Nelly Posture & Hazard Engine/i },
+    ];
+
+    for (const viewport of [
+      { width: 1440, height: 900 },
+      { width: 375, height: 667 },
+    ]) {
+      await page.setViewportSize(viewport);
+      await page.goto('/');
+      await expect(page.locator('h1:has-text("ERGOSAFE")')).toBeVisible();
+      for (const route of routes) {
+        await ensureSidebarOpen(page);
+        const btn = page.locator('div.fixed.left-0.top-0').getByRole('button', { name: route.label, exact: true });
+        await btn.scrollIntoViewIfNeeded();
+        await btn.click();
+        await expect(page.locator('main')).toContainText(route.expectPattern, { timeout: 10000 });
+
+        if (viewport.width === 375) {
+          const overflow = await page.evaluate(() => ({
+            scrollWidth: document.documentElement.scrollWidth,
+            innerWidth: window.innerWidth,
+          }));
+          expect(overflow.scrollWidth).toBeLessThanOrEqual(overflow.innerWidth + 2);
+        }
+      }
+    }
+
+    expect(consoleErrors).toEqual([]);
+    expect(pageErrors).toEqual([]);
+  });
+
+  test('7. POPIA Section 18 Camera Consent Gate Blocks getUserMedia Until Accepted & Supports Manual Fallback', async ({ page }) => {
+    await seedPrivacyAcceptedSession(page);
+    await page.addInitScript(() => {
+      (window as any).__getUserMediaCalls = 0;
+      const mockStream = {
+        getTracks: () => [{ stop: () => {} }],
+      };
+      Object.defineProperty(navigator, 'mediaDevices', {
+        configurable: true,
+        value: {
+          getUserMedia: async () => {
+            (window as any).__getUserMediaCalls += 1;
+            return mockStream;
+          },
+        },
+      });
+    });
+
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+
+    // Open Live Monitor modal (autoStart=true, must STILL be blocked by POPIA Consent Gate)
+    await page.locator('button:has-text("LIVE MONITOR")').first().click();
+    const consentGate = page.getByTestId('popia-camera-consent-gate');
+    await expect(consentGate).toBeVisible({ timeout: 10000 });
+    await expect(consentGate).toContainText(/zero facial recognition/i);
+    await expect(consentGate).toContainText(/Competent Person/i);
+
+    // Camera must NOT have been called prior to explicit consent
+    expect(await page.evaluate(() => (window as any).__getUserMediaCalls)).toBe(0);
+
+    // Continue Without Camera -> Manual Ergonomic Assessment Mode
+    await page.getByRole('button', { name: /Continue Without Camera \(Manual Ergonomic Assessment Mode\)/i }).click();
+    await expect(page.getByTestId('manual-ergonomic-mode')).toBeVisible();
+    expect(await page.evaluate(() => (window as any).__getUserMediaCalls)).toBe(0);
+
+    // Switch back to Consent Gate and Accept Camera
+    await page.getByRole('button', { name: /Opt In to Local Camera/i }).click();
+    await expect(consentGate).toBeVisible();
+    await page.getByRole('button', { name: /Accept & Enable Local Camera/i }).click();
+
+    const storedConsent = await page.evaluate(() => {
+      const raw = window.localStorage.getItem('ergosafe_popia_s18_camera_consent');
+      return raw ? JSON.parse(raw) : null;
+    });
+    expect(storedConsent?.accepted).toBe(true);
+    expect(storedConsent?.mode).toBe('camera');
+    await expect.poll(async () => page.evaluate(() => (window as any).__getUserMediaCalls)).toBeGreaterThanOrEqual(1);
+  });
+
+  test('8. Enterprise Trust Center Diagnostics, Honest Procurement Matrix & POPIA Data Subject Wipe', async ({ page }) => {
+    await seedPrivacyAcceptedSession(page);
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    await expect(page.locator('h1:has-text("ERGOSAFE")')).toBeVisible();
+
+    await ensureSidebarOpen(page);
+    await page.locator('div.fixed.left-0.top-0').getByRole('button', { name: 'Trust & Enterprise Licensing', exact: true }).click();
+    await expect(page.getByTestId('run-diagnostics-btn')).toBeVisible({ timeout: 10000 });
+
+    // No fake certification claims
+    const bodyText = await page.locator('body').innerText();
+    expect(bodyText).not.toMatch(/SOC 2 Certified|ISO 27001 Certified|100% Legally Compliant/i);
+    expect(bodyText).toContain('Available in Enterprise Licensing Tier');
+
+    // Run 5 live verification diagnostics
+    await page.getByTestId('run-diagnostics-btn').click();
+    for (let i = 0; i < 5; i++) {
+      const card = page.getByTestId(`diagnostic-result-${i}`);
+      await expect(card).toBeVisible({ timeout: 10000 });
+      await expect(card).toContainText('PASS');
+    }
+
+    // Verify AI Governance Card is visible
+    await expect(page.getByTestId('ai-governance-card')).toBeVisible();
+
+    // Verify POPIA Data Subject Panel inspect & wipe
+    const dataPanel = page.getByTestId('popia-data-subject-panel');
+    await expect(dataPanel).toBeVisible();
+    await page.evaluate(() => {
+      window.localStorage.setItem('ergosafe_test_sample_key', 'sample-ergonomic-record');
+    });
+    await page.getByTestId('wipe-local-data-btn').click();
+    expect(await page.evaluate(() => window.localStorage.getItem('ergosafe_test_sample_key'))).toBeNull();
+  });
+
+  test('9. Statutory Ergonomics Workflow: Hierarchy Gate, PPE Warning, Reg 8(2) Consent & SHA-256 Archive', async ({ page }) => {
+    await seedPrivacyAcceptedSession(page);
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    await expect(page.locator('h1:has-text("ERGOSAFE")')).toBeVisible();
+
+    await ensureSidebarOpen(page);
+    await page.locator('div.fixed.left-0.top-0').getByRole('button', { name: 'Statutory Risk & Governance (GN R1589)', exact: true }).click();
+    await expect(page.getByTestId('record-task-assessment-btn')).toBeVisible({ timeout: 10000 });
+
+    // Record a new high-risk RULA task (max out sliders/inputs or submit default/high task)
+    await page.getByLabel(/Task Name/i).fill('Cold Room Case Stacking Audit');
+    await page.getByLabel(/Department/i).fill('Logistics Dispatch');
+    await page.getByTestId('record-task-assessment-btn').click();
+
+    // Verify 24-month reassessment due date is rendered and "Mark Hazard Controlled" is blocked when 0 controls exist
+    await expect(page.locator('body')).toContainText(/24-Month/i);
+    const markControlledBtn = page.getByTestId('mark-controlled-btn');
+    await expect(markControlledBtn).toBeDisabled();
+
+    // Add PPE-only control -> verify Training/PPE-only warning appears
+    await page.getByLabel('Control Hierarchy Tier').selectOption('PPE');
+    await page.getByLabel('Control Description').fill('Thermal grip gloves issued');
+    await page.getByTestId('add-control-btn').click();
+    await expect(page.getByTestId('ppe-only-warning')).toBeVisible();
+
+    // Add higher-order Engineering control -> warning clears & Mark Hazard Controlled works
+    await page.getByLabel('Control Hierarchy Tier').selectOption('Engineering');
+    await page.getByLabel('Control Description').fill('Install hydraulic scissor-lift palletizer');
+    await page.getByTestId('add-control-btn').click();
+    await expect(page.getByTestId('ppe-only-warning')).toBeHidden();
+    await expect(markControlledBtn).toBeEnabled();
+    await markControlledBtn.click();
+
+    // Toggle Reg 8(2) Medical Surveillance Referral -> written consent warning appears
+    await page.getByTestId('reg8-referral-toggle').check();
+    await expect(page.getByTestId('reg8-consent-warning')).toBeVisible();
+
+    // Generate SHA-256 Sealed Archive -> 64-char hex digest & retention tiers
+    await page.getByTestId('generate-archive-btn').click();
+    const digestEl = page.getByTestId('sha256-archive-digest');
+    await expect(digestEl).toBeVisible();
+    const digestText = (await digestEl.innerText()).trim();
+    expect(digestText).toMatch(/[a-f0-9]{64}/i);
+    await expect(page.locator('body')).toContainText('40 Years');
+    await expect(page.locator('body')).toContainText('3 Years');
+    await expect(page.locator('body')).toContainText('Duration of Employment');
   });
 
 });

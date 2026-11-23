@@ -2,7 +2,7 @@
 
 ## ✅ Status: DATABASE LOCKED & READY FOR FRONTEND
 
-The complete Iris Safety Database is production-ready with bilingual content (English + isiZulu), comprehensive SOPs, and the Astron Energy FAQ deck.
+The complete Iris Safety Database is production-ready with bilingual content (English + isiZulu), comprehensive SOPs, and the ErgoSafe Forecourt FAQ deck.
 
 ---
 
@@ -64,7 +64,7 @@ console.log(faqCards.length); // 5
 // Get specific FAQ
 const card1 = iris.getFAQCard(1);
 console.log(card1.question.en);
-// "Why did Caltex change its name to Astron Energy?"
+// "Why must I switch off my engine and avoid using my phone near fuel pumps?"
 ```
 
 ### Step 4: Use React hooks (for React apps)
@@ -168,13 +168,13 @@ console.log(personality.communicationStyle.en); // "Authoritative yet supportive
 2. **SOP-PAY-02** - Secure Payment Processing (MEDIUM)
 3. **SOP-CLEA-03** - End-of-Shift Cleanup (MEDIUM)
 
-### FAQ Deck (5 cards - Astron Energy Transition)
+### FAQ Deck (5 cards - ErgoSafe Forecourt Safety & Ergonomics)
 
-1. **Card 1** - Why the name change?
-2. **Card 2** - Is fuel quality the same?
-3. **Card 3** - UCount card still works?
-4. **Card 4** - What about fleet cards?
-5. **Card 5** - Are convenience stores changing?
+1. **Card 1** - Why switch off engine & avoid phones at pumps?
+2. **Card 2** - How do attendants prevent back & wrist strain?
+3. **Card 3** - Contactless & loyalty cards at the pump?
+4. **Card 4** - What about corporate fleet cards?
+5. **Card 5** - Is the forecourt shop safe for a rest stop?
 
 ---
 
@@ -271,6 +271,6 @@ For implementation examples, see: **useIrisCore.ts**
 **Status**: ✅ **PRODUCTION READY**  
 **Version**: 2026.5.1-PRODUCTION  
 **Last Updated**: 2026-05-28  
-**Locked by Iris for Astron Energy Safety Compliance**
+**Locked by Iris for ErgoSafe Forecourt Safety Compliance**
 
 *Safety is not negotiable. Excellence is the standard.*

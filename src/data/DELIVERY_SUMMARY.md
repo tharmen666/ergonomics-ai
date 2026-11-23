@@ -1,6 +1,6 @@
 # 🎯 IRIS CORE DATABASE DELIVERY SUMMARY
 
-## Project: ErgoSafe Reborn - Astron Energy Safety & Compliance System
+## Project: ErgoSafe Reborn - ErgoSafe Forecourt Safety & Compliance System
 
 **Completed**: 2026-05-28 08:25:00 UTC  
 **Status**: ✅ LOCKED FOR FRONTEND DEPLOYMENT  
@@ -105,19 +105,19 @@
 - 4-6 numbered steps
 - Performance metrics
 - Sales opportunity guidance
-- UCount loyalty integration
+- Loyalty & fleet card verification integration
 - Time budgets
 - Bilingual content
 
-### Astron Energy 5-Card FAQ Deck (Brand Transition Support)
+### ErgoSafe Forecourt 5-Card FAQ Deck (Safety & Ergonomics Support)
 
 | Card | Question | Concern Level | Strategy |
 |---|---|---|---|
-| 1 | Why did Caltex change to Astron Energy? | LOW | Excitement—it's progress |
-| 2 | Is fuel quality still the same? | MEDIUM | Reassure + mention Quartex |
-| 3 | UCount Rewards card still works? | MEDIUM | YES + upsell |
-| 4 | What about corporate fleet cards? | HIGH | YES + emphasize speed |
-| 5 | Are convenience stores (FreshStop) changing? | LOW | Upgraded + upsell coffee |
+| 1 | Why switch off engine & avoid phones at pumps? | MEDIUM | Calmly explain vapour/spark safety |
+| 2 | How do attendants prevent back & wrist strain? | MEDIUM | Demonstrate safe ergonomic posture |
+| 3 | Contactless & loyalty cards at the pump? | LOW | YES + fast window checkout |
+| 4 | What about corporate fleet cards? | HIGH | YES + keep card in sight & emphasize speed |
+| 5 | Is the forecourt shop safe for a rest stop? | LOW | Slip-resistant walkways + upsell coffee |
 
 **Features per Card**:
 - Customer concern level assessment
@@ -355,6 +355,6 @@ All safety protocols, FAQ content, and Iris personality have been mapped into a 
 **Status**: ✅ PRODUCTION LOCKED  
 **Version**: 2026.5.1-PRODUCTION  
 **Persona**: Iris - The Safety Agent  
-**Mission**: Astron Energy / Service Station Safety Compliance
+**Mission**: ErgoSafe Forecourt / Service Station Safety Compliance
 
 *Safety is not negotiable. Excellence is the standard.*

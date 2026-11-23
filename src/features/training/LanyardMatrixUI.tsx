@@ -61,7 +61,7 @@ export const LanyardMatrixUI = () => {
                     onClick={() => setActiveTab('faq')}
                     className={`flex-1 min-w-[150px] flex items-center justify-center gap-2 px-4 py-3 rounded-lg font-bold transition-all ${activeTab === 'faq' ? 'bg-ohs-orange/20 text-ohs-orange border border-ohs-orange/30' : 'text-gray-400 hover:bg-white/5'}`}
                 >
-                    <MessageCircle size={18} /> Astron FAQ Deck
+                    <MessageCircle size={18} /> Forecourt FAQ Deck
                 </button>
                 <button 
                     onClick={() => setActiveTab('mockup')}
@@ -155,7 +155,7 @@ export const LanyardMatrixUI = () => {
                 {/* FAQ DECK */}
                 {activeTab === 'faq' && (
                     <div className="grid grid-cols-1 gap-4">
-                        {matrix.astronTransitionDeck.map(card => (
+                        {matrix.forecourtFaqDeck.map(card => (
                             <div key={card.cardNumber} className="bg-white/5 border border-white/10 rounded-2xl p-6 hover:border-ohs-orange/30 transition-colors relative overflow-hidden group">
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-ohs-orange/5 rounded-bl-full -z-10 group-hover:bg-ohs-orange/10 transition-colors" />
                                 

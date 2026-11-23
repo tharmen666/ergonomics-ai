@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Timer, CheckCircle, ShieldCheck, Volume2, Sparkles, X, Activity, User, Monitor, Play, Pause } from 'lucide-react';
-import { getOredaxUser, oredaxPilotConfig } from '../../data/tenantOredax';
+import { getCallCentrePilotUser, callCentrePilotConfig } from '../../data/tenantCallCentrePilot';
 import { speak } from '../../utils/speech';
 import { useComplianceStore } from '../../store/complianceStore';
 
@@ -37,8 +37,8 @@ const STRETCH_STEPS = [
 ];
 
 export const ErgoMicroPrompt = ({ currentUser = 'ODX-AGT-01' }: ErgoMicroPromptProps) => {
-    const user = getOredaxUser(currentUser);
-    const settings = oredaxPilotConfig.workstationSettings;
+    const user = getCallCentrePilotUser(currentUser);
+    const settings = callCentrePilotConfig.workstationSettings;
     const logVerifiedBBSIntervention = useComplianceStore((state) => state.logVerifiedBBSIntervention);
 
     const [isOpen, setIsOpen] = useState(false);
@@ -110,7 +110,7 @@ export const ErgoMicroPrompt = ({ currentUser = 'ODX-AGT-01' }: ErgoMicroPromptP
 
         // Vocal alert via Nelly
         speak(
-            `Oredax Call-Centre Micro-Break Alert: 60-second ergonomics stretch sequence initiated for ${user.label} at ${user.station}. Please pause call logging for 60 seconds.`,
+            `ErgoSafe Call-Centre Micro-Break Alert: 60-second ergonomics stretch sequence initiated for ${user.label} at ${user.station}. Please pause call logging for 60 seconds.`,
             'en-ZA'
         );
     };
@@ -122,13 +122,13 @@ export const ErgoMicroPrompt = ({ currentUser = 'ODX-AGT-01' }: ErgoMicroPromptP
 
         // Log verified intervention into compliance ledger
         logVerifiedBBSIntervention(
-            'Oredax Call-Centre Micro-Break',
+            'ErgoSafe Call-Centre Micro-Break',
             `${user.station} (${user.label}) completed 60s ergonomic postural stretch protocol`,
             settings.microStretchDurationSeconds
         );
 
         speak(
-            `Micro-break verified for station ${user.station}. Postural compliance recorded for Oredax audit ledger.`,
+            `Micro-break verified for station ${user.station}. Postural compliance recorded for ErgoSafe Call-Centre audit ledger.`,
             'en-ZA'
         );
 
@@ -157,7 +157,7 @@ export const ErgoMicroPrompt = ({ currentUser = 'ODX-AGT-01' }: ErgoMicroPromptP
                     <div className="flex flex-col">
                         <div className="flex items-center gap-1 font-bold text-gray-200">
                             <ShieldCheck size={13} className="text-ohs-orange" />
-                            <span>{oredaxPilotConfig.companyName}</span>
+                            <span>{callCentrePilotConfig.companyName}</span>
                             <span className="text-[10px] text-gray-400">({user.station})</span>
                         </div>
                         <div className="text-[10px] text-gray-400 flex items-center gap-1">
@@ -200,7 +200,7 @@ export const ErgoMicroPrompt = ({ currentUser = 'ODX-AGT-01' }: ErgoMicroPromptP
                                     <div>
                                         <div className="flex items-center gap-2">
                                             <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-ohs-orange/20 text-ohs-orange border border-ohs-orange/30">
-                                                {oredaxPilotConfig.companyName} Pilot
+                                                {callCentrePilotConfig.companyName} Pilot
                                             </span>
                                             <span className="text-xs text-gray-400">60-Sec Call-Centre Reset</span>
                                         </div>
@@ -260,7 +260,7 @@ export const ErgoMicroPrompt = ({ currentUser = 'ODX-AGT-01' }: ErgoMicroPromptP
                                     </motion.div>
                                     <h3 className="text-xl font-bold text-white">Micro-Break Verified!</h3>
                                     <p className="text-xs text-gray-300 max-w-md">
-                                        Postural decompression recorded for <span className="text-emerald-400 font-semibold">{user.label}</span> on the Oredax pilot ledger. Total completed resets today: <span className="font-bold text-ohs-orange">{completedCount}</span>.
+                                        Postural decompression recorded for <span className="text-emerald-400 font-semibold">{user.label}</span> on the ErgoSafe Call-Centre pilot ledger. Total completed resets today: <span className="font-bold text-ohs-orange">{completedCount}</span>.
                                     </p>
                                 </div>
                             ) : (

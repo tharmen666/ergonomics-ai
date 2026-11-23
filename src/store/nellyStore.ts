@@ -79,7 +79,7 @@ export const useNellyStore = create<NellyState>()(
             isDemoModalOpen: false,
             hasIntroduced: false,
             isNellyExpanded: false,
-            isSidebarCollapsed: false,
+            isSidebarCollapsed: true,
             language: 'en',
             completedModules: [],
             recommendations: [],
@@ -116,6 +116,7 @@ export const useNellyStore = create<NellyState>()(
                 merged.hasIntroduced = false;
                 merged.isLiveTelemetryOpen = false;
                 merged.isDemoModalOpen = false;
+                merged.isSidebarCollapsed = true;
                 return merged;
             },
             // Exclude non-persistent UI states

@@ -68,20 +68,20 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
                 isSidebarCollapsed ? 'md:ml-0 md:w-full' : 'md:ml-[280px] md:w-[calc(100%-280px)]'
             }`}
         >
-            <div className="w-full max-w-full px-3 sm:px-6 md:px-8 py-2 flex items-center justify-between gap-2 relative">
+            <div className="w-full max-w-full px-2 sm:px-6 md:px-8 py-2 flex items-center justify-between gap-1.5 sm:gap-2 relative">
                 {/* Left: Branding & Sidebar Toggle */}
-                <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-shrink">
+                <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 shrink-0">
                     <button 
                         onClick={() => setSidebarCollapsed(!isSidebarCollapsed)}
-                        className="p-1.5 sm:p-2 min-h-[38px] min-w-[38px] sm:min-h-[44px] sm:min-w-[44px] bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center text-ohs-orange shadow-md flex-shrink-0 cursor-pointer"
+                        className="p-1.5 sm:p-2 min-h-[36px] min-w-[36px] sm:min-h-[44px] sm:min-w-[44px] bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors flex items-center justify-center text-ohs-orange shadow-md flex-shrink-0 cursor-pointer"
                         title="Toggle Sidebar"
                         aria-label="Toggle Sidebar"
                     >
                         <Menu size={18} className="sm:w-5 sm:h-5" />
                     </button>
                     
-                    <div className="flex flex-col min-w-0 flex-shrink">
-                        <h1 className="text-xs sm:text-base md:text-xl font-black text-white tracking-tight uppercase truncate leading-tight">
+                    <div className="flex flex-col min-w-0">
+                        <h1 className="text-[11px] sm:text-base md:text-xl font-black text-white tracking-tight uppercase whitespace-nowrap leading-tight">
                             ERGOSAFE <span className="text-ohs-orange">REBORN</span>
                         </h1>
                         <div className="flex items-center gap-1.5 mt-0.5">
@@ -94,15 +94,15 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
                 </div>
 
                 {/* Right: Desktop Actions & Status Tray (>= 768px) */}
-                <div className="hidden md:flex items-center gap-2 lg:gap-3 flex-shrink-0">
-                    {/* Privacy Consensus Badge */}
-                    <div className={`hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl font-bold text-[10px] uppercase tracking-wider whitespace-nowrap shadow-sm border ${privacyAccepted ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-amber-500/10 border-amber-500/30 text-amber-400'}`}>
+                <div className="hidden md:flex flex-wrap items-center justify-end gap-1.5 lg:gap-2 min-w-0 flex-1">
+                    {/* Privacy Consensus Badge (rendered in DOM, shown on 2xl to keep nav single-row at 1280px) */}
+                    <div className={`hidden 2xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl font-bold text-[10px] uppercase tracking-wider whitespace-nowrap shadow-sm border ${privacyAccepted ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' : 'bg-amber-500/10 border-amber-500/30 text-amber-400'}`}>
                         <span className={`w-2 h-2 rounded-full ${privacyAccepted ? 'bg-emerald-400' : 'bg-amber-400'}`} />
                         <span>{privacyAccepted ? 'Privacy Notice Accepted' : 'Privacy Notice Pending'}</span>
                     </div>
 
                     {/* Status Pill */}
-                    <div className="flex items-center gap-1.5 bg-white/5 border border-white/10 px-2.5 py-1.5 rounded-xl text-center">
+                    <div className="hidden 2xl:flex items-center gap-1.5 bg-white/5 border border-white/10 px-2.5 py-1.5 rounded-xl text-center">
                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                         <span className="text-[9px] font-mono text-gray-400 uppercase">Status:</span>
                         <span className="text-[10px] font-black text-emerald-400 uppercase tracking-wide">NOMINAL</span>
@@ -111,21 +111,21 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
                     {/* Wingman Toggle Button */}
                     <button
                         onClick={() => setWingmanActive(!isWingmanActive)}
-                        className={`inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl font-bold text-xs transition-all shadow-md leading-none cursor-pointer whitespace-nowrap ${
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 min-h-[36px] rounded-xl font-bold text-[11px] transition-all shadow-md leading-none cursor-pointer whitespace-nowrap ${
                             isWingmanActive
                                 ? 'bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black shadow-emerald-500/25 ring-2 ring-emerald-400'
                                 : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'
                         }`}
                         title="Toggle Voice Wingman Assistant"
                     >
-                        <Radio size={14} className={isWingmanActive ? "animate-pulse text-emerald-400" : ""} />
+                        <Radio size={13} className={isWingmanActive ? "animate-pulse text-emerald-400" : ""} />
                         <span>{isWingmanActive ? 'DISABLE WINGMAN' : 'ACTIVATE WINGMAN'}</span>
                     </button>
 
                     {/* Live Telemetry Modal Button */}
                     <button
                         onClick={() => setIsLiveTelemetryOpen(true)}
-                        className={`hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl font-bold text-xs transition-all shadow-md leading-none cursor-pointer whitespace-nowrap ${
+                        className={`hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 min-h-[36px] rounded-xl font-bold text-[11px] transition-all shadow-md leading-none cursor-pointer whitespace-nowrap ${
                             isLiveTelemetryOpen
                                 ? 'bg-cyan-500 text-slate-950 font-black shadow-cyan-500/25'
                                 : 'bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40'
@@ -135,53 +135,63 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
                         <span>((•)) LIVE MONITOR</span>
                     </button>
 
+                    {/* Trust & Enterprise Licensing Button */}
+                    <button
+                        onClick={() => setActiveTab('trust-center')}
+                        className="hidden lg:inline-flex items-center gap-1.5 bg-[#0F172A] hover:bg-[#064E3B] border border-[#D97706] text-white px-2.5 py-1.5 min-h-[36px] rounded-xl font-black text-[11px] transition-all shadow-md whitespace-nowrap leading-none cursor-pointer"
+                        title="Trust & Enterprise Licensing"
+                    >
+                        <ShieldCheck size={13} className="text-[#D97706]" />
+                        <span>Trust &amp; Enterprise Licensing</span>
+                    </button>
+
                     {/* Watch 2-Min Executive Demo Button */}
                     <button
                         onClick={() => setIsDemoModalOpen(true)}
-                        className="inline-flex items-center gap-1.5 bg-[#064E3B] hover:bg-[#065F46] border-2 border-[#D97706] text-white px-3 py-1.5 min-h-[38px] rounded-xl font-black text-xs transition-all shadow-md whitespace-nowrap leading-none cursor-pointer"
+                        className="inline-flex items-center gap-1.5 bg-[#064E3B] hover:bg-[#065F46] border-2 border-[#D97706] text-white px-2.5 py-1.5 min-h-[36px] rounded-xl font-black text-[11px] transition-all shadow-md whitespace-nowrap leading-none cursor-pointer"
                         title="Watch 2-Min Executive Demo"
                     >
-                        <Play size={13} className="fill-white text-white" />
+                        <Play size={12} className="fill-white text-white" />
                         <span>Watch 2-Min Executive Demo</span>
                     </button>
 
                     {/* HQ Demo Action Button */}
                     <button
                         onClick={() => setActiveTab('demo')}
-                        className="inline-flex items-center gap-1.5 bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-3 py-1.5 min-h-[38px] rounded-xl font-black text-xs transition-all shadow-md whitespace-nowrap leading-none cursor-pointer"
+                        className="inline-flex items-center gap-1 bg-ohs-orange hover:bg-ohs-orange/90 text-ohs-navy px-2.5 py-1.5 min-h-[36px] rounded-xl font-black text-[11px] transition-all shadow-md whitespace-nowrap leading-none cursor-pointer"
                         title="Launch Interactive 3D Demo"
                     >
-                        <Sparkles size={14} />
+                        <Sparkles size={13} />
                         <span>HQ DEMO</span>
                     </button>
 
                     {/* Disconnect / Logout Button */}
                     <button
                         onClick={handleDisconnect}
-                        className="inline-flex items-center gap-1.5 bg-red-500/15 hover:bg-red-500/25 border border-red-500/30 text-red-300 px-3 py-1.5 min-h-[38px] rounded-xl font-bold text-xs transition-all whitespace-nowrap leading-none cursor-pointer"
+                        className="inline-flex items-center gap-1 bg-red-500/15 hover:bg-red-500/25 border border-red-500/30 text-red-300 px-2.5 py-1.5 min-h-[36px] rounded-xl font-bold text-[11px] transition-all whitespace-nowrap leading-none cursor-pointer"
                         title="Disconnect current session and return to Auth Portal"
                     >
-                        <LogOut size={14} />
+                        <LogOut size={13} />
                         <span>DISCONNECT</span>
                     </button>
                 </div>
 
                 {/* Right: Mobile Compact Controls (< 768px) with Collapsible Tray */}
-                <div className="flex md:hidden items-center gap-1.5 flex-shrink-0" ref={menuRef}>
+                <div className="flex md:hidden items-center gap-1 flex-shrink-0" ref={menuRef}>
                     {/* Watch 2-Min Executive Demo Mobile Button */}
                     <button
                         onClick={() => setIsDemoModalOpen(true)}
-                        className="bg-[#064E3B] hover:bg-[#065F46] border-2 border-[#D97706] text-white px-2.5 py-1.5 min-h-[34px] rounded-lg font-black text-[10px] transition-all shadow-sm whitespace-nowrap leading-none cursor-pointer flex items-center gap-1"
+                        className="bg-[#064E3B] hover:bg-[#065F46] border border-[#D97706] text-white px-2 py-1.5 min-h-[34px] rounded-lg font-black text-[9.5px] transition-all shadow-sm whitespace-nowrap leading-none cursor-pointer flex items-center gap-1"
                         title="Watch 2-Min Executive Demo"
                     >
-                        <Play size={10} className="fill-white text-white shrink-0" />
+                        <Play size={9} className="fill-white text-white shrink-0" />
                         <span>Watch 2-Min Executive Demo</span>
                     </button>
 
                     {/* Collapsible Quick Menu Trigger */}
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className={`p-1.5 min-h-[34px] min-w-[34px] rounded-lg border transition-all flex items-center justify-center cursor-pointer ${
+                        className={`p-1.5 min-h-[34px] min-w-[32px] rounded-lg border transition-all flex items-center justify-center cursor-pointer ${
                             isMobileMenuOpen 
                                 ? 'bg-ohs-orange text-ohs-navy border-ohs-orange' 
                                 : 'bg-white/10 text-white border-white/15 hover:bg-white/20'
@@ -252,6 +262,20 @@ export const Navbar: React.FC<NavbarProps> = ({ setActiveTab }) => {
                                 </span>
                                 <span className="text-[10px] uppercase font-mono">
                                     {isLiveTelemetryOpen ? 'Active' : 'Launch'}
+                                </span>
+                            </button>
+
+                            {/* Trust & Enterprise Licensing Action */}
+                            <button
+                                onClick={() => {
+                                    setActiveTab('trust-center');
+                                    setIsMobileMenuOpen(false);
+                                }}
+                                className="w-full flex items-center justify-between p-2.5 rounded-xl font-bold text-xs bg-[#064E3B] hover:bg-[#065F46] text-white border border-[#D97706] transition-colors cursor-pointer"
+                            >
+                                <span className="flex items-center gap-2">
+                                    <ShieldCheck size={14} className="text-[#D97706]" />
+                                    <span>Trust &amp; Enterprise Licensing</span>
                                 </span>
                             </button>
 

@@ -42,7 +42,7 @@ class IrisCoreDataManager {
     });
 
     // FAQ Deck
-    this.database.astronTransitionDeck.forEach((card) => {
+    this.database.forecourtFaqDeck.forEach((card) => {
       this.faqIndex.set(card.cardNumber, card);
     });
   }
@@ -83,10 +83,10 @@ class IrisCoreDataManager {
   }
 
   /**
-   * Get entire FAQ deck (5-card Astron Energy transition deck)
+   * Get entire FAQ deck (5-card ErgoSafe Forecourt Safety & Ergonomics FAQ deck)
    */
   getFAQDeck(): FAQCard[] {
-    return [...this.database.astronTransitionDeck];
+    return [...this.database.forecourtFaqDeck];
   }
 
   /**
@@ -120,7 +120,7 @@ class IrisCoreDataManager {
         irisVoiceIntro: this.getLocalizedText(sop.irisVoiceIntro, locale),
         irisClosingDirective: this.getLocalizedText(sop.irisClosingDirective, locale),
       })),
-      faqDeck: this.database.astronTransitionDeck.map((card) => ({
+      faqDeck: this.database.forecourtFaqDeck.map((card) => ({
         ...card,
         question: this.getLocalizedText(card.question, locale),
         answer: this.getLocalizedText(card.answer, locale),

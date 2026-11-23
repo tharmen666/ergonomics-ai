@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
-import { Users, Award, ClipboardCheck, CheckSquare, Bot, FileText, BarChart2, X, ShieldAlert, LogOut, HeartHandshake, Timer, Sparkles, Activity, ShieldCheck, BrainCircuit, Calculator } from 'lucide-react';
+import { Users, Award, ClipboardCheck, CheckSquare, Bot, FileText, BarChart2, X, ShieldAlert, LogOut, HeartHandshake, Timer, Sparkles, Activity, ShieldCheck, BrainCircuit, Calculator, Lock } from 'lucide-react';
 import { useNellyStore } from '../../store/nellyStore';
 import { useTenantStore } from '../../store/tenantStore';
 
 const navItems = [
+    { icon: Lock, label: "Trust & Enterprise Licensing", id: "trust-center" },
+    { icon: ShieldCheck, label: "Statutory Risk & Governance (GN R1589)", id: "statutory-governance" },
     { icon: Users, label: "HR & Compliance Dashboard", id: "hr" },
     { icon: ClipboardCheck, label: "GN R1589 Statutory Assessment Workspaces", id: "assessment" },
     { icon: Calculator, label: "Biomechanical Calculators (REBA/RULA/NIOSH/WBGT)", id: "calculators" },
@@ -23,6 +25,8 @@ const navItems = [
 export const isTabActive = (itemId: string, currentTab: string): boolean => {
     if (itemId === currentTab) return true;
     const norm = (currentTab || '').toLowerCase().trim();
+    if (itemId === 'trust-center' && ['trust-center', 'trust', 'enterprise-licensing'].includes(norm)) return true;
+    if (itemId === 'statutory-governance' && ['statutory-governance', 'statutory-ergonomics', 'gn-r1589'].includes(norm)) return true;
     if (itemId === 'nelly' && ['nelly', 'posture', '3d-spine', '3d-spinal', 'spinal-3d', 'spinal3d', 'spinal', 'spine', '3d', 'spine-viewer', 'spine-simulation'].includes(norm)) return true;
     if (itemId === 'risks' && ['risks', 'risk', 'risky-behaviours', 'risky-behaviors', 'riskybehaviours', 'riskybehaviors', 'risky-behaviour', 'risky-behavior', 'behaviours', 'behaviors'].includes(norm)) return true;
     if (itemId === 'training' && ['training', 'trainings', 'training-module', 'trainingmodule', 'certification', 'curriculum'].includes(norm)) return true;

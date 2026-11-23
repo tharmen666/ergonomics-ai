@@ -1,7 +1,7 @@
 /**
  * ERGOSAFE REBORN: FORECOURT COMPLIANCE MATRIX
  * 
- * Target: Service Stations (Astron Energy / General Forecourt)
+ * Target: Service Stations (ErgoSafe Forecourt / General Forecourt)
  * Persona: Iris (Safety Agent)
  * Format: Physical SOP Lanyard Tracks & 5-Card FAQ Deck
  * Localization: English (en) & isiZulu (zu)
@@ -37,12 +37,12 @@ export interface ServiceStationMatrix {
     brandFocus: string;
     sideA_EmergencySOPs: SOPTrack[];
     sideB_ServiceRoutines: SOPTrack[];
-    astronTransitionDeck: FAQCard[];
+    forecourtFaqDeck: FAQCard[];
 }
 
 export const FORECOURT_LANYARD_MATRIX: ServiceStationMatrix = {
     version: "2026.5.1",
-    brandFocus: "Astron Energy / General Service Stations",
+    brandFocus: "ErgoSafe Forecourt / General Service Stations",
 
     // ==========================================
     // SIDE A: EMERGENCY & HAZMAT CONTAINMENT
@@ -174,82 +174,82 @@ export const FORECOURT_LANYARD_MATRIX: ServiceStationMatrix = {
     ],
 
     // ==========================================
-    // ASTRON ENERGY 5-CARD FAQ DECK
+    // ERGOSAFE FORECOURT 5-CARD FAQ DECK
     // ==========================================
-    astronTransitionDeck: [
+    forecourtFaqDeck: [
         {
             cardNumber: 1,
             question: {
-                en: "Why did Caltex change its name to Astron Energy?",
-                zu: "Kungani i-Caltex ishintshe igama layo yaba yi-Astron Energy?"
+                en: "Why must I switch off my engine and avoid using my phone near fuel pumps?",
+                zu: "Kungani kufanele ngicime injini futhi ngigweme ukusebenzisa umakhalekhukhwini eduze kwamapompe kaphethiloli?"
             },
             answer: {
-                en: "Astron Energy acquired the Caltex network in South Africa. We are upgrading to a new, vibrant, and modern African energy brand.",
-                zu: "I-Astron Energy ithenge inethiwekhi ye-Caltex eNingizimu Afrika. Sithuthukela kumkhiqizo wamandla wase-Afrika omusha, onomdlandla, nonesimanje."
+                en: "Fuel vapours are invisible and highly flammable. Switching off your engine, avoiding open flames, and keeping mobile devices inside the cabin eliminates static and spark ignition risks on the ErgoSafe Forecourt.",
+                zu: "Umhwamuko kaphethiloli awubonakali futhi uvutha kalula kakhulu. Ukucima injini yakho, ukugwema amalangabi, nokugcina umakhalekhukhwini emotweni kuqeda ingozi yezinhlansi endaweni yokufaka uphethiloli ye-ErgoSafe Forecourt."
             },
             irisProtocolTip: {
-                en: "Smile when you explain this. It is an exciting upgrade, not just a paint job.",
-                zu: "Mamatheka uma uchaza lokhu. Kungukuthuthukiswa okujabulisayo, hhayi nje ukushintsha umbala."
+                en: "Remain calm and polite. Explain that ErgoSafe Forecourt safety rules protect every driver, passenger, and attendant.",
+                zu: "Hlala uzolile futhi uhloniphekile. Chaza ukuthi imithetho yokuphepha ye-ErgoSafe Forecourt ivikela bonke abashayeli, abagibeli, nabasebenzi."
             }
         },
         {
             cardNumber: 2,
             question: {
-                en: "Is the fuel quality still the same?",
-                zu: "Ngabe izinga lukaphethiloli lisafana yini?"
+                en: "How do forecourt attendants prevent back and wrist strain during busy shifts?",
+                zu: "Abasebenzi basemapompeni bakuvikela kanjani ukulimala komhlane nesihlakala phakathi namashifu amatasa?"
             },
             answer: {
-                en: "Yes, our fuel quality remains world-class. It is exactly the same premium formulation featuring our advanced Quartex additives.",
-                zu: "Yebo, izinga lethu lukaphethiloli lihlala lisezingeni lomhlaba. Kuyifomula efanayo kakhulu enezithako zethu ezithuthukisiwe ze-Quartex."
+                en: "Our team follows ErgoSafe Forecourt ergonomic posture protocols: keeping the fuel nozzle close to the body, maintaining neutral wrists, bending knees when checking tyres or lifting oil containers, and rotating pump islands regularly.",
+                zu: "Ithimba lethu lilandela imigomo ye-ergonomics ye-ErgoSafe Forecourt: ukugcina umbhobho kaphethiloli useduze nomzimba, ukugcina izihlakala ziqondile, ukugoba amadolo uma kuhlolwa amathayi noma kuphakanyiswa amafutha, nokushintshana emapompeni njalo."
             },
             irisProtocolTip: {
-                en: "Reassure them. Mention 'Quartex' clearly—it signals advanced engine protection.",
-                zu: "Baqinisekise. Yisho 'i-Quartex' ngokucacile—ikhomba isivikelo senjini esithuthukisiwe."
+                en: "Demonstrate safe stance at the pump. Good posture reduces fatigue and keeps service fast and accurate.",
+                zu: "Khombisa ukuma okuphephile epompeni. Ukuma kahle kunciphisa ukukhathala futhi kugcina ukusebenza kushesha futhi kunembile."
             }
         },
         {
             cardNumber: 3,
             question: {
-                en: "Can I still use my UCount Rewards card?",
-                zu: "Ngingasakwazi ukusebenzisa ikhadi lami le-UCount Rewards?"
+                en: "Can I use my contactless bank card or forecourt loyalty rewards at the pump?",
+                zu: "Ngingasebenzisa ikhadi lami lasebhange elingathinti noma imiklomelo yokwethembeka epompeni?"
             },
             answer: {
-                en: "Absolutely! The Standard Bank UCount partnership is still fully active at all Astron Energy sites.",
-                zu: "Kakhulu! Ubambiswano lwe-Standard Bank UCount lusasebenza ngokugcwele kuzo zonke izindawo ze-Astron Energy."
+                en: "Yes! ErgoSafe Forecourt sites support cash, tap-and-go bank cards, and active partner loyalty programs right at the pump window without you needing to leave your vehicle.",
+                zu: "Yebo! Iziteshi ze-ErgoSafe Forecourt zamukela ukheshi, amakhadi asebhange a-tap-and-go, nezinhlelo zemiklomelo ezisebenzayo khona lapho efasiteleni ngaphandle kokuba uphume emotweni."
             },
             irisProtocolTip: {
-                en: "Always ask 'Do you have your UCount card?' before processing payment. It shows we care about their rewards.",
-                zu: "Njalo buza 'Unalo ikhadi lakho le-UCount?' ngaphambi kokwenza inkokhelo. Kukhombisa ukuthi siyakhathalela ngemiklomelo yabo."
+                en: "Always confirm the payment method and loyalty card before authorizing the pump—it speeds up checkout and builds customer trust.",
+                zu: "Njalo qinisekisa indlela yokukhokha nekhadi lemiklomelo ngaphambi kokuvula ipompe—lokhu kusheshisa inkokhelo futhi kwakha ukwethenjwa."
             }
         },
         {
             cardNumber: 4,
             question: {
-                en: "What happens to my corporate fleet card?",
-                zu: "Kwenzekani ekhadini lami lezimoto zenhlangano?"
+                en: "What happens to my corporate fleet card and fuel slip verification?",
+                zu: "Kwenzekani ngekhadini lami lezimoto zenhlangano kanye nokuqinisekiswa kwamarisidi kaphethiloli?"
             },
             answer: {
-                en: "All Starcard and other major fleet cards are still 100% accepted without any interruptions.",
-                zu: "Wonke ama-Starcard namanye amakhadi amakhulu ezimoto asasebenza ngo-100% ngaphandle kokuphazamiseka."
+                en: "All major corporate fleet cards are 100% accepted with instant pump authorization, odometer capture, and itemized tax-compliant receipts for your fleet audit trail.",
+                zu: "Wonke amakhadi amakhulu ezimoto zenhlangano amukelwa ngo-100% ngokuvunywa kwepompe ngokushesha, ukubhalwa kwe-odometer, namarisidi ahambisana nemithetho yentela."
             },
             irisProtocolTip: {
-                en: "Fleet drivers are on a tight schedule. Assure them the transaction will be as fast as always.",
-                zu: "Abashayeli bezimoto zenhlangano banesikhathi esincane. Baqinisekise ukuthi inkokhelo izoshesha njengokujwayelekile."
+                en: "Fleet drivers are on a tight schedule. Assure them their fleet card stays in sight and the authorization will be completed rapidly.",
+                zu: "Abashayeli bezimoto zenhlangano banesikhathi esincane. Baqinisekise ukuthi ikhadi labo lizohlala libonakala futhi inkokhelo izophela ngokushesha."
             }
         },
         {
             cardNumber: 5,
             question: {
-                en: "Are the convenience stores changing too?",
-                zu: "Ngabe nezitolo zangaphakathi nazo ziyashintsha?"
+                en: "Is the forecourt convenience shop safe and accessible for a quick driver rest stop?",
+                zu: "Ngabe isitolo sasesiteshini siphephile futhi sifinyeleleka kalula ukuze umshayeli aphumule kancane?"
             },
             answer: {
-                en: "Yes! FreshStop remains, but with an upgraded look and feel to match our new Astron Energy colors.",
-                zu: "Yebo! I-FreshStop isekhona, kodwa ngokubukeka okusha nokuthuthukisiwe okufanelana nemibala yethu emisha ye-Astron Energy."
+                en: "Yes! Our ErgoSafe Forecourt convenience store features high-visibility walkways, slip-resistant floors, clean restrooms, and fresh refreshments to help drivers combat road fatigue.",
+                zu: "Yebo! Isitolo sethu sase-ErgoSafe Forecourt sinemigwaqo yokuhamba ebonakala kahle, phansi okungasheleli, izindlu zangasese ezihlanzekile, neziphuzo ezintsha ukusiza abashayeli bagweme ukukhathala emgwaqweni."
             },
             irisProtocolTip: {
-                en: "Use this moment to upsell. 'Would you like to grab a coffee inside our upgraded FreshStop today?'",
-                zu: "Sebenzisa leli thuba ukuthengisa kakhulu. 'Ungathanda yini ukuyothenga ikhofi ngaphakathi kwi-FreshStop yethu ethuthukisiwe namuhla?'"
+                en: "Use this moment to promote road safety and upsell: 'Would you like to stretch your legs and grab a fresh coffee inside our forecourt shop?'",
+                zu: "Sebenzisa leli thuba ukukhuthaza ukuphepha emgwaqweni nokuthengisa: 'Ungathanda yini ukuyolula imilenze uthenge ikhofi elisha esitolo sethu?'"
             }
         }
     ]

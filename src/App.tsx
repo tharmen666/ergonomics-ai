@@ -35,6 +35,8 @@ const InvoicePage = lazy(() => import('./features/invoices/InvoicePage').then(m 
 const CompanionHub = lazy(() => import('./components/CompanionHub').then(m => ({ default: m.CompanionHub })));
 const SmartBreakTimer = lazy(() => import('./components/SmartBreakTimer').then(m => ({ default: m.SmartBreakTimer })));
 const SOPGenerator = lazy(() => import('./components/SOPGenerator').then(m => ({ default: m.SOPGenerator })));
+const StatutoryErgonomicsModule = lazy(() => import('./features/compliance/StatutoryErgonomicsModule').then(m => ({ default: m.StatutoryErgonomicsModule })));
+const EnterpriseTrustCenter = lazy(() => import('./features/trust/EnterpriseTrustCenter').then(m => ({ default: m.EnterpriseTrustCenter })));
 
 // Architectural alias components
 export const Spinal3D = RiskyBehaviorsPage;
@@ -231,6 +233,18 @@ function renderTabContent(activeTab: string) {
     case 'regulatory-logs':
       return <ReportsPage />;
 
+    // Trust Center & Enterprise Licensing
+    case 'trust-center':
+    case 'trust':
+    case 'enterprise-licensing':
+      return <EnterpriseTrustCenter />;
+
+    // Statutory Ergonomics Governance (GN R1589 + ISO 45001)
+    case 'statutory-governance':
+    case 'statutory-ergonomics':
+    case 'gn-r1589':
+      return <StatutoryErgonomicsModule />;
+
     // Settings & Portal
     case 'settings':
       return <SettingsPage />;
@@ -291,7 +305,7 @@ function App() {
         <BBSCorrectiveActionOverlay />
         <DemoVideoModal isOpen={isDemoModalOpen} onClose={() => setIsDemoModalOpen(false)} />
         
-        {/* Isolated to Oredax Pilot Tenant; never loads hardcoded across other tenants */}
+        {/* Isolated to ErgoSafe Call-Centre Pilot Tenant; never loads hardcoded across other tenants */}
         {companyId === 'COMP-ODX-01' && (
           <ErgoMicroPrompt currentUser={userId || 'ODX-AGT-01'} />
         )}
@@ -345,7 +359,14 @@ function App() {
                       <span>Initializing Edge Vision Engine...</span>
                     </div>
                   }>
-                    <LivePostureTelemetry autoStart={true} onClose={() => setIsLiveTelemetryOpen(false)} />
+                    <LivePostureTelemetry
+                      autoStart={true}
+                      onClose={() => setIsLiveTelemetryOpen(false)}
+                      onNavigateToStatutory={() => {
+                        setIsLiveTelemetryOpen(false);
+                        setActiveTab('statutory-governance');
+                      }}
+                    />
                   </Suspense>
                 </div>
               </motion.div>

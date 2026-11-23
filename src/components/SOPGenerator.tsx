@@ -5,6 +5,7 @@ import {
   Wrench, AlertTriangle, UserCheck, RefreshCw, FileCheck, Layers, Calendar
 } from 'lucide-react';
 import { StatutoryDisclaimerBanner } from './common/StatutoryDisclaimerBanner';
+import { AITransparencyBadge } from './compliance/AITransparencyBadge';
 
 interface SOPData {
   sopNumber: string;
@@ -260,6 +261,8 @@ ${generatedSOP.section37Agreement}${signOffBlock}`;
                 Draft Input
               </span>
             </div>
+
+            <AITransparencyBadge compact />
 
             {/* Presets */}
             <div>

@@ -20,7 +20,7 @@ export interface TenantConfig {
   }[];
 }
 
-export const oredaxPilotConfig: TenantConfig = {
+export const callCentrePilotConfig: TenantConfig = {
   tenantId: 'ergosafe-za-001',
   companyName: 'ErgoSafe Call-Centre Division',
   industry: 'Customer Support / Inbound Call Centre',
@@ -48,8 +48,8 @@ export const oredaxPilotConfig: TenantConfig = {
   ]
 };
 
-export const getOredaxUser = (userId: string) => {
-  return oredaxPilotConfig.pilotUsers.find(u => u.userId === userId) || oredaxPilotConfig.pilotUsers[1];
+export const getCallCentrePilotUser = (userId: string) => {
+  return callCentrePilotConfig.pilotUsers.find(u => u.userId === userId) || callCentrePilotConfig.pilotUsers[1];
 };
 
 export { wholesaleCashCarryPreset, retailButcheryPreset };

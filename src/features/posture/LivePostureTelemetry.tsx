@@ -3,7 +3,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePoseLandmarker, PostureMetrics } from './usePoseLandmarker';
 import { useNellyStore } from '../../store/nellyStore';
 import { useComplianceStore } from '../../store/complianceStore';
-import { speak, stopSpeaking } from '../../utils/speech';
+import { speak } from '../../utils/speech';
+import {
+  getCameraConsentState,
+  setCameraConsentState,
+  revokeCameraConsent,
+  CameraConsentRecord,
+} from '../../utils/popiaCrypto';
+import { CameraConsentGate, PopiaDataSubjectPanel } from '../../components/compliance/CameraConsentGate';
+import { AITransparencyBadge } from '../../components/compliance/AITransparencyBadge';
 import { 
   Camera, 
   CameraOff, 
@@ -12,14 +20,13 @@ import {
   Volume2, 
   VolumeX, 
   RotateCcw, 
-  Activity, 
   AlertTriangle, 
   CheckCircle2, 
   Loader2, 
   Sliders, 
-  Globe2, 
   HeartHandshake,
-  Info
+  ClipboardCheck,
+  FileCheck2
 } from 'lucide-react';
 
 const MULTILINGUAL_POSTURE_ALERTS: Record<string, { neck: string; slouch: string; combined: string }> = {
@@ -68,19 +75,33 @@ const MULTILINGUAL_POSTURE_ALERTS: Record<string, { neck: string; slouch: string
 export interface LivePostureTelemetryProps {
   autoStart?: boolean;
   onClose?: () => void;
+  onNavigateToStatutory?: () => void;
 }
+
+type ManualNeckComfort = 'comfortable' | 'mild_tension' | 'high_strain';
+type ManualLumbarSupport = 'full_support' | 'partial_support' | 'no_support';
+type ManualMonitorHeight = 'eye_level' | 'slightly_low' | 'neck_bending';
+type ManualBreakCompliance = 'every_30_45_min' | 'overdue_1_2_hr' | 'no_breaks_2_plus_hr';
 
 export const LivePostureTelemetry: React.FC<LivePostureTelemetryProps> = ({
   autoStart = false,
-  onClose
+  onNavigateToStatutory
 }) => {
   const { language, setSpeaking, setMood, setGuidance } = useNellyStore();
+  const [consentState, setConsentState] = useState<CameraConsentRecord>(() => getCameraConsentState());
   const [isVoiceMuted, setIsVoiceMuted] = useState(false);
   const [activeIssueNotice, setActiveIssueNotice] = useState<string | null>(null);
   const hasAutoStartedRef = useRef(false);
   // Session log: one posture sample every 5 seconds while the camera is on. Numbers only, no images.
   const sessionSamplesRef = useRef<Array<Record<string, string | number | boolean>>>([]);
   const lastSampleAtRef = useRef(0);
+
+  // Manual Ergonomic Assessment Mode state
+  const [manualNeck, setManualNeck] = useState<ManualNeckComfort>('comfortable');
+  const [manualLumbar, setManualLumbar] = useState<ManualLumbarSupport>('full_support');
+  const [manualMonitor, setManualMonitor] = useState<ManualMonitorHeight>('eye_level');
+  const [manualBreaks, setManualBreaks] = useState<ManualBreakCompliance>('every_30_45_min');
+  const [manualLoggedNotice, setManualLoggedNotice] = useState<string | null>(null);
 
   // Trigger audio callback on sustained bad posture
   const handleSustainedBadPosture = useCallback(
@@ -144,13 +165,28 @@ export const LivePostureTelemetry: React.FC<LivePostureTelemetryProps> = ({
     voiceCooldownSeconds: 25
   });
 
-  // Auto-trigger webcam start when launched from 1-click button or modal
+  // Listen for POPIA data wipe or consent revocation events
   useEffect(() => {
-    if (autoStart && !isCameraActive && !hasAutoStartedRef.current && !initError) {
+    const handleResetConsent = () => {
+      stopCamera();
+      hasAutoStartedRef.current = false;
+      setConsentState(getCameraConsentState());
+    };
+    window.addEventListener('ERGOSAFE_LOCAL_DATA_WIPED', handleResetConsent);
+    window.addEventListener('ERGOSAFE_CAMERA_CONSENT_CHANGED', handleResetConsent);
+    return () => {
+      window.removeEventListener('ERGOSAFE_LOCAL_DATA_WIPED', handleResetConsent);
+      window.removeEventListener('ERGOSAFE_CAMERA_CONSENT_CHANGED', handleResetConsent);
+    };
+  }, [stopCamera]);
+
+  // Auto-trigger webcam start when launched from 1-click button or modal ONLY when POPIA consent is accepted
+  useEffect(() => {
+    if (autoStart && consentState.accepted && !isCameraActive && !hasAutoStartedRef.current && !initError) {
       hasAutoStartedRef.current = true;
       startCamera();
     }
-  }, [autoStart, isCameraActive, initError, startCamera]);
+  }, [autoStart, consentState.accepted, isCameraActive, initError, startCamera]);
 
   // Record a posture sample every 5 seconds while the camera is active.
   useEffect(() => {
@@ -198,58 +234,240 @@ export const LivePostureTelemetry: React.FC<LivePostureTelemetryProps> = ({
     });
   };
 
+  const handleSubmitManualAssessment = () => {
+    const issues: string[] = [];
+    if (manualNeck !== 'comfortable') {
+      issues.push(`Neck Comfort: ${manualNeck.replace(/_/g, ' ')}`);
+    }
+    if (manualLumbar !== 'full_support') {
+      issues.push(`Lumbar Support: ${manualLumbar.replace(/_/g, ' ')}`);
+    }
+    if (manualMonitor !== 'eye_level') {
+      issues.push(`Monitor Eye-Line: ${manualMonitor.replace(/_/g, ' ')}`);
+    }
+    if (manualBreaks !== 'every_30_45_min') {
+      issues.push(`Break Compliance: ${manualBreaks.replace(/_/g, ' ')}`);
+    }
+
+    const summary =
+      issues.length === 0
+        ? 'Manual Ergonomic Assessment (No-Camera Mode): All self-checks reported optimal (Neck comfortable, Lumbar supported, Monitor at eye level, Regular breaks).'
+        : `Manual Ergonomic Assessment (No-Camera Mode): Voluntary self-check flagged ${issues.join('; ')}.`;
+
+    try {
+      useComplianceStore.getState().logHazardEvent('posture', summary, 'RISK_ALERT');
+    } catch (err) {
+      console.warn('Failed to log manual ergonomic screening:', err);
+    }
+
+    setManualLoggedNotice(
+      issues.length === 0
+        ? `Manual ergonomic screening logged at ${new Date().toLocaleTimeString()} — workstation alignment optimal. Supports Competent Person oversight under SA Ergonomics Regulations (2019).`
+        : `Manual ergonomic screening logged at ${new Date().toLocaleTimeString()} (${issues.length} area${issues.length > 1 ? 's' : ''} flagged for ergonomic adjustment).`
+    );
+  };
+
   const getScoreColor = (score: number) => {
     if (score >= 80) return 'text-emerald-400 border-emerald-500/40 bg-emerald-500/10';
     if (score >= 60) return 'text-amber-400 border-amber-500/40 bg-amber-500/10';
     return 'text-red-400 border-red-500/40 bg-red-500/10';
   };
 
-  const getGaugeBorder = (status: 'optimal' | 'warning' | 'critical') => {
-    if (status === 'optimal') return 'border-emerald-500 shadow-emerald-500/20';
-    if (status === 'warning') return 'border-amber-500 shadow-amber-500/20';
-    return 'border-red-500 shadow-red-500/30';
-  };
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full max-w-full overflow-x-hidden">
       {/* Zero-Surveillance Privacy Banner */}
-      <div className="bg-slate-900/80 border border-emerald-500/30 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 backdrop-blur-md">
-        <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-emerald-500/20 text-emerald-400 rounded-xl border border-emerald-500/30 shrink-0">
-            <ShieldCheck size={24} />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h4 className="text-sm font-black text-white uppercase tracking-wider">
-                POPIA-Compliant Zero-Surveillance Edge Processing
-              </h4>
-              <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold border border-emerald-500/30">
-                100% Client-Side
-              </span>
+      <div className="bg-slate-900/80 border border-emerald-500/30 rounded-2xl p-4 space-y-3 backdrop-blur-md">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-emerald-500/20 text-emerald-400 rounded-xl border border-emerald-500/30 shrink-0">
+              <ShieldCheck size={24} />
             </div>
-            <p className="text-xs text-slate-300 mt-0.5 max-w-2xl leading-relaxed">
-              Video frames are processed in volatile GPU memory and discarded instantly. Zero footage or biometric landmarks are recorded, stored, or transmitted over any network.
-            </p>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h4 className="text-sm font-black text-white uppercase tracking-wider">
+                  POPIA-Compliant Zero-Surveillance Edge Processing
+                </h4>
+                <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold border border-emerald-500/30">
+                  100% Client-Side
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 mt-0.5 max-w-2xl leading-relaxed">
+                Video frames are processed in volatile GPU memory and discarded instantly. Zero footage or biometric landmarks are recorded, stored, or transmitted over any network.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 w-full md:w-auto justify-end">
+            <button
+              onClick={() => setIsVoiceMuted(!isVoiceMuted)}
+              className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                isVoiceMuted
+                  ? 'bg-red-500/20 text-red-300 border border-red-500/40'
+                  : 'bg-white/10 text-emerald-300 border border-emerald-500/30 hover:bg-white/15'
+              }`}
+              title={isVoiceMuted ? 'Nelly audio alerts muted' : 'Nelly audio alerts active'}
+            >
+              {isVoiceMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+              <span>{isVoiceMuted ? 'Voice Muted' : 'Voice Active'}</span>
+            </button>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 w-full md:w-auto justify-end">
-          <button
-            onClick={() => setIsVoiceMuted(!isVoiceMuted)}
-            className={`px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
-              isVoiceMuted
-                ? 'bg-red-500/20 text-red-300 border border-red-500/40'
-                : 'bg-white/10 text-emerald-300 border border-emerald-500/30 hover:bg-white/15'
-            }`}
-            title={isVoiceMuted ? 'Nelly audio alerts muted' : 'Nelly audio alerts active'}
-          >
-            {isVoiceMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
-            <span>{isVoiceMuted ? 'Voice Muted' : 'Voice Active'}</span>
-          </button>
-        </div>
+        <AITransparencyBadge compact />
       </div>
 
-      {/* Main Grid: Live Video Viewport (2 cols) & Biomechanical Telemetry Gauges (1 col) */}
+      {/* Mode 1: Unset -> POPIA Section 18 Camera Consent Gate */}
+      {consentState.mode === 'unset' && (
+        <CameraConsentGate
+          onAcceptCamera={() => {
+            const next = setCameraConsentState('camera');
+            setConsentState(next);
+            hasAutoStartedRef.current = true;
+            startCamera();
+          }}
+          onContinueManual={() => {
+            stopCamera();
+            setConsentState(setCameraConsentState('manual'));
+          }}
+        />
+      )}
+
+      {/* Mode 2: Manual Ergonomic Assessment Mode (No Camera) */}
+      {consentState.mode === 'manual' && (
+        <div
+          data-testid="manual-ergonomic-mode"
+          className="w-full max-w-full overflow-x-hidden rounded-3xl bg-[#0F172A] border-2 border-[#D97706] p-5 sm:p-6 text-white shadow-2xl space-y-5"
+        >
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+            <div className="flex items-start sm:items-center gap-3">
+              <div className="p-2.5 rounded-2xl bg-[#064E3B] border border-[#D97706] text-white shrink-0">
+                <ClipboardCheck size={22} />
+              </div>
+              <div>
+                <span className="inline-block text-[10px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-[#064E3B] border border-[#D97706]/70 text-white mb-1">
+                  Camera-Free Workstation Check
+                </span>
+                <h3 className="text-base sm:text-lg font-black text-white">
+                  Manual Ergonomic Assessment Mode
+                </h3>
+                <p className="text-xs text-slate-300 mt-0.5">
+                  Voluntary self-assessment for ergonomic coaching &amp; H&amp;S support without camera access. Supports, and does not replace, an appointed Competent Person under SA Ergonomics Regulations (2019).
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Neck Comfort */}
+            <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-4 space-y-2">
+              <label className="block text-xs font-black uppercase tracking-wider text-white">
+                1. Neck Comfort
+              </label>
+              <select
+                value={manualNeck}
+                onChange={(e) => setManualNeck(e.target.value as ManualNeckComfort)}
+                className="w-full rounded-xl bg-slate-800 border border-white/20 px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D97706]"
+              >
+                <option value="comfortable">Neutral / Comfortable (ears over shoulders)</option>
+                <option value="mild_tension">Mild Neck Tension / Slight Forward Tilt</option>
+                <option value="high_strain">Noticeable Cervical Strain / Looking Down</option>
+              </select>
+            </div>
+
+            {/* Lumbar Support */}
+            <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-4 space-y-2">
+              <label className="block text-xs font-black uppercase tracking-wider text-white">
+                2. Lumbar Support
+              </label>
+              <select
+                value={manualLumbar}
+                onChange={(e) => setManualLumbar(e.target.value as ManualLumbarSupport)}
+                className="w-full rounded-xl bg-slate-800 border border-white/20 px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D97706]"
+              >
+                <option value="full_support">Lower Back Supported Against Backrest</option>
+                <option value="partial_support">Partial Support / Leaning Forward Occasionally</option>
+                <option value="no_support">No Lumbar Support / Slouched Seat Position</option>
+              </select>
+            </div>
+
+            {/* Monitor Eye-Line Height */}
+            <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-4 space-y-2">
+              <label className="block text-xs font-black uppercase tracking-wider text-white">
+                3. Monitor Eye-Line Height
+              </label>
+              <select
+                value={manualMonitor}
+                onChange={(e) => setManualMonitor(e.target.value as ManualMonitorHeight)}
+                className="w-full rounded-xl bg-slate-800 border border-white/20 px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D97706]"
+              >
+                <option value="eye_level">Top Third of Screen at Eye Level</option>
+                <option value="slightly_low">Slightly Low (Laptop / Desk Riser Needed)</option>
+                <option value="neck_bending">Significantly Below Eye Line (Sustained Neck Flexion)</option>
+              </select>
+            </div>
+
+            {/* Break Compliance */}
+            <div className="rounded-2xl bg-slate-900/90 border border-white/10 p-4 space-y-2">
+              <label className="block text-xs font-black uppercase tracking-wider text-white">
+                4. Break Compliance
+              </label>
+              <select
+                value={manualBreaks}
+                onChange={(e) => setManualBreaks(e.target.value as ManualBreakCompliance)}
+                className="w-full rounded-xl bg-slate-800 border border-white/20 px-3 py-2 text-xs text-white focus:outline-none focus:border-[#D97706]"
+              >
+                <option value="every_30_45_min">Micro-Breaks Taken Every 30–45 Minutes</option>
+                <option value="overdue_1_2_hr">Break Overdue (1–2 Hours Continuous Sitting)</option>
+                <option value="no_breaks_2_plus_hr">No Micro-Breaks for 2+ Hours</option>
+              </select>
+            </div>
+          </div>
+
+          {manualLoggedNotice && (
+            <div className="rounded-xl bg-[#064E3B]/70 border border-[#D97706] px-4 py-3 text-xs text-white flex items-start gap-2.5">
+              <CheckCircle2 size={16} className="text-emerald-300 shrink-0 mt-0.5" />
+              <span>{manualLoggedNotice}</span>
+            </div>
+          )}
+
+          <div className="flex flex-wrap items-center gap-3 pt-1">
+            <button
+              type="button"
+              onClick={handleSubmitManualAssessment}
+              className="px-5 py-2.5 rounded-xl bg-[#064E3B] hover:bg-[#065F46] border-2 border-[#D97706] text-white text-xs font-black flex items-center gap-2 cursor-pointer transition-all shadow-lg"
+            >
+              <FileCheck2 size={15} />
+              <span>Log Manual Ergonomic Screening</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                revokeCameraConsent();
+                setConsentState(getCameraConsentState());
+              }}
+              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-white/20 text-white text-xs font-bold flex items-center gap-2 cursor-pointer transition-all"
+            >
+              <Camera size={15} />
+              <span>Opt In to Local Camera (View POPIA Consent)</span>
+            </button>
+
+            {onNavigateToStatutory && (
+              <button
+                type="button"
+                onClick={onNavigateToStatutory}
+                className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-[#D97706]/60 text-amber-200 text-xs font-bold cursor-pointer transition-all"
+              >
+                Open Statutory Governance
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Mode 3: Consented Local Camera Mode */}
+      {consentState.mode === 'camera' && consentState.accepted && (
+      /* Main Grid: Live Video Viewport (2 cols) & Biomechanical Telemetry Gauges (1 col) */
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Live Webcam Canvas Viewport */}
         <div className="lg:col-span-2 bg-slate-950/70 border border-white/10 rounded-3xl p-4 sm:p-6 space-y-4 relative overflow-hidden backdrop-blur-md shadow-2xl">
@@ -721,6 +939,17 @@ export const LivePostureTelemetry: React.FC<LivePostureTelemetryProps> = ({
           </div>
         </div>
       </div>
+      )}
+
+      {/* POPIA Data Subject Rights & 1-Click Local Data Wipe Panel */}
+      <PopiaDataSubjectPanel
+        compact
+        onConsentRevoked={() => {
+          stopCamera();
+          hasAutoStartedRef.current = false;
+          setConsentState(getCameraConsentState());
+        }}
+      />
     </div>
   );
 };

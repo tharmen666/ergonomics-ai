@@ -49,7 +49,7 @@
 - Iris personality profile
 - 3 Emergency SOPs (Side A)
 - 3 Service SOPs (Side B)
-- 5 FAQ cards (Astron transition deck)
+- 5 FAQ cards (ErgoSafe Forecourt safety & ergonomics deck)
 - Frontend integration metadata
 
 **Access Pattern**: 
@@ -200,11 +200,11 @@ import { useAllSOPs, useFAQDeck, useLocalePreference } from './useIrisCore';
 - SOP-CLEA-03: End-of-Shift Cleanup & Security (MEDIUM)
 
 ### FAQ Cards (5)
-1. Brand transition (Caltex → Astron)
-2. Fuel quality assurance
-3. UCount Rewards compatibility
-4. Fleet card acceptance
-5. FreshStop upgrade
+1. Engine-off & mobile phone ignition safety
+2. Attendant ergonomic posture & strain prevention
+3. Contactless & loyalty rewards compatibility
+4. Fleet card acceptance & slip verification
+5. Forecourt shop safety & driver rest stop
 
 ### Languages
 - English (en)
@@ -263,7 +263,7 @@ Before going to production:
 **Role**: Safety Agent  
 **Personality**: Authoritative, supportive, action-oriented  
 **Languages**: English + isiZulu  
-**Mission**: Ensure safety at Astron Energy forecourts  
+**Mission**: Ensure safety at ErgoSafe Forecourt sites  
 **Voice**: Consistent, protective, empowering  
 
 ---

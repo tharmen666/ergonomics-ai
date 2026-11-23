@@ -1,15 +1,15 @@
 import { useState } from 'react';
 
-// Custom Hex Palette extracted directly from logo.png for OHS Haven branding
+// Custom Hex Palette for ErgoSafe branding
 const brandPalettes: Record<string, { primary: string, text: string, accent: string }> = {
-  ohsHaven: { primary: "bg-[#032B53]", text: "text-[#F09A1A]", accent: "border-[#048F40]" },
-  astronEnergy: { primary: "bg-[#0A2540]", text: "text-[#FF6B00]", accent: "border-[#00D4B2]" },
-  engen: { primary: "bg-[#002F6C]", text: "text-[#FFD100]", accent: "border-[#00A896]" },
-  total: { primary: "bg-[#002A54]", text: "text-[#FF3B30]", accent: "border-[#FFCC00]" }
+  ergoSafe: { primary: "bg-[#032B53]", text: "text-[#F09A1A]", accent: "border-[#048F40]" },
+  forecourtTheme: { primary: "bg-[#0A2540]", text: "text-[#FF6B00]", accent: "border-[#00D4B2]" },
+  callCentreTheme: { primary: "bg-[#002F6C]", text: "text-[#FFD100]", accent: "border-[#00A896]" },
+  hazmatTheme: { primary: "bg-[#002A54]", text: "text-[#FF3B30]", accent: "border-[#FFCC00]" }
 };
 
 export const LanyardCardPreview = () => {
-  const [selectedBrand, setSelectedBrand] = useState('ohsHaven');
+  const [selectedBrand, setSelectedBrand] = useState('ergoSafe');
   const [currentSide, setCurrentSide] = useState('en'); // 'en' for Front, 'zu' for Back
 
   const activeColors = brandPalettes[selectedBrand];
@@ -76,7 +76,7 @@ export const LanyardCardPreview = () => {
 
         {/* Card Footer Badge */}
         <div className="text-center border-t border-slate-100/10 pt-3">
-          <p className="text-[10px] font-mono text-slate-300 tracking-wider">PROTECTED BY OHS HAVEN LMS</p>
+          <p className="text-[10px] font-mono text-slate-300 tracking-wider">PROTECTED BY ERGOSAFE LMS</p>
           <p className="text-[8px] font-mono text-slate-500 mt-0.5">SA OHS ACT ACT 85 OF 1993 COMPLIANT</p>
         </div>
       </div>

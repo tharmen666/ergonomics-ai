@@ -8,7 +8,7 @@
 **Status**: LOCKED_FOR_FRONTEND  
 **Last Updated**: 2026-05-28T08:25:00Z
 
-This database contains the complete compliance, safety, and customer service framework for Astron Energy / Service Station network. Content is **authoritative, bilingual (English + isiZulu), and mission-critical** for frontline operations.
+This database contains the complete compliance, safety, and customer service framework for the ErgoSafe Forecourt / Service Station network. Content is **authoritative, bilingual (English + isiZulu), and mission-critical** for frontline operations.
 
 ---
 
@@ -22,7 +22,7 @@ The JSON database contains:
 - **Iris Personality Profile**: Communication style, core values, role definition
 - **Side A - Emergency SOPs**: Critical and high-priority safety protocols
 - **Side B - Service Routines**: Customer service and operational procedures
-- **Astron Transition Deck**: 5-card FAQ for brand transition support
+- **Forecourt FAQ Deck**: 5-card FAQ for forecourt safety, ergonomics, and service support
 - **Frontend Integration**: API endpoints and compatibility info
 
 **Access Pattern**: Load once at app startup, cache in memory.
@@ -81,21 +81,21 @@ These are routine procedures for customer interaction and compliance.
 **Key Features**:
 - Sales optimization guidance
 - Customer satisfaction metrics
-- UCount loyalty prompt integration
+- Loyalty & fleet card prompt integration
 - Time budgets per step
 - Payment method support
 
-### **Astron Energy 5-Card FAQ Deck** (Brand Transition)
+### **ErgoSafe Forecourt 5-Card FAQ Deck** (Safety & Ergonomics)
 
-Crisis communication for customer questions during the Caltex → Astron transition.
+Frontline communication for common customer & safety questions on the forecourt.
 
 | Card | Question | Concern Level | Strategy |
 |---|---|---|---|
-| 1 | Why the name change? | LOW | Excitement—it's progress |
-| 2 | Is fuel quality the same? | MEDIUM | Reassure + mention Quartex |
-| 3 | UCount card still works? | MEDIUM | YES + upsell |
-| 4 | Fleet card accepted? | HIGH | YES + emphasize speed |
-| 5 | FreshStop changing? | LOW | Upgraded + upsell coffee |
+| 1 | Why switch off engine & phones? | MEDIUM | Calm vapour/spark explanation |
+| 2 | How do attendants prevent strain? | MEDIUM | Demonstrate ergonomic posture |
+| 3 | Contactless & loyalty cards accepted? | LOW | YES + fast window checkout |
+| 4 | Corporate fleet card accepted? | HIGH | YES + keep in sight & emphasize speed |
+| 5 | Forecourt shop safe for rest stops? | LOW | Slip-resistant access + upsell coffee |
 
 **Key Features**:
 - Iris Protocol Tips for delivery tone
@@ -198,7 +198,7 @@ Every SOP includes:
 
 ✅ Complete Emergency SOP coverage (3 protocols)  
 ✅ Complete Service SOP coverage (3 procedures)  
-✅ Astron Energy 5-Card FAQ deck (full)  
+✅ ErgoSafe Forecourt 5-Card FAQ deck (full)  
 ✅ Bilingual content (English + isiZulu)  
 ✅ Iris personality mapping (consistent voice)  
 ✅ Type-safe schema (TypeScript)  
@@ -281,5 +281,5 @@ if (!validateFAQCard(faqData)) {
 
 ---
 
-**Locked by Iris for Astron Energy / Service Station Compliance**  
+**Locked by Iris for ErgoSafe Forecourt / Service Station Compliance**  
 *Safety is not negotiable. Excellence is the standard.*

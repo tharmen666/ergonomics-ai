@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { FilesetResolver, PoseLandmarker, NormalizedLandmark } from '@mediapipe/tasks-vision';
+import { getCameraConsentState } from '../../utils/popiaCrypto';
 
 export interface PostureMetrics {
   neckFlexionAngle: number; // degrees deviation from vertical or baseline
@@ -450,6 +451,11 @@ export const usePoseLandmarker = (options: UsePoseLandmarkerOptions = {}) => {
 
   // Start Webcam
   const startCamera = useCallback(async () => {
+    if (!getCameraConsentState().accepted) {
+      setCameraPermissionError('POPIA Section 18 camera consent is required before activating the local camera.');
+      setIsCameraActive(false);
+      return;
+    }
     try {
       setCameraPermissionError(null);
       if (streamRef.current) {
