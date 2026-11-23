@@ -9,8 +9,8 @@ import { NellyCore } from './NellyCore';
 import { NellyInterface } from './NellyInterface';
 import { NellyEmergencyUI } from './NellyEmergencyUI';
 import { translations, Language, TranslationEntry } from '../../utils/translations';
-import { speak } from '../../utils/speech';
-import { nellyReply } from './nellyReplies';
+import { speakWithSubtitles } from '../../utils/speech';
+import { nellyReplyPair } from './nellyReplies';
 
 /**
  * NellyAvatar: The primary entry point for the Nelly AI Coach.
@@ -45,9 +45,10 @@ export const NellyAvatar = () => {
     // Introduce Nelly only after Wingman activation, once per browser session.
     useEffect(() => {
         if (isWingmanActive && !hasIntroduced) {
-            const intro = translations[language as Language]?.nelly_intro || translations['en'].nelly_intro;
+            const activeLang = (language as Language) || 'en';
+            const localizedIntro = translations[activeLang]?.nelly_intro || translations['en'].nelly_intro;
             markIntroduced();
-            speak(intro, language);
+            speakWithSubtitles(translations['en'].nelly_intro, localizedIntro, activeLang);
         }
     }, [isWingmanActive, hasIntroduced, language, markIntroduced]);
 
@@ -70,29 +71,30 @@ export const NellyAvatar = () => {
         const isEye = matchesAny(['eye', 'eyes', 'headache', 'screen', 'vision']);
         const isOHSQuery = matchesAny(['ohs', 'iso', 'section 37', 'compliance', 'legal', 'act']);
 
+        const activeLang = (language as Language) || 'en';
+
         if (isEmerg) {
             setIsEmergency(true);
             setSpeaking(true);
-            const response = nellyReply('emergency', language);
-            setGuidance(response);
-            addLog('Nelly', response);
+            const { spokenEnglish, subtitleText } = nellyReplyPair('emergency', activeLang);
+            setGuidance(subtitleText);
+            addLog('Nelly', subtitleText);
             useComplianceStore.getState().logHazardEvent('emergency', 'Acute Medical/Injury Emergency Protocol Triggered', 'BREACH');
-            speak(response, language);
+            speakWithSubtitles(spokenEnglish, subtitleText, activeLang);
         } else if (isFirstAid) {
-            const currentLang = (language as Language) || 'en';
-            const response = (translations[currentLang] as TranslationEntry)?.first_aid || translations['en'].first_aid;
+            const response = (translations[activeLang] as TranslationEntry)?.first_aid || translations['en'].first_aid;
             setGuidance(response);
             addLog('Nelly', response);
             setSpeaking(true);
-            speak(response, language);
+            speakWithSubtitles(translations['en'].first_aid, response, activeLang);
             setTimeout(() => setSpeaking(false), 5000);
         } else if (isNeckPain) {
             setSpeaking(true);
-            const response = nellyReply('neck', language);
-            setGuidance(response);
-            addLog('Nelly', response);
+            const { spokenEnglish, subtitleText } = nellyReplyPair('neck', activeLang);
+            setGuidance(subtitleText);
+            addLog('Nelly', subtitleText);
             useComplianceStore.getState().logHazardEvent('neck_strain', 'Neck pain reported by user', 'RISK_ALERT');
-            speak(response, language);
+            speakWithSubtitles(spokenEnglish, subtitleText, activeLang);
             
             const { fatigueLevel } = useFatigueStore.getState();
             if (fatigueLevel !== 'high') {
@@ -101,25 +103,25 @@ export const NellyAvatar = () => {
             setTimeout(() => setSpeaking(false), 8000);
         } else if (isLowerBack) {
             setSpeaking(true);
-            const response = nellyReply('back', language);
-            setGuidance(response);
-            addLog('Nelly', response);
+            const { spokenEnglish, subtitleText } = nellyReplyPair('back', activeLang);
+            setGuidance(subtitleText);
+            addLog('Nelly', subtitleText);
             useComplianceStore.getState().logHazardEvent('posture', 'Lower Back / Lumbar Discomfort Reported (L1-L5 Strain Risk)', 'RISK_ALERT');
-            speak(response, language);
+            speakWithSubtitles(spokenEnglish, subtitleText, activeLang);
             setTimeout(() => setSpeaking(false), 8000);
         } else if (isWrist) {
             setSpeaking(true);
-            const response = nellyReply('wrist', language);
-            setGuidance(response);
-            addLog('Nelly', response);
+            const { spokenEnglish, subtitleText } = nellyReplyPair('wrist', activeLang);
+            setGuidance(subtitleText);
+            addLog('Nelly', subtitleText);
             useComplianceStore.getState().logHazardEvent('posture', 'Wrist Fatigue & Carpal Compression Risk Reported', 'RISK_ALERT');
-            speak(response, language);
+            speakWithSubtitles(spokenEnglish, subtitleText, activeLang);
             setTimeout(() => setSpeaking(false), 8000);
         } else if (isEye) {
             setSpeaking(true);
-            const response = nellyReply('eye', language);
-            setGuidance(response);
-            addLog('Nelly', response);
+            const { spokenEnglish, subtitleText } = nellyReplyPair('eye', activeLang);
+            setGuidance(subtitleText);
+            addLog('Nelly', subtitleText);
             useComplianceStore.getState().logHazardEvent('break_interval', 'Digital Eye Strain & Visual Fatigue Reported', 'RISK_ALERT');
 
             if (typeof window !== 'undefined') {
@@ -138,33 +140,33 @@ export const NellyAvatar = () => {
                 }));
             }
 
-            speak(response, language);
+            speakWithSubtitles(spokenEnglish, subtitleText, activeLang);
             setTimeout(() => setSpeaking(false), 8000);
         } else if (isOHSQuery) {
             setSpeaking(true);
             // TODO(legal-verify): removed claim that Section 37 provides automatic liability protection and zero-knowledge claim
             // TODO(privacy): implement encryption + POPIA s26 special-information handling before production
-            const response = nellyReply('ohs', language);
-            setGuidance(response);
-            addLog('Nelly', response);
-            speak(response, language);
+            const { spokenEnglish, subtitleText } = nellyReplyPair('ohs', activeLang);
+            setGuidance(subtitleText);
+            addLog('Nelly', subtitleText);
+            speakWithSubtitles(spokenEnglish, subtitleText, activeLang);
             setTimeout(() => setSpeaking(false), 9000);
         } else if (isSymptom) {
             setSpeaking(true);
-            const response = nellyReply('symptom', language);
-            setGuidance(response);
-            addLog('Nelly', response);
+            const { spokenEnglish, subtitleText } = nellyReplyPair('symptom', activeLang);
+            setGuidance(subtitleText);
+            addLog('Nelly', subtitleText);
             useComplianceStore.getState().logHazardEvent('posture', 'Tingling or numbness reported by user', 'RISK_ALERT');
-            speak(response, language);
+            speakWithSubtitles(spokenEnglish, subtitleText, activeLang);
             setTimeout(() => setSpeaking(false), 8000);
         } else {
             // Context-Aware Response Algorithm
             setSpeaking(true);
             // Nelly does not measure fatigue or posture here, so she says so rather than guessing.
-            const response = nellyReply('unknown', language);
-            setGuidance(response);
-            addLog('Nelly', response);
-            speak(response, language);
+            const { spokenEnglish, subtitleText } = nellyReplyPair('unknown', activeLang);
+            setGuidance(subtitleText);
+            addLog('Nelly', subtitleText);
+            speakWithSubtitles(spokenEnglish, subtitleText, activeLang);
             setTimeout(() => setSpeaking(false), 5000);
         }
         setUserInput('');
@@ -196,10 +198,11 @@ export const NellyAvatar = () => {
                                 }}
                                 onStewardship={() => {
                                     setSpeaking(true);
+                                    const activeLang = (language as Language) || 'en';
                                     const response = "STEWARDSHIP AUDIT: Are you currently seated at a desk or working from a bed/couch? (Please type your response)";
                                     setGuidance(response);
                                     addLog('Nelly', response);
-                                    speak(response, language);
+                                    speakWithSubtitles(response, response, activeLang);
                                     setTimeout(() => setSpeaking(false), 8000);
                                 }}
                                 userInput={userInput}

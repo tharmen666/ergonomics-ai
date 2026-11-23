@@ -33,13 +33,33 @@ const safeStorage = {
     }
 };
 
+import type { NellyVoiceTier } from '../utils/nelly-localization-engine';
+
+export interface ActiveSubtitleState {
+    text: string;
+    lang: Language;
+    spokenText: string;
+}
+
+export interface ActiveVoiceState {
+    name: string;
+    lang: string;
+    tier: NellyVoiceTier;
+    rate: number;
+    pitch: number;
+}
+
 interface NellyState {
     isSpeaking: boolean;
     currentGuidance: string | null;
+    activeSubtitle: ActiveSubtitleState | null;
+    activeVoice: ActiveVoiceState | null;
     showAvatar: boolean;
     mood: 'neutral' | 'happy' | 'concerned';
     setSpeaking: (speaking: boolean) => void;
     setGuidance: (text: string | null) => void;
+    setActiveSubtitle: (subtitle: ActiveSubtitleState | null) => void;
+    setActiveVoice: (voice: ActiveVoiceState | null) => void;
     setMood: (mood: 'neutral' | 'happy' | 'concerned') => void;
     isTourActive: boolean;
     setTourActive: (active: boolean) => void;
@@ -73,6 +93,8 @@ export const useNellyStore = create<NellyState>()(
         (set) => ({
             isSpeaking: false,
             currentGuidance: null,
+            activeSubtitle: null,
+            activeVoice: null,
             showAvatar: true,
             mood: 'neutral',
             isTourActive: false,
@@ -88,6 +110,8 @@ export const useNellyStore = create<NellyState>()(
             recommendations: [],
             setSpeaking: (isSpeaking) => set({ isSpeaking }),
             setGuidance: (currentGuidance) => set({ currentGuidance }),
+            setActiveSubtitle: (activeSubtitle) => set({ activeSubtitle }),
+            setActiveVoice: (activeVoice) => set({ activeVoice }),
             setMood: (mood) => set({ mood }),
             toggleAvatar: () => set((state) => ({ showAvatar: !state.showAvatar })),
             setTourActive: (isTourActive) => set({ isTourActive }),
@@ -121,6 +145,8 @@ export const useNellyStore = create<NellyState>()(
                 merged.isLiveTelemetryOpen = false;
                 merged.isDemoModalOpen = false;
                 merged.isWorkspaceModalOpen = false;
+                merged.activeSubtitle = null;
+                merged.activeVoice = null;
                 merged.isSidebarCollapsed = typeof window !== 'undefined' ? window.innerWidth < 1024 : true;
                 return merged;
             },
@@ -132,6 +158,8 @@ export const useNellyStore = create<NellyState>()(
                     isLiveTelemetryOpen: _isLiveTelemetryOpen, 
                     isDemoModalOpen: _isDemoModalOpen,
                     isWorkspaceModalOpen: _isWorkspaceModalOpen,
+                    activeSubtitle: _activeSubtitle,
+                    activeVoice: _activeVoice,
                     ...persistedState 
                 } = state;
                 return persistedState;

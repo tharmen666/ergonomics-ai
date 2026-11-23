@@ -8,7 +8,7 @@
  * V&V AUDIT [2026-05-25]: Expanded to include ISO 9001 (Quality) and ISO 14001
  * (Environmental) - both voluntary standards. Section 38 text describes offences
  * and penalties generically; no penalty amounts are stated.
- * Stabilised with full multilingual translation matrices (EN, ZU, XH, ST, SW, ZH, DE).
+ * Stabilised with full multilingual translation matrices (EN, ZU, XH, ST, SW, ZH, DE, AF, FR).
  */
 
 import { Language } from '../../utils/translations';
@@ -28,7 +28,6 @@ class SemanticFirewall {
     }
 
     private shardOHSLogic() {
-        // TODO(legal-verify): removed 2026 DEL Administrative Directive across all translations
         this._ohsCore.set('sec8', {
             en: "Section 8 (General Duties of Employers): Every employer shall provide and maintain, as far as is reasonably practicable, a working environment that is safe and without risk to the health of his employees.",
             zu: "Isigaba 8 (Imisebenzi Ejwayelekile Yabaqashi): Wonke umqashi uzohlinzeka futhi agcine, ngendlela efanele, indawo yokusebenza ephephile nengenawo ubungozi bezempilo.",
@@ -37,7 +36,8 @@ class SemanticFirewall {
             sw: "Kifungu cha 8 (Majukumu Makuu ya Waajiri): Kila mwajiri atatoa na kudumisha, kwa kadiri inavyowezekana, mazingira ya kazi ambayo ni salama na yasiyo na hatari kwa afya.",
             zh: "第 8 条（雇主的一般职责）：每个雇主都应在合理可行的范围内提供并维持一个安全且对员工健康无风险的工作环境。",
             de: "Abschnitt 8 (Allgemeine Pflichten der Arbeitgeber): Jeder Arbeitgeber muss, soweit dies vernünftigerweise praktisch möglich ist, eine Arbeitsumgebung bereitstellen und aufrechterhalten, die sicher und ohne Gesundheitsrisiken ist.",
-            af: "Artikel 8 (Algemene Pligte van Werkgewers): Elke werkgewer sal so ver as wat redelikerwys prakties is, 'n werksomgewing voorsien en in stand hou wat veilig en sonder risiko vir gesondheid is."
+            af: "Artikel 8 (Algemene Pligte van Werkgewers): Elke werkgewer sal so ver as wat redelikerwys prakties is, 'n werksomgewing voorsien en in stand hou wat veilig en sonder risiko vir gesondheid is.",
+            fr: "Article 8 (Obligations générales des employeurs) : Tout employeur doit fournir et maintenir, dans la mesure du raisonnablement pratique, un environnement de travail sûr et sans risque pour la santé de ses employés."
         });
 
         this._ohsCore.set('sec14', {
@@ -48,10 +48,10 @@ class SemanticFirewall {
             sw: "Kifungu cha 14 (Majukumu Makuu ya Wafanyakazi): Kila mfanyakazi atachukua tahadhari nzuri kwa afya na usalama wao na wa wengine.",
             zh: "第 14 条（雇员的一般职责）：每个雇员都应对自己和可能受其行为或疏忽影响的其他人的健康与安全给予合理的关注。",
             de: "Abschnitt 14 (Allgemeine Pflichten der Arbeitnehmer): Jeder Arbeitnehmer muss in angemessener Weise für seine eigene Gesundheit und Sicherheit sowie die anderer Sorge tragen.",
-            af: "Artikel 14 (Algemene Pligte van Werknemers): Elke werknemer moet redelike sorg neem vir hul eie gesondheid en veiligheid en dié van ander."
+            af: "Artikel 14 (Algemene Pligte van Werknemers): Elke werknemer moet redelike sorg neem vir hul eie gesondheid en veiligheid en dié van ander.",
+            fr: "Article 14 (Obligations générales des employés) : Chaque employé doit veiller raisonnablement à sa propre santé et sécurité ainsi qu'à celle d'autrui."
         });
 
-        // TODO(legal-verify): removed claim that Section 37 provides automatic legal defense or immunity; updated to reflect acts/omissions and s37(2) agreements
         this._ohsCore.set('sec37', {
             en: "Section 37 (Acts or Omissions of Employees and Mandataries): Governs the acts or omissions of employees and mandataries, and provides for written agreements in terms of Section 37(2) regarding compliance arrangements.",
             zu: "Isigaba 37 (Izenzo noma Ukunyakaza Kwabasebenzi & Mandataries): Silawula izenzo noma ukunganaki kwabasebenzi nabathunywa, futhi sivumela izivumelwano ezibhaliwe ngaphansi kweSigaba 37(2).",
@@ -60,10 +60,10 @@ class SemanticFirewall {
             sw: "Kifungu cha 37 (Matendo/Uasi wa Wafanyakazi & Mamlaka): Inasimamia matendo au uzembe wa wafanyakazi na wawakilishi, ikitoa makubaliano ya maandishi chini ya Kifungu cha 37(2).",
             zh: "第 37 条（雇员与代理人的行为/疏忽）：规范雇员和代理人的行为或疏忽，并规定根据第 37(2) 条签订有关合规安排的书面协议。",
             de: "Abschnitt 37 (Handlungen/Unterlassungen von Arbeitnehmern und Bevollmächtigten): Regelt Handlungen und Unterlassungen von Mitarbeitern und Beauftragten und sieht schriftliche Vereinbarungen gemäß Abschnitt 37(2) vor.",
-            af: "Artikel 37 (Dade/Versuim van Werknemers en Mandatarisse): Reël handelinge of versuim van werknemers en mandatarisse en maak voorsiening vir skriftelike ooreenkomste ingevolge Artikel 37(2)."
+            af: "Artikel 37 (Dade/Versuim van Werknemers en Mandatarisse): Reël handelinge of versuim van werknemers en mandatarisse en maak voorsiening vir skriftelike ooreenkomste ingevolge Artikel 37(2).",
+            fr: "Article 37 (Actes ou omissions des employés et mandataires) : Régit les actes ou omissions des employés et mandataires et prévoit des accords écrits en vertu de l'article 37(2)."
         });
 
-        // TODO(legal-verify): removed fabricated 2026 Amendment fines (R5,000,000 / 10% turnover) and imprisonment figures
         this._ohsCore.set('sec38', {
             en: "Section 38 (Offences, Penalties and Special Orders): Outlines statutory offences and penalties for non-compliance with the provisions of the Occupational Health and Safety Act and its regulations.",
             zu: "Isigaba 38 (Amacala Nezinhlawulo): Sibeka amacala nezinhlawulo ezisemthethweni zokungalandelwa kwemibandela ye-OHS Act nemithethonqubo yayo.",
@@ -72,7 +72,8 @@ class SemanticFirewall {
             sw: "Kifungu cha 38 (Makosa na Adhabu): Inaeleza makosa ya kisheria na adhabu kwa kutofuata masharti ya Sheria ya OHS.",
             zh: "第 38 条（违法行为与处罚）：概述违反《职业健康与安全法》及其法规规定的法定违法行为和处罚。",
             de: "Abschnitt 38 (Straftaten und Strafen): Umfasst gesetzliche Straftaten und Strafen bei Nichteinhaltung der Bestimmungen des Arbeitsschutzgesetzes.",
-            af: "Artikel 38 (Misdrywe en Strawwe): Sit statutêre misdrywe en strawwe uiteen vir nie-nakoming van die Wet."
+            af: "Artikel 38 (Misdrywe en Strawwe): Sit statutêre misdrywe en strawwe uiteen vir nie-nakoming van die Wet.",
+            fr: "Article 38 (Infractions et sanctions) : Définit les infractions statutaires et les sanctions en cas de non-respect de la loi OHS et de ses règlements."
         });
 
         this._ohsCore.set('sec24', {
@@ -83,7 +84,8 @@ class SemanticFirewall {
             sw: "Kifungu cha 24 (Kuripoti Matukio): Inaagiza kuripoti kwa lazima kwa mkaguzi kwa matukio fulani ya mahali pa kazi.",
             zh: "第 24 条（特定事件的报告）：规定在法定期限内向检查员强制报告特定的工作场所事件、伤害和健康危害。",
             de: "Abschnitt 24 (Meldung von Vorfällen): Schreibt die Meldung bestimmter Arbeitsunfälle an einen Arbeitsinspektor vor.",
-            af: "Artikel 24 (Aanmelding van Voorvalle): Skryf verpligte aanmelding van sekere voorvalle by 'n inspekteur voor."
+            af: "Artikel 24 (Aanmelding van Voorvalle): Skryf verpligte aanmelding van sekere voorvalle by 'n inspekteur voor.",
+            fr: "Article 24 (Déclaration de certains incidents) : Prescrit la déclaration obligatoire à un inspecteur dans le délai fixé pour les incidents, blessures et risques professionnels."
         });
     }
 
@@ -96,7 +98,8 @@ class SemanticFirewall {
             sw: "ISO 9001:2015 (Mifumo ya Usimamizi wa Ubora - Hiari): Mwongozo wa tathmini ya utendaji chini ya Kifungu cha 9.1.",
             zh: "ISO 9001:2015（自愿性质量管理体系）：概述第 9.1 条款下的绩效评估指导原则。",
             de: "ISO 9001:2015 (Freiwillige Qualitätsmanagementsysteme): Bietet Leitlinien für prozessbasierte Leistungsbewertung gemäß Klausel 9.1.",
-            af: "ISO 9001:2015 (Vrywillige Kwaliteitbestuurstelsels): Riglyne vir prosesgebaseerde evaluering ingevolge Klousule 9.1."
+            af: "ISO 9001:2015 (Vrywillige Kwaliteitbestuurstelsels): Riglyne vir prosesgebaseerde evaluering ingevolge Klousule 9.1.",
+            fr: "ISO 9001:2015 (Systèmes de management de la qualité - Volontaire) : Lignes directrices pour l'approche processus et l'évaluation des performances selon la clause 9.1."
         });
 
         this._isoCore.set('14001-2015', {
@@ -107,7 +110,8 @@ class SemanticFirewall {
             sw: "ISO 14001:2015 (Mifumo ya Usimamizi wa Mazingira - Hiari): Mwongozo wa uendeshaji wa mazingira.",
             zh: "ISO 14001:2015（自愿性环境管理体系）：提供环境因素运行策划和控制指导的自愿性国际标准。",
             de: "ISO 14001:2015 (Freiwillige Umweltmanagementsysteme): Bietet Leitlinien für betriebliche Kontrollen von Umweltaspekten.",
-            af: "ISO 14001:2015 (Vrywillige Omgewingsbestuurstelsels): Riglyne vir operasionele beplanning van omgewingsaspekte."
+            af: "ISO 14001:2015 (Vrywillige Omgewingsbestuurstelsels): Riglyne vir operasionele beplanning van omgewingsaspekte.",
+            fr: "ISO 14001:2015 (Systèmes de management environnemental - Volontaire) : Norme internationale volontaire pour la planification et la maîtrise environnementale."
         });
 
         this._isoCore.set('45001-2018', {
@@ -118,7 +122,8 @@ class SemanticFirewall {
             sw: "ISO 45001:2018 (Usimamizi wa Afya na Usalama Mahali pa Kazi - Hiari): Kiwango cha hiari cha kimataifa cha kutathmini hatari (Kifungu cha 6.1).",
             zh: "ISO 45001:2018（自愿性职业健康与安全管理）：关于危险源辨识与风险评估（第 6.1 条款）及员工协商的自愿性国际最佳实践标准。",
             de: "ISO 45001:2018 (Freiwilliges Arbeitsschutzmanagement): Freiwilliger internationaler Standard für Gefährdungsbeurteilung und Risikobewertung (Klausel 6.1).",
-            af: "ISO 45001:2018 (Vrywillige Beroepsgesondheid en Veiligheidsbestuur): Vrywillige internasionale standaard vir risikobepaling ingevolge Klousule 6.1."
+            af: "ISO 45001:2018 (Vrywillige Beroepsgesondheid en Veiligheidsbestuur): Vrywillige internasionale standaard vir risikobepaling ingevolge Klousule 6.1.",
+            fr: "ISO 45001:2018 (Management de la santé et de la sécurité au travail - Volontaire) : Norme internationale volontaire pour l'identification des dangers et l'évaluation des risques (Clause 6.1)."
         });
 
         this._isoCore.set('45003-2021', {
@@ -129,7 +134,8 @@ class SemanticFirewall {
             sw: "ISO 45003:2021 (Afya ya Kisaikolojia Kazini - Hiari): Mwongozo wa hiari wa kudhibiti hatari za kisaikolojia (Kifungu cha 6.1.2).",
             zh: "ISO 45003:2021（自愿性工作中心理健康与安全）：管理工作场所心理社会风险的自愿性国际指南（第 6.1.2 条款）。",
             de: "ISO 45003:2021 (Freiwillige Psychische Gesundheit am Arbeitsplatz): Freiwillige Leitlinien für das Management psychosozialer Risiken (Klausel 6.1.2).",
-            af: "ISO 45003:2021 (Vrywillige Sielkundige Gesondheid by die Werk): Vrywillige riglyne vir die bestuur van psigososiale risiko's (Klousule 6.1.2)."
+            af: "ISO 45003:2021 (Vrywillige Sielkundige Gesondheid by die Werk): Vrywillige riglyne vir die bestuur van psigososiale risiko's (Klousule 6.1.2).",
+            fr: "ISO 45003:2021 (Santé psychologique au travail - Volontaire) : Lignes directrices volontaires pour la gestion des risques psychosociaux (Clause 6.1.2)."
         });
     }
 
@@ -148,21 +154,21 @@ class SemanticFirewall {
     /** Returns all sharded OHS Act provisions as an array. */
     public fetchOHSBriefing(lang: Language = 'en'): Array<{ id: string; title: string; text: string }> {
         return [
-            { id: 'ohs-8',  title: lang === 'zu' ? 'I-OHS Act Isigaba 8 – Umsebenzi Wokunakekela' : lang === 'xh' ? 'I-OHS Act Icandelo 8 – Umsebenzi Wokukhathalela' : lang === 'st' ? 'OHS Act Karolo 8 – Mosebetsi oa Tlhokomelo' : lang === 'sw' ? 'Sheria ya OHS Kifungu cha 8 – Wajibu wa Utunzaji' : lang === 'zh' ? 'OHS 法案第 8 条 – 关怀职责' : lang === 'de' ? 'OHS-Gesetz Abschnitt 8 – Fürsorgepflicht' : 'OHS Act Section 8 – Duty of Care',        text: this.getComplianceVector('OHS', 'sec8', lang)  },
-            { id: 'ohs-14', title: lang === 'zu' ? 'I-OHS Act Isigaba 14 – Imisebenzi Yabasebenzi' : lang === 'xh' ? 'I-OHS Act Icandelo 14 – Imisebenzi Yabasebenzi' : lang === 'st' ? 'OHS Act Karolo 14 – Mesebetsi ea Basebetsi' : lang === 'sw' ? 'Sheria ya OHS Kifungu cha 14 – Majukumu ya Wafanyakazi' : lang === 'zh' ? 'OHS 法案第 14 条 – 雇员职责' : lang === 'de' ? 'OHS-Gesetz Abschnitt 14 – Pflichten der Arbeitnehmer' : 'OHS Act Section 14 – Employee Duties',     text: this.getComplianceVector('OHS', 'sec14', lang) },
-            { id: 'ohs-24', title: lang === 'zu' ? 'I-OHS Act Isigaba 24 – Ukubikwa Kwezigameko' : lang === 'xh' ? 'I-OHS Act Icandelo 24 – Ukuxhelwa Kwezigameko' : lang === 'st' ? 'OHS Act Karolo 24 – Ho Tlaleha Likotsi' : lang === 'sw' ? 'Sheria ya OHS Kifungu cha 24 – Kuripoti Matukio' : lang === 'zh' ? 'OHS 法案第 24 条 – 事故报告' : lang === 'de' ? 'OHS-Gesetz Abschnitt 24 – Meldung von Vorfällen' : 'OHS Act Section 24 – Incident Reporting',  text: this.getComplianceVector('OHS', 'sec24', lang) },
-            { id: 'ohs-37', title: lang === 'zu' ? 'I-OHS Act Isigaba 37 – Izenzo Zabathunywa' : lang === 'xh' ? 'I-OHS Act Icandelo 37 – Izenzo Zabathunywa' : lang === 'st' ? 'OHS Act Karolo 37 – Diketso tsa Baemeli' : lang === 'sw' ? 'Sheria ya OHS Kifungu cha 37 – Vitendo vya Wawakilishi' : lang === 'zh' ? 'OHS 法案第 37 条 – 代理人行为' : lang === 'de' ? 'OHS-Gesetz Abschnitt 37 – Handlungen von Beauftragten' : 'OHS Act Section 37 – Acts or Omissions of Employees and Mandataries', text: this.getComplianceVector('OHS', 'sec37', lang) },
-            { id: 'ohs-38', title: lang === 'zu' ? 'I-OHS Act Isigaba 38 – Amacala & Nezinhlawulo' : lang === 'xh' ? 'I-OHS Act Icandelo 38 – Amacala & neZohlwayo' : lang === 'st' ? 'OHS Act Karolo 38 – Litlhōlo le Likotlo' : lang === 'sw' ? 'Sheria ya OHS Kifungu cha 38 – Makosa na Adhabu' : lang === 'zh' ? 'OHS 法案第 38 条 – 违法与处罚' : lang === 'de' ? 'OHS-Gesetz Abschnitt 38 – Straftaten & Strafen' : 'OHS Act Section 38 – Offences & Penalties',text: this.getComplianceVector('OHS', 'sec38', lang) },
+            { id: 'ohs-8',  title: lang === 'zu' ? 'I-OHS Act Isigaba 8 – Umsebenzi Wokunakekela' : lang === 'xh' ? 'I-OHS Act Icandelo 8 – Umsebenzi Wokukhathalela' : lang === 'st' ? 'OHS Act Karolo 8 – Mosebetsi oa Tlhokomelo' : lang === 'sw' ? 'Sheria ya OHS Kifungu cha 8 – Wajibu wa Utunzaji' : lang === 'zh' ? 'OHS 法案第 8 条 – 关怀职责' : lang === 'de' ? 'OHS-Gesetz Abschnitt 8 – Fürsorgepflicht' : lang === 'fr' ? 'Loi OHS Article 8 – Devoir de diligence' : 'OHS Act Section 8 – Duty of Care',        text: this.getComplianceVector('OHS', 'sec8', lang)  },
+            { id: 'ohs-14', title: lang === 'zu' ? 'I-OHS Act Isigaba 14 – Imisebenzi Yabasebenzi' : lang === 'xh' ? 'I-OHS Act Icandelo 14 – Imisebenzi Yabasebenzi' : lang === 'st' ? 'OHS Act Karolo 14 – Mesebetsi ea Basebetsi' : lang === 'sw' ? 'Sheria ya OHS Kifungu cha 14 – Majukumu ya Wafanyakazi' : lang === 'zh' ? 'OHS 法案第 14 条 – 雇员职责' : lang === 'de' ? 'OHS-Gesetz Abschnitt 14 – Pflichten der Arbeitnehmer' : lang === 'fr' ? 'Loi OHS Article 14 – Obligations des employés' : 'OHS Act Section 14 – Employee Duties',     text: this.getComplianceVector('OHS', 'sec14', lang) },
+            { id: 'ohs-24', title: lang === 'zu' ? 'I-OHS Act Isigaba 24 – Ukubikwa Kwezigameko' : lang === 'xh' ? 'I-OHS Act Icandelo 24 – Ukuxhelwa Kwezigameko' : lang === 'st' ? 'OHS Act Karolo 24 – Ho Tlaleha Likotsi' : lang === 'sw' ? 'Sheria ya OHS Kifungu cha 24 – Kuripoti Matukio' : lang === 'zh' ? 'OHS 法案第 24 条 – 事故报告' : lang === 'de' ? 'OHS-Gesetz Abschnitt 24 – Meldung von Vorfällen' : lang === 'fr' ? 'Loi OHS Article 24 – Déclaration des incidents' : 'OHS Act Section 24 – Incident Reporting',  text: this.getComplianceVector('OHS', 'sec24', lang) },
+            { id: 'ohs-37', title: lang === 'zu' ? 'I-OHS Act Isigaba 37 – Izenzo Zabathunywa' : lang === 'xh' ? 'I-OHS Act Icandelo 37 – Izenzo Zabathunywa' : lang === 'st' ? 'OHS Act Karolo 37 – Diketso tsa Baemeli' : lang === 'sw' ? 'Sheria ya OHS Kifungu cha 37 – Vitendo vya Wawakilishi' : lang === 'zh' ? 'OHS 法案第 37 条 – 代理人行为' : lang === 'de' ? 'OHS-Gesetz Abschnitt 37 – Handlungen von Beauftragten' : lang === 'fr' ? 'Loi OHS Article 37 – Actes des mandataires' : 'OHS Act Section 37 – Acts or Omissions of Employees and Mandataries', text: this.getComplianceVector('OHS', 'sec37', lang) },
+            { id: 'ohs-38', title: lang === 'zu' ? 'I-OHS Act Isigaba 38 – Amacala & Nezinhlawulo' : lang === 'xh' ? 'I-OHS Act Icandelo 38 – Amacala & neZohlwayo' : lang === 'st' ? 'OHS Act Karolo 38 – Litlhōlo le Likotlo' : lang === 'sw' ? 'Sheria ya OHS Kifungu cha 38 – Makosa na Adhabu' : lang === 'zh' ? 'OHS 法案第 38 条 – 违法与处罚' : lang === 'de' ? 'OHS-Gesetz Abschnitt 38 – Straftaten & Strafen' : lang === 'fr' ? 'Loi OHS Article 38 – Infractions et sanctions' : 'OHS Act Section 38 – Offences & Penalties',text: this.getComplianceVector('OHS', 'sec38', lang) },
         ];
     }
 
     /** Returns all sharded ISO standards as an array. */
     public fetchISOBriefing(lang: Language = 'en'): Array<{ id: string; title: string; text: string }> {
         return [
-            { id: 'iso-9001',  title: lang === 'zu' ? 'ISO 9001:2015 – Ukuphathwa Kwekhwalithi' : lang === 'xh' ? 'ISO 9001:2015 – UkuLawulwa kweKhwalithi' : lang === 'st' ? 'ISO 9001:2015 – Tsamaiso ea Boleng' : lang === 'sw' ? 'ISO 9001:2015 – Usimamizi wa Ubora' : lang === 'zh' ? 'ISO 9001:2015 – 质量管理' : lang === 'de' ? 'ISO 9001:2015 – Qualitätsmanagement' : 'ISO 9001:2015 – Quality Management (Voluntary)',       text: this.getComplianceVector('ISO', '9001-2015', lang)  },
-            { id: 'iso-14001', title: lang === 'zu' ? 'ISO 14001:2015 – Ukuphathwa Kwezemvelo' : lang === 'xh' ? 'ISO 14001:2015 – UkuLawulwa kokusiNgqongileyo' : lang === 'st' ? 'ISO 14001:2015 – Tsamaiso ea Tikoloho' : lang === 'sw' ? 'ISO 14001:2015 – Usimamizi wa Mazingira' : lang === 'zh' ? 'ISO 14001:2015 – 环境管理' : lang === 'de' ? 'ISO 14001:2015 – Umweltmanagement' : 'ISO 14001:2015 – Environmental Management (Voluntary)', text: this.getComplianceVector('ISO', '14001-2015', lang) },
-            { id: 'iso-45001', title: lang === 'zu' ? 'ISO 45001:2018 (Voluntary) – Ukuphathwa Kwe-OHS' : lang === 'xh' ? 'ISO 45001:2018 (Voluntary) – UkuLawulwa kwe-OHS' : lang === 'st' ? 'ISO 45001:2018 (Voluntary) – Tsamaiso ea OHS' : lang === 'sw' ? 'ISO 45001:2018 (Voluntary) – Usimamizi wa OHS' : lang === 'zh' ? 'ISO 45001:2018 (自愿性) – OHS 管理' : lang === 'de' ? 'ISO 45001:2018 (Freiwillig) – Arbeitsschutzmanagement' : 'ISO 45001:2018 (Voluntary) – OHS Management',           text: this.getComplianceVector('ISO', '45001-2018', lang) },
-            { id: 'iso-45003', title: lang === 'zu' ? 'ISO 45003:2021 (Voluntary) – Ubungozi Bezengqondo' : lang === 'xh' ? 'ISO 45003:2021 (Voluntary) – Iingozi zeZengqondo' : lang === 'st' ? 'ISO 45003:2021 (Voluntary) – Likotsi tsa Kelello' : lang === 'sw' ? 'ISO 45003:2021 (Voluntary) – Hatari ya Kisaikolojia' : lang === 'zh' ? 'ISO 45003:2021 (自愿性) – 心理社会风险' : lang === 'de' ? 'ISO 45003:2021 (Freiwillig) – Psychosoziales Risiko' : 'ISO 45003:2021 (Voluntary) – Psychosocial Risk',        text: this.getComplianceVector('ISO', '45003-2021', lang) },
+            { id: 'iso-9001',  title: lang === 'zu' ? 'ISO 9001:2015 – Ukuphathwa Kwekhwalithi' : lang === 'xh' ? 'ISO 9001:2015 – UkuLawulwa kweKhwalithi' : lang === 'st' ? 'ISO 9001:2015 – Tsamaiso ea Boleng' : lang === 'sw' ? 'ISO 9001:2015 – Usimamizi wa Ubora' : lang === 'zh' ? 'ISO 9001:2015 – 质量管理' : lang === 'de' ? 'ISO 9001:2015 – Qualitätsmanagement' : lang === 'fr' ? 'ISO 9001:2015 – Management de la qualité (Volontaire)' : 'ISO 9001:2015 – Quality Management (Voluntary)',       text: this.getComplianceVector('ISO', '9001-2015', lang)  },
+            { id: 'iso-14001', title: lang === 'zu' ? 'ISO 14001:2015 – Ukuphathwa Kwezemvelo' : lang === 'xh' ? 'ISO 14001:2015 – UkuLawulwa kokusiNgqongileyo' : lang === 'st' ? 'ISO 14001:2015 – Tsamaiso ea Tikoloho' : lang === 'sw' ? 'ISO 14001:2015 – Usimamizi wa Mazingira' : lang === 'zh' ? 'ISO 14001:2015 – 环境管理' : lang === 'de' ? 'ISO 14001:2015 – Umweltmanagement' : lang === 'fr' ? 'ISO 14001:2015 – Management environnemental (Volontaire)' : 'ISO 14001:2015 – Environmental Management (Voluntary)', text: this.getComplianceVector('ISO', '14001-2015', lang) },
+            { id: 'iso-45001', title: lang === 'zu' ? 'ISO 45001:2018 (Voluntary) – Ukuphathwa Kwe-OHS' : lang === 'xh' ? 'ISO 45001:2018 (Voluntary) – UkuLawulwa kwe-OHS' : lang === 'st' ? 'ISO 45001:2018 (Voluntary) – Tsamaiso ea OHS' : lang === 'sw' ? 'ISO 45001:2018 (Voluntary) – Usimamizi wa OHS' : lang === 'zh' ? 'ISO 45001:2018 (自愿性) – OHS 管理' : lang === 'de' ? 'ISO 45001:2018 (Freiwillig) – Arbeitsschutzmanagement' : lang === 'fr' ? 'ISO 45001:2018 (Volontaire) – Management OHS' : 'ISO 45001:2018 (Voluntary) – OHS Management',           text: this.getComplianceVector('ISO', '45001-2018', lang) },
+            { id: 'iso-45003', title: lang === 'zu' ? 'ISO 45003:2021 (Voluntary) – Ubungozi Bezengqondo' : lang === 'xh' ? 'ISO 45003:2021 (Voluntary) – Iingozi zeZengqondo' : lang === 'st' ? 'ISO 45003:2021 (Voluntary) – Likotsi tsa Kelello' : lang === 'sw' ? 'ISO 45003:2021 (Voluntary) – Hatari ya Kisaikolojia' : lang === 'zh' ? 'ISO 45003:2021 (自愿性) – 心理社会风险' : lang === 'de' ? 'ISO 45003:2021 (Freiwillig) – Psychosoziales Risiko' : lang === 'fr' ? 'ISO 45003:2021 (Volontaire) – Risques psychosociaux' : 'ISO 45003:2021 (Voluntary) – Psychosocial Risk',        text: this.getComplianceVector('ISO', '45003-2021', lang) },
         ];
     }
 

@@ -3,7 +3,7 @@ import { lazy, Suspense } from 'react';
 import { GlowButton } from '../../components/ui/GlowButton';
 import { Volume2, VolumeX, X, Play, Square, ChevronLeft, ChevronRight, CheckCircle, Globe } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
-import { speak, stopSpeaking, VOICEOVER_ACCENT_MAP } from '../../utils/speech';
+import { speakWithSubtitles, stopSpeaking, VOICEOVER_ACCENT_MAP } from '../../utils/speech';
 import { useNellyStore } from '../../store/nellyStore';
 import { FRESH_OHS_PROJECT_REGISTRY } from '../../utils/master_ohs_boot';
 import { Language } from '../../utils/translations';
@@ -64,9 +64,11 @@ export const TrainingModule = ({ id, title, description, duration, onClose, onCo
 
     const speakCurrentInstruction = (step = steps[currentStepIndex]) => {
         if (!step) return;
-        const stepText = localisedStepText(step, language);
-        const utterance = speak(
-            `Step ${step.step}: ${step.title}. ${stepText}`,
+        const subtitleText = localisedStepText(step, language);
+        const spokenEnglishText = `Step ${step.step}: ${step.title}. ${step.en}`;
+        const utterance = speakWithSubtitles(
+            spokenEnglishText,
+            subtitleText,
             language,
             () => {
                 if (!isPlayingRef.current) return;
@@ -109,9 +111,11 @@ export const TrainingModule = ({ id, title, description, duration, onClose, onCo
             return;
         }
 
-        const stepText = localisedStepText(currentStep, language);
-        const utterance = speak(
-            `Step ${currentStep.step}: ${currentStep.title}. ${stepText}`,
+        const subtitleText = localisedStepText(currentStep, language);
+        const spokenEnglishText = `Step ${currentStep.step}: ${currentStep.title}. ${currentStep.en}`;
+        const utterance = speakWithSubtitles(
+            spokenEnglishText,
+            subtitleText,
             language,
             () => {
                 if (!isPlayingRef.current) return;

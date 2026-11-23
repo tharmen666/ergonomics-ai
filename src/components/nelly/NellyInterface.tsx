@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { X, Globe, PlayCircle, ShieldCheck, Minimize2, Volume2, VolumeX } from 'lucide-react';
 import { ReasoningLog } from '../agent/ReasoningLog';
 import { translations, Language } from '../../utils/translations';
-import { VOICEOVER_ACCENT_MAP, speak, toggleMute, getIsMuted } from '../../utils/speech';
+import { VOICEOVER_ACCENT_MAP, speakWithSubtitles, toggleMute, getIsMuted } from '../../utils/speech';
 
 import { useNellyStore } from '../../store/nellyStore';
 import { AITransparencyBadge } from '../compliance/AITransparencyBadge';
@@ -34,12 +34,17 @@ export const NellyInterface = ({
     const language = propLang || store.language || 'en';
     const setLanguage = propSetLang || store.setLanguage;
     const isSpeaking = propIsSpeaking !== undefined ? propIsSpeaking : store.isSpeaking;
-    const { hasIntroduced, markIntroduced } = store;
+    const { markIntroduced, activeSubtitle, activeVoice } = store;
     const userInput = propUserInput !== undefined ? propUserInput : (store.currentGuidance || '');
     const setUserInput = propSetUserInput || ((val: string) => store.setGuidance(val));
     const onSend = propOnSend || (() => {});
 
     const activeLang: Language = (language && translations[language]) ? language : 'en';
+    const currentAccent = VOICEOVER_ACCENT_MAP[activeLang] || VOICEOVER_ACCENT_MAP['en'];
+    const subtitleDisplay =
+        activeSubtitle && activeSubtitle.lang === activeLang
+            ? activeSubtitle.text
+            : translations[activeLang].nelly_intro;
 
     return (
         <motion.div
@@ -90,7 +95,7 @@ export const NellyInterface = ({
             <AITransparencyBadge compact className="mb-3" />
 
             {/* Premium Language Preference Selection Bar */}
-            <div className="grid grid-cols-4 sm:grid-cols-7 gap-1 mb-4 bg-slate-950 border border-slate-800 p-1.5 rounded-xl">
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-1 mb-3 bg-slate-950 border border-slate-800 p-1.5 rounded-xl">
                 {Object.entries(VOICEOVER_ACCENT_MAP).map(([code, config]) => {
                     const isSelected = activeLang === code;
                     const langCode = code as Language;
@@ -99,11 +104,10 @@ export const NellyInterface = ({
                             key={code}
                             onClick={() => {
                                 setLanguage(langCode);
-                                if (!hasIntroduced) {
-                                    const intro = translations[langCode]?.nelly_intro || translations['en'].nelly_intro;
-                                    markIntroduced();
-                                    speak(intro, langCode);
-                                }
+                                const localizedIntro = translations[langCode]?.nelly_intro || translations['en'].nelly_intro;
+                                const englishIntro = translations['en'].nelly_intro;
+                                markIntroduced();
+                                speakWithSubtitles(englishIntro, localizedIntro, langCode);
                             }}
                             className={`flex-1 text-[10px] font-black py-2 px-1 rounded-lg cursor-pointer transition-all duration-300 ${
                                 isSelected 
@@ -117,10 +121,32 @@ export const NellyInterface = ({
                 })}
             </div>
 
-            {/* Intro Text */}
-            <div className="mb-3">
-                <p className="text-xs sm:text-sm text-white font-medium italic leading-relaxed break-words whitespace-normal bg-white/5 p-3 rounded-xl border border-white/5">
-                    "{translations[activeLang].nelly_intro}"
+            {/* Live Multilingual Subtitle Bar synced with South African English (en-ZA) Voice */}
+            <div
+                data-testid="nelly-subtitle-bar"
+                className="mb-3 bg-white/5 p-3 rounded-xl border border-white/10 space-y-2"
+            >
+                <div className="flex flex-wrap items-center justify-between gap-1.5 text-[10px] font-bold">
+                    <span
+                        data-testid="nelly-voice-badge"
+                        title={activeVoice?.name || 'South African English (en-ZA)'}
+                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-950/70 border border-emerald-500/30 text-emerald-300"
+                    >
+                        Voice: {activeVoice?.tier === 'en-ZA' || !activeVoice ? 'en-ZA' : activeVoice.lang} • 0.96x
+                    </span>
+                    <span
+                        data-testid="nelly-subtitle-lang"
+                        className="inline-flex items-center gap-1 text-amber-300"
+                    >
+                        <Globe size={11} />
+                        Subtitles: {currentAccent.displayName} ({currentAccent.regionalAccent})
+                    </span>
+                </div>
+                <p
+                    data-testid="nelly-subtitle-text"
+                    className="text-xs sm:text-sm text-white font-medium italic leading-relaxed break-words whitespace-normal"
+                >
+                    "{subtitleDisplay}"
                 </p>
             </div>
 

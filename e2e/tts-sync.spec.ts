@@ -209,4 +209,260 @@ test.describe('Nelly Voiceover (TTS) Synchronization & Modal Cleanup', () => {
         });
         expect(finalCancels).toBeGreaterThan(cancelCountAfterToggle);
     });
+
+    test('3. South African English (en-ZA) voice profile & real-time multilingual subtitle sync (Swahili, isiZulu, French)', async ({ page }) => {
+        const consoleMessages: string[] = [];
+        page.on('console', (msg) => {
+            consoleMessages.push(msg.text());
+        });
+
+        await page.addInitScript(() => {
+            const voiceMap = new WeakMap<SpeechSynthesisUtterance, SpeechSynthesisVoice | null>();
+            if (typeof SpeechSynthesisUtterance !== 'undefined') {
+                Object.defineProperty(SpeechSynthesisUtterance.prototype, 'voice', {
+                    configurable: true,
+                    get() {
+                        return voiceMap.get(this) ?? null;
+                    },
+                    set(v: SpeechSynthesisVoice | null) {
+                        voiceMap.set(this, v);
+                    },
+                });
+            }
+
+            const mockVoices = [
+                {
+                    name: 'Microsoft David - English (United States)',
+                    lang: 'en-US',
+                    voiceURI: 'Microsoft David - English (United States)',
+                    default: true,
+                    localService: true,
+                },
+                {
+                    name: 'Google UK English Female',
+                    lang: 'en-GB',
+                    voiceURI: 'Google UK English Female',
+                    default: false,
+                    localService: false,
+                },
+                {
+                    name: 'Microsoft Leah Online (Natural) - English (South Africa)',
+                    lang: 'en-ZA',
+                    voiceURI: 'Microsoft Leah Online (Natural) - English (South Africa)',
+                    default: false,
+                    localService: false,
+                },
+            ] as unknown as SpeechSynthesisVoice[];
+
+            let voicesLoaded = false;
+            const enZaLogs: Array<{
+                text: string;
+                lang: string;
+                rate: number;
+                pitch: number;
+                voiceName: string | null;
+                voiceLang: string | null;
+            }> = [];
+            (window as any).__enZaLogs = enZaLogs;
+
+            if ('speechSynthesis' in window) {
+                const synth = window.speechSynthesis;
+                const listeners = new Set<(ev: Event) => void>();
+
+                const origAdd = synth.addEventListener?.bind(synth);
+                const origRemove = synth.removeEventListener?.bind(synth);
+
+                synth.addEventListener = ((type: string, fn: any, opts?: any) => {
+                    if (type === 'voiceschanged' && typeof fn === 'function') {
+                        listeners.add(fn);
+                    }
+                    if (origAdd) origAdd(type, fn, opts);
+                }) as any;
+
+                synth.removeEventListener = ((type: string, fn: any, opts?: any) => {
+                    if (type === 'voiceschanged' && typeof fn === 'function') {
+                        listeners.delete(fn);
+                    }
+                    if (origRemove) origRemove(type, fn, opts);
+                }) as any;
+
+                synth.getVoices = () => (voicesLoaded ? mockVoices : []);
+
+                synth.speak = (utterance: SpeechSynthesisUtterance) => {
+                    if (utterance.text && utterance.text.trim()) {
+                        enZaLogs.push({
+                            text: utterance.text,
+                            lang: utterance.lang,
+                            rate: utterance.rate,
+                            pitch: utterance.pitch,
+                            voiceName: utterance.voice ? utterance.voice.name : null,
+                            voiceLang: utterance.voice ? utterance.voice.lang : null,
+                        });
+                    }
+                    if (utterance.onstart) {
+                        setTimeout(() => utterance.onstart?.(new Event('start') as any), 5);
+                    }
+                };
+
+                synth.cancel = () => {};
+
+                setTimeout(() => {
+                    voicesLoaded = true;
+                    const ev = new Event('voiceschanged');
+                    listeners.forEach((fn) => {
+                        try {
+                            fn(ev);
+                        } catch {}
+                    });
+                    if (typeof synth.onvoiceschanged === 'function') {
+                        synth.onvoiceschanged(ev);
+                    }
+                }, 80);
+            }
+        });
+
+        await seedSession(page);
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await page.goto('/');
+
+        await openTab(page, 'Nelly Posture & Hazard Monitoring Engine (3D Spine)');
+        await expect(page.getByTestId('nelly-subtitle-bar')).toBeVisible({ timeout: 10000 });
+
+        // Select Swahili subtitles (sw-KE)
+        await page.getByRole('button', { name: 'sw-KE' }).click();
+        await expect(page.getByTestId('nelly-subtitle-text')).toContainText('Hujambo');
+        await expect(page.getByTestId('nelly-voice-badge')).toContainText('Voice: en-ZA');
+        await expect(page.getByTestId('nelly-subtitle-lang')).toContainText('sw-KE');
+
+        await expect.poll(async () => {
+            return await page.evaluate(() => {
+                const logs = (window as any).__enZaLogs || [];
+                return logs[logs.length - 1] || null;
+            });
+        }).toMatchObject({
+            voiceName: 'Microsoft Leah Online (Natural) - English (South Africa)',
+            voiceLang: 'en-ZA',
+            lang: 'en-ZA',
+            rate: expect.closeTo(0.96, 2),
+            pitch: expect.closeTo(1.02, 2),
+            text: expect.stringMatching(/Hi, I'm Nelly/i),
+        });
+
+        // Select isiZulu subtitles (zu-ZA)
+        await page.getByRole('button', { name: 'zu-ZA' }).click();
+        await expect(page.getByTestId('nelly-subtitle-text')).toContainText('Sawubona');
+        await expect.poll(async () => {
+            return await page.evaluate(() => {
+                const logs = (window as any).__enZaLogs || [];
+                return logs[logs.length - 1] || null;
+            });
+        }).toMatchObject({
+            voiceName: 'Microsoft Leah Online (Natural) - English (South Africa)',
+            voiceLang: 'en-ZA',
+            lang: 'en-ZA',
+            rate: expect.closeTo(0.96, 2),
+            pitch: expect.closeTo(1.02, 2),
+            text: expect.stringMatching(/Hi, I'm Nelly/i),
+        });
+
+        // Select French subtitles (fr-FR)
+        await page.getByRole('button', { name: 'fr-FR' }).click();
+        await expect(page.getByTestId('nelly-subtitle-text')).toContainText('Bonjour');
+
+        // Confirm browser console logged en-ZA telemetry for synced subtitles
+        const hasTelemetryLog = consoleMessages.some(
+            (msg) => msg.includes('[Nelly TTS]') && msg.includes('en-ZA') && msg.includes('sw')
+        );
+        expect(hasTelemetryLog).toBe(true);
+    });
+
+    test('4. Voice fallback chain (en-ZA absent -> en-GB natural female, never male David)', async ({ page }) => {
+        await page.addInitScript(() => {
+            const voiceMap = new WeakMap<SpeechSynthesisUtterance, SpeechSynthesisVoice | null>();
+            if (typeof SpeechSynthesisUtterance !== 'undefined') {
+                Object.defineProperty(SpeechSynthesisUtterance.prototype, 'voice', {
+                    configurable: true,
+                    get() {
+                        return voiceMap.get(this) ?? null;
+                    },
+                    set(v: SpeechSynthesisVoice | null) {
+                        voiceMap.set(this, v);
+                    },
+                });
+            }
+
+            const mockVoices = [
+                {
+                    name: 'Microsoft David - English (United States)',
+                    lang: 'en-US',
+                    voiceURI: 'Microsoft David - English (United States)',
+                    default: true,
+                    localService: true,
+                },
+                {
+                    name: 'Google UK English Female',
+                    lang: 'en-GB',
+                    voiceURI: 'Google UK English Female',
+                    default: false,
+                    localService: false,
+                },
+            ] as unknown as SpeechSynthesisVoice[];
+
+            const fallbackLogs: Array<{
+                voiceName: string | null;
+                voiceLang: string | null;
+                rate: number;
+                pitch: number;
+            }> = [];
+            (window as any).__fallbackLogs = fallbackLogs;
+
+            if ('speechSynthesis' in window) {
+                const synth = window.speechSynthesis;
+                synth.getVoices = () => mockVoices;
+                synth.speak = (utterance: SpeechSynthesisUtterance) => {
+                    if (utterance.text && utterance.text.trim()) {
+                        fallbackLogs.push({
+                            voiceName: utterance.voice ? utterance.voice.name : null,
+                            voiceLang: utterance.voice ? utterance.voice.lang : null,
+                            rate: utterance.rate,
+                            pitch: utterance.pitch,
+                        });
+                    }
+                    if (utterance.onstart) {
+                        setTimeout(() => utterance.onstart?.(new Event('start') as any), 5);
+                    }
+                };
+                synth.cancel = () => {};
+            }
+        });
+
+        await seedSession(page);
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await page.goto('/');
+
+        await openTab(page, 'Nelly Posture & Hazard Monitoring Engine (3D Spine)');
+        await expect(page.getByTestId('nelly-subtitle-bar')).toBeVisible({ timeout: 10000 });
+
+        await page.getByRole('button', { name: 'sw-KE' }).click();
+        await expect(page.getByTestId('nelly-subtitle-text')).toContainText('Hujambo');
+
+        await expect.poll(async () => {
+            return await page.evaluate(() => {
+                const logs = (window as any).__fallbackLogs || [];
+                const active = (window as any).__nellyActiveVoice || null;
+                return {
+                    lastSpeak: logs[logs.length - 1] || null,
+                    tier: active?.tier || null,
+                };
+            });
+        }).toMatchObject({
+            lastSpeak: {
+                voiceName: 'Google UK English Female',
+                voiceLang: 'en-GB',
+                rate: expect.closeTo(0.96, 2),
+                pitch: expect.closeTo(1.02, 2),
+            },
+            tier: 'en-GB',
+        });
+    });
 });

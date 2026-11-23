@@ -1,6 +1,6 @@
 // TODO(native-review): zu/xh/st/sw strings were edited only to delete unsupported claims
 // (100% compliance, CCMA precedent, Kenyan OSHA 2007). Have a first-language speaker review them.
-export type Language = 'en' | 'zu' | 'xh' | 'sw' | 'zh' | 'de' | 'st' | 'af';
+export type Language = 'en' | 'zu' | 'xh' | 'sw' | 'zh' | 'de' | 'st' | 'af' | 'fr';
 
 export interface TranslationEntry {
     nelly_intro: string;
@@ -392,6 +392,50 @@ export const translations: Record<Language, TranslationEntry> = {
                 "stress-dump": { title: "Stresverligting", desc: "Mikro-pouses. OHS-wet Artikel 8 Nakoming.", step1: "Asem diep in" },
                 "risk-audit": { title: "Self-Oudit", desc: "Hoe om jou eie gevare te identifiseer. OHS-wet Artikel 8 Nakoming.", step1: "Skandeer omgewing" },
                 "corrective-flow": { title: "Korrektiewe Vloei", desc: "Gevorderde strekke. OHS-wet Artikel 8 Nakoming.", step1: "Teiken nekstrek" }
+            }
+        }
+    },
+    fr: {
+        nelly_intro: "Bonjour, je suis Nelly. Votre assistante de sécurité IA. Assurons votre protection aujourd'hui.",
+        stewardship_model: "Le modèle de gouvernance soutient la conformité via une chaîne de responsabilité claire : de l'employé au superviseur, au responsable et au PDG.",
+        high_discomfort_disclaimer: "AVERTISSEMENT : Inconfort élevé détecté. Cela a été signalé. Ne pas y remédier peut entraîner une non-conformité à la loi OHS.",
+        legal_shock: "IMPORTANT : Une non-conformité continue peut engager la responsabilité de l'entreprise, y compris des amendes ou des sanctions en vertu des lois OHS sud-africaines.",
+        exercise_tip: "Il est temps de faire un étirement rapide ! Cela prévient les tensions musculo-squelettiques à long terme.",
+        compliance_check: "Analyse quotidienne de sécurité requise. Veuillez compléter votre liste de contrôle avant vendredi midi.",
+        admin_zero: "Évaluation terminée. Je l'ai enregistrée dans le journal de conformité de ce navigateur.",
+        first_aid: "Arrêtez le saignement, nettoyez la plaie, couvrez-la.",
+        right_to_disconnect: "Le repos en dehors des heures de travail convenues est important. Des sollicitations répétées après les heures de travail peuvent constituer un risque psychosocial (voir les directives volontaires ISO 45003:2021).",
+        popi_title: "VOS DONNÉES SONT VOTRE BOUCLIER",
+        popi_subtitle: "Architecture OHS respectueuse de la vie privée",
+        popi_desc: "ErgoSafe Reborn fonctionne strictement comme un compagnon de sécurité numérique. Les données d'évaluation sont stockées localement dans votre navigateur.",
+        popi_guarantee_title: "Garantie d'intervention humaine",
+        popi_guarantee_desc: "La sécurité est notre priorité absolue. Nous ne vous suivons pas pour vous sanctionner, mais pour vous guider vers votre bien-être optimal.",
+        popi_accept: "ACCEPTER LE PROTOCOLE DE CONFIDENTIALITÉ",
+        cognitive_title: "BASE DE RÉACTION COGNITIVE",
+        cognitive_subtitle: "Cliquez sur les cibles aussi vite que possible pour établir votre référence. Un écart > 20 % déclenchera des conseils de sécurité proactifs.",
+        cognitive_fail: "ALERTE PROTOCOLE : {reason} détecté. Écart de {variance}%. Alerte de fatigue opérationnelle activée.",
+        cognitive_pass_optimal: "BONUS KAIZEN : Latence optimale (<700ms) et faible variance détectées. Test validé.",
+        cognitive_warn: "FATIGUE DÉTECTÉE : L'écart est de {variance}% par rapport à la référence. Envisagez une micro-pause.",
+        cognitive_pass: "Test cognitif réussi ! Vous travaillez en toute sécurité dans les normes habituelles.",
+        liability_title: "Alerte de fatigue opérationnelle",
+        liability_subtitle: "LATENCE COGNITIVE ÉLEVÉE DÉTECTÉE. Protocole de sécurité : Article 8(1) OHS Act 85 de 1993",
+        liability_desc: "Vos temps de réaction s'écartent des seuils de sécurité. Veuillez contacter votre superviseur pour un point bien-être.",
+        liability_action: "CONFIRMER",
+        kaizen_master: "Maître Kaizen",
+        training: {
+            start_session: "Démarrer la session :",
+            follow_guide: "Suivez le guide animé. Étape 1 :",
+            exercises: {
+                "monitor-mastery": { title: "Maîtrise de l'écran", desc: "Optimisez la hauteur et la distance de l'écran pour éviter les tensions cervicales. Conformité OHS Act Article 8.", step1: "Asseyez-vous à distance d'un bras" },
+                "lumbar-lock": { title: "Verrouillage lombaire", desc: "Protégez le bas du dos pour un soutien vertébral toute la journée. Conformité OHS Act Article 8.", step1: "Asseyez-vous au fond du siège" },
+                "20-20-20": { title: "Règle des yeux 20-20-20", desc: "Protocole de prévention de la fatigue visuelle numérique. Conformité OHS Act Article 8.", step1: "Toutes les 20 minutes" },
+                "shoulder-rolls": { title: "Rotations des épaules", desc: "Relâchez les tensions du haut du corps par de simples mouvements circulaires. Conformité OHS Act Article 8.", step1: "Tenez-vous droit" },
+                "wrist-flexor": { title: "Étirement des poignets", desc: "Prévenez les troubles musculo-squelettiques des poignets et avant-bras. Conformité OHS Act Article 8.", step1: "Tendez le bras vers l'avant" },
+                "lateral-neck": { title: "Inclinaison latérale du cou", desc: "Soulagez la raideur cervicale due à l'exposition prolongée à l'écran. Conformité OHS Act Article 8.", step1: "Regardez droit devant" },
+                "mobile-command": { title: "Poste mobile", desc: "Ergonomie pour ordinateurs portables et postes temporaires. Conformité OHS Act Article 8.", step1: "Surélevez l'ordinateur portable" },
+                "stress-dump": { title: "Décompression rapide", desc: "Micro-pause de récupération après des appels exigeants. Conformité OHS Act Article 8.", step1: "Inspirez profondément" },
+                "risk-audit": { title: "Auto-audit ergonomique", desc: "Comment repérer vos propres signaux d'alerte ergonomiques. Conformité OHS Act Article 8.", step1: "Analysez votre environnement" },
+                "corrective-flow": { title: "Flux correctif", desc: "Étirements avancés pour les zones de tension chronique. Conformité OHS Act Article 8.", step1: "Relâchement ciblé du cou" }
             }
         }
     }

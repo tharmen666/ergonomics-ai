@@ -100,6 +100,16 @@ const CHECKLIST_TRANSLATIONS: Record<Language, {
         compliant: 'Ten Volle Voldoenend',
         completed: 'Voltooi',
         feedback: 'Goeie werk! Jou opstelling is nou OHS-nakomend vir die dag.'
+    },
+    fr: {
+        monitor: 'Écran à hauteur des yeux ?',
+        chair: 'Chaise soutenant le bas du dos ?',
+        feet: 'Pieds à plat sur le sol ?',
+        title: 'Liste de contrôle de sécurité quotidienne',
+        complete: 'Conformité vérifiée',
+        compliant: 'Entièrement conforme',
+        completed: 'Terminé',
+        feedback: 'Excellent travail ! Votre poste est conforme aux normes OHS pour la journée.'
     }
 };
 
