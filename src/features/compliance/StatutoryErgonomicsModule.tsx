@@ -840,7 +840,7 @@ export const StatutoryErgonomicsModule: React.FC = () => {
       className="w-full max-w-full overflow-x-hidden min-w-0 break-words space-y-5 text-white"
     >
       {/* Header & Statutory Disclosures */}
-      <div className="bg-[#0F172A] border border-[#D97706]/50 rounded-2xl p-4 sm:p-6 shadow-xl min-w-0">
+      <div className="glass-card-3d border border-[#D97706]/50 rounded-2xl p-4 sm:p-6 shadow-xl min-w-0">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
           <div className="min-w-0">
             <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#064E3B] border border-[#D97706]/60 text-[11px] font-bold uppercase tracking-wider text-white mb-2">

@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTenantStore } from '../../store/tenantStore';
 import { GlassCard } from '../ui/GlassCard';
-import { Shield, Key, Building2, UserCircle } from 'lucide-react';
+import { Shield, Key, Building2, UserCircle, X } from 'lucide-react';
 
 interface TenantLoginProps {
     onSuccess?: () => void;
+    onClose?: () => void;
 }
 
 // TODO(auth): replace with real SSO before production
-export const TenantLogin: React.FC<TenantLoginProps> = ({ onSuccess }) => {
+export const TenantLogin: React.FC<TenantLoginProps> = ({ onSuccess, onClose }) => {
     const { companies, login } = useTenantStore();
     const [mode, setMode] = useState<'demo' | 'sso'>('demo');
     const [selectedCompanyId, setSelectedCompanyId] = useState(companies[0]?.id || 'COMP-001');
@@ -17,6 +18,15 @@ export const TenantLogin: React.FC<TenantLoginProps> = ({ onSuccess }) => {
     const [ssoDomain, setSsoDomain] = useState('');
     const [role, setRole] = useState<'employee' | 'admin'>('employee');
     const [error, setError] = useState('');
+
+    useEffect(() => {
+        if (!onClose) return;
+        const onKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') onClose();
+        };
+        window.addEventListener('keydown', onKeyDown);
+        return () => window.removeEventListener('keydown', onKeyDown);
+    }, [onClose]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -47,23 +57,40 @@ export const TenantLogin: React.FC<TenantLoginProps> = ({ onSuccess }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-ohs-navy/95 backdrop-blur-md p-4">
-            <div className="absolute inset-0 opacity-5 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:40px_40px] pointer-events-none" />
+        <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Workspace Switcher"
+            onClick={() => onClose?.()}
+            className="fixed inset-0 z-[99999] flex items-center justify-center bg-[#030712]/80 backdrop-blur-xl p-3 sm:p-4 overflow-y-auto"
+        >
+            <div className="absolute inset-0 opacity-10 [background-image:linear-gradient(rgba(16,185,129,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.12)_1px,transparent_1px)] [background-size:40px_40px] pointer-events-none" />
             
             <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 25 }}
+                initial={{ opacity: 0, scale: 0.94, y: 16 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                className="w-full max-w-lg"
+                onClick={(e) => e.stopPropagation()}
+                className="w-full max-w-lg my-auto"
             >
-                <GlassCard className="p-8 sm:p-10 border border-white/10 shadow-[0_0_80px_rgba(249,168,37,0.15)] relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-ohs-orange via-yellow-500 to-ohs-green" />
+                <GlassCard className="glass-card-3d p-5 sm:p-7 border border-emerald-500/30 shadow-[0_24px_80px_rgba(6,78,59,0.45)] relative overflow-y-auto max-h-[88vh]">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#064E3B] via-emerald-400 to-[#D97706]" />
+                    {onClose && (
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            aria-label="Close Workspace Switcher"
+                            className="absolute right-4 top-4 p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-colors cursor-pointer"
+                        >
+                            <X size={18} />
+                        </button>
+                    )}
                     
-                    <div className="flex flex-col items-center text-center mb-8">
-                        <div className="bg-ohs-orange/10 p-4 rounded-3xl border border-ohs-orange/20 mb-4">
-                            <Shield className="text-ohs-orange animate-pulse" size={44} />
+                    <div className="flex flex-col items-center text-center mb-5">
+                        <div className="bg-emerald-500/15 p-3 rounded-2xl border border-emerald-400/30 mb-3 shadow-[0_0_25px_rgba(16,185,129,0.25)]">
+                            <Shield className="text-emerald-400" size={32} />
                         </div>
-                        <h2 className="text-3xl font-black text-white tracking-tight uppercase">ERGOSAFE REBORN</h2>
-                        <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-1.5">Demo login (no real authentication)</p>
+                        <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight uppercase">WORKSPACE SWITCHER</h2>
+                        <p className="text-cyan-300/80 font-bold uppercase tracking-widest text-[10px] mt-1">Select Demo Tenant or Administrator Session</p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-6">
@@ -157,7 +184,7 @@ export const TenantLogin: React.FC<TenantLoginProps> = ({ onSuccess }) => {
                                             type="text"
                                             value={userId}
                                             onChange={(e) => setUserId(e.target.value)}
-                                            placeholder={role === 'admin' ? 'Enter administrator ID' : 'e.g. mike_ross, sarah_j, user@company.com'}
+                                            placeholder={role === 'admin' ? 'Enter administrator ID' : 'e.g. usr-sarah, safety.lead@ergosafe.co.za'}
                                             className="w-full bg-white/5 border border-white/10 text-white rounded-xl pl-11 pr-4 py-3 text-sm font-semibold placeholder:text-gray-600 focus:outline-none focus:ring-2 focus:ring-ohs-orange transition-all"
                                         />
                                         <Key className="absolute left-4 top-3.5 text-gray-500" size={16} />

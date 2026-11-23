@@ -1,6 +1,25 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ShieldAlert, AlertTriangle, FileText, CheckCircle2, TrendingUp, Volume2, VolumeX, Activity, Scale, Award, ShieldCheck, UserCheck, Zap, Play } from 'lucide-react';
+import {
+    ShieldAlert,
+    AlertTriangle,
+    FileText,
+    CheckCircle2,
+    TrendingUp,
+    Volume2,
+    VolumeX,
+    Activity,
+    Scale,
+    Award,
+    ShieldCheck,
+    Zap,
+    Play,
+    Timer,
+    ClipboardCheck,
+    Lock,
+    Bot,
+    ArrowRight,
+} from 'lucide-react';
 import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
 import { useNellyStore } from '../../store/nellyStore';
 import { useComplianceStore } from '../../store/complianceStore';
@@ -20,11 +39,78 @@ export const BCEA_REST_PERIODS_FRAMEWORK = {
     complianceCode: "BCEA Sec 15 Daily Rest Period & GN R1589 Regulation 6/7 Ergonomic Controls."
 } as const;
 
-export const ExecutiveBriefing = () => {
+interface ExecutiveBriefingProps {
+    onNavigate?: (tabId: string) => void;
+}
+
+export const ExecutiveBriefing = ({ onNavigate }: ExecutiveBriefingProps = {}) => {
     const openStatutoryBreaches = useComplianceStore((s) => s.cases.filter(c => c.status === 'BREACH' && c.escalationState !== 'resolved').length);
     const { language, setIsLiveTelemetryOpen, setWingmanActive, setIsDemoModalOpen } = useNellyStore();
     const [isNarrating, setIsNarrating] = useState(false);
     const [showSupportingMatrix, setShowSupportingMatrix] = useState(false);
+
+    const coreModules = [
+        {
+            id: 'nelly',
+            title: 'Live 3D Posture & Spine Telemetry',
+            badge: 'POPIA s18 + Manual Fallback',
+            desc: 'Client-side skeletal posture scoring & 3D spine telemetry behind a non-bypassable POPIA consent gate.',
+            icon: Bot,
+            accent: 'glass-card-emerald border-emerald-400/35 hover:border-emerald-300/70',
+            iconColor: 'text-emerald-300 bg-emerald-500/20 border-emerald-400/40',
+            cta: 'Open Posture Engine',
+        },
+        {
+            id: 'training',
+            title: 'Interactive 3D Training Videos & Safety Drills',
+            badge: 'Multilingual Safety LMS',
+            desc: 'Interactive ergonomic training modules, 3D workplace hazard drills, and voiceover-synced certification.',
+            icon: Award,
+            accent: 'glass-card-amber border-[#D97706]/45 hover:border-amber-400/80',
+            iconColor: 'text-amber-300 bg-amber-500/20 border-amber-400/40',
+            cta: 'Launch Training',
+        },
+        {
+            id: 'smart-breaks',
+            title: 'Guided Stretch Breaks & Micro-Break Timers',
+            badge: 'BCEA Sec 15 Recovery',
+            desc: 'Automated VDU micro-break intervals and guided mobility decompression routines for desk & call-centre teams.',
+            icon: Timer,
+            accent: 'glass-card-cyan border-cyan-400/35 hover:border-cyan-300/70',
+            iconColor: 'text-cyan-300 bg-cyan-500/20 border-cyan-400/40',
+            cta: 'Open Break Engine',
+        },
+        {
+            id: 'statutory-governance',
+            title: 'Statutory Ergonomics Module (GN R1589)',
+            badge: 'RULA / REBA / NIOSH + SHA-256',
+            desc: 'Task-level biomechanical assessments, Hierarchy of Controls gate, Reg 6 2-year clock, and SHA-256 dossiers.',
+            icon: ClipboardCheck,
+            accent: 'glass-card-emerald border-emerald-400/35 hover:border-emerald-300/70',
+            iconColor: 'text-emerald-300 bg-emerald-500/20 border-emerald-400/40',
+            cta: 'Open Statutory Suite',
+        },
+        {
+            id: 'fatigue',
+            title: 'Prizm Fatigue & Shift Checks',
+            badge: 'Shift Readiness Telemetry',
+            desc: 'Objective fatigue risk tracking, shift-readiness screening, and pre-shift safety escalation logs.',
+            icon: Activity,
+            accent: 'glass-card-cyan border-cyan-400/35 hover:border-cyan-300/70',
+            iconColor: 'text-cyan-300 bg-cyan-500/20 border-cyan-400/40',
+            cta: 'Open Fatigue Checks',
+        },
+        {
+            id: 'trust-center',
+            title: 'Enterprise Trust Center & EU AI Act',
+            badge: 'Live CISO Diagnostics',
+            desc: 'Run live AES-256-GCM, SHA-256 & POPIA diagnostics, inspect AI Art. 50 governance, and build pilot briefs.',
+            icon: Lock,
+            accent: 'glass-card-amber border-[#D97706]/45 hover:border-amber-400/80',
+            iconColor: 'text-amber-300 bg-amber-500/20 border-amber-400/40',
+            cta: 'Open Trust Center',
+        },
+    ];
 
     const ergonomicRiskClosures = [
         {
@@ -68,78 +154,126 @@ export const ExecutiveBriefing = () => {
     };
 
     return (
-        <div className="p-3 sm:p-6 md:p-8 w-full max-w-7xl mx-auto space-y-6 sm:space-y-8 mb-24 overflow-x-hidden font-sans box-border">
+        <div className="p-2 sm:p-5 md:p-6 w-full max-w-7xl mx-auto space-y-5 sm:space-y-6 mb-20 overflow-x-hidden font-sans box-border">
             {/* DOMINANT SAFETY COMMAND CENTRE BANNER */}
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-gradient-to-r from-slate-950 via-ohs-navy to-[#050B14] p-4 sm:p-6 md:p-8 rounded-[2rem] border-2 border-ohs-orange/40 shadow-[0_0_80px_rgba(249,168,37,0.15)] relative overflow-hidden space-y-6 w-full max-w-full"
+                className="glass-card-3d p-4 sm:p-6 rounded-[1.75rem] border border-emerald-400/30 shadow-[0_24px_60px_-15px_rgba(6,78,59,0.5)] relative overflow-hidden space-y-4 w-full max-w-full"
             >
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-white/10">
-                    <div className="space-y-2 max-w-3xl min-w-0">
+                <div className="pointer-events-none absolute -top-24 -right-24 w-72 h-72 bg-emerald-500/15 rounded-full blur-3xl" />
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-white/10 relative z-10">
+                    <div className="space-y-1.5 max-w-3xl min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                            <span className="text-[9px] sm:text-[10px] font-black text-ohs-orange uppercase tracking-wider bg-ohs-orange/10 px-3 py-1 rounded-full border border-ohs-orange/30 whitespace-normal leading-tight max-w-full">
+                            <span className="text-[9px] sm:text-[10px] font-black text-[#FCD34D] uppercase tracking-wider bg-[#D97706]/15 px-2.5 py-1 rounded-full border border-[#D97706]/40 whitespace-normal leading-tight max-w-full">
                                 🛡️ STATUTORY OHS COMMAND
                             </span>
-                            <span className="text-[9px] sm:text-[10px] font-bold text-emerald-400 uppercase tracking-widest bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 whitespace-normal leading-tight max-w-full">
+                            <span className="text-[9px] sm:text-[10px] font-bold text-emerald-300 uppercase tracking-widest bg-emerald-500/15 px-2.5 py-1 rounded-full border border-emerald-400/30 whitespace-normal leading-tight max-w-full">
                                 GN R1589 COMPLIANCE ENGINE
                             </span>
                         </div>
-                        <h1 className="text-2xl sm:text-3xl md:text-5xl font-black text-white tracking-tight uppercase break-words leading-tight">
-                            STATUTORY SAFETY <span className="text-ohs-orange">COMMAND CENTRE</span>
+                        <h1 className="text-xl sm:text-3xl md:text-4xl font-black text-white tracking-tight uppercase break-words leading-tight">
+                            STATUTORY SAFETY <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-300 to-[#F59E0B]">COMMAND CENTRE</span>
                         </h1>
-                        <p className="text-gray-300 font-medium text-xs md:text-sm leading-relaxed break-words">
-                            Occupational Health and Safety Act (Act 85 of 1993) & Ergonomics Regulations 2019 (GN R1589) digital governance dashboard with Section 16.2 Competent Person oversight.
+                        <p className="text-slate-300 font-medium text-xs md:text-sm leading-relaxed break-words">
+                            Occupational Health and Safety Act (Act 85 of 1993) &amp; Ergonomics Regulations 2019 (GN R1589) digital governance dashboard with Section 16.2 Competent Person oversight.
                         </p>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-2.5 shrink-0">
                         <button
                             onClick={() => setIsDemoModalOpen(true)}
-                            className="flex items-center justify-center gap-2.5 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl bg-[#064E3B] hover:bg-[#065F46] border-2 border-[#D97706] text-white font-black text-xs transition-all shadow-lg cursor-pointer w-full sm:w-auto"
+                            className="flex items-center justify-center gap-2 px-4 py-2.5 sm:py-3 rounded-xl cta-gradient-emerald border-2 border-[#D97706] text-white font-black text-xs transition-all shadow-lg cursor-pointer w-full sm:w-auto"
                         >
-                            <Play size={16} className="fill-white text-white shrink-0" />
+                            <Play size={15} className="fill-white text-white shrink-0" />
                             <span>Watch 2-Min Executive Demo</span>
                         </button>
                         <button
                             onClick={toggleNarration}
-                            className={`flex items-center justify-center gap-2.5 px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl font-black text-xs transition-all shadow-lg cursor-pointer w-full sm:w-auto ${
+                            className={`flex items-center justify-center gap-2 px-4 py-2.5 sm:py-3 rounded-xl font-black text-xs transition-all shadow-lg cursor-pointer w-full sm:w-auto ${
                                 isNarrating 
                                     ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' 
-                                    : 'bg-ohs-orange hover:bg-yellow-400 text-ohs-navy shadow-ohs-orange/20'
+                                    : 'cta-gradient-amber text-slate-950'
                             }`}
                         >
-                            {isNarrating ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                            {isNarrating ? <VolumeX size={16} /> : <Volume2 size={16} />}
                             {isNarrating ? 'STOP AUDIO NARRATION' : 'NARRATE BRIEFING (NELLY VOICE)'}
                         </button>
                     </div>
                 </div>
 
                 {/* Statutory Competent Person Gate Disclaimer Banner */}
-                <div className="p-4 bg-ohs-navy/80 border-2 border-ohs-orange/50 rounded-2xl flex items-start gap-3 shadow-md">
-                    <ShieldAlert className="text-ohs-orange shrink-0 mt-0.5" size={20} />
+                <div className="p-3 sm:p-3.5 bg-[#060d1b]/80 border border-[#D97706]/45 rounded-2xl flex items-start gap-3 shadow-inner relative z-10">
+                    <ShieldAlert className="text-[#D97706] shrink-0 mt-0.5" size={18} />
                     <p className="text-xs text-amber-100/90 leading-relaxed font-sans">
-                        <strong className="text-ohs-orange font-black">Statutory Notice:</strong> Digital biomechanical screening under GN R1589 (Ergonomics Regulations 2019). Baseline scores and control hierarchies are screening indicators and must be reviewed and countersigned by an appointed Competent Person / Section 16.2 Appointee.
+                        <strong className="text-[#FCD34D] font-black">Statutory Notice:</strong> Digital biomechanical screening under GN R1589 (Ergonomics Regulations 2019). Baseline scores and control hierarchies are screening indicators and must be reviewed and countersigned by an appointed Competent Person / Section 16.2 Appointee.
                     </p>
                 </div>
             </motion.div>
+
+            {/* CORE COMMAND MODULES (1-CLICK ACCESS GRID) */}
+            <div className="space-y-3" data-testid="core-command-grid">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-[10px] font-black uppercase tracking-[0.22em] text-cyan-300">
+                        1-Click Core Command Modules
+                    </span>
+                    <span className="text-[11px] text-slate-400">
+                        Direct access to Posture Telemetry, Training, Mobility, GN R1589 Governance, Fatigue &amp; Trust Diagnostics
+                    </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3.5 w-full max-w-full min-w-0">
+                    {coreModules.map((mod) => {
+                        const ModIcon = mod.icon;
+                        return (
+                            <button
+                                key={mod.id}
+                                type="button"
+                                onClick={() => onNavigate?.(mod.id)}
+                                className={`${mod.accent} p-4 rounded-2xl text-left flex flex-col justify-between gap-3 cursor-pointer group hover:-translate-y-0.5 transition-all duration-200`}
+                            >
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between gap-2">
+                                        <div className={`p-2 rounded-xl border ${mod.iconColor}`}>
+                                            <ModIcon size={18} />
+                                        </div>
+                                        <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/10 text-slate-200 border border-white/15">
+                                            {mod.badge}
+                                        </span>
+                                    </div>
+                                    <h3 className="text-sm font-black text-white leading-snug group-hover:text-emerald-300 transition-colors">
+                                        {mod.title}
+                                    </h3>
+                                    <p className="text-[11px] text-slate-300 leading-relaxed line-clamp-2">
+                                        {mod.desc}
+                                    </p>
+                                </div>
+                                <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px] font-black text-cyan-300">
+                                    <span>{mod.cta}</span>
+                                    <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform text-[#D97706]" />
+                                </div>
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
 
             {/* HERO LAUNCH CARD: AI Posture Wingman (Live Edge Telemetry) */}
             <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="relative overflow-hidden rounded-[2rem] border-2 border-emerald-500/50 bg-gradient-to-r from-emerald-950/70 via-slate-950 to-[#041a12] p-5 sm:p-7 shadow-[0_0_50px_rgba(16,185,129,0.2)]"
+                className="glass-card-emerald relative overflow-hidden rounded-[1.75rem] border border-emerald-400/45 p-5 sm:p-6 shadow-[0_20px_55px_-12px_rgba(16,185,129,0.3)]"
             >
                 <div className="absolute top-0 right-0 -mt-10 -mr-10 w-72 h-72 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
                 
-                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
-                    <div className="space-y-2.5 max-w-3xl">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
+                    <div className="space-y-2 max-w-3xl">
                         <div className="flex flex-wrap items-center gap-2">
-                            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                            <span className="flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
                                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                                 1-Click Instant Launch
                             </span>
-                            <span className="text-[10px] font-bold text-cyan-300 uppercase tracking-widest bg-cyan-500/10 px-2.5 py-1 rounded-full border border-cyan-500/20">
+                            <span className="text-[10px] font-bold text-cyan-300 uppercase tracking-widest bg-cyan-500/15 px-2.5 py-1 rounded-full border border-cyan-400/30">
                                 MediaPipe Edge AI Vision
                             </span>
                         </div>
@@ -148,18 +282,18 @@ export const ExecutiveBriefing = () => {
                             AI Posture Wingman (Live Edge Telemetry)
                         </h2>
 
-                        <p className="text-slate-300 text-xs sm:text-sm font-medium leading-relaxed">
-                            Zero-Surveillance POPIA compliant. Analyzes neck flexion, thoracic slouch, and shoulder tilt locally via your webcam.
+                        <p className="text-slate-200 text-xs sm:text-sm font-medium leading-relaxed">
+                            POPIA Section 18 Consent-Gated &amp; Zero-Surveillance. Analyzes neck flexion, thoracic slouch, and shoulder tilt locally via your webcam — or operate in voluntary Manual Ergonomic Assessment Mode.
                         </p>
 
-                        <div className="flex flex-wrap items-center gap-4 pt-1 text-[11px] text-slate-400 font-mono">
-                            <span className="flex items-center gap-1 text-emerald-400 font-semibold">
+                        <div className="flex flex-wrap items-center gap-4 pt-1 text-[11px] text-slate-300 font-mono">
+                            <span className="flex items-center gap-1 text-emerald-300 font-semibold">
                                 ✓ 100% Client-Side Processing
                             </span>
-                            <span className="flex items-center gap-1 text-slate-300">
+                            <span className="flex items-center gap-1 text-slate-200">
                                 ✓ Multilingual Verbal Feedback
                             </span>
-                            <span className="flex items-center gap-1 text-slate-300">
+                            <span className="flex items-center gap-1 text-slate-200">
                                 ✓ GN R1589 Statutory Audit Log
                             </span>
                         </div>
@@ -171,10 +305,10 @@ export const ExecutiveBriefing = () => {
                                 setIsLiveTelemetryOpen(true);
                                 setWingmanActive(true);
                             }}
-                            className="w-full sm:w-auto px-6 py-4 bg-gradient-to-r from-emerald-500 via-emerald-400 to-teal-400 hover:from-emerald-400 hover:to-teal-300 text-slate-950 font-black text-sm uppercase tracking-wider rounded-2xl shadow-[0_0_35px_rgba(16,185,129,0.5)] hover:shadow-[0_0_50px_rgba(16,185,129,0.7)] transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-3 cursor-pointer"
+                            className="w-full sm:w-auto px-6 py-3.5 cta-gradient-emerald border border-emerald-300/60 text-white font-black text-sm uppercase tracking-wider rounded-2xl shadow-[0_0_35px_rgba(16,185,129,0.45)] transition-all transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-3 cursor-pointer"
                             title="Launch AI Posture Wingman in full-screen live monitor"
                         >
-                            <Zap className="fill-slate-950 text-slate-950 animate-bounce" size={18} />
+                            <Zap className="fill-white text-white animate-pulse" size={18} />
                             <span>⚡ Launch Live AI Monitor</span>
                         </button>
                     </div>
@@ -182,7 +316,7 @@ export const ExecutiveBriefing = () => {
             </motion.div>
 
             {/* COLLAPSIBLE SECTION: ERGONOMIC RISK & COMPLIANCE MATRIX */}
-            <div className="bg-black/40 border border-white/10 rounded-[2rem] p-4 sm:p-6 space-y-4 w-full max-w-full overflow-hidden">
+            <div className="glass-card-3d rounded-[1.75rem] p-4 sm:p-6 space-y-4 w-full max-w-full overflow-hidden">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="min-w-0">
                         <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest block mb-1 truncate">
@@ -283,14 +417,14 @@ export const ExecutiveBriefing = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15, duration: 0.3 }}
-                className="bg-gradient-to-r from-green-900/20 to-black border border-green-500/30 p-4 sm:p-6 md:p-8 rounded-3xl mt-8 w-full max-w-full overflow-hidden"
+                className="glass-card-emerald p-4 sm:p-6 md:p-7 rounded-3xl mt-6 w-full max-w-full overflow-hidden"
             >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                     <div className="min-w-0 flex-1">
-                        <h3 className="text-xl font-black text-white flex items-center gap-3 break-words"><FileText className="text-green-500 shrink-0" size={24} /> Statutory Ledger Status</h3>
-                        <p className="text-gray-400 font-medium mt-1 break-words">All ergonomic risk assessments are indexed under Regulation 10(1) with mandatory 40-year retention.</p>
+                        <h3 className="text-xl font-black text-white flex items-center gap-3 break-words"><FileText className="text-emerald-400 shrink-0" size={24} /> Statutory Ledger Status</h3>
+                        <p className="text-slate-300 font-medium mt-1 break-words">All ergonomic risk assessments are indexed under Regulation 10(1) with mandatory 40-year retention.</p>
                     </div>
-                    <div className={`px-6 py-3 rounded-full font-bold uppercase tracking-widest text-sm whitespace-nowrap block text-center sm:text-left w-full sm:w-auto shrink-0 ${openStatutoryBreaches === 0 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                    <div className={`px-5 py-2.5 rounded-full font-bold uppercase tracking-widest text-xs whitespace-nowrap block text-center sm:text-left w-full sm:w-auto shrink-0 border ${openStatutoryBreaches === 0 ? 'bg-emerald-500/20 border-emerald-400/40 text-emerald-300' : 'bg-red-500/20 border-red-400/40 text-red-300'}`}>
                         {openStatutoryBreaches === 0 ? 'NO OPEN STATUTORY BREACHES' : `${openStatutoryBreaches} OPEN STATUTORY BREACH${openStatutoryBreaches === 1 ? '' : 'ES'}`}
                     </div>
                 </div>
@@ -301,27 +435,27 @@ export const ExecutiveBriefing = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.3 }}
-                className="bg-[#0b0f19] border border-ohs-orange/30 p-4 sm:p-6 md:p-8 rounded-3xl mt-8 shadow-[0_0_40px_rgba(249,168,37,0.1)] relative overflow-hidden w-full max-w-full"
+                className="glass-card-amber p-4 sm:p-6 md:p-7 rounded-3xl mt-6 relative overflow-hidden w-full max-w-full"
             >
-                <TrendingUp className="absolute -right-10 -bottom-10 text-ohs-orange/5" size={150} />
+                <TrendingUp className="absolute -right-10 -bottom-10 text-amber-400/10" size={150} />
                 <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
                     <div className="min-w-0">
                         <h3 className="text-2xl font-black text-white flex items-center gap-3 break-words">
-                            LPS ROI: <span className="text-ohs-orange">Productivity Recovered</span>
+                            LPS ROI: <span className="text-[#FCD34D]">Productivity Recovered</span>
                         </h3>
-                        <p className="text-gray-400 font-medium mt-2 leading-relaxed break-words">
+                        <p className="text-slate-300 font-medium mt-2 leading-relaxed break-words">
                             Tracks productive time recovered through ergonomic micro-breaks and verified posture interventions.
                         </p>
                     </div>
                 </div>
             </motion.div>
 
-            {/* STATUTORY GOVERNANCE & REST PERIOD FRAMEWORK (NO SALES CLUTTER) */}
+            {/* STATUTORY GOVERNANCE & REST PERIOD FRAMEWORK */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.3 }}
-                className="bg-gradient-to-br from-ohs-navy via-[#0c1322] to-black border border-ohs-orange/40 p-4 sm:p-6 md:p-8 rounded-[2rem] shadow-[0_0_50px_rgba(249,168,37,0.05)] mt-8 w-full max-w-full overflow-hidden"
+                className="glass-card-3d border border-cyan-400/25 p-4 sm:p-6 md:p-7 rounded-[1.75rem] mt-6 w-full max-w-full overflow-hidden"
             >
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8 pb-6 border-b border-white/10">
                     <div className="min-w-0">

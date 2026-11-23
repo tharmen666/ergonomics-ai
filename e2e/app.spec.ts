@@ -377,4 +377,66 @@ test.describe('ErgoSafe Reborn V3 End-to-End Suite', () => {
     await expect(page.locator('body')).toContainText('Duration of Employment');
   });
 
+  test('10. Frictionless Direct Landing (No Login Wall), Docked Desktop Sidebar & Workspace Switcher on 1366x768 & 1920x1080', async ({ page }) => {
+    await page.addInitScript(() => {
+      window.localStorage.setItem('popiHandshakeAccepted', 'true');
+      window.localStorage.setItem('ergo_privacy_consent_verified', 'true');
+    });
+
+    for (const viewport of [
+      { width: 1366, height: 768 },
+      { width: 1920, height: 1080 },
+    ]) {
+      await page.setViewportSize(viewport);
+      await page.goto('/');
+
+      // Immediately lands inside live Command Workspace without blocking login wall
+      await expect(page.getByText(/Demo login \(no real authentication\)/i)).toHaveCount(0);
+      await expect(page.locator('h1:has-text("ERGOSAFE")')).toBeVisible();
+      await expect(page.locator('main')).toContainText('STATUTORY SAFETY COMMAND CENTRE');
+
+      // Docked desktop sidebar is immediately visible with all core modules
+      const sidebar = page.locator('div.fixed.left-0.top-0').first();
+      await expect(sidebar).not.toHaveClass(/-translate-x-full/);
+      await expect(sidebar).toContainText('Sovereign Health Ltd');
+
+      const coreSidebarLabels = [
+        'Nelly Posture & Hazard Monitoring Engine (3D Spine)',
+        'Ergonomics Training & Certification',
+        'Smart Break & Mobility Engine',
+        'Statutory Risk & Governance (GN R1589)',
+        'Prizm Fatigue & Shift Checks',
+        'Trust & Enterprise Licensing',
+      ];
+      for (const label of coreSidebarLabels) {
+        await expect(sidebar.getByRole('button', { name: label, exact: true })).toBeVisible();
+      }
+
+      // Header Watch 2-Min Executive Demo & Workspace Switcher are visible and not clipped
+      const demoBtn = page.locator('header button:has-text("Watch 2-Min Executive Demo"):visible').first();
+      const switcherBtn = page.getByTestId('workspace-switcher-btn');
+      await expect(demoBtn).toBeVisible();
+      await expect(switcherBtn).toBeVisible();
+
+      const demoBox = await demoBtn.boundingBox();
+      const switcherBox = await switcherBtn.boundingBox();
+      expect(demoBox).not.toBeNull();
+      expect(switcherBox).not.toBeNull();
+      expect(demoBox!.x + demoBox!.width).toBeLessThanOrEqual(viewport.width);
+      expect(switcherBox!.x + switcherBox!.width).toBeLessThanOrEqual(viewport.width);
+      expect(demoBox!.y).toBeGreaterThanOrEqual(0);
+      expect(switcherBox!.y).toBeGreaterThanOrEqual(0);
+
+      // 1-Click Core Command Grid is visible
+      await expect(page.getByTestId('core-command-grid')).toBeVisible();
+
+      // Workspace Switcher modal opens & closes cleanly via Escape
+      await switcherBtn.click();
+      const switcherDialog = page.locator('[role="dialog"][aria-label="Workspace Switcher"]');
+      await expect(switcherDialog).toBeVisible();
+      await page.keyboard.press('Escape');
+      await expect(switcherDialog).toBeHidden();
+    }
+  });
+
 });

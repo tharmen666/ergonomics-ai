@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Layout } from './components/layout/Layout';
 import { NellyAvatar } from './components/nelly/NellyAvatar';
 import { PrivacyHandshake } from './assets/Privacy-Shield/PrivacyHandshake';
@@ -97,7 +97,7 @@ class ModuleErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBound
   }
 }
 
-function renderTabContent(activeTab: string) {
+function renderTabContent(activeTab: string, setActiveTab: (id: string) => void) {
   const tab = (activeTab || '').toLowerCase().trim();
 
   switch (tab) {
@@ -107,7 +107,7 @@ function renderTabContent(activeTab: string) {
     case 'executive':
     case 'stewardship':
     case 'executive-briefing':
-      return <ExecutiveBriefing />;
+      return <ExecutiveBriefing onNavigate={setActiveTab} />;
 
     // 3D Spinal & Posture Telemetry
     case '3d-spinal':
@@ -264,7 +264,25 @@ function renderTabContent(activeTab: string) {
 function App() {
   const { companyId, isAdmin, userId } = useTenantStore();
   const [activeTab, setActiveTab] = useState('executive');
-  const { isLiveTelemetryOpen, setIsLiveTelemetryOpen, isDemoModalOpen, setIsDemoModalOpen } = useNellyStore();
+  const {
+    isLiveTelemetryOpen,
+    setIsLiveTelemetryOpen,
+    isDemoModalOpen,
+    setIsDemoModalOpen,
+    isWorkspaceModalOpen,
+    setIsWorkspaceModalOpen,
+  } = useNellyStore();
+  const hasBootstrappedDemoRef = useRef(false);
+
+  // Auto-initialize into Sovereign Health Ltd (COMP-001) demo workspace on initial load (zero login wall)
+  useEffect(() => {
+    if (hasBootstrappedDemoRef.current) return;
+    hasBootstrappedDemoRef.current = true;
+    const state = useTenantStore.getState();
+    if (!state.companyId && !state.isAdmin) {
+      state.login('COMP-001', 'usr-sarah', false);
+    }
+  }, []);
 
   // Close modal on Escape key
   useEffect(() => {
@@ -277,14 +295,6 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isLiveTelemetryOpen, setIsLiveTelemetryOpen]);
 
-  if (!companyId && !isAdmin) {
-    return <TenantLogin onSuccess={() => setActiveTab('executive')} />;
-  }
-
-  if (activeTab === 'tenant-portal') {
-    return <TenantLogin onSuccess={() => setActiveTab('executive')} />;
-  }
-
   if (activeTab === 'demo') {
     return (
       <Suspense fallback={<div className="p-8 text-center text-ohs-orange font-mono">Loading Demo...</div>}>
@@ -294,7 +304,7 @@ function App() {
   }
 
   return (
-    <div className="w-full max-w-full min-h-screen overflow-x-hidden bg-ohs-navy text-white font-sans flex flex-col box-border">
+    <div className="w-full max-w-full min-h-screen overflow-x-hidden bg-[#030712] text-white font-sans flex flex-col box-border">
       <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
         <PrivacyHandshake />
         <CognitiveHandshake />
@@ -304,6 +314,18 @@ function App() {
         <GEAROverlay />
         <BBSCorrectiveActionOverlay />
         <DemoVideoModal isOpen={isDemoModalOpen} onClose={() => setIsDemoModalOpen(false)} />
+        {(isWorkspaceModalOpen || activeTab === 'tenant-portal') && (
+          <TenantLogin
+            onClose={() => {
+              setIsWorkspaceModalOpen(false);
+              if (activeTab === 'tenant-portal') setActiveTab('executive');
+            }}
+            onSuccess={() => {
+              setIsWorkspaceModalOpen(false);
+              setActiveTab('executive');
+            }}
+          />
+        )}
         
         {/* Isolated to ErgoSafe Call-Centre Pilot Tenant; never loads hardcoded across other tenants */}
         {companyId === 'COMP-ODX-01' && (
@@ -384,7 +406,7 @@ function App() {
                 </div>
               </div>
             }>
-              {renderTabContent(activeTab)}
+              {renderTabContent(activeTab, setActiveTab)}
             </Suspense>
           </ModuleErrorBoundary>
         </div>

@@ -15,8 +15,12 @@ html {
 body {
   margin: 0;
   padding: 0;
-  background-color: #00121e;
-  /* ohs-dark */
+  background-color: #030712;
+  background-image:
+    radial-gradient(ellipse 70% 55% at 15% -10%, rgba(16, 185, 129, 0.14) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 90% 10%, rgba(6, 182, 212, 0.11) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 45% at 50% 105%, rgba(217, 119, 6, 0.08) 0%, transparent 60%);
+  background-attachment: fixed;
   color: #ffffff;
   min-height: 100vh;
   overflow-x: hidden;
@@ -63,11 +67,90 @@ body {
 }
 
 .glass-ohs {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  background: linear-gradient(155deg, rgba(15, 23, 42, 0.82) 0%, rgba(3, 7, 18, 0.92) 100%);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 16px 40px -12px rgba(0, 0, 0, 0.72);
+}
+
+.glass-card-3d {
+  background: linear-gradient(155deg, rgba(15, 23, 42, 0.84) 0%, rgba(6, 13, 27, 0.94) 100%);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 20px 44px -14px rgba(0, 0, 0, 0.78);
+  transition: border-color 250ms ease, box-shadow 250ms ease, transform 250ms ease;
+}
+
+.glass-card-3d:hover {
+  border-color: rgba(52, 211, 153, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 24px 52px -14px rgba(6, 78, 59, 0.45);
+}
+
+.glass-card-emerald {
+  background: linear-gradient(155deg, rgba(6, 78, 59, 0.36) 0%, rgba(9, 17, 32, 0.92) 100%);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(167, 243, 208, 0.25),
+    0 20px 44px -14px rgba(6, 78, 59, 0.48);
+}
+
+.glass-card-cyan {
+  background: linear-gradient(155deg, rgba(8, 51, 68, 0.42) 0%, rgba(9, 17, 32, 0.92) 100%);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(34, 211, 238, 0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(165, 243, 252, 0.22),
+    0 20px 44px -14px rgba(6, 182, 212, 0.32);
+}
+
+.glass-card-amber {
+  background: linear-gradient(155deg, rgba(120, 53, 15, 0.32) 0%, rgba(15, 23, 42, 0.92) 100%);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(217, 119, 6, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(253, 230, 138, 0.22),
+    0 20px 44px -14px rgba(217, 119, 6, 0.28);
+}
+
+.cta-gradient-emerald {
+  background: linear-gradient(135deg, #064E3B 0%, #059669 55%, #0891B2 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 10px 26px -6px rgba(16, 185, 129, 0.52);
+}
+
+.cta-gradient-emerald:hover {
+  background: linear-gradient(135deg, #065F46 0%, #10B981 55%, #06B6D4 100%);
+}
+
+.cta-gradient-amber {
+  background: linear-gradient(135deg, #B45309 0%, #D97706 50%, #F59E0B 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    0 10px 26px -6px rgba(217, 119, 6, 0.5);
+}
+
+.cta-gradient-amber:hover {
+  background: linear-gradient(135deg, #D97706 0%, #F59E0B 50%, #FBBF24 100%);
+}
+
+.cta-gradient-cyan {
+  background: linear-gradient(135deg, #0E7490 0%, #06B6D4 55%, #14B8A6 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 10px 24px -6px rgba(6, 182, 212, 0.45);
 }
 
 .glass-nelly {

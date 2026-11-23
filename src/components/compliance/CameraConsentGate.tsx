@@ -37,7 +37,7 @@ export const CameraConsentGate: React.FC<CameraConsentGateProps> = ({
   return (
     <div
       data-testid="popia-camera-consent-gate"
-      className="w-full max-w-full overflow-x-hidden rounded-3xl bg-[#0F172A] border-2 border-[#D97706] p-5 sm:p-6 text-white shadow-2xl space-y-5"
+      className="w-full max-w-full overflow-x-hidden rounded-3xl glass-card-3d border-2 border-[#D97706] p-5 sm:p-6 text-white shadow-2xl space-y-5"
     >
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">

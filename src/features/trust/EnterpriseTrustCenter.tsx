@@ -376,7 +376,7 @@ export const EnterpriseTrustCenter: React.FC = () => {
   return (
     <div className="w-full max-w-full overflow-x-hidden min-w-0 break-words space-y-6 text-white">
       {/* Top Hero Banner */}
-      <div className="rounded-2xl bg-[#0F172A] border border-[#D97706]/50 p-5 sm:p-6 shadow-2xl space-y-4">
+      <div className="rounded-2xl glass-card-3d border border-[#D97706]/50 p-5 sm:p-6 shadow-2xl space-y-4">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 min-w-0">
           <div className="space-y-1.5 min-w-0">
             <div className="flex flex-wrap items-center gap-2">
@@ -402,7 +402,7 @@ export const EnterpriseTrustCenter: React.FC = () => {
       {/* SECTION A — Live Technical Self-Verification Console */}
       <section
         aria-labelledby="diagnostics-heading"
-        className="rounded-2xl bg-[#0F172A] border border-white/15 p-4 sm:p-6 shadow-xl space-y-4 min-w-0"
+        className="rounded-2xl glass-card-3d border border-white/15 p-4 sm:p-6 shadow-xl space-y-4 min-w-0"
       >
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-white/10 pb-4 min-w-0">
           <div className="min-w-0">

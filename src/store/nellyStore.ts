@@ -49,6 +49,8 @@ interface NellyState {
     setIsLiveTelemetryOpen: (open: boolean) => void;
     isDemoModalOpen: boolean;
     setIsDemoModalOpen: (open: boolean) => void;
+    isWorkspaceModalOpen: boolean;
+    setIsWorkspaceModalOpen: (open: boolean) => void;
     hasIntroduced: boolean;
     markIntroduced: () => void;
     isNellyExpanded: boolean;
@@ -77,9 +79,10 @@ export const useNellyStore = create<NellyState>()(
             isWingmanActive: false,
             isLiveTelemetryOpen: false,
             isDemoModalOpen: false,
+            isWorkspaceModalOpen: false,
             hasIntroduced: false,
             isNellyExpanded: false,
-            isSidebarCollapsed: true,
+            isSidebarCollapsed: typeof window !== 'undefined' ? window.innerWidth < 1024 : true,
             language: 'en',
             completedModules: [],
             recommendations: [],
@@ -91,6 +94,7 @@ export const useNellyStore = create<NellyState>()(
             setWingmanActive: (isWingmanActive) => set({ isWingmanActive }),
             setIsLiveTelemetryOpen: (isLiveTelemetryOpen) => set({ isLiveTelemetryOpen }),
             setIsDemoModalOpen: (isDemoModalOpen) => set({ isDemoModalOpen }),
+            setIsWorkspaceModalOpen: (isWorkspaceModalOpen) => set({ isWorkspaceModalOpen }),
             markIntroduced: () => set({ hasIntroduced: true }),
             setNellyExpanded: (isNellyExpanded) => set({ isNellyExpanded }),
             setSidebarCollapsed: (isSidebarCollapsed) => set({ isSidebarCollapsed }),
@@ -116,7 +120,8 @@ export const useNellyStore = create<NellyState>()(
                 merged.hasIntroduced = false;
                 merged.isLiveTelemetryOpen = false;
                 merged.isDemoModalOpen = false;
-                merged.isSidebarCollapsed = true;
+                merged.isWorkspaceModalOpen = false;
+                merged.isSidebarCollapsed = typeof window !== 'undefined' ? window.innerWidth < 1024 : true;
                 return merged;
             },
             // Exclude non-persistent UI states
@@ -126,6 +131,7 @@ export const useNellyStore = create<NellyState>()(
                     productiveStreak: _productiveStreak, 
                     isLiveTelemetryOpen: _isLiveTelemetryOpen, 
                     isDemoModalOpen: _isDemoModalOpen,
+                    isWorkspaceModalOpen: _isWorkspaceModalOpen,
                     ...persistedState 
                 } = state;
                 return persistedState;
