@@ -114,7 +114,17 @@ const RESPONSE_KNOWLEDGE: Record<LanguageCode, (topic: string, name: string, ton
   }
 };
 
+export const COMPANION_TABS = ['all', 'setup', 'dialogue', 'prompts'] as const;
+export type CompanionTab = (typeof COMPANION_TABS)[number];
+
+export function normalizeCompanionTab(tab?: string | null): CompanionTab {
+  const clean = (tab || '').toLowerCase().trim() as CompanionTab;
+  return (COMPANION_TABS as readonly string[]).includes(clean) ? clean : 'all';
+}
+
 export const CompanionHub: React.FC = () => {
+  const [activeCompanionTab, setActiveCompanionTab] = useState<CompanionTab>('all');
+  const safeCompanionTab = normalizeCompanionTab(activeCompanionTab);
   const [config, setConfig] = useState<CompanionConfig>({
     name: 'Nelly',
     avatar: 'knight',
@@ -184,10 +194,13 @@ export const CompanionHub: React.FC = () => {
   const activeLanguageLabel = LANGUAGE_LABELS[config.language] || LANGUAGE_LABELS.en;
   const activePresets = PROMPT_PRESETS[config.language] || PROMPT_PRESETS.en;
 
+  const showSetup = safeCompanionTab === 'all' || safeCompanionTab === 'setup';
+  const showDialogue = safeCompanionTab === 'all' || safeCompanionTab === 'dialogue' || safeCompanionTab === 'prompts';
+
   return (
-    <div className="w-full space-y-6">
+    <div data-testid="companion-hub" className="w-full space-y-6 flex-1 min-h-0 flex flex-col">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-ohs-navy via-slate-900 to-ohs-navy p-6 rounded-2xl border border-white/10 shadow-2xl relative overflow-hidden">
+      <div className="bg-gradient-to-r from-ohs-navy via-slate-900 to-ohs-navy p-6 rounded-2xl border border-white/10 shadow-2xl relative overflow-hidden shrink-0">
         <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-ohs-orange/10 rounded-full blur-3xl pointer-events-none" />
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 relative z-10">
           <div>
@@ -217,9 +230,34 @@ export const CompanionHub: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      {/* Companion Hub Tab Switcher */}
+      <div data-testid="companion-hub-tabs" className="flex flex-wrap gap-2 p-1.5 bg-slate-900/90 border border-white/10 rounded-2xl shrink-0">
+        {([
+          { id: 'all', label: 'All Workspace' },
+          { id: 'setup', label: 'Setup & Voice' },
+          { id: 'dialogue', label: 'Live Dialogue' },
+          { id: 'prompts', label: 'Quick OHS Prompts' },
+        ] as const).map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            data-testid={`companion-tab-${tab.id}`}
+            onClick={() => setActiveCompanionTab(normalizeCompanionTab(tab.id))}
+            className={`px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
+              safeCompanionTab === tab.id
+                ? 'bg-emerald-500 text-slate-950 shadow-lg'
+                : 'bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      <div data-testid="companion-tab-body" className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-[240px]">
         {/* Companion Setup Controls */}
-        <div className="lg:col-span-5 space-y-6">
+        {showSetup && (
+        <div className={`${showDialogue ? 'lg:col-span-5' : 'lg:col-span-12'} space-y-6`}>
           {/* Identity & Avatar Selection */}
           <div className="bg-slate-900/90 border border-white/10 rounded-2xl p-5 shadow-xl space-y-4">
             <div className="flex items-center justify-between">
@@ -321,9 +359,11 @@ export const CompanionHub: React.FC = () => {
             </div>
           </div>
         </div>
+        )}
 
         {/* Natural Conversational Interface */}
-        <div className="lg:col-span-7 flex flex-col bg-slate-900/90 border border-white/10 rounded-2xl shadow-xl overflow-hidden min-h-[550px]">
+        {showDialogue && (
+        <div className={`${showSetup ? 'lg:col-span-7' : 'lg:col-span-12'} flex flex-col bg-slate-900/90 border border-white/10 rounded-2xl shadow-xl overflow-hidden min-h-[550px]`}>
           {/* Interface Header */}
           <div className="bg-slate-950/80 border-b border-white/10 px-5 py-3.5 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
@@ -423,6 +463,7 @@ export const CompanionHub: React.FC = () => {
             </button>
           </div>
         </div>
+        )}
       </div>
     </div>
   );

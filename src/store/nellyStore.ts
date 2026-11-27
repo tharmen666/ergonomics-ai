@@ -35,6 +35,22 @@ const safeStorage = {
 
 import type { NellyVoiceTier } from '../utils/nelly-localization-engine';
 
+export const NELLY_SIDE_PANEL_TABS = [
+    'advisor',
+    'ergonomics',
+    'first-aid',
+    'prompts',
+    'voice',
+    'compliance',
+] as const;
+
+export type NellySidePanelTab = (typeof NELLY_SIDE_PANEL_TABS)[number];
+
+export function normalizeNellySidePanelTab(tab?: string | null): NellySidePanelTab {
+    const clean = (tab || '').toLowerCase().trim() as NellySidePanelTab;
+    return (NELLY_SIDE_PANEL_TABS as readonly string[]).includes(clean) ? clean : 'advisor';
+}
+
 export interface ActiveSubtitleState {
     text: string;
     lang: Language;
@@ -77,6 +93,8 @@ interface NellyState {
     markIntroduced: () => void;
     isNellyExpanded: boolean;
     setNellyExpanded: (expanded: boolean) => void;
+    activeSidePanelTab: NellySidePanelTab;
+    setActiveSidePanelTab: (tab: string) => void;
     isSidebarCollapsed: boolean;
     setSidebarCollapsed: (collapsed: boolean) => void;
     language: Language;
@@ -106,6 +124,7 @@ export const useNellyStore = create<NellyState>()(
             isWorkspaceModalOpen: false,
             hasIntroduced: false,
             isNellyExpanded: false,
+            activeSidePanelTab: 'advisor',
             isSidebarCollapsed: typeof window !== 'undefined' ? window.innerWidth < 1024 : true,
             language: 'en',
             completedModules: [],
@@ -123,6 +142,7 @@ export const useNellyStore = create<NellyState>()(
             setIsWorkspaceModalOpen: (isWorkspaceModalOpen) => set({ isWorkspaceModalOpen }),
             markIntroduced: () => set({ hasIntroduced: true }),
             setNellyExpanded: (isNellyExpanded) => set({ isNellyExpanded }),
+            setActiveSidePanelTab: (tab) => set({ activeSidePanelTab: normalizeNellySidePanelTab(tab) }),
             setSidebarCollapsed: (isSidebarCollapsed) => set({ isSidebarCollapsed }),
             setLanguage: (language) => set({ language }),
             completeModule: (id) => set((state) => ({
@@ -143,6 +163,7 @@ export const useNellyStore = create<NellyState>()(
                 if (!merged.language || !translations[merged.language as Language]) {
                     merged.language = 'en';
                 }
+                merged.activeSidePanelTab = normalizeNellySidePanelTab(merged.activeSidePanelTab);
                 merged.hasIntroduced = false;
                 merged.isLiveTelemetryOpen = false;
                 merged.isDemoModalOpen = false;

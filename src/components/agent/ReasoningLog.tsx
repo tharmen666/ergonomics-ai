@@ -37,7 +37,7 @@ export const ReasoningLog = () => {
                     </div>
                 </div>
             </div>
-            <div className="p-3 space-y-2 h-40 flex flex-col-reverse relative scroll-smooth">
+            <div className="p-3 space-y-2 h-40 overflow-y-auto flex flex-col-reverse relative scroll-smooth">
                 <AnimatePresence initial={false}>
                     {logs.map((log) => (
                         <motion.div
