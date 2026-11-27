@@ -95,7 +95,8 @@ export const Sidebar = ({ activeTab, setActiveTab, isCollapsed, setIsCollapsed }
       )}
 
       <div
-        className={`fixed left-0 top-0 h-[100dvh] w-[264px] bg-[#060d1b]/95 backdrop-blur-2xl border-r border-white/15 p-3.5 flex flex-col z-[1000] text-white shadow-[12px_0_48px_rgba(0,0,0,0.75)] transition-transform duration-300 ease-in-out ${
+        data-testid="sidebar-drawer"
+        className={`fixed left-0 top-0 h-[100dvh] w-[264px] bg-[#060d1b]/95 backdrop-blur-2xl border-r border-white/15 p-3.5 flex flex-col min-h-0 z-[1000] text-white shadow-[12px_0_48px_rgba(0,0,0,0.75)] transition-transform duration-300 ease-in-out ${
           isCollapsed ? '-translate-x-full' : 'translate-x-0'
         }`}
       >
@@ -125,7 +126,7 @@ export const Sidebar = ({ activeTab, setActiveTab, isCollapsed, setIsCollapsed }
           </div>
         </div>
 
-        <nav className="flex-1 space-y-1 overflow-y-auto pr-1 scrollbar-thin">
+        <nav data-testid="sidebar-nav" className="flex-1 min-h-0 space-y-1 overflow-y-auto pr-1 scrollbar-thin">
           <span className="text-[9px] font-black text-cyan-300/90 uppercase tracking-widest block mb-1.5 px-2">
             Core System Modules
           </span>
@@ -182,16 +183,26 @@ export const Sidebar = ({ activeTab, setActiveTab, isCollapsed, setIsCollapsed }
         </nav>
 
         <div className="mt-3 pt-3 overflow-hidden border-t border-white/10 flex flex-col gap-2 shrink-0">
-          <div className="p-2.5 rounded-xl bg-white/5 border border-white/10">
-            <div className="flex items-center justify-between gap-2 mb-0.5">
-              <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest">
-                Active Tenant Session
-              </span>
+          <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 flex items-center gap-2.5">
+            <img
+              src="/assets/nelly-male-avatar.png"
+              alt="Nelly Advisor Avatar"
+              className="w-8 h-8 rounded-full object-cover object-top border border-[#D97706]/60 shrink-0"
+            />
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center justify-between gap-1">
+                <span className="text-[9px] font-black text-emerald-400 uppercase tracking-widest truncate">
+                  Active Tenant
+                </span>
+                <span className="text-[8px] font-mono text-amber-300 shrink-0">
+                  en-ZA Luke
+                </span>
+              </div>
+              <p className="text-xs font-bold text-white truncate">{companyName}</p>
+              <p className="text-[10px] text-slate-400 truncate">
+                {companyId || 'ADMIN'} • {userId || 'usr-sarah'}
+              </p>
             </div>
-            <p className="text-xs font-bold text-white truncate">{companyName}</p>
-            <p className="text-[10px] text-slate-400 truncate">
-              {companyId || 'ADMIN'} • {userId || 'usr-sarah'}
-            </p>
           </div>
           <button
             onClick={() => setIsWorkspaceModalOpen(true)}

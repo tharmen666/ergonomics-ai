@@ -1,15 +1,18 @@
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { StatutoryWorkspacesHub, WorkspaceId } from './StatutoryWorkspacesHub';
 import { SelfAssessment } from '../training/SelfAssessment';
 import { HomeOfficeSetupGuide } from './HomeOfficeSetupGuide';
-import { Activity, Layers, ClipboardCheck, Calculator, Sparkles } from 'lucide-react';
+import { Activity, Layers, ClipboardCheck, Calculator } from 'lucide-react';
 import { CalculatorTab } from '../calculators/BiomechanicalCalculatorsSuite';
 
 const SpineViewer = lazy(() => import('../../components/agent/SpineViewer').then(m => ({ default: m.SpineViewer })));
 
+const VALID_VIEWS = ['workspaces', 'calculators', '3d', 'questionnaire'] as const;
+type AssessmentView = (typeof VALID_VIEWS)[number];
+
 interface SelfAssessmentPageProps {
-  initialView?: 'workspaces' | 'calculators' | '3d' | 'questionnaire';
+  initialView?: AssessmentView;
   initialWorkspace?: WorkspaceId;
   initialCalculatorTab?: CalculatorTab;
 }
@@ -19,9 +22,15 @@ export const SelfAssessmentPage: React.FC<SelfAssessmentPageProps> = ({
   initialWorkspace = 'office-ergonomics',
   initialCalculatorTab = 'reba'
 }) => {
-  const [currentView, setCurrentView] = useState<'workspaces' | 'calculators' | '3d' | 'questionnaire'>(
-    initialView === 'calculators' ? 'calculators' : initialView
+  const [currentView, setCurrentView] = useState<AssessmentView>(
+    VALID_VIEWS.includes(initialView) ? initialView : 'workspaces'
   );
+
+  useEffect(() => {
+    setCurrentView(VALID_VIEWS.includes(initialView) ? initialView : 'workspaces');
+  }, [initialView]);
+
+  const safeView: AssessmentView = VALID_VIEWS.includes(currentView) ? currentView : 'workspaces';
 
   return (
     <div className="p-3 sm:p-6 md:p-8 max-w-7xl mx-auto pb-32 space-y-6 sm:space-y-8 font-sans">
@@ -99,17 +108,17 @@ export const SelfAssessmentPage: React.FC<SelfAssessmentPageProps> = ({
       </div>
 
       {/* VIEW 1: Core Statutory Workspaces */}
-      {currentView === 'workspaces' && (
+      {safeView === 'workspaces' && (
         <StatutoryWorkspacesHub initialWorkspace={initialWorkspace} />
       )}
 
       {/* VIEW 2: Biomechanical Calculators Standalone Suite */}
-      {currentView === 'calculators' && (
+      {safeView === 'calculators' && (
         <StatutoryWorkspacesHub initialWorkspace="biomechanical-calculators" initialCalculatorTab={initialCalculatorTab} />
       )}
 
       {/* VIEW 3: 3D Spine Telemetry & Home Office Setup Guide */}
-      {currentView === '3d' && (
+      {safeView === '3d' && (
         <div className="space-y-6">
           <HomeOfficeSetupGuide />
 
@@ -147,7 +156,7 @@ export const SelfAssessmentPage: React.FC<SelfAssessmentPageProps> = ({
       )}
 
       {/* VIEW 4: WFH Desk Questionnaire */}
-      {currentView === 'questionnaire' && (
+      {safeView === 'questionnaire' && (
         <SelfAssessment />
       )}
     </div>

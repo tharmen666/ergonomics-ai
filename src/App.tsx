@@ -97,8 +97,35 @@ class ModuleErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBound
   }
 }
 
+const VALID_TAB_IDS = new Set([
+  'dashboard',
+  'executive', 'stewardship', 'executive-briefing',
+  '3d-spinal', '3d spinal', 'spinal3d', '3d-spine', '3d spine', 'spinal-3d', 'spinal', 'spine', '3d', 'spine-viewer', 'spine-simulation', 'posture', 'nelly',
+  'risks', 'risk', 'risky-behaviours', 'risky behaviours', 'risky-behaviors', 'risky behaviors', 'riskybehaviours', 'riskybehaviors', 'risky-behaviour', 'risky-behavior', 'behaviours', 'behaviors',
+  'training', 'trainings', 'training-module', 'training module', 'trainingmodule', 'certification', 'curriculum',
+  'assessment', 'assessments', 'self-assessment', 'self assessment', 'self-assessments', 'self assessments', 'selfassessment', 'selfassessments', 'workspaces', 'statutory-assessment', 'wfh-assessment',
+  'calculators', 'calculator', 'biomechanical-calculators', 'reba', 'rula', 'niosh', 'wbgt',
+  'companion-hub', 'ground-zero', 'companion',
+  'smart-breaks', 'smart-break', 'mobility-engine', 'breaks',
+  'sop-generator', 'sop', 'iso-45001',
+  'checklist', 'kiosk', 'daily-checklist',
+  'cognitive-handshake', 'handshake', 'ergonomics-handshake',
+  'fatigue', 'telemetry', 'gear', 'prizm', 'driver-telemetry',
+  'hr', 'hr-dashboard', 'hr-compliance', 'compliance',
+  'invoices', 'invoice', 'billing',
+  'reports', 'analytics', 'audit-logs', 'regulatory-logs',
+  'trust-center', 'trust', 'enterprise-licensing',
+  'statutory-governance', 'statutory-ergonomics', 'gn-r1589',
+  'settings', 'team', 'admin', 'master-admin', 'demo', 'tenant-portal',
+]);
+
+export function normalizeTabId(id: string): string {
+  const norm = (id || '').toLowerCase().trim();
+  return VALID_TAB_IDS.has(norm) ? norm : 'executive';
+}
+
 function renderTabContent(activeTab: string, setActiveTab: (id: string) => void) {
-  const tab = (activeTab || '').toLowerCase().trim();
+  const tab = normalizeTabId(activeTab);
 
   switch (tab) {
     case 'dashboard':
@@ -162,7 +189,7 @@ function renderTabContent(activeTab: string, setActiveTab: (id: string) => void)
     case 'workspaces':
     case 'statutory-assessment':
     case 'wfh-assessment':
-      return <SelfAssessmentPage />;
+      return <SelfAssessmentPage key="assessment" initialView="workspaces" />;
 
     // Biomechanical Calculators (REBA/RULA/NIOSH/WBGT)
     case 'calculators':
@@ -172,7 +199,7 @@ function renderTabContent(activeTab: string, setActiveTab: (id: string) => void)
     case 'rula':
     case 'niosh':
     case 'wbgt':
-      return <SelfAssessmentPage initialView="calculators" />;
+      return <SelfAssessmentPage key="calculators" initialView="calculators" />;
 
     // Ground-Zero Human Co-Pilot Companion
     case 'companion-hub':
@@ -255,15 +282,17 @@ function renderTabContent(activeTab: string, setActiveTab: (id: string) => void)
     case 'master-admin':
       return <MasterAdminPortal />;
 
-    // Default route: Dashboard fallback instead of blank DOM
+    // Default route: Executive Briefing fallback instead of blank DOM
     default:
-      return <DashboardPage />;
+      return <ExecutiveBriefing onNavigate={setActiveTab} />;
   }
 }
 
 function App() {
   const { companyId, isAdmin, userId } = useTenantStore();
-  const [activeTab, setActiveTab] = useState('executive');
+  const [activeTab, setActiveTabRaw] = useState('executive');
+  const setActiveTab = (id: string) => setActiveTabRaw(normalizeTabId(id));
+  const normalizedTab = normalizeTabId(activeTab);
   const {
     isLiveTelemetryOpen,
     setIsLiveTelemetryOpen,
@@ -374,7 +403,7 @@ function App() {
                 </div>
 
                 {/* Modal Content */}
-                <div className="p-3 sm:p-6 overflow-y-auto flex-1">
+                <div className="p-3 sm:p-6 overflow-y-auto flex-1 min-h-0">
                   <Suspense fallback={
                     <div className="p-12 text-center text-emerald-400 font-mono text-sm flex items-center justify-center gap-2">
                       <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
@@ -396,17 +425,27 @@ function App() {
           )}
         </AnimatePresence>
 
-        <div className="w-full max-w-full min-h-screen flex flex-col flex-1 overflow-x-hidden">
-          <ModuleErrorBoundary onReset={() => setActiveTab('executive')} fallback={<DashboardPage />}>
+        <div className="w-full max-w-full min-h-screen flex flex-col flex-1 min-h-0 overflow-x-hidden">
+          <ModuleErrorBoundary key={normalizedTab} onReset={() => setActiveTab('executive')}>
             <Suspense fallback={
-              <div className="flex-1 flex items-center justify-center p-12 text-slate-400 font-mono text-xs">
+              <div className="flex-1 flex items-center justify-center p-12 text-slate-400 font-mono text-xs min-h-[240px]">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-ohs-orange animate-ping" />
                   <span>Loading Module...</span>
                 </div>
               </div>
             }>
-              {renderTabContent(activeTab, setActiveTab)}
+              <motion.div
+                key={normalizedTab}
+                initial={{ opacity: 0.92, y: 4 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.14 }}
+                data-testid="active-tab-content"
+                data-active-tab={normalizedTab}
+                className="w-full max-w-full flex-1 min-h-0 flex flex-col overflow-x-hidden"
+              >
+                {renderTabContent(normalizedTab, setActiveTab)}
+              </motion.div>
             </Suspense>
           </ModuleErrorBoundary>
         </div>

@@ -181,6 +181,8 @@ export const CompanionHub: React.FC = () => {
   };
 
   const selectedAvatarObj = AVATAR_OPTIONS.find(a => a.id === config.avatar) || AVATAR_OPTIONS[0];
+  const activeLanguageLabel = LANGUAGE_LABELS[config.language] || LANGUAGE_LABELS.en;
+  const activePresets = PROMPT_PRESETS[config.language] || PROMPT_PRESETS.en;
 
   return (
     <div className="w-full space-y-6">
@@ -202,10 +204,14 @@ export const CompanionHub: React.FC = () => {
             </p>
           </div>
           <div className="flex items-center gap-3 bg-white/5 border border-white/10 px-4 py-2.5 rounded-xl">
-            <span className="text-2xl">{selectedAvatarObj.icon}</span>
+            <img
+              src="/assets/nelly-male-avatar.png"
+              alt="Nelly AI Advisor"
+              className="w-9 h-9 rounded-full object-cover object-top border border-[#D97706]/60 shrink-0"
+            />
             <div>
               <p className="text-xs font-bold text-white">{config.name}</p>
-              <p className="text-[10px] text-ohs-orange font-medium">{LANGUAGE_LABELS[config.language].name} ({config.tone})</p>
+              <p className="text-[10px] text-ohs-orange font-medium">{activeLanguageLabel.name} ({config.tone}) • en-ZA LukeNeural</p>
             </div>
           </div>
         </div>
@@ -319,16 +325,20 @@ export const CompanionHub: React.FC = () => {
         {/* Natural Conversational Interface */}
         <div className="lg:col-span-7 flex flex-col bg-slate-900/90 border border-white/10 rounded-2xl shadow-xl overflow-hidden min-h-[550px]">
           {/* Interface Header */}
-          <div className="bg-slate-950/80 border-b border-white/10 px-5 py-3.5 flex items-center justify-between">
+          <div className="bg-slate-950/80 border-b border-white/10 px-5 py-3.5 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${selectedAvatarObj.color} flex items-center justify-center text-xl shadow-lg`}>
-                {selectedAvatarObj.icon}
+              <div className="w-10 h-10 rounded-xl overflow-hidden border border-[#D97706]/50 shadow-lg shrink-0 bg-slate-900">
+                <img
+                  src="/assets/nelly-male-avatar.png"
+                  alt="Nelly AI Advisor"
+                  className="w-full h-full object-cover object-top"
+                />
               </div>
               <div>
                 <h4 className="text-sm font-bold text-white flex items-center gap-2">
-                  {config.name} <span className="text-emerald-400 text-[10px] font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">Active Steward</span>
+                  {config.name} <span className="text-emerald-400 text-[10px] font-semibold bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">en-ZA (LukeNeural)</span>
                 </h4>
-                <p className="text-[10px] text-gray-400">Zero-Prompt Natural OHS Dialogue • {LANGUAGE_LABELS[config.language].name}</p>
+                <p className="text-[10px] text-gray-400">Zero-Prompt Natural OHS Dialogue • {activeLanguageLabel.name}</p>
               </div>
             </div>
             <button
@@ -343,7 +353,7 @@ export const CompanionHub: React.FC = () => {
           </div>
 
           {/* Messages Container */}
-          <div className="flex-1 p-5 overflow-y-auto space-y-4 scrollbar-thin max-h-[420px]">
+          <div className="flex-1 min-h-0 p-5 overflow-y-auto space-y-4 scrollbar-thin max-h-[420px]">
             {messages.map(msg => (
               <div
                 key={msg.id}
@@ -381,8 +391,8 @@ export const CompanionHub: React.FC = () => {
           </div>
 
           {/* Quick Natural Preset Chips */}
-          <div className="px-5 py-2.5 bg-slate-950/40 border-t border-white/5 overflow-x-auto whitespace-nowrap scrollbar-none flex gap-2">
-            {PROMPT_PRESETS[config.language].map((preset, idx) => (
+          <div className="px-5 py-2.5 bg-slate-950/40 border-t border-white/5 overflow-x-auto whitespace-nowrap scrollbar-none flex gap-2 shrink-0">
+            {activePresets.map((preset, idx) => (
               <button
                 key={idx}
                 onClick={() => handleSendMessage(preset)}
@@ -395,13 +405,13 @@ export const CompanionHub: React.FC = () => {
           </div>
 
           {/* Input Bar */}
-          <div className="p-4 bg-slate-950/80 border-t border-white/10 flex items-center gap-2">
+          <div className="p-4 bg-slate-950/80 border-t border-white/10 flex items-center gap-2 shrink-0">
             <input
               type="text"
               value={inputMessage}
               onChange={e => setInputMessage(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSendMessage()}
-              placeholder={`Speak to ${config.name} in natural ${LANGUAGE_LABELS[config.language].name}...`}
+              placeholder={`Speak to ${config.name} in natural ${activeLanguageLabel.name}...`}
               className="flex-1 bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-xs sm:text-sm text-white placeholder-gray-500 focus:outline-none focus:border-ohs-orange transition-colors"
             />
             <button

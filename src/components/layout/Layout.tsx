@@ -1,9 +1,7 @@
 import React, { ReactNode, useEffect, memo } from 'react';
 import { Sidebar } from './Sidebar';
 import { Footer } from './Footer';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useNellyStore } from '../../store/nellyStore';
-import { Menu, Settings } from 'lucide-react';
 
 import { Navbar } from './Navbar';
 
@@ -49,22 +47,11 @@ export const Layout = memo(({ children, activeTab, setActiveTab }: LayoutProps) 
 
             <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-            <main className={`box-border flex-1 px-3 sm:px-6 md:px-8 pt-5 pb-32 md:pb-24 relative z-10 flex flex-col w-full max-w-full overflow-x-hidden transition-all duration-300 ease-in-out ${
+            <main className={`box-border flex-1 min-h-0 px-3 sm:px-6 md:px-8 pt-5 pb-32 md:pb-24 relative z-10 flex flex-col w-full max-w-full overflow-x-hidden transition-all duration-300 ease-in-out ${
                 isSidebarCollapsed ? 'lg:ml-0 lg:w-full' : 'lg:ml-[264px] lg:w-[calc(100%-264px)]'
             }`}>
-                <div className="flex-1 w-full max-w-7xl mx-auto overflow-x-hidden pr-0 lg:pr-2">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={activeTab}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.3 }}
-                            className="w-full max-w-full min-h-screen flex flex-col flex-1 overflow-x-hidden"
-                        >
-                            {children}
-                        </motion.div>
-                    </AnimatePresence>
+                <div className="flex-1 min-h-0 w-full max-w-7xl mx-auto flex flex-col overflow-x-hidden pr-0 lg:pr-2">
+                    {children}
                 </div>
                 <Footer />
             </main>

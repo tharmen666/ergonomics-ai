@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   ShoppingBag, 
@@ -73,14 +73,39 @@ interface StatutoryWorkspacesHubProps {
   initialCalculatorTab?: CalculatorTab;
 }
 
+const VALID_WORKSPACES: WorkspaceId[] = [
+  'office-ergonomics',
+  'wfh-ergonomics',
+  'material-handling',
+  'retail-wholesale',
+  'corporate-callcentre',
+  'petroleum-forecourt',
+  'biomechanical-calculators',
+];
+
 export const StatutoryWorkspacesHub: React.FC<StatutoryWorkspacesHubProps> = ({
   initialWorkspace = 'office-ergonomics',
   initialCalculatorTab = 'reba'
 }) => {
-  const [selectedWorkspace, setSelectedWorkspace] = useState<WorkspaceId>(initialWorkspace);
+  const safeInitialWs: WorkspaceId = VALID_WORKSPACES.includes(initialWorkspace) ? initialWorkspace : 'office-ergonomics';
+  const [selectedWorkspace, setSelectedWorkspace] = useState<WorkspaceId>(safeInitialWs);
   const [activeTaskTemplate, setActiveTaskTemplate] = useState<string>(
-    initialWorkspace === 'material-handling' || initialWorkspace === 'retail-wholesale' ? 'receiving' : 'rosa-vdu'
+    safeInitialWs === 'material-handling' || safeInitialWs === 'retail-wholesale' ? 'receiving' : 'rosa-vdu'
   );
+
+  useEffect(() => {
+    const nextWs: WorkspaceId = VALID_WORKSPACES.includes(initialWorkspace) ? initialWorkspace : 'office-ergonomics';
+    setSelectedWorkspace(nextWs);
+    if (nextWs === 'material-handling' || nextWs === 'retail-wholesale') {
+      setActiveTaskTemplate('receiving');
+    } else if (nextWs === 'office-ergonomics' || nextWs === 'corporate-callcentre') {
+      setActiveTaskTemplate('rosa-vdu');
+    }
+  }, [initialWorkspace]);
+
+  const activeWorkspace: WorkspaceId = VALID_WORKSPACES.includes(selectedWorkspace)
+    ? selectedWorkspace
+    : 'office-ergonomics';
   const [isSignOffOpen, setIsSignOffOpen] = useState(false);
 
   // Sign-off modal payload
@@ -127,20 +152,20 @@ export const StatutoryWorkspacesHub: React.FC<StatutoryWorkspacesHubProps> = ({
       <StatutoryDisclaimerBanner />
 
       {/* Workspace Selector Bar */}
-      {selectedWorkspace !== 'biomechanical-calculators' && (
+      {activeWorkspace !== 'biomechanical-calculators' && (
         <div className="space-y-3">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <span className="text-[10px] font-black uppercase tracking-[0.25em] text-ohs-orange block">
               GN R1589 Core Assessment Workspaces
             </span>
             <span className="text-xs text-gray-400 font-mono">
-              Active Workspace: <strong className="text-white uppercase font-bold">{selectedWorkspace.replace('-', ' ')}</strong>
+              Active Workspace: <strong className="text-white uppercase font-bold">{activeWorkspace.replace('-', ' ')}</strong>
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {ERGO_WORKSPACES.map((ws) => {
-              const isSelected = selectedWorkspace === ws.id;
+              const isSelected = activeWorkspace === ws.id;
               const Icon = iconMap[ws.icon] || Monitor;
               const badgeColorClass = badgeStyleMap[ws.badgeColor] || badgeStyleMap.blue;
               return (
@@ -188,7 +213,7 @@ export const StatutoryWorkspacesHub: React.FC<StatutoryWorkspacesHubProps> = ({
       {/* ========================================================================= */}
       {/* WORKSPACE: STACKING, PACKING, LOADING & LIFTING (MATERIAL HANDLING) */}
       {/* ========================================================================= */}
-      {(selectedWorkspace === 'material-handling' || selectedWorkspace === 'retail-wholesale') && (
+      {(activeWorkspace === 'material-handling' || activeWorkspace === 'retail-wholesale') && (
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -557,7 +582,7 @@ export const StatutoryWorkspacesHub: React.FC<StatutoryWorkspacesHubProps> = ({
       {/* ========================================================================= */}
       {/* WORKSPACE: OFFICE ERGONOMICS (VDU WORKSTATIONS) */}
       {/* ========================================================================= */}
-      {(selectedWorkspace === 'office-ergonomics' || selectedWorkspace === 'corporate-callcentre') && (
+      {(activeWorkspace === 'office-ergonomics' || activeWorkspace === 'corporate-callcentre') && (
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -839,7 +864,7 @@ export const StatutoryWorkspacesHub: React.FC<StatutoryWorkspacesHubProps> = ({
       {/* ========================================================================= */}
       {/* WORKSPACE 3: PETROLEUM FORECOURT & CONVENIENCE */}
       {/* ========================================================================= */}
-      {selectedWorkspace === 'petroleum-forecourt' && (
+      {activeWorkspace === 'petroleum-forecourt' && (
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1126,7 +1151,7 @@ export const StatutoryWorkspacesHub: React.FC<StatutoryWorkspacesHubProps> = ({
       {/* ========================================================================= */}
       {/* WORKSPACE: WORKING FROM HOME (WFH) */}
       {/* ========================================================================= */}
-      {selectedWorkspace === 'wfh-ergonomics' && (
+      {activeWorkspace === 'wfh-ergonomics' && (
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1140,7 +1165,7 @@ export const StatutoryWorkspacesHub: React.FC<StatutoryWorkspacesHubProps> = ({
       {/* ========================================================================= */}
       {/* WORKSPACE 4: BIOMECHANICAL CALCULATORS SUITE */}
       {/* ========================================================================= */}
-      {selectedWorkspace === 'biomechanical-calculators' && (
+      {activeWorkspace === 'biomechanical-calculators' && (
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}

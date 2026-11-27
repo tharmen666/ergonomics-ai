@@ -253,13 +253,14 @@ export const HRDashboard = () => {
 
                         {/* Drawer */}
                         <motion.div
+                            data-testid="hr-escalation-drawer"
                             initial={{ x: '100%' }}
                             animate={{ x: 0 }}
                             exit={{ x: '100%' }}
                             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                            className="fixed right-0 top-0 h-full w-full max-w-md bg-ohs-navy/95 border-l border-white/10 p-8 shadow-2xl z-50 overflow-y-auto pointer-events-auto flex flex-col justify-between"
+                            className="fixed right-0 top-0 h-[100dvh] w-full max-w-md bg-ohs-navy/95 border-l border-white/10 p-6 sm:p-8 shadow-2xl z-[1100] pointer-events-auto flex flex-col min-h-0"
                         >
-                            <div className="space-y-8">
+                            <div className="flex-1 min-h-0 overflow-y-auto space-y-6 pr-1">
                                 {/* Header */}
                                 <div className="flex justify-between items-start">
                                     <div>
@@ -403,7 +404,7 @@ export const HRDashboard = () => {
                             </div>
 
                             {/* Action Buttons */}
-                            <div className="pt-6 border-t border-white/10 space-y-3">
+                            <div className="pt-4 mt-4 border-t border-white/10 space-y-3 shrink-0">
                                 {activeCase.escalationState !== 'resolved' && (
                                     <button
                                         onClick={() => resolveCase(activeCase.id)}
