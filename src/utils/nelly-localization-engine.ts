@@ -20,44 +20,44 @@ export interface RegionalSubtitleDefault {
 }
 
 export const NELLY_VOICE_PROFILE = {
+    voiceId: 'en-ZA-LukeNeural' as const,
+    persona: 'male' as const,
     locale: 'en-ZA' as const,
     rate: 0.96,
-    pitch: 1.02,
+    pitch: 1.0,
     preferredZaVoices: [
-        'microsoft leah online (natural) - english (south africa)',
-        'microsoft leah online',
-        'microsoft leah',
+        'microsoft luke online (natural) - english (south africa)',
+        'microsoft luke online',
+        'microsoft luke',
+        'luke',
         'google english (south africa)',
-        'google south africa english female',
-        'leah',
-        'ayanda',
+        'google south africa english male',
     ],
     preferredGbVoices: [
-        'microsoft libby online (natural)',
-        'microsoft sonia online (natural)',
-        'microsoft libby',
-        'microsoft sonia',
-        'google uk english female',
-        'microsoft hazel',
-        'microsoft susan',
-        'serena',
-        'kate',
-        'martha',
+        'microsoft ryan online (natural)',
+        'microsoft thomas online (natural)',
+        'microsoft ryan',
+        'microsoft thomas',
+        'google uk english male',
+        'microsoft george',
+        'daniel',
+        'arthur',
+        'oliver',
     ],
-    preferredFallbackFemaleVoices: [
-        'microsoft jenny',
-        'microsoft aria',
-        'microsoft zira desktop',
-        'microsoft zira',
-        'google us english female',
-        'samantha',
-        'karen',
-        'victoria',
-        'moira',
-        'tessa',
+    preferredFallbackMaleVoices: [
+        'microsoft guy',
+        'microsoft andrew',
+        'microsoft christopher',
+        'microsoft eric',
+        'microsoft david',
+        'google us english male',
+        'alex',
+        'fred',
+        'james',
+        'mark',
     ],
-    maleVoiceRegex:
-        /\b(david|mark|george|richard|male|guy|adam|alex|daniel|fred|james|jorge|rishi|tom|stefan|luke|ryan|christopher|eric|roger|steffan)\b/i,
+    femaleVoiceRegex:
+        /\b(leah|leah online|zira|jenny|aria|susan|hazel|libby|sonia|samantha|karen|victoria|ayanda|female|woman|kate|serena|martha|moira|tessa)\b/i,
 } as const;
 
 export const REGIONAL_SUBTITLE_DEFAULTS: Record<string, RegionalSubtitleDefault> = {
@@ -113,7 +113,7 @@ const buildResolved = (
     tier: NellyVoiceTier
 ): ResolvedNellyVoice => ({
     voice,
-    name: voice?.name || 'System en-ZA Default',
+    name: voice?.name || 'en-ZA-LukeNeural (Default)',
     lang: voice?.lang || NELLY_VOICE_PROFILE.locale,
     tier,
     targetLocale: NELLY_VOICE_PROFILE.locale,
@@ -122,89 +122,94 @@ const buildResolved = (
 });
 
 /**
- * Resolves Nelly's English voice strictly following the South African English (en-ZA) profile:
- * Tier 1: en-ZA female voices (Microsoft Leah Online (Natural), Google English (South Africa), etc.)
- * Tier 2: en-GB natural female voices (Microsoft Libby/Sonia Online, Google UK English Female, etc.)
- * Tier 3: Default non-male female English voice fallback
- * Tier 4: First non-male or default system voice
+ * Resolves Nelly's English voice strictly matching the demo video male narrator (en-ZA-LukeNeural):
+ * Tier 1: en-ZA male voices (Microsoft Luke Online (Natural) - English (South Africa), etc.)
+ * Tier 2: en-GB natural male voices (Microsoft Ryan/Thomas Online, Google UK English Male, George, Daniel)
+ * Tier 3: Default English male fallback (Microsoft Guy, Andrew, David, Google US English Male)
+ * Tier 4: First non-female or default system voice
  */
 export function resolveNellyVoice(voices: SpeechSynthesisVoice[]): ResolvedNellyVoice {
     if (!voices || voices.length === 0) {
         return buildResolved(null, 'default');
     }
 
-    const { preferredZaVoices, preferredGbVoices, preferredFallbackFemaleVoices, maleVoiceRegex } =
+    const { preferredZaVoices, preferredGbVoices, preferredFallbackMaleVoices, femaleVoiceRegex } =
         NELLY_VOICE_PROFILE;
 
-    // Tier 1: en-ZA female voices
+    // Tier 1: en-ZA male voices (and any en-ZA voice before leaving South African English)
     for (const pattern of preferredZaVoices) {
         const match = voices.find((v) => {
             const normLang = normalizeLang(v.lang);
             const lowerName = (v.name || '').toLowerCase();
             return (
-                !maleVoiceRegex.test(v.name || '') &&
+                !femaleVoiceRegex.test(v.name || '') &&
                 lowerName.includes(pattern) &&
                 (normLang.startsWith('en-za') ||
                     lowerName.includes('south africa') ||
-                    lowerName.includes('leah'))
+                    lowerName.includes('luke'))
             );
         });
         if (match) return buildResolved(match, 'en-ZA');
     }
 
-    const anyZaFemale = voices.find(
-        (v) => normalizeLang(v.lang).startsWith('en-za') && !maleVoiceRegex.test(v.name || '')
+    const anyZaNonFemale = voices.find(
+        (v) => normalizeLang(v.lang).startsWith('en-za') && !femaleVoiceRegex.test(v.name || '')
     );
-    if (anyZaFemale) return buildResolved(anyZaFemale, 'en-ZA');
+    if (anyZaNonFemale) return buildResolved(anyZaNonFemale, 'en-ZA');
 
-    // Tier 2: en-GB natural female voices
+    const anyZaVoice = voices.find((v) => normalizeLang(v.lang).startsWith('en-za'));
+    if (anyZaVoice) return buildResolved(anyZaVoice, 'en-ZA');
+
+    // Tier 2: en-GB natural male voices
     for (const pattern of preferredGbVoices) {
         const match = voices.find(
             (v) =>
                 (v.name || '').toLowerCase().includes(pattern) &&
-                !maleVoiceRegex.test(v.name || '')
+                !femaleVoiceRegex.test(v.name || '')
         );
         if (match) return buildResolved(match, 'en-GB');
     }
 
-    const gbNaturalFemale = voices.find(
+    const gbNaturalMale = voices.find(
         (v) =>
             normalizeLang(v.lang).startsWith('en-gb') &&
-            /natural|online|google|neural|female/i.test(v.name || '') &&
-            !maleVoiceRegex.test(v.name || '')
+            /natural|online|google|neural|male/i.test(v.name || '') &&
+            !femaleVoiceRegex.test(v.name || '')
     );
-    if (gbNaturalFemale) return buildResolved(gbNaturalFemale, 'en-GB');
+    if (gbNaturalMale) return buildResolved(gbNaturalMale, 'en-GB');
 
-    const anyGbNonMale = voices.find(
-        (v) => normalizeLang(v.lang).startsWith('en-gb') && !maleVoiceRegex.test(v.name || '')
+    const anyGbNonFemale = voices.find(
+        (v) => normalizeLang(v.lang).startsWith('en-gb') && !femaleVoiceRegex.test(v.name || '')
     );
-    if (anyGbNonMale) return buildResolved(anyGbNonMale, 'en-GB');
+    if (anyGbNonFemale) return buildResolved(anyGbNonFemale, 'en-GB');
 
-    // Tier 3: Default female English fallback
-    for (const pattern of preferredFallbackFemaleVoices) {
+    // Tier 3: Default English male fallback
+    for (const pattern of preferredFallbackMaleVoices) {
         const match = voices.find(
             (v) =>
                 (v.name || '').toLowerCase().includes(pattern) &&
-                !maleVoiceRegex.test(v.name || '')
+                !femaleVoiceRegex.test(v.name || '')
         );
         if (match) return buildResolved(match, 'en-fallback');
     }
 
-    const enFemaleRegexMatch = voices.find(
+    const enMaleRegexMatch = voices.find(
         (v) =>
             normalizeLang(v.lang).startsWith('en') &&
-            /female|woman|natural|neural/i.test(v.name || '') &&
-            !maleVoiceRegex.test(v.name || '')
+            /\bmale\b|man|natural|neural/i.test(v.name || '') &&
+            !femaleVoiceRegex.test(v.name || '')
     );
-    if (enFemaleRegexMatch) return buildResolved(enFemaleRegexMatch, 'en-fallback');
+    if (enMaleRegexMatch) return buildResolved(enMaleRegexMatch, 'en-fallback');
 
-    const anyEnNonMale = voices.find(
-        (v) => normalizeLang(v.lang).startsWith('en') && !maleVoiceRegex.test(v.name || '')
+    const anyEnNonFemale = voices.find(
+        (v) => normalizeLang(v.lang).startsWith('en') && !femaleVoiceRegex.test(v.name || '')
     );
-    if (anyEnNonMale) return buildResolved(anyEnNonMale, 'en-fallback');
+    if (anyEnNonFemale) return buildResolved(anyEnNonFemale, 'en-fallback');
 
-    // Tier 4: Any non-male system voice
-    const nonMaleAny = voices.find((v) => !maleVoiceRegex.test(v.name || ''));
-    return buildResolved(nonMaleAny || voices[0] || null, 'default');
+    const anyEnVoice = voices.find((v) => normalizeLang(v.lang).startsWith('en'));
+    if (anyEnVoice) return buildResolved(anyEnVoice, 'en-fallback');
+
+    // Tier 4: Any non-female system voice
+    const nonFemaleAny = voices.find((v) => !femaleVoiceRegex.test(v.name || ''));
+    return buildResolved(nonFemaleAny || voices[0] || null, 'default');
 }
-

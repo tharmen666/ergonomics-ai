@@ -55,6 +55,13 @@ export const NellyInterface = ({
             {/* Header */}
             <div className="flex items-center justify-between mb-2 border-b border-white/5 pb-2">
                 <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full overflow-hidden border border-amber-400/50 shrink-0 bg-slate-900">
+                        <img
+                            src="/assets/nelly-male-avatar.png"
+                            alt="Nelly AI Advisor"
+                            className="w-full h-full object-cover object-top"
+                        />
+                    </div>
                     <span className="text-[10px] font-black text-ohs-orange uppercase tracking-widest">Nelly Intelligence Grid</span>
                     <button
                         onClick={() => {
@@ -129,10 +136,12 @@ export const NellyInterface = ({
                 <div className="flex flex-wrap items-center justify-between gap-1.5 text-[10px] font-bold">
                     <span
                         data-testid="nelly-voice-badge"
-                        title={activeVoice?.name || 'South African English (en-ZA)'}
+                        title={activeVoice?.name || 'en-ZA-LukeNeural (Demo Voicenote)'}
                         className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-950/70 border border-emerald-500/30 text-emerald-300"
                     >
-                        Voice: {activeVoice?.tier === 'en-ZA' || !activeVoice ? 'en-ZA' : activeVoice.lang} • 0.96x
+                        {activeVoice?.engine === 'voicenote' || !activeVoice
+                            ? 'Voice: en-ZA (LukeNeural)'
+                            : `Voice: ${activeVoice.tier === 'en-ZA' ? 'en-ZA' : activeVoice.lang} • 0.96x`}
                     </span>
                     <span
                         data-testid="nelly-subtitle-lang"

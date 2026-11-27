@@ -145,7 +145,7 @@ export const DemoVideoModal: React.FC<DemoVideoModalProps> = ({ isOpen, onClose 
               playsInline
               preload="metadata"
               autoPlay
-              poster="/assets/nelly-steward-final.png"
+              poster="/assets/nelly-male-avatar.png"
               title="ErgoSafe Reborn V3 2-Minute Narrated Executive Demo"
             />
           </div>

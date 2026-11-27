@@ -47,6 +47,8 @@ export interface ActiveVoiceState {
     tier: NellyVoiceTier;
     rate: number;
     pitch: number;
+    engine?: 'voicenote' | 'speech-synthesis';
+    audioSrc?: string | null;
 }
 
 interface NellyState {

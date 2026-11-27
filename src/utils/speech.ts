@@ -10,7 +10,7 @@ export interface VoiceConfig {
     displayName: string;
     regionalAccent: string;
     elevenLabsVoiceId: string;
-    persona: 'female';
+    persona: 'male';
     locale: string;
     audioPathPattern?: string;
 }
@@ -19,81 +19,135 @@ export const VOICEOVER_ACCENT_MAP: Record<string, VoiceConfig> = {
     en: {
         displayName: 'South African English',
         regionalAccent: 'en-ZA',
-        elevenLabsVoiceId: '21m00Tcm4TlvDq8ikWAM', // Natural Female en-ZA profile
-        persona: 'female',
+        elevenLabsVoiceId: 'en-ZA-LukeNeural',
+        persona: 'male',
         locale: 'en-ZA',
-        audioPathPattern: '/assets/audio/en_za/scene{scene}.mp3',
+        audioPathPattern: '/assets/audio/en_za_luke/{clip}.mp3',
     },
     zu: {
         displayName: 'isiZulu',
         regionalAccent: 'zu-ZA',
-        elevenLabsVoiceId: 'AZnzlk1XvdvUeBnXmlld',
-        persona: 'female',
+        elevenLabsVoiceId: 'en-ZA-LukeNeural',
+        persona: 'male',
         locale: 'zu-ZA',
         audioPathPattern: '/assets/audio/zu/scene{scene}.mp3',
     },
     xh: {
         displayName: 'isiXhosa',
         regionalAccent: 'xh-ZA',
-        elevenLabsVoiceId: 'EXAVITQu4vr4xnSDxMaL',
-        persona: 'female',
+        elevenLabsVoiceId: 'en-ZA-LukeNeural',
+        persona: 'male',
         locale: 'xh-ZA',
         audioPathPattern: '/assets/audio/xh/scene{scene}.mp3',
     },
     st: {
         displayName: 'Sesotho',
         regionalAccent: 'st-ZA',
-        elevenLabsVoiceId: 'EXAVITQu4vr4xnSDxMaL',
-        persona: 'female',
+        elevenLabsVoiceId: 'en-ZA-LukeNeural',
+        persona: 'male',
         locale: 'st-ZA',
         audioPathPattern: '/assets/audio/st/scene{scene}.mp3',
     },
     sw: {
         displayName: 'KiSwahili',
         regionalAccent: 'sw-KE',
-        elevenLabsVoiceId: 'EXAVITQu4vr4xnSDxMaL',
-        persona: 'female',
+        elevenLabsVoiceId: 'en-ZA-LukeNeural',
+        persona: 'male',
         locale: 'sw-KE',
         audioPathPattern: '/assets/audio/sw/scene{scene}.mp3',
     },
     af: {
         displayName: 'Afrikaans',
         regionalAccent: 'af-ZA',
-        elevenLabsVoiceId: 'EXAVITQu4vr4xnSDxMaL',
-        persona: 'female',
+        elevenLabsVoiceId: 'en-ZA-LukeNeural',
+        persona: 'male',
         locale: 'af-ZA',
         audioPathPattern: '/assets/audio/af/scene{scene}.mp3',
     },
     fr: {
         displayName: 'Français',
         regionalAccent: 'fr-FR',
-        elevenLabsVoiceId: '21m00Tcm4TlvDq8ikWAM',
-        persona: 'female',
+        elevenLabsVoiceId: 'en-ZA-LukeNeural',
+        persona: 'male',
         locale: 'fr-FR',
         audioPathPattern: '/assets/audio/fr/scene{scene}.mp3',
     },
     de: {
         displayName: 'German',
         regionalAccent: 'de-DE',
-        elevenLabsVoiceId: 'MF3mGyEYCl7XYWbV9V6O',
-        persona: 'female',
+        elevenLabsVoiceId: 'en-ZA-LukeNeural',
+        persona: 'male',
         locale: 'de-DE',
         audioPathPattern: '/assets/audio/de/scene{scene}.mp3',
     },
     zh: {
         displayName: 'Mandarin Chinese',
         regionalAccent: 'zh-CN',
-        elevenLabsVoiceId: 'EXAVITQu4vr4xnSDxMaL',
-        persona: 'female',
+        elevenLabsVoiceId: 'en-ZA-LukeNeural',
+        persona: 'male',
         locale: 'zh-CN',
         audioPathPattern: '/assets/audio/zh/scene{scene}.mp3',
     },
 };
 
+export const LUKE_VOICENOTE_CLIPS = {
+    intro: '/assets/audio/en_za_luke/intro.mp3',
+    stewardship: '/assets/audio/en_za_luke/stewardship.mp3',
+    first_aid: '/assets/audio/en_za_luke/first_aid.mp3',
+    emergency: '/assets/audio/en_za_luke/emergency.mp3',
+    neck: '/assets/audio/en_za_luke/neck.mp3',
+    back: '/assets/audio/en_za_luke/back.mp3',
+    wrist: '/assets/audio/en_za_luke/wrist.mp3',
+    eye: '/assets/audio/en_za_luke/eye.mp3',
+    symptom: '/assets/audio/en_za_luke/symptom.mp3',
+    ohs: '/assets/audio/en_za_luke/ohs.mp3',
+    unknown: '/assets/audio/en_za_luke/unknown.mp3',
+} as const;
+
+export function matchLukeVoicenoteClip(cleanText: string): string | null {
+    const t = cleanText.trim();
+    if (!t) return null;
+    if (t === translations.en.nelly_intro || t.startsWith("Hi, I'm Nelly. Your AI Safety companion.")) {
+        return LUKE_VOICENOTE_CLIPS.intro;
+    }
+    if (t.toLowerCase().startsWith('stewardship audit:')) {
+        return LUKE_VOICENOTE_CLIPS.stewardship;
+    }
+    if (t === translations.en.first_aid) {
+        return LUKE_VOICENOTE_CLIPS.first_aid;
+    }
+    if (t.startsWith('EMERGENCY: Follow your site emergency procedure now.')) {
+        return LUKE_VOICENOTE_CLIPS.emergency;
+    }
+    if (t.startsWith('Neck pain reported.')) {
+        return LUKE_VOICENOTE_CLIPS.neck;
+    }
+    if (t.startsWith('Lower back discomfort reported.')) {
+        return LUKE_VOICENOTE_CLIPS.back;
+    }
+    if (t.startsWith('Wrist or forearm discomfort reported.')) {
+        return LUKE_VOICENOTE_CLIPS.wrist;
+    }
+    if (t.startsWith('ERGONOMIC TRIAGE: Visual fatigue')) {
+        return LUKE_VOICENOTE_CLIPS.eye;
+    }
+    if (t.startsWith('Tingling or numbness reported.')) {
+        return LUKE_VOICENOTE_CLIPS.symptom;
+    }
+    if (t.startsWith('OHS COMPLIANCE ADVISORY:')) {
+        return LUKE_VOICENOTE_CLIPS.ohs;
+    }
+    if (t.startsWith('I did not recognise that.')) {
+        return LUKE_VOICENOTE_CLIPS.unknown;
+    }
+    return null;
+}
+
 let isAudioMuted = false;
 let cachedVoices: SpeechSynthesisVoice[] = [];
 let pendingAutoplaySpeech: (() => void) | null = null;
 let activeSpeakRequestId = 0;
+let activeVoicenoteAudio: HTMLAudioElement | null = null;
 
 export const toggleMute = (): boolean => {
     isAudioMuted = !isAudioMuted;
@@ -154,16 +208,16 @@ if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
 }
 
 /**
- * Returns the resolved Nelly voice metadata following the South African English (en-ZA)
- * priority chain: en-ZA -> en-GB natural -> default female English.
+ * Returns the resolved Nelly voice metadata matching the demo video male narrator
+ * (en-ZA-LukeNeural -> en-GB natural male -> English male fallback).
  */
 export function getResolvedNellyVoice(): ResolvedNellyVoice {
     return resolveNellyVoice(getAvailableVoices());
 }
 
 /**
- * Prioritized female voice selection strategy strictly targeting South African English (en-ZA),
- * British English (en-GB), or high-quality female English voices.
+ * Prioritized male voice selection strategy strictly targeting South African English (en-ZA),
+ * British English (en-GB), or high-quality male English voices.
  */
 export function getPreferredNellyVoice(): SpeechSynthesisVoice | null {
     return resolveNellyVoice(getAvailableVoices()).voice;
@@ -205,6 +259,22 @@ const stopSpeechHeartbeat = () => {
     }
 };
 
+const stopVoicenoteAudio = () => {
+    if (activeVoicenoteAudio) {
+        try {
+            activeVoicenoteAudio.onplay = null;
+            activeVoicenoteAudio.onended = null;
+            activeVoicenoteAudio.onerror = null;
+            activeVoicenoteAudio.pause();
+            activeVoicenoteAudio.currentTime = 0;
+            activeVoicenoteAudio.src = '';
+        } catch {
+            // Safe cleanup
+        }
+        activeVoicenoteAudio = null;
+    }
+};
+
 const clearActiveUtteranceRefs = (utterance: SpeechSynthesisUtterance) => {
     if (activeSpeechUtterance === utterance) {
         activeSpeechUtterance = null;
@@ -231,9 +301,10 @@ const normalizeSubtitleLanguage = (lang?: string): Language => {
 };
 
 /**
- * High-Fidelity South African English (en-ZA) Speech Engine for Nelly AI Companion.
- * Keeps Nelly's voice locked to en-ZA (with en-GB natural -> female EN fallback) while
- * syncing real-time multilingual subtitles (en, sw, zu, xh, st, af, fr, de, zh).
+ * High-Fidelity South African English (en-ZA-LukeNeural) Speech Engine.
+ * Plays exact demo-matched en-ZA-LukeNeural MP3 voicenotes for core guidance and
+ * falls back to male en-ZA Web Speech API synthesis for dynamic content, while keeping
+ * multilingual subtitles synced in real time.
  */
 export const speakNellyGuidance = (
     text: string,
@@ -251,8 +322,7 @@ export const speakNellyGuidance = (
     const normalizedSubtitleLang = normalizeSubtitleLanguage(lang);
     const effectiveSubtitle = (subtitleText || cleanText).trim();
 
-    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
-        console.warn('Web Speech API is not supported in this browser.');
+    if (typeof window === 'undefined') {
         try {
             useNellyStore.getState().setActiveSubtitle({
                 text: effectiveSubtitle,
@@ -260,7 +330,7 @@ export const speakNellyGuidance = (
                 spokenText: cleanText,
             });
         } catch {
-            // ignore store errors
+            // ignore
         }
         if (onEnd) onEnd();
         return null;
@@ -271,45 +341,24 @@ export const speakNellyGuidance = (
         return null;
     }
 
-    const synth = window.speechSynthesis;
     const requestId = ++activeSpeakRequestId;
     pendingAutoplaySpeech = null;
+    stopVoicenoteAudio();
 
-    if (synth.paused) {
+    if ('speechSynthesis' in window) {
+        const synth = window.speechSynthesis;
+        if (synth.paused) {
+            try {
+                synth.resume();
+            } catch (e) {
+                console.warn('Error resuming speech synth:', e);
+            }
+        }
         try {
-            synth.resume();
+            synth.cancel();
         } catch (e) {
-            console.warn('Error resuming speech synth:', e);
+            console.warn('Error cancelling speech synth:', e);
         }
-    }
-
-    try {
-        synth.cancel();
-    } catch (e) {
-        console.warn('Error cancelling speech synth:', e);
-    }
-
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = NELLY_VOICE_PROFILE.locale; // 'en-ZA'
-    utterance.rate = NELLY_VOICE_PROFILE.rate; // 0.96
-    utterance.pitch = NELLY_VOICE_PROFILE.pitch; // 1.02
-
-    // Chrome TTS Garbage Collection Guard
-    activeSpeechUtterance = utterance;
-    (window as any).__activeUtterance = utterance;
-    (window as any).__activeSpeechUtterance = utterance;
-
-    const initialResolved = resolveNellyVoice(getAvailableVoices());
-    if (initialResolved.voice) {
-        try {
-            utterance.voice = initialResolved.voice;
-        } catch {
-            // Mock environments may reject synthetic SpeechSynthesisVoice objects
-        }
-        utterance.lang =
-            initialResolved.tier === 'en-ZA'
-                ? 'en-ZA'
-                : initialResolved.voice.lang || NELLY_VOICE_PROFILE.locale;
     }
 
     try {
@@ -319,101 +368,54 @@ export const speakNellyGuidance = (
             spokenText: cleanText,
         });
     } catch {
-        // ignore store errors if uninitialized
+        // ignore
     }
 
-    utterance.onstart = () => {
-        startSpeechHeartbeat();
-        try {
-            useNellyStore.getState().setSpeaking(true);
-        } catch {
-            // ignore
-        }
-        if (onStart) onStart();
-    };
-
-    utterance.onend = () => {
-        stopSpeechHeartbeat();
-        clearActiveUtteranceRefs(utterance);
-        try {
-            useNellyStore.getState().setSpeaking(false);
-        } catch {
-            // ignore
-        }
-        if (onEnd) onEnd();
-    };
-
-    const applyResolvedVoiceAndSpeak = () => {
+    const startWebSpeechFallback = (): SpeechSynthesisUtterance | null => {
         if (requestId !== activeSpeakRequestId || isAudioMuted) {
-            return;
+            return null;
         }
-        try {
-            const resolved = resolveNellyVoice(getAvailableVoices());
-            if (resolved.voice) {
-                try {
-                    utterance.voice = resolved.voice;
-                } catch {
-                    // Mock environments may reject synthetic SpeechSynthesisVoice objects
-                }
+        if (!('speechSynthesis' in window)) {
+            if (onEnd) onEnd();
+            return null;
+        }
+
+        const synth = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        utterance.lang = NELLY_VOICE_PROFILE.locale; // 'en-ZA'
+        utterance.rate = NELLY_VOICE_PROFILE.rate; // 0.96
+        utterance.pitch = NELLY_VOICE_PROFILE.pitch; // 1.0
+
+        // Chrome TTS Garbage Collection Guard
+        activeSpeechUtterance = utterance;
+        (window as any).__activeUtterance = utterance;
+        (window as any).__activeSpeechUtterance = utterance;
+
+        const initialResolved = resolveNellyVoice(getAvailableVoices());
+        if (initialResolved.voice) {
+            try {
+                utterance.voice = initialResolved.voice;
+            } catch {
+                // Mock environments may reject synthetic SpeechSynthesisVoice objects
             }
             utterance.lang =
-                resolved.tier === 'en-ZA'
+                initialResolved.tier === 'en-ZA'
                     ? 'en-ZA'
-                    : resolved.voice?.lang || NELLY_VOICE_PROFILE.locale;
-            utterance.rate = resolved.rate;
-            utterance.pitch = resolved.pitch;
+                    : initialResolved.voice.lang || NELLY_VOICE_PROFILE.locale;
+        }
 
-            const activeTelemetry = {
-                name: resolved.name,
-                lang: resolved.lang,
-                tier: resolved.tier,
-                targetLocale: 'en-ZA' as const,
-                utteranceLang: utterance.lang,
-                rate: utterance.rate,
-                pitch: utterance.pitch,
-                subtitleLang: normalizedSubtitleLang,
-                subtitleText: effectiveSubtitle,
-            };
-
-            (window as any).__nellyActiveVoice = activeTelemetry;
-
+        utterance.onstart = () => {
+            startSpeechHeartbeat();
             try {
-                const store = useNellyStore.getState();
-                store.setActiveVoice({
-                    name: resolved.name,
-                    lang: resolved.lang,
-                    tier: resolved.tier,
-                    rate: resolved.rate,
-                    pitch: resolved.pitch,
-                });
-                store.setActiveSubtitle({
-                    text: effectiveSubtitle,
-                    lang: normalizedSubtitleLang,
-                    spokenText: cleanText,
-                });
+                useNellyStore.getState().setSpeaking(true);
             } catch {
-                // ignore store errors
+                // ignore
             }
+            if (onStart) onStart();
+        };
 
-            console.info(
-                '[Nelly TTS]',
-                JSON.stringify({
-                    voice: resolved.name,
-                    voiceLang: resolved.lang,
-                    tier: resolved.tier,
-                    utteranceLang: utterance.lang,
-                    rate: Number(utterance.rate.toFixed(2)),
-                    pitch: Number(utterance.pitch.toFixed(2)),
-                    subtitleLang: normalizedSubtitleLang,
-                })
-            );
-
-            if (synth.paused) {
-                synth.resume();
-            }
-            synth.speak(utterance);
-        } catch (e) {
-            console.error('Failed to trigger speech synthesis:', e);
+        utterance.onend = () => {
+            stopSpeechHeartbeat();
             clearActiveUtteranceRefs(utterance);
             try {
                 useNellyStore.getState().setSpeaking(false);
@@ -421,73 +423,284 @@ export const speakNellyGuidance = (
                 // ignore
             }
             if (onEnd) onEnd();
-        }
-    };
+        };
 
-    utterance.onerror = (e: SpeechSynthesisErrorEvent) => {
-        stopSpeechHeartbeat();
-        if (e.error === 'not-allowed') {
-            pendingAutoplaySpeech = () => {
-                if (requestId === activeSpeakRequestId && !isAudioMuted) {
-                    applyResolvedVoiceAndSpeak();
+        const applyResolvedVoiceAndSpeak = () => {
+            if (requestId !== activeSpeakRequestId || isAudioMuted) {
+                return;
+            }
+            try {
+                const resolved = resolveNellyVoice(getAvailableVoices());
+                if (resolved.voice) {
+                    try {
+                        utterance.voice = resolved.voice;
+                    } catch {
+                        // Mock environments may reject synthetic SpeechSynthesisVoice objects
+                    }
                 }
-            };
+                utterance.lang =
+                    resolved.tier === 'en-ZA'
+                        ? 'en-ZA'
+                        : resolved.voice?.lang || NELLY_VOICE_PROFILE.locale;
+                utterance.rate = resolved.rate;
+                utterance.pitch = resolved.pitch;
+
+                (window as any).__nellyActiveVoice = {
+                    name: resolved.name,
+                    voiceId: NELLY_VOICE_PROFILE.voiceId,
+                    lang: resolved.lang,
+                    tier: resolved.tier,
+                    targetLocale: 'en-ZA' as const,
+                    utteranceLang: utterance.lang,
+                    rate: utterance.rate,
+                    pitch: utterance.pitch,
+                    engine: 'speech-synthesis',
+                    audioSrc: null,
+                    subtitleLang: normalizedSubtitleLang,
+                    subtitleText: effectiveSubtitle,
+                };
+
+                try {
+                    const store = useNellyStore.getState();
+                    store.setActiveVoice({
+                        name: resolved.name,
+                        lang: resolved.lang,
+                        tier: resolved.tier,
+                        rate: resolved.rate,
+                        pitch: resolved.pitch,
+                        engine: 'speech-synthesis',
+                        audioSrc: null,
+                    });
+                    store.setActiveSubtitle({
+                        text: effectiveSubtitle,
+                        lang: normalizedSubtitleLang,
+                        spokenText: cleanText,
+                    });
+                } catch {
+                    // ignore store errors
+                }
+
+                console.info(
+                    '[Nelly TTS]',
+                    JSON.stringify({
+                        voice: resolved.name,
+                        voiceLang: resolved.lang,
+                        tier: resolved.tier,
+                        engine: 'speech-synthesis',
+                        utteranceLang: utterance.lang,
+                        rate: Number(utterance.rate.toFixed(2)),
+                        pitch: Number(utterance.pitch.toFixed(2)),
+                        subtitleLang: normalizedSubtitleLang,
+                    })
+                );
+
+                if (synth.paused) {
+                    synth.resume();
+                }
+                synth.speak(utterance);
+            } catch (e) {
+                console.error('Failed to trigger speech synthesis:', e);
+                clearActiveUtteranceRefs(utterance);
+                try {
+                    useNellyStore.getState().setSpeaking(false);
+                } catch {
+                    // ignore
+                }
+                if (onEnd) onEnd();
+            }
+        };
+
+        utterance.onerror = (e: SpeechSynthesisErrorEvent) => {
+            stopSpeechHeartbeat();
+            if (e.error === 'not-allowed') {
+                pendingAutoplaySpeech = () => {
+                    if (requestId === activeSpeakRequestId && !isAudioMuted) {
+                        applyResolvedVoiceAndSpeak();
+                    }
+                };
+                try {
+                    useNellyStore.getState().setSpeaking(false);
+                } catch {
+                    // ignore
+                }
+                return;
+            }
+            clearActiveUtteranceRefs(utterance);
             try {
                 useNellyStore.getState().setSpeaking(false);
             } catch {
                 // ignore
             }
-            return;
+            if (e.error === 'canceled' || e.error === 'interrupted') {
+                return;
+            }
+            console.error('Nelly Speech Error:', e);
+            if (onEnd) onEnd();
+        };
+
+        if (getAvailableVoices().length > 0) {
+            applyResolvedVoiceAndSpeak();
+        } else {
+            let fired = false;
+            let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+            const finishWait = () => {
+                if (fired) return;
+                fired = true;
+                if (timeoutId) {
+                    clearTimeout(timeoutId);
+                    timeoutId = null;
+                }
+                if (typeof synth.removeEventListener === 'function') {
+                    synth.removeEventListener('voiceschanged', finishWait);
+                }
+                refreshVoices();
+                applyResolvedVoiceAndSpeak();
+            };
+
+            if (typeof synth.addEventListener === 'function') {
+                synth.addEventListener('voiceschanged', finishWait);
+            } else {
+                const prevHandler = synth.onvoiceschanged;
+                synth.onvoiceschanged = (ev: Event) => {
+                    if (typeof prevHandler === 'function') {
+                        prevHandler.call(synth, ev);
+                    }
+                    finishWait();
+                };
+            }
+
+            timeoutId = setTimeout(finishWait, 350);
         }
-        clearActiveUtteranceRefs(utterance);
+
+        return utterance;
+    };
+
+    const voicenoteUrl = matchLukeVoicenoteClip(cleanText);
+    if (voicenoteUrl && typeof Audio !== 'undefined') {
+        const audio = new Audio(voicenoteUrl);
+        audio.preload = 'auto';
+        activeVoicenoteAudio = audio;
+
+        const voicenoteTelemetry = {
+            name: 'en-ZA-LukeNeural (Demo Voicenote)',
+            voiceId: NELLY_VOICE_PROFILE.voiceId,
+            lang: 'en-ZA',
+            tier: 'en-ZA' as const,
+            targetLocale: 'en-ZA' as const,
+            utteranceLang: 'en-ZA',
+            rate: NELLY_VOICE_PROFILE.rate,
+            pitch: NELLY_VOICE_PROFILE.pitch,
+            engine: 'voicenote' as const,
+            audioSrc: voicenoteUrl,
+            subtitleLang: normalizedSubtitleLang,
+            subtitleText: effectiveSubtitle,
+        };
+
+        (window as any).__nellyActiveVoice = voicenoteTelemetry;
+
         try {
-            useNellyStore.getState().setSpeaking(false);
+            const store = useNellyStore.getState();
+            store.setActiveVoice({
+                name: voicenoteTelemetry.name,
+                lang: 'en-ZA',
+                tier: 'en-ZA',
+                rate: NELLY_VOICE_PROFILE.rate,
+                pitch: NELLY_VOICE_PROFILE.pitch,
+                engine: 'voicenote',
+                audioSrc: voicenoteUrl,
+            });
+            store.setActiveSubtitle({
+                text: effectiveSubtitle,
+                lang: normalizedSubtitleLang,
+                spokenText: cleanText,
+            });
         } catch {
             // ignore
         }
-        if (e.error === 'canceled' || e.error === 'interrupted') {
-            return;
-        }
-        console.error('Nelly Speech Error:', e);
-        if (onEnd) onEnd();
-    };
 
-    if (getAvailableVoices().length > 0) {
-        applyResolvedVoiceAndSpeak();
-    } else {
-        let fired = false;
-        let timeoutId: ReturnType<typeof setTimeout> | null = null;
+        console.info(
+            '[Nelly TTS]',
+            JSON.stringify({
+                voice: voicenoteTelemetry.name,
+                voiceId: NELLY_VOICE_PROFILE.voiceId,
+                voiceLang: 'en-ZA',
+                tier: 'en-ZA',
+                engine: 'voicenote',
+                audioSrc: voicenoteUrl,
+                rate: NELLY_VOICE_PROFILE.rate,
+                pitch: NELLY_VOICE_PROFILE.pitch,
+                subtitleLang: normalizedSubtitleLang,
+            })
+        );
 
-        const finishWait = () => {
-            if (fired) return;
-            fired = true;
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-                timeoutId = null;
-            }
-            if (typeof synth.removeEventListener === 'function') {
-                synth.removeEventListener('voiceschanged', finishWait);
-            }
-            refreshVoices();
-            applyResolvedVoiceAndSpeak();
+        let fallbackTriggered = false;
+        const triggerFallback = () => {
+            if (fallbackTriggered || requestId !== activeSpeakRequestId || isAudioMuted) return;
+            fallbackTriggered = true;
+            stopVoicenoteAudio();
+            startWebSpeechFallback();
         };
 
-        if (typeof synth.addEventListener === 'function') {
-            synth.addEventListener('voiceschanged', finishWait);
-        } else {
-            const prevHandler = synth.onvoiceschanged;
-            synth.onvoiceschanged = (ev: Event) => {
-                if (typeof prevHandler === 'function') {
-                    prevHandler.call(synth, ev);
-                }
-                finishWait();
-            };
-        }
+        audio.onplay = () => {
+            if (requestId !== activeSpeakRequestId) return;
+            try {
+                useNellyStore.getState().setSpeaking(true);
+            } catch {
+                // ignore
+            }
+            if (onStart) onStart();
+        };
 
-        timeoutId = setTimeout(finishWait, 350);
+        audio.onended = () => {
+            if (activeVoicenoteAudio === audio) {
+                activeVoicenoteAudio = null;
+            }
+            try {
+                useNellyStore.getState().setSpeaking(false);
+            } catch {
+                // ignore
+            }
+            if (onEnd) onEnd();
+        };
+
+        audio.onerror = () => {
+            triggerFallback();
+        };
+
+        const startPlayback = () => {
+            if (requestId !== activeSpeakRequestId || isAudioMuted) return;
+            try {
+                const playPromise = audio.play();
+                if (playPromise && typeof playPromise.catch === 'function') {
+                    playPromise.catch((err: any) => {
+                        if (requestId !== activeSpeakRequestId || isAudioMuted) return;
+                        if (err && err.name === 'NotAllowedError') {
+                            pendingAutoplaySpeech = () => {
+                                if (requestId === activeSpeakRequestId && !isAudioMuted) {
+                                    audio.play().catch(() => triggerFallback());
+                                }
+                            };
+                            try {
+                                useNellyStore.getState().setSpeaking(false);
+                            } catch {
+                                // ignore
+                            }
+                            return;
+                        }
+                        triggerFallback();
+                    });
+                }
+            } catch {
+                triggerFallback();
+            }
+        };
+
+        startPlayback();
+        return null;
     }
 
-    return utterance;
+    return startWebSpeechFallback();
 };
 
 /**
@@ -518,6 +731,7 @@ export const speak = (
 export const stopSpeaking = () => {
     activeSpeakRequestId++;
     pendingAutoplaySpeech = null;
+    stopVoicenoteAudio();
     stopSpeechHeartbeat();
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
         try {
@@ -547,13 +761,17 @@ if (typeof window !== 'undefined') {
                 if (window.speechSynthesis.paused) {
                     window.speechSynthesis.resume();
                 }
-                if (pendingAutoplaySpeech) {
-                    const retry = pendingAutoplaySpeech;
-                    pendingAutoplaySpeech = null;
-                    retry();
-                }
             } catch (e) {
                 console.warn('Unlock speech failed:', e);
+            }
+        }
+        if (pendingAutoplaySpeech) {
+            const retry = pendingAutoplaySpeech;
+            pendingAutoplaySpeech = null;
+            try {
+                retry();
+            } catch (e) {
+                console.warn('Autoplay retry failed:', e);
             }
         }
     };

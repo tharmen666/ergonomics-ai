@@ -319,7 +319,7 @@ export const DashboardPage = () => {
                                 controls
                                 preload="metadata"
                                 playsInline
-                                poster="/assets/nelly-steward-final.png"
+                                poster="/assets/nelly-male-avatar.png"
                                 title="ErgoSafe Reborn V3 2-Minute Narrated Executive Demo"
                             />
                         </div>

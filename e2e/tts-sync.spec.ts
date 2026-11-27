@@ -210,12 +210,85 @@ test.describe('Nelly Voiceover (TTS) Synchronization & Modal Cleanup', () => {
         expect(finalCancels).toBeGreaterThan(cancelCountAfterToggle);
     });
 
-    test('3. South African English (en-ZA) voice profile & real-time multilingual subtitle sync (Swahili, isiZulu, French)', async ({ page }) => {
+    test('3. Male Avatar + Exact Demo Video Voice (en-ZA-LukeNeural) & Multilingual Subtitle Sync (Swahili, isiZulu, French)', async ({ page, request }) => {
+        const avatarRes = await request.get('/assets/nelly-male-avatar.png');
+        expect(avatarRes.status()).toBe(200);
+        expect(avatarRes.headers()['content-type']).toContain('image/png');
+
+        const audioRes = await request.get('/assets/audio/en_za_luke/intro.mp3');
+        expect(audioRes.status()).toBe(200);
+        expect((await audioRes.body()).byteLength).toBeGreaterThan(4000);
+
         const consoleMessages: string[] = [];
         page.on('console', (msg) => {
             consoleMessages.push(msg.text());
         });
 
+        await page.addInitScript(() => {
+            const playedVoicenotes: Array<{ src: string }> = [];
+            (window as any).__playedVoicenotes = playedVoicenotes;
+
+            HTMLMediaElement.prototype.play = function () {
+                const src = (this as HTMLAudioElement).src || '';
+                playedVoicenotes.push({ src });
+                return Promise.resolve();
+            };
+        });
+
+        await seedSession(page);
+        await page.setViewportSize({ width: 1280, height: 800 });
+        await page.goto('/');
+
+        await openTab(page, 'Nelly Posture & Hazard Monitoring Engine (3D Spine)');
+        await expect(page.getByTestId('nelly-subtitle-bar')).toBeVisible({ timeout: 10000 });
+
+        const avatarImg = page.locator('img[src="/assets/nelly-male-avatar.png"]').first();
+        await expect(avatarImg).toBeVisible();
+
+        // Select Swahili subtitles (sw-KE)
+        await page.getByRole('button', { name: 'sw-KE' }).click();
+        await expect(page.getByTestId('nelly-subtitle-text')).toContainText('Hujambo');
+        await expect(page.getByTestId('nelly-voice-badge')).toContainText('Voice: en-ZA (LukeNeural)');
+        await expect(page.getByTestId('nelly-subtitle-lang')).toContainText('sw-KE');
+
+        await expect.poll(async () => {
+            return await page.evaluate(() => {
+                const notes = (window as any).__playedVoicenotes || [];
+                return {
+                    lastSrc: notes[notes.length - 1]?.src || '',
+                    active: (window as any).__nellyActiveVoice || null,
+                };
+            });
+        }).toMatchObject({
+            lastSrc: expect.stringContaining('/assets/audio/en_za_luke/intro.mp3'),
+            active: {
+                voiceId: 'en-ZA-LukeNeural',
+                lang: 'en-ZA',
+                tier: 'en-ZA',
+                engine: 'voicenote',
+                audioSrc: '/assets/audio/en_za_luke/intro.mp3',
+            },
+        });
+
+        // Select isiZulu subtitles (zu-ZA)
+        await page.getByRole('button', { name: 'zu-ZA' }).click();
+        await expect(page.getByTestId('nelly-subtitle-text')).toContainText('Sawubona');
+        await expect.poll(async () => {
+            return await page.evaluate(() => (window as any).__nellyActiveVoice?.subtitleLang || null);
+        }).toBe('zu');
+
+        // Select French subtitles (fr-FR)
+        await page.getByRole('button', { name: 'fr-FR' }).click();
+        await expect(page.getByTestId('nelly-subtitle-text')).toContainText('Bonjour');
+
+        // Confirm browser console logged en-ZA-LukeNeural telemetry for synced subtitles
+        const hasTelemetryLog = consoleMessages.some(
+            (msg) => msg.includes('[Nelly TTS]') && msg.includes('en-ZA-LukeNeural') && msg.includes('sw')
+        );
+        expect(hasTelemetryLog).toBe(true);
+    });
+
+    test('4. Dynamic Web Speech API Fallback Chain (Microsoft Luke en-ZA -> en-GB Natural Male, never female Zira)', async ({ page }) => {
         await page.addInitScript(() => {
             const voiceMap = new WeakMap<SpeechSynthesisUtterance, SpeechSynthesisVoice | null>();
             if (typeof SpeechSynthesisUtterance !== 'undefined') {
@@ -232,38 +305,42 @@ test.describe('Nelly Voiceover (TTS) Synchronization & Modal Cleanup', () => {
 
             const mockVoices = [
                 {
-                    name: 'Microsoft David - English (United States)',
+                    name: 'Microsoft Zira - English (United States)',
                     lang: 'en-US',
-                    voiceURI: 'Microsoft David - English (United States)',
+                    voiceURI: 'Microsoft Zira - English (United States)',
                     default: true,
                     localService: true,
                 },
                 {
-                    name: 'Google UK English Female',
+                    name: 'Google UK English Male',
                     lang: 'en-GB',
-                    voiceURI: 'Google UK English Female',
+                    voiceURI: 'Google UK English Male',
                     default: false,
                     localService: false,
                 },
                 {
-                    name: 'Microsoft Leah Online (Natural) - English (South Africa)',
+                    name: 'Microsoft Luke Online (Natural) - English (South Africa)',
                     lang: 'en-ZA',
-                    voiceURI: 'Microsoft Leah Online (Natural) - English (South Africa)',
+                    voiceURI: 'Microsoft Luke Online (Natural) - English (South Africa)',
                     default: false,
                     localService: false,
                 },
             ] as unknown as SpeechSynthesisVoice[];
 
+            let includeZaVoice = true;
             let voicesLoaded = false;
-            const enZaLogs: Array<{
-                text: string;
+            (window as any).__setIncludeZaVoice = (val: boolean) => {
+                includeZaVoice = val;
+            };
+
+            const fallbackLogs: Array<{
+                voiceName: string | null;
+                voiceLang: string | null;
                 lang: string;
                 rate: number;
                 pitch: number;
-                voiceName: string | null;
-                voiceLang: string | null;
             }> = [];
-            (window as any).__enZaLogs = enZaLogs;
+            (window as any).__fallbackLogs = fallbackLogs;
 
             if ('speechSynthesis' in window) {
                 const synth = window.speechSynthesis;
@@ -286,24 +363,25 @@ test.describe('Nelly Voiceover (TTS) Synchronization & Modal Cleanup', () => {
                     if (origRemove) origRemove(type, fn, opts);
                 }) as any;
 
-                synth.getVoices = () => (voicesLoaded ? mockVoices : []);
+                synth.getVoices = () => {
+                    if (!voicesLoaded) return [];
+                    return includeZaVoice ? mockVoices : mockVoices.slice(0, 2);
+                };
 
                 synth.speak = (utterance: SpeechSynthesisUtterance) => {
                     if (utterance.text && utterance.text.trim()) {
-                        enZaLogs.push({
-                            text: utterance.text,
+                        fallbackLogs.push({
+                            voiceName: utterance.voice ? utterance.voice.name : null,
+                            voiceLang: utterance.voice ? utterance.voice.lang : null,
                             lang: utterance.lang,
                             rate: utterance.rate,
                             pitch: utterance.pitch,
-                            voiceName: utterance.voice ? utterance.voice.name : null,
-                            voiceLang: utterance.voice ? utterance.voice.lang : null,
                         });
                     }
                     if (utterance.onstart) {
                         setTimeout(() => utterance.onstart?.(new Event('start') as any), 5);
                     }
                 };
-
                 synth.cancel = () => {};
 
                 setTimeout(() => {
@@ -314,9 +392,6 @@ test.describe('Nelly Voiceover (TTS) Synchronization & Modal Cleanup', () => {
                             fn(ev);
                         } catch {}
                     });
-                    if (typeof synth.onvoiceschanged === 'function') {
-                        synth.onvoiceschanged(ev);
-                    }
                 }, 80);
             }
         });
@@ -325,126 +400,29 @@ test.describe('Nelly Voiceover (TTS) Synchronization & Modal Cleanup', () => {
         await page.setViewportSize({ width: 1280, height: 800 });
         await page.goto('/');
 
-        await openTab(page, 'Nelly Posture & Hazard Monitoring Engine (3D Spine)');
-        await expect(page.getByTestId('nelly-subtitle-bar')).toBeVisible({ timeout: 10000 });
+        // Training Modal speaks dynamic exercise steps using Web Speech API fallback chain
+        await openTab(page, 'Ergonomics Training & Certification');
+        await page.getByRole('button', { name: /START COURSE|REVIEW MODULE/i }).first().click();
+        const modal = page.locator('div.fixed.inset-0.z-\\[100\\]');
+        await expect(modal).toBeVisible();
 
-        // Select Swahili subtitles (sw-KE)
-        await page.getByRole('button', { name: 'sw-KE' }).click();
-        await expect(page.getByTestId('nelly-subtitle-text')).toContainText('Hujambo');
-        await expect(page.getByTestId('nelly-voice-badge')).toContainText('Voice: en-ZA');
-        await expect(page.getByTestId('nelly-subtitle-lang')).toContainText('sw-KE');
-
+        // Sub-check A: Microsoft Luke (en-ZA) prioritized over Microsoft Zira (en-US) even with delayed voiceschanged
         await expect.poll(async () => {
             return await page.evaluate(() => {
-                const logs = (window as any).__enZaLogs || [];
+                const logs = (window as any).__fallbackLogs || [];
                 return logs[logs.length - 1] || null;
             });
         }).toMatchObject({
-            voiceName: 'Microsoft Leah Online (Natural) - English (South Africa)',
+            voiceName: 'Microsoft Luke Online (Natural) - English (South Africa)',
             voiceLang: 'en-ZA',
             lang: 'en-ZA',
             rate: expect.closeTo(0.96, 2),
-            pitch: expect.closeTo(1.02, 2),
-            text: expect.stringMatching(/Hi, I'm Nelly/i),
+            pitch: expect.closeTo(1.0, 2),
         });
 
-        // Select isiZulu subtitles (zu-ZA)
-        await page.getByRole('button', { name: 'zu-ZA' }).click();
-        await expect(page.getByTestId('nelly-subtitle-text')).toContainText('Sawubona');
-        await expect.poll(async () => {
-            return await page.evaluate(() => {
-                const logs = (window as any).__enZaLogs || [];
-                return logs[logs.length - 1] || null;
-            });
-        }).toMatchObject({
-            voiceName: 'Microsoft Leah Online (Natural) - English (South Africa)',
-            voiceLang: 'en-ZA',
-            lang: 'en-ZA',
-            rate: expect.closeTo(0.96, 2),
-            pitch: expect.closeTo(1.02, 2),
-            text: expect.stringMatching(/Hi, I'm Nelly/i),
-        });
-
-        // Select French subtitles (fr-FR)
-        await page.getByRole('button', { name: 'fr-FR' }).click();
-        await expect(page.getByTestId('nelly-subtitle-text')).toContainText('Bonjour');
-
-        // Confirm browser console logged en-ZA telemetry for synced subtitles
-        const hasTelemetryLog = consoleMessages.some(
-            (msg) => msg.includes('[Nelly TTS]') && msg.includes('en-ZA') && msg.includes('sw')
-        );
-        expect(hasTelemetryLog).toBe(true);
-    });
-
-    test('4. Voice fallback chain (en-ZA absent -> en-GB natural female, never male David)', async ({ page }) => {
-        await page.addInitScript(() => {
-            const voiceMap = new WeakMap<SpeechSynthesisUtterance, SpeechSynthesisVoice | null>();
-            if (typeof SpeechSynthesisUtterance !== 'undefined') {
-                Object.defineProperty(SpeechSynthesisUtterance.prototype, 'voice', {
-                    configurable: true,
-                    get() {
-                        return voiceMap.get(this) ?? null;
-                    },
-                    set(v: SpeechSynthesisVoice | null) {
-                        voiceMap.set(this, v);
-                    },
-                });
-            }
-
-            const mockVoices = [
-                {
-                    name: 'Microsoft David - English (United States)',
-                    lang: 'en-US',
-                    voiceURI: 'Microsoft David - English (United States)',
-                    default: true,
-                    localService: true,
-                },
-                {
-                    name: 'Google UK English Female',
-                    lang: 'en-GB',
-                    voiceURI: 'Google UK English Female',
-                    default: false,
-                    localService: false,
-                },
-            ] as unknown as SpeechSynthesisVoice[];
-
-            const fallbackLogs: Array<{
-                voiceName: string | null;
-                voiceLang: string | null;
-                rate: number;
-                pitch: number;
-            }> = [];
-            (window as any).__fallbackLogs = fallbackLogs;
-
-            if ('speechSynthesis' in window) {
-                const synth = window.speechSynthesis;
-                synth.getVoices = () => mockVoices;
-                synth.speak = (utterance: SpeechSynthesisUtterance) => {
-                    if (utterance.text && utterance.text.trim()) {
-                        fallbackLogs.push({
-                            voiceName: utterance.voice ? utterance.voice.name : null,
-                            voiceLang: utterance.voice ? utterance.voice.lang : null,
-                            rate: utterance.rate,
-                            pitch: utterance.pitch,
-                        });
-                    }
-                    if (utterance.onstart) {
-                        setTimeout(() => utterance.onstart?.(new Event('start') as any), 5);
-                    }
-                };
-                synth.cancel = () => {};
-            }
-        });
-
-        await seedSession(page);
-        await page.setViewportSize({ width: 1280, height: 800 });
-        await page.goto('/');
-
-        await openTab(page, 'Nelly Posture & Hazard Monitoring Engine (3D Spine)');
-        await expect(page.getByTestId('nelly-subtitle-bar')).toBeVisible({ timeout: 10000 });
-
-        await page.getByRole('button', { name: 'sw-KE' }).click();
-        await expect(page.getByTestId('nelly-subtitle-text')).toContainText('Hujambo');
+        // Sub-check B: When en-ZA absent, resolves to Google UK English Male (en-GB), never Zira
+        await page.evaluate(() => (window as any).__setIncludeZaVoice(false));
+        await page.getByRole('button', { name: /NEXT INSTRUCTION/i }).click();
 
         await expect.poll(async () => {
             return await page.evaluate(() => {
@@ -457,10 +435,10 @@ test.describe('Nelly Voiceover (TTS) Synchronization & Modal Cleanup', () => {
             });
         }).toMatchObject({
             lastSpeak: {
-                voiceName: 'Google UK English Female',
+                voiceName: 'Google UK English Male',
                 voiceLang: 'en-GB',
                 rate: expect.closeTo(0.96, 2),
-                pitch: expect.closeTo(1.02, 2),
+                pitch: expect.closeTo(1.0, 2),
             },
             tier: 'en-GB',
         });

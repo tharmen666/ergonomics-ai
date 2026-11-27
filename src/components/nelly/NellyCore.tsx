@@ -27,8 +27,8 @@ export const NellyCore = ({ isSpeaking, onClick }: NellyCoreProps) => {
                 'border-red-500 bg-gradient-to-br from-red-500/20 to-black'
             }`}>
                 <img 
-                    src="/assets/nelly-new-avatar.png" 
-                    className="w-full h-full object-cover" 
+                    src="/assets/nelly-male-avatar.png" 
+                    className="w-full h-full object-cover object-top" 
                     alt="Nelly Avatar" 
                 />
                 
