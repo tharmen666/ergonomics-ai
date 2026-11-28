@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
     X,
@@ -30,6 +30,7 @@ import { useTenantStore } from '../../store/tenantStore';
 import { getCameraConsentState } from '../../utils/popiaCrypto';
 import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
 import { NELLY_REPLIES, nellyReplyPair, type NellyReplyKey } from './nellyReplies';
+import { triage, newTriageSession, type TriageSession } from '../../lib/nellyTriage';
 import { AITransparencyBadge } from '../compliance/AITransparencyBadge';
 
 interface NellyInterfaceProps {
@@ -96,6 +97,8 @@ export const NellyInterface = ({
     const { companyId, companies } = useTenantStore();
     const [localInput, setLocalInput] = useState('');
     const [lastQuickReply, setLastQuickReply] = useState<string | null>(null);
+    // Nelly's banter / pain-check state. In memory only: gone on refresh, never saved, never sent.
+    const triageRef = useRef<TriageSession>(newTriageSession());
 
     const language = propLang || store.language || 'en';
     const setLanguage = propSetLang || store.setLanguage;
@@ -151,6 +154,27 @@ export const NellyInterface = ({
         (() => {
             const trimmed = userInput.trim();
             if (!trimmed) return;
+
+            // Banter, pain check and doctor referral. Private to this person: their own words are not logged and nothing is reported.
+            const triaged = triage(trimmed, triageRef.current);
+            triageRef.current = triaged.session;
+            if (triaged.result?.type === 'emergency') {
+                setUserInput('');
+                handleQuickPrompt('emergency');
+                return;
+            }
+            if (triaged.result?.type === 'reply') {
+                const text = triaged.result.text;
+                const spoken = text.replace(/^- /gm, '');
+                addLog('Nelly', text);
+                setLastQuickReply(text);
+                store.setSpeaking(true);
+                store.setGuidance(text);
+                speakWithSubtitles(spoken, text, 'en', () => store.setSpeaking(false));
+                setUserInput('');
+                return;
+            }
+
             const low = trimmed.toLowerCase();
             addLog('User', trimmed);
             let key: NellyReplyKey = 'unknown';

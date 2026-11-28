@@ -22,6 +22,16 @@ Industrial workplace compliance (anchored by frameworks like the South African O
 * **Storage:** Prototype only - all compliance records live in the browser (Zustand + localStorage). There is no server database yet, no encryption and no access control.
 * **Frontend & Edge Delivery:** High-performance React 18, Vite, and Tailwind CSS deployed on global edge infrastructure with sub-second responsive interaction.
 
+## Privacy & pilot model
+
+ErgoSafe Reborn is a **prototype**. It runs in the browser, has no server database, no login and no encryption, and must not be used with real personal or health information as it stands.
+
+- **Coaching, not policing.** Individual posture, pain answers and chat with Nelly are never reported to a manager, supervisor, HR or executive, and never create a case or a score.
+- **Camera = stick figure only.** The camera is used to check posture and workspace set-up as a skeleton. No photos, no recordings, no face recognition, and the live view hides the camera picture by default.
+- **Nelly's pain check is private and temporary.** It lives in memory for the session and disappears on refresh. Nelly never diagnoses; she refers people to a doctor.
+- **Leave and sick notes are HR matters.** Nelly does not handle them.
+- **Pilots.** When a company wants to test or use ErgoSafe, it is plugged into that company's own systems: their identity, storage, consent process and Information Officer. Any employer-facing reporting must be anonymous group numbers only. Because pain and symptom information is health information (special personal information under POPIA), a POPIA practitioner must review the consent and storage design before a pilot starts.
+
 ---
 
 ## ⚖️ Statutory Framework: OHS Act 85 of 1993

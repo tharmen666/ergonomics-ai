@@ -22,8 +22,9 @@ export const useAgentLog = create<AgentLogState>((set) => ({
     setLowConfidence: (isLowConfidence) => set({ isLowConfidence }),
     addLog: (agent, message) => set((state) => {
         // Model Armor: Safety Shield for Medical Diagnoses
-        const medicalKeywords = ['diagnose', 'diagnosis', 'doctor', 'cure', 'prescription', 'medical advice'];
-        const isMedicalQuery = medicalKeywords.some(word => message.toLowerCase().includes(word));
+        // Only block people ASKING for a diagnosis. Nelly's own "please see a doctor" must pass through.
+        const DIAGNOSIS_REQUEST = /\b(diagnose me|diagnosis|what (do|did) i have|prescri(be|ption)|cure|medical advice)\b/i;
+        const isMedicalQuery = agent === 'User' && DIAGNOSIS_REQUEST.test(message);
 
         let finalMessage = message;
         let finalAgent = agent;

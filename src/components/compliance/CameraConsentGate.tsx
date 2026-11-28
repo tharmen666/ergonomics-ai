@@ -67,7 +67,7 @@ export const CameraConsentGate: React.FC<CameraConsentGateProps> = ({
               1. 100% Client-Side Skeletal Processing
             </h4>
             <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-              100% client-side in-browser skeletal processing runs in volatile memory — zero raw video frames are ever transmitted or stored.
+              100% client-side in-browser skeletal processing runs in volatile memory — zero raw video frames are ever transmitted or stored. The camera is used only to check your posture and workspace set-up as a stick figure. No photos, no recordings, no face is identified, and your posture is never reported to your manager.
             </p>
           </div>
         </div>

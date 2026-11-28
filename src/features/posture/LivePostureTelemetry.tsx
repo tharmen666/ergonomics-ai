@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePoseLandmarker, PostureMetrics } from './usePoseLandmarker';
 import { useNellyStore } from '../../store/nellyStore';
-import { useComplianceStore } from '../../store/complianceStore';
 import { speak } from '../../utils/speech';
 import {
   getCameraConsentState,
@@ -90,6 +89,8 @@ export const LivePostureTelemetry: React.FC<LivePostureTelemetryProps> = ({
   const { language, setSpeaking, setMood, setGuidance } = useNellyStore();
   const [consentState, setConsentState] = useState<CameraConsentRecord>(() => getCameraConsentState());
   const [isVoiceMuted, setIsVoiceMuted] = useState(false);
+  // Skeleton-only by default: the camera feed is hidden and only the stick figure is drawn.
+  const [showPreview, setShowPreview] = useState(false);
   const [activeIssueNotice, setActiveIssueNotice] = useState<string | null>(null);
   const hasAutoStartedRef = useRef(false);
   // Session log: one posture sample every 5 seconds while the camera is on. Numbers only, no images.
@@ -123,16 +124,9 @@ export const LivePostureTelemetry: React.FC<LivePostureTelemetryProps> = ({
       setActiveIssueNotice(issueLabel);
       setTimeout(() => setActiveIssueNotice(null), 8000);
 
-      // Log hazard into compliance ledger
-      try {
-        useComplianceStore.getState().logHazardEvent(
-          'posture',
-          `MediaPipe Live Telemetry: Sustained ${issueLabel} (Posture Score: ${currentMetrics.postureScore}/100)`,
-          'RISK_ALERT'
-        );
-      } catch (err) {
-        console.warn('Failed to log posture hazard:', err);
-      }
+      // PRIVACY: individual posture is coaching for the person only. It is NOT written to the
+      // compliance ledger and creates no case for a manager. Employer reporting, if a client
+      // pilot needs it, must be anonymous group numbers only (see README, Privacy & pilot model).
 
       // Voice prompt if unmuted
       if (!isVoiceMuted) {
@@ -249,21 +243,11 @@ export const LivePostureTelemetry: React.FC<LivePostureTelemetryProps> = ({
       issues.push(`Break Compliance: ${manualBreaks.replace(/_/g, ' ')}`);
     }
 
-    const summary =
-      issues.length === 0
-        ? 'Manual Ergonomic Assessment (No-Camera Mode): All self-checks reported optimal (Neck comfortable, Lumbar supported, Monitor at eye level, Regular breaks).'
-        : `Manual Ergonomic Assessment (No-Camera Mode): Voluntary self-check flagged ${issues.join('; ')}.`;
-
-    try {
-      useComplianceStore.getState().logHazardEvent('posture', summary, 'RISK_ALERT');
-    } catch (err) {
-      console.warn('Failed to log manual ergonomic screening:', err);
-    }
-
+    // PRIVACY: a self-check is for the person only. Nothing is logged, saved or sent.
     setManualLoggedNotice(
       issues.length === 0
-        ? `Manual ergonomic screening logged at ${new Date().toLocaleTimeString()} — workstation alignment optimal. Supports Competent Person oversight under SA Ergonomics Regulations (2019).`
-        : `Manual ergonomic screening logged at ${new Date().toLocaleTimeString()} (${issues.length} area${issues.length > 1 ? 's' : ''} flagged for ergonomic adjustment).`
+        ? `Self-check done at ${new Date().toLocaleTimeString()}: your setup looks good. This stays on your screen only.`
+        : `Self-check done at ${new Date().toLocaleTimeString()}: ${issues.length} area${issues.length > 1 ? 's' : ''} could be adjusted. This stays on your screen only, and nobody else can see it.`
     );
   };
 
@@ -534,7 +518,7 @@ export const LivePostureTelemetry: React.FC<LivePostureTelemetryProps> = ({
               ref={videoRef}
               playsInline
               muted
-              className="absolute inset-0 w-full h-full object-cover transform -scale-x-100 opacity-70"
+              className={`absolute inset-0 w-full h-full object-cover transform -scale-x-100 ${showPreview ? 'opacity-70' : 'opacity-0'}`}
             />
 
             {/* Overlaid Drawing Canvas */}
@@ -542,6 +526,21 @@ export const LivePostureTelemetry: React.FC<LivePostureTelemetryProps> = ({
               ref={canvasRef}
               className="absolute inset-0 w-full h-full object-cover transform -scale-x-100 pointer-events-none z-10"
             />
+
+            {isCameraActive && (
+              <div className="absolute top-2 left-2 right-2 z-30 flex items-center justify-between gap-2 text-[10px] text-slate-300">
+                <span className="px-2 py-1 rounded-lg bg-black/60 border border-white/10">
+                  Skeleton only. No face is shown, saved or sent.
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setShowPreview((v) => !v)}
+                  className="px-2 py-1 rounded-lg bg-black/60 border border-white/20 hover:bg-black/80 cursor-pointer"
+                >
+                  {showPreview ? 'Hide my camera view' : 'Show my camera view'}
+                </button>
+              </div>
+            )}
 
             {/* Standby / Inactive Overlay */}
             {!isCameraActive && (

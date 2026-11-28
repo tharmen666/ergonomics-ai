@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "npm run verify:privacy && tsc && vite build",
+    "verify:privacy": "node scripts/verify-privacy.mjs",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "test": "playwright test",
     "preview": "vite preview",

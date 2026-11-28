@@ -1,57 +1,31 @@
-export interface Employee {
-    id: string;
-    name: string;
-    supervisorId: string;
-    leaderId: string;
-    complianceScore: number;
-    lastScanDate: string;
-    riskLevel: 'Low' | 'Medium' | 'High';
-}
+/**
+ * ErgoSafe is a coaching tool, not a monitoring tool.
+ *
+ * The old per-person escalation (missed weekly scan -> supervisor -> leader -> CEO, with a
+ * "complianceScore" and "Unmanaged Corporate Liability" flag) was removed. It was not used
+ * anywhere in the app, and it contradicts the promise on the camera consent screen: no
+ * disciplinary action, no performance scoring, no productivity surveillance.
+ *
+ * Manager accountability for real workplace hazards lives in complianceStore (cases that a
+ * manager must resolve within a time limit) and is unchanged.
+ */
 
-export const orgChart: {
-    hierarchy: {
-        [key: string]: { supervisor: string; leader: string; ceo: string; }
-    }
-} = {
-    // Simple mapping: Employee -> Supervisor -> Leader -> CEO
-    hierarchy: {
-        'emp_001': { supervisor: 'sup_001', leader: 'lead_001', ceo: 'ceo_001' },
-        'emp_002': { supervisor: 'sup_001', leader: 'lead_001', ceo: 'ceo_001' },
-    }
-};
-
-export const checkEscalation = (employee: Employee) => {
-    const now = new Date();
-    const lastScan = new Date(employee.lastScanDate);
-    const diffDays = Math.floor((now.getTime() - lastScan.getTime()) / (1000 * 3600 * 24));
-
-    // Task 1: Escalation Logic
-    if (diffDays >= 3 && diffDays < 7) {
-        return {
-            level: 'Supervisor',
-            message: 'Weekly Scan incomplete. Auto-notifying Direct Supervisor.',
-            notify: orgChart.hierarchy[employee.id]?.supervisor
-        };
-    } else if (diffDays >= 7 && diffDays < 14) {
-        return {
-            level: 'Functional Leader',
-            message: 'Issue unresolved for 7 days. Auto-notifying Functional Leader.',
-            notify: orgChart.hierarchy[employee.id]?.leader
-        };
-    } else if (diffDays >= 14) {
-        return {
-            level: 'CEO/HR',
-            message: 'Unmanaged Corporate Liability. Flagged to CEO/HR Dashboard.',
-            notify: 'ceo_001',
-            isLiability: true
-        };
-    }
-
-    return null;
+/** A gentle reminder that goes to the person themselves only. Never to a manager. */
+export const checkSelfReminder = (
+    lastCheckInDate: string | null,
+    now: Date = new Date()
+): { message: string } | null => {
+    if (!lastCheckInDate) return null;
+    const last = new Date(lastCheckInDate).getTime();
+    if (Number.isNaN(last)) return null;
+    const days = Math.floor((now.getTime() - last) / (1000 * 3600 * 24));
+    if (days < 7) return null;
+    return {
+        message: 'Quick check-in? It has been a week. A two-minute stretch and posture check keeps small aches from becoming big ones.',
+    };
 };
 
 // TODO(legal-verify): removed specific fine amount of R1,000,000
 export const getLegalShockContent = () => {
     return "Failure to adhere to Section 8(1) and Section 38 of the Occupational Health and Safety Act 85 of 1993 may result in statutory liability and penalties as prescribed under the Act.";
 };
-
