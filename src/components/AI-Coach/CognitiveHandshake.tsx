@@ -247,7 +247,7 @@ export const CognitiveHandshake = ({ isInlinePage = false }: CognitiveHandshakeP
                             <span className="text-red-500 mt-2 block italic text-sm">Employer duty of care: Section 8(1) OHS Act 85 of 1993</span>
                         </p>
                         <p className="text-gray-400 text-sm mb-10 leading-relaxed px-4">
-                            Your reaction times have deviated significantly from safe operational baselines. To protect the organization and your personal safety, <strong>DOA Lockout</strong> has been triggered. Please contact your supervisor for a mandatory wellness check.
+                            Wellness pause recommended. Take a 2-minute stretch and hydration break before resuming.
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <button

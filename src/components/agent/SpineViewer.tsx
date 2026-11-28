@@ -2,7 +2,6 @@ import { useRef, useState, useEffect, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Box, Cylinder } from '@react-three/drei';
 import * as THREE from 'three';
-import { useComplianceStore } from '../../store/complianceStore';
 
 const Vertebra = ({ position, rotation, color, scale, showDisc }: any) => {
     return (
@@ -237,8 +236,6 @@ export const SpineViewer = () => {
         }
 
         if (sc.state !== 'good' && sc.logDesc) {
-            useComplianceStore.getState().logHazardEvent('posture', sc.logDesc, sc.state === 'critical' ? 'BREACH' : 'RISK_ALERT');
-
             if (typeof window !== 'undefined') {
                 window.dispatchEvent(new CustomEvent('TRIGGER_BBS_INTERVENTION', {
                     detail: {

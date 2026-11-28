@@ -1,16 +1,12 @@
 import { useEffect, useState } from 'react';
-import { reportsEmergency } from '../../utils/emergencyIntent';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNellyStore } from '../../store/nellyStore';
-import { useFatigueStore } from '../../logic/Fatigue-Check/fatigueStore';
-import { useComplianceStore } from '../../store/complianceStore';
 import { useAgentLog } from '../../store/agentLogStore';
 import { NellyCore } from './NellyCore';
 import { NellyInterface } from './NellyInterface';
 import { NellyEmergencyUI } from './NellyEmergencyUI';
-import { translations, Language, TranslationEntry } from '../../utils/translations';
+import { translations, Language } from '../../utils/translations';
 import { speakWithSubtitles } from '../../utils/speech';
-import { nellyReplyPair } from './nellyReplies';
 
 /**
  * NellyAvatar: The primary entry point for the Nelly AI Coach.
@@ -31,8 +27,6 @@ export const NellyAvatar = () => {
         setNellyExpanded 
     } = useNellyStore();
     const { addLog } = useAgentLog();
-    
-    const [userInput, setUserInput] = useState('');
     const [isEmergency, setIsEmergency] = useState(false);
 
     // Audio Cleanup
@@ -51,126 +45,6 @@ export const NellyAvatar = () => {
             speakWithSubtitles(translations['en'].nelly_intro, localizedIntro, activeLang);
         }
     }, [isWingmanActive, hasIntroduced, language, markIntroduced]);
-
-    const handleSend = () => {
-        if (!userInput.trim()) return;
-
-        const lowCase = userInput.toLowerCase();
-        addLog('User', userInput);
-        // Whole-word matching, so "contact" does not match "act" and "no neck pain" still matches "neck pain".
-        const matchesAny = (words: string[]) => words.some((w) => new RegExp(`\\b${w}\\b`).test(lowCase));
-        const firstAidKeywords = ['first aid', 'first_aid', 'basic_first_aid_training_nsh', 'bleeding'];
-        const symptomKeywords = ['tingling', 'numbness', 'pins and needles', 'sharp pain', 'burning'];
-        
-        const isEmerg = reportsEmergency(lowCase);
-        const isFirstAid = matchesAny(firstAidKeywords);
-        const isSymptom = matchesAny(symptomKeywords);
-        const isNeckPain = matchesAny(['neck pain', 'cervical', 'neck']);
-        const isLowerBack = matchesAny(['lower back', 'lumbar', 'back pain', 'spine']);
-        const isWrist = matchesAny(['wrist', 'carpal', 'hand pain', 'mouse']);
-        const isEye = matchesAny(['eye', 'eyes', 'headache', 'screen', 'vision']);
-        const isOHSQuery = matchesAny(['ohs', 'iso', 'section 37', 'compliance', 'legal', 'act']);
-
-        const activeLang = (language as Language) || 'en';
-
-        if (isEmerg) {
-            setIsEmergency(true);
-            setSpeaking(true);
-            const { spokenEnglish, subtitleText } = nellyReplyPair('emergency', activeLang);
-            setGuidance(subtitleText);
-            addLog('Nelly', subtitleText);
-            useComplianceStore.getState().logHazardEvent('emergency', 'Acute Medical/Injury Emergency Protocol Triggered', 'BREACH');
-            speakWithSubtitles(spokenEnglish, subtitleText, activeLang);
-        } else if (isFirstAid) {
-            const response = (translations[activeLang] as TranslationEntry)?.first_aid || translations['en'].first_aid;
-            setGuidance(response);
-            addLog('Nelly', response);
-            setSpeaking(true);
-            speakWithSubtitles(translations['en'].first_aid, response, activeLang);
-            setTimeout(() => setSpeaking(false), 5000);
-        } else if (isNeckPain) {
-            setSpeaking(true);
-            const { spokenEnglish, subtitleText } = nellyReplyPair('neck', activeLang);
-            setGuidance(subtitleText);
-            addLog('Nelly', subtitleText);
-            useComplianceStore.getState().logHazardEvent('neck_strain', 'Neck pain reported by user', 'RISK_ALERT');
-            speakWithSubtitles(spokenEnglish, subtitleText, activeLang);
-            
-            const { fatigueLevel } = useFatigueStore.getState();
-            if (fatigueLevel !== 'high') {
-                window.dispatchEvent(new CustomEvent('TRIGGER_INTERVENTION', { detail: 'micro-stretch' }));
-            }
-            setTimeout(() => setSpeaking(false), 8000);
-        } else if (isLowerBack) {
-            setSpeaking(true);
-            const { spokenEnglish, subtitleText } = nellyReplyPair('back', activeLang);
-            setGuidance(subtitleText);
-            addLog('Nelly', subtitleText);
-            useComplianceStore.getState().logHazardEvent('posture', 'Lower Back / Lumbar Discomfort Reported (L1-L5 Strain Risk)', 'RISK_ALERT');
-            speakWithSubtitles(spokenEnglish, subtitleText, activeLang);
-            setTimeout(() => setSpeaking(false), 8000);
-        } else if (isWrist) {
-            setSpeaking(true);
-            const { spokenEnglish, subtitleText } = nellyReplyPair('wrist', activeLang);
-            setGuidance(subtitleText);
-            addLog('Nelly', subtitleText);
-            useComplianceStore.getState().logHazardEvent('posture', 'Wrist Fatigue & Carpal Compression Risk Reported', 'RISK_ALERT');
-            speakWithSubtitles(spokenEnglish, subtitleText, activeLang);
-            setTimeout(() => setSpeaking(false), 8000);
-        } else if (isEye) {
-            setSpeaking(true);
-            const { spokenEnglish, subtitleText } = nellyReplyPair('eye', activeLang);
-            setGuidance(subtitleText);
-            addLog('Nelly', subtitleText);
-            useComplianceStore.getState().logHazardEvent('break_interval', 'Digital Eye Strain & Visual Fatigue Reported', 'RISK_ALERT');
-
-            if (typeof window !== 'undefined') {
-                window.dispatchEvent(new CustomEvent('TRIGGER_BBS_INTERVENTION', {
-                    detail: {
-                        type: 'ocular-cervical-glide',
-                        duration: 20,
-                        hazard: 'Digital Eye Strain & Ocular Exhaustion',
-                        title: '20-Second Ocular & Cervical Glide Reset',
-                        instructions: [
-                            'Look away from display and focus on an object 20 feet away.',
-                            'Blink slowly 5 times to re-lubricate corneal surface.',
-                            'Slowly tilt head toward left shoulder for 5s, then right shoulder for 5s.'
-                        ]
-                    }
-                }));
-            }
-
-            speakWithSubtitles(spokenEnglish, subtitleText, activeLang);
-            setTimeout(() => setSpeaking(false), 8000);
-        } else if (isOHSQuery) {
-            setSpeaking(true);
-            // TODO(legal-verify): removed claim that Section 37 provides automatic liability protection and zero-knowledge claim
-            // TODO(privacy): implement encryption + POPIA s26 special-information handling before production
-            const { spokenEnglish, subtitleText } = nellyReplyPair('ohs', activeLang);
-            setGuidance(subtitleText);
-            addLog('Nelly', subtitleText);
-            speakWithSubtitles(spokenEnglish, subtitleText, activeLang);
-            setTimeout(() => setSpeaking(false), 9000);
-        } else if (isSymptom) {
-            setSpeaking(true);
-            const { spokenEnglish, subtitleText } = nellyReplyPair('symptom', activeLang);
-            setGuidance(subtitleText);
-            addLog('Nelly', subtitleText);
-            useComplianceStore.getState().logHazardEvent('posture', 'Tingling or numbness reported by user', 'RISK_ALERT');
-            speakWithSubtitles(spokenEnglish, subtitleText, activeLang);
-            setTimeout(() => setSpeaking(false), 8000);
-        } else {
-            // Context-Aware Response Algorithm
-            setSpeaking(true);
-            // Nelly does not measure fatigue or posture here, so she says so rather than guessing.
-            const { spokenEnglish, subtitleText } = nellyReplyPair('unknown', activeLang);
-            setGuidance(subtitleText);
-            addLog('Nelly', subtitleText);
-            speakWithSubtitles(spokenEnglish, subtitleText, activeLang);
-            setTimeout(() => setSpeaking(false), 5000);
-        }
-        setUserInput('');
-    };
 
     if (!isWingmanActive) return null;
 
@@ -196,6 +70,7 @@ export const NellyAvatar = () => {
                                     setTourActive(true);
                                     setNellyExpanded(false);
                                 }}
+                                onEmergency={() => setIsEmergency(true)}
                                 onStewardship={() => {
                                     setSpeaking(true);
                                     const activeLang = (language as Language) || 'en';
@@ -205,9 +80,6 @@ export const NellyAvatar = () => {
                                     speakWithSubtitles(response, response, activeLang);
                                     setTimeout(() => setSpeaking(false), 8000);
                                 }}
-                                userInput={userInput}
-                                setUserInput={setUserInput}
-                                onSend={handleSend}
                                 isSpeaking={isSpeaking}
                              />
                         )}

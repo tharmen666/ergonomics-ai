@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle, CheckCircle, ArrowRight, ShieldCheck, ShieldAlert } from 'lucide-react';
 import { IncidentLogger } from './IncidentLogger';
-import { useComplianceStore } from '../../store/complianceStore';
 
 const questions = [
     {
@@ -46,7 +45,6 @@ const questions = [
 ];
 
 export const RiskPage = () => {
-    const { logHazardEvent } = useComplianceStore();
     const [step, setStep] = useState(0);
     const [answers, setAnswers] = useState<string[]>([]);
     const [completed, setCompleted] = useState(false);
@@ -70,15 +68,6 @@ export const RiskPage = () => {
             });
             const totalScore = scores.reduce((sum, s) => sum + s, 0);
             setFinalScore(totalScore);
-
-            if (totalScore >= 15) {
-                // An unsafe ergonomic setup is a RISK to act on, not a legal breach
-                logHazardEvent(
-                    'posture',
-                    `Manual Risk Assessment: Unsafe ergonomic setup flagged (Score: ${totalScore}).`,
-                    'RISK_ALERT'
-                );
-            }
             setCompleted(true);
         }
     };
@@ -117,7 +106,7 @@ export const RiskPage = () => {
 
                         {finalScore >= 15 ? (
                             <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl text-xs text-red-300 font-medium max-w-md mx-auto">
-                                <strong>Ergonomic Risk Logged:</strong> Your answers indicate high-risk ergonomic positioning. A risk alert has been routed to your line manager for corrective action.
+                                <strong>Ergonomic Risk Logged:</strong> Your answers indicate high-risk ergonomic positioning. This self-check stays private on your screen—adjust your setup or ask Nelly for a quick stretch.
                             </div>
                         ) : (
                             <div className="bg-ohs-green/10 border border-ohs-green/20 p-4 rounded-xl text-xs text-ohs-green max-w-md mx-auto">

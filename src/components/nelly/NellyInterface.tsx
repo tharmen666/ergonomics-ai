@@ -31,6 +31,7 @@ import { getCameraConsentState } from '../../utils/popiaCrypto';
 import { GlobalComplianceEngine } from '../../logic/security/semanticFirewall';
 import { NELLY_REPLIES, nellyReplyPair, type NellyReplyKey } from './nellyReplies';
 import { triage, newTriageSession, type TriageSession } from '../../lib/nellyTriage';
+import { reportsEmergency } from '../../utils/emergencyIntent';
 import { AITransparencyBadge } from '../compliance/AITransparencyBadge';
 
 interface NellyInterfaceProps {
@@ -39,6 +40,7 @@ interface NellyInterfaceProps {
     onClose?: () => void;
     onTour?: () => void;
     onStewardship?: () => void;
+    onEmergency?: () => void;
     userInput?: string;
     setUserInput?: (input: string) => void;
     onSend?: () => void;
@@ -86,6 +88,7 @@ export const NellyInterface = ({
     onClose = () => {},
     onTour = () => {},
     onStewardship,
+    onEmergency,
     userInput: propUserInput,
     setUserInput: propSetUserInput,
     onSend,
@@ -155,11 +158,20 @@ export const NellyInterface = ({
             const trimmed = userInput.trim();
             if (!trimmed) return;
 
+            const low = trimmed.toLowerCase();
+            if (reportsEmergency(low)) {
+                setUserInput('');
+                onEmergency?.();
+                handleQuickPrompt('emergency');
+                return;
+            }
+
             // Banter, pain check and doctor referral. Private to this person: their own words are not logged and nothing is reported.
             const triaged = triage(trimmed, triageRef.current);
             triageRef.current = triaged.session;
             if (triaged.result?.type === 'emergency') {
                 setUserInput('');
+                onEmergency?.();
                 handleQuickPrompt('emergency');
                 return;
             }
@@ -175,11 +187,9 @@ export const NellyInterface = ({
                 return;
             }
 
-            const low = trimmed.toLowerCase();
             addLog('User', trimmed);
             let key: NellyReplyKey = 'unknown';
-            if (/\b(emergency|collapse|unconscious|chest pain|severe bleeding)\b/.test(low)) key = 'emergency';
-            else if (/\b(neck|cervical)\b/.test(low)) key = 'neck';
+            if (/\b(neck|cervical)\b/.test(low)) key = 'neck';
             else if (/\b(back|lumbar|spine)\b/.test(low)) key = 'back';
             else if (/\b(wrist|carpal|hand|mouse)\b/.test(low)) key = 'wrist';
             else if (/\b(eye|eyes|headache|vision|screen)\b/.test(low)) key = 'eye';
